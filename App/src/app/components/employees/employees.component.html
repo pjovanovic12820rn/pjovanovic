@@ -1,0 +1,38 @@
+<div class="employees-container">
+    <h2>Employees</h2>
+
+    @if (errorMessage) {
+        <div class="error-message">
+            {{ errorMessage }}
+        </div>
+    }
+
+    @if (isAdmin) {
+        <div id="employees-list" class="employee-list">
+            @for (employee of employees; track employee.id) {
+                <div class="employee-card">
+          <span>
+            <strong>{{ employee.firstName }} {{ employee.lastName }}</strong> ({{
+              employee.email
+            }})
+          </span>
+                    <p class="role"><strong>Role:</strong> {{ employee.position }}</p>
+                    <p><strong>Phone:</strong> {{ employee.phoneNumber }}</p>
+                    <p><strong>Status:</strong> {{ employee.isActive ? 'Active' : 'Inactive' }}</p>
+                    <div class="employee-actions">
+                      <button class="view-details-btn" [routerLink]="['/employees', employee.id]">View Details</button>
+                      <button class="delete-btn">Delete</button>
+                      <button class="deactivate-btn">Deactivate</button>
+                    </div>
+                </div>
+            } @empty {
+                @if (!errorMessage) {
+                    <p>No employees found.</p>
+                }
+            }
+        </div>
+    } @else {
+        <p>You are not authorized to view the employee list.</p>
+    }
+</div>
+
