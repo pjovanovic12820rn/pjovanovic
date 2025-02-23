@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 
 export const routes: Routes = [
   // {
@@ -6,5 +7,10 @@ export const routes: Routes = [
   //   component: LoginComponent,
   //   canActivate: [LoginGuard],
   // },
+  {
+       path: 'reset-password',
+       component: PasswordResetComponent,
+       // canActivate: [LoginGuard],
+    },
 
 ];
