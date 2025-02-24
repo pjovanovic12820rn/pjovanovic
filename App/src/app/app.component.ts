@@ -6,7 +6,7 @@ import {RegisterEmployeeComponent} from './components/register-employee/register
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent, AlertComponent,RegisterEmployeeComponent],
+  imports: [RouterOutlet, NavbarComponent, AlertComponent],
   templateUrl: './app.component.html',
   standalone: true,
   styleUrl: './app.component.css'
