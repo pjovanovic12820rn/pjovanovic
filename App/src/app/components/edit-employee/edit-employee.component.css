@@ -98,3 +98,10 @@ button:hover {
     background: #9E7CD7;
     transform: scale(1.05);
 }
+
+/* Poruka o grešci */
+.error-message {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}

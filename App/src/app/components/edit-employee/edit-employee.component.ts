@@ -3,7 +3,7 @@ import { EmployeeService } from '../../services/employee.service';
 import { Employee } from '../../models/employee.model';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -14,6 +14,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrl: './edit-employee.component.css'
 })
 export class EditEmployeeComponent implements OnInit {
+  private router = inject(Router);
   private employeeService = inject(EmployeeService);
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
@@ -78,9 +79,20 @@ export class EditEmployeeComponent implements OnInit {
       formData.birthDate = new Date(formData.birthDate);
 
       console.log('Form submitted:', formData);
+      this.router.navigate(['/employees']);
     } else {
       console.log('Form is invalid');
       this.editForm.markAllAsTouched();
     }
   }
+
+    isFieldInvalid(field: string) {
+        const formControl = this.editForm.get(field);
+        return formControl && formControl.invalid && (formControl.dirty || formControl.touched);
+    }
+
+    getFieldError(field: string, errorType: string) {
+        const formControl = this.editForm.get(field);
+        return formControl?.errors?.[errorType];
+    }
 }
