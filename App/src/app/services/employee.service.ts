@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Employee } from '../models/employee.model';
 import {Observable, of, throwError} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {AuthService} from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +59,7 @@ export class EmployeeService {
     }
   ];
 
-  constructor() { }
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   getEmployees(): Observable<Employee[]> {
     return of(this.mockEmployees);
@@ -68,7 +70,16 @@ export class EmployeeService {
     return of(employee);
   }
 
+  updateEmployee(updatedEmployee: Employee): Observable<boolean> {
+    // Check if the user has admin permissions
+    if (!this.authService.isAdmin) {
+      return throwError(() => new Error('Permission denied: Admin access required.'));
+    }
 
+    return of(true)
+    // Make a PUT request to update the employee
+    // return this.http.put<boolean>(`/api/admin/employees/${updatedEmployee.id}`, updatedEmployee);
+  }
   deleteEmployee(id: number): Observable<void> {
     const index = this.mockEmployees.findIndex(emp => emp.id === id);
     if (index !== -1) {
