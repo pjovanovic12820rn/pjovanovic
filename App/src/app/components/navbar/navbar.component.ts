@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -6,16 +7,19 @@ import { Component } from '@angular/core';
   templateUrl: './navbar.component.html',
   standalone: true,
   styleUrl: './navbar.component.css'
-})
-export class NavbarComponent {
+})export class NavbarComponent {
+  constructor(private router: Router) {}
 
-  addUser() {}
-  addEmployee(){}
-  search(){}
-  viewUsers(){}
-  viewAccounts(){}
-  viewTransactions(){}
-  viewLoans(){}
-  viewExchange(){}
-  logout(){}
+  AllEmployees() {
+    this.router.navigate(['/employees']);
+  }
+
+  AllUsers() {
+    this.router.navigate(['/users']);
+  }
+
+  logout() {
+    console.log("Logging out...");
+    this.router.navigate(['/login']);
+  }
 }

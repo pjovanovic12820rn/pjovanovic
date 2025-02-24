@@ -4,5 +4,7 @@ import { EditEmployeeComponent } from './components/edit-employee/edit-employee.
 
 export const routes: Routes = [
   { path: 'employees', component: EmployeesComponent },
-  { path: 'employees/:id', component: EditEmployeeComponent }
+  { path: 'employees/:id', component: EditEmployeeComponent },
+  { path: 'employees', component: EmployeesComponent }, // Change this Component once others arrive
+  { path: 'users', component: EmployeesComponent }
 ];
