@@ -29,29 +29,29 @@
         </div>
       </div>
 
-<!--      <div class="form-row">-->
-<!--        <div class="input-group">-->
-<!--          <label for="birthDate">Date of Birth</label>-->
-<!--          <input type="date" id="birthDate" formControlName="birthDate" required>-->
-<!--          <div *ngIf="isFieldInvalid('birthDate')" class="error-message">-->
-<!--            <div *ngIf="getFieldError('birthDate', 'required')">Date of Birth is required.</div>-->
-<!--            <div *ngIf="getFieldError('birthDate', 'invalidDate')">Birthdate must be in the past.</div>-->
-<!--          </div>-->
-<!--        </div>-->
+      <!--      <div class="form-row">-->
+      <!--        <div class="input-group">-->
+      <!--          <label for="birthDate">Date of Birth</label>-->
+      <!--          <input type="date" id="birthDate" formControlName="birthDate" required>-->
+      <!--          <div *ngIf="isFieldInvalid('birthDate')" class="error-message">-->
+      <!--            <div *ngIf="getFieldError('birthDate', 'required')">Date of Birth is required.</div>-->
+      <!--            <div *ngIf="getFieldError('birthDate', 'invalidDate')">Birthdate must be in the past.</div>-->
+      <!--          </div>-->
+      <!--        </div>-->
 
-<!--        <div class="input-group">-->
-<!--          <label for="gender">Gender</label>-->
-<!--          <select id="gender" formControlName="gender" required>-->
-<!--            <option value="" disabled selected>Select gender</option>-->
-<!--            <option value="M">Male</option>-->
-<!--            <option value="F">Female</option>-->
-<!--            <option value="" disabled>There are only 2 genders</option>-->
-<!--          </select>-->
-<!--          <div *ngIf="isFieldInvalid('gender')" class="error-message">-->
-<!--            <div *ngIf="getFieldError('gender', 'required')">Gender is required.</div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
+      <!--        <div class="input-group">-->
+      <!--          <label for="gender">Gender</label>-->
+      <!--          <select id="gender" formControlName="gender" required>-->
+      <!--            <option value="" disabled selected>Select gender</option>-->
+      <!--            <option value="M">Male</option>-->
+      <!--            <option value="F">Female</option>-->
+      <!--            <option value="" disabled>There are only 2 genders</option>-->
+      <!--          </select>-->
+      <!--          <div *ngIf="isFieldInvalid('gender')" class="error-message">-->
+      <!--            <div *ngIf="getFieldError('gender', 'required')">Gender is required.</div>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
 
       <div class="form-row">
         <div class="input-group">
@@ -115,7 +115,7 @@
         </div>
       </div>
 
-      <button type="submit">Save Changes</button>
+      <button type="submit" [disabled]="!authService.isAdmin">Save Changes</button>
     </form>
 
   }

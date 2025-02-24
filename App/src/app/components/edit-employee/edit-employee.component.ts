@@ -1,11 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { EmployeeService } from '../../services/employee.service';
-import { Employee } from '../../models/employee.model';
+import {Component, inject, OnInit} from '@angular/core';
+import {EmployeeService} from '../../services/employee.service';
+import {Employee} from '../../models/employee.model';
 import {AbstractControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {AlertService} from '../../services/alert.service';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-edit-employee',
@@ -15,6 +16,7 @@ import {AlertService} from '../../services/alert.service';
   styleUrl: './edit-employee.component.css'
 })
 export class EditEmployeeComponent implements OnInit {
+  protected authService = inject(AuthService);
   private router = inject(Router);
   private employeeService = inject(EmployeeService);
   private route = inject(ActivatedRoute);
@@ -24,7 +26,8 @@ export class EditEmployeeComponent implements OnInit {
   editForm!: FormGroup;
   errorMessage: string | null = null;
 
-  constructor(private alertService: AlertService) {}
+  constructor(private alertService: AlertService) {
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -52,7 +55,7 @@ export class EditEmployeeComponent implements OnInit {
   }
 
   initializeForm(): void {
-    const formattedBirthDate = this.employee?.birthDate ? this.formatDate(this.employee.birthDate) : '';
+    // const formattedBirthDate = this.employee?.birthDate ? this.formatDate(this.employee.birthDate) : '';
 
     this.editForm = this.fb.group({
       firstName: [
@@ -63,14 +66,14 @@ export class EditEmployeeComponent implements OnInit {
         this.employee?.lastName,
         [Validators.required, Validators.pattern(/^[A-Z][a-z]+(\s[A-Z][a-z]+)*$/)]
       ],
-      birthDate: [
-        formattedBirthDate,
-        [Validators.required, this.pastDateValidator]
-      ],
-      gender: [
-        this.employee?.gender,
-        [Validators.required, Validators.pattern(/^(M|F)$/)]
-      ],
+      // birthDate: [
+      //   formattedBirthDate,
+      //   [Validators.required, this.pastDateValidator]
+      // ],
+      // gender: [
+      //   this.employee?.gender,
+      //   [Validators.required, Validators.pattern(/^([MF])$/)]
+      // ],
       email: [
         this.employee?.email,
         [Validators.required, Validators.email, Validators.pattern(/^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/)]
@@ -99,7 +102,7 @@ export class EditEmployeeComponent implements OnInit {
   }
 
   noWhitespaceValidator(control: AbstractControl): { [key: string]: boolean } | null {
-    return (control.value || '').trim().length === 0 ? { whitespace: true } : null;
+    return (control.value || '').trim().length === 0 ? {whitespace: true} : null;
   }
 
   private formatDate(date: Date): string {
@@ -111,14 +114,14 @@ export class EditEmployeeComponent implements OnInit {
 
 
   onSubmit(): void {
-    if (!this.employeeService.isAdmin) {
+    if (!this.authService.isAdmin) {
       this.alertService.showAlert('error', 'Permission denied: Only admins can edit employee details.');
       return;
     }
 
     if (this.editForm.valid) {
-      const formData = { ...this.editForm.value };
-      formData.birthDate = new Date(formData.birthDate);
+      const formData = {...this.editForm.value};
+      // formData.birthDate = new Date(formData.birthDate);
 
       this.employeeService.updateEmployee(formData).subscribe({
         next: () => {
@@ -137,20 +140,20 @@ export class EditEmployeeComponent implements OnInit {
     }
   }
 
-    isFieldInvalid(field: string) {
-        const formControl = this.editForm.get(field);
-        return formControl && formControl.invalid && (formControl.dirty || formControl.touched);
-    }
+  isFieldInvalid(field: string) {
+    const formControl = this.editForm.get(field);
+    return formControl && formControl.invalid && (formControl.dirty || formControl.touched);
+  }
 
-    getFieldError(field: string, errorType: string) {
-        const formControl = this.editForm.get(field);
-        return formControl?.errors?.[errorType];
-    }
+  getFieldError(field: string, errorType: string) {
+    const formControl = this.editForm.get(field);
+    return formControl?.errors?.[errorType];
+  }
 
   pastDateValidator(control: AbstractControl): { [key: string]: any } | null {
     const today = new Date();
     const inputDate = new Date(control.value);
-    return inputDate < today ? null : { invalidDate: 'Birthdate must be in the past' };
+    return inputDate < today ? null : {invalidDate: 'Birthdate must be in the past'};
   }
 
 }
