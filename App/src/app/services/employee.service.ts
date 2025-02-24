@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Employee } from '../models/employee.model';
-import { Observable, of } from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -66,5 +66,24 @@ export class EmployeeService {
   getEmployee(id: number): Observable<Employee | undefined> {
     const employee = this.mockEmployees.find(emp => emp.id === id);
     return of(employee);
+  }
+
+
+  deleteEmployee(id: number): Observable<void> {
+    const index = this.mockEmployees.findIndex(emp => emp.id === id);
+    if (index !== -1) {
+      this.mockEmployees.splice(index, 1);
+      return of(undefined);
+    }
+    return throwError(() => new Error('Employee not found'));
+  }
+
+  deactivateEmployee(id: number): Observable<void> {
+    const employee = this.mockEmployees.find(emp => emp.id === id);
+    if (employee) {
+      employee.isActive = false;
+      return of(undefined);
+    }
+    return throwError(() => new Error('Employee not found'));
   }
 }
