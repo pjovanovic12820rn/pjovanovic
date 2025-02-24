@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Employee</title>
+  <link rel="stylesheet" href="register-employee.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="register-container">
+  <h2>Register New Employee</h2>
+  <form [formGroup]="registerEmployeeForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <div class="input-group">
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" required>
+      </div>
+      <div class="input-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" required>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="input-group">
+        <label for="dob">Date of Birth</label>
+        <input type="date" id="dob" required>
+      </div>
+      <div class="input-group">
+        <label for="gender">Gender</label>
+        <select id="gender">
+          <option value="M">Male</option>
+          <option value="F">Female</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="input-group">
+        <label for="jmbg">JMBG</label>
+        <input type="text" id="jmbg" maxlength="13" pattern="\d{13}" required>
+      </div>
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="input-group">
+        <label for="phone">Phone Number</label>
+        <input type="text" id="phone" pattern="\d{11}" required>
+      </div>
+      <div class="input-group">
+        <label for="address">Address</label>
+        <input type="text" id="address" required>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="input-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" required>
+      </div>
+      <div class="input-group">
+        <label for="role">Role</label>
+        <input type="text" id="role" required>
+      </div>
+    </div>
+
+    <button type="submit">Register</button>
+  </form>
+</div>
+</body>
+</html>
