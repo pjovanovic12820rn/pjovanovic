@@ -7,7 +7,7 @@ import {Observable, of, throwError} from 'rxjs';
 })
 export class AuthService {
 
-  isAdmin = true;
+  isAdmin = false;
 
 
 }

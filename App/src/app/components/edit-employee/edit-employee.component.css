@@ -98,7 +98,10 @@ button:hover {
     background: #9E7CD7;
     transform: scale(1.05);
 }
-
+button:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+}
 /* Poruka o grešci */
 .error-message {
     color: red;
