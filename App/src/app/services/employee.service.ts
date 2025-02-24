@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Employee } from '../models/employee.model';
+import { Employee, Message } from '../models/employee.model';
 import { Observable, of } from 'rxjs';
 
 @Injectable({
@@ -67,4 +67,13 @@ export class EmployeeService {
     const employee = this.mockEmployees.find(emp => emp.id === id);
     return of(employee);
   }
+
+
+  resetPassword(token: string, newPassword: string): Observable<Message>{
+    const message: Message = {
+      message: "Password reset successfully"
+    };
+    return of(message);
+  }
+
 }

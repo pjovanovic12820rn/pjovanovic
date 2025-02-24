@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { EmployeeService } from '../../services/employee.service';
 
 @Component({
   selector: 'app-password-reset',
@@ -14,7 +14,7 @@ export class PasswordResetComponent {
   passwordForm: FormGroup;
   passwordStrength: string = '';
 
-  constructor(private fb: FormBuilder, private httpClient: HttpClient) {
+  constructor(private fb: FormBuilder, private employeeService: EmployeeService) {
     this.passwordForm = this.fb.group(
       {
         newPassword: this.fb.control('', [Validators.required]),
@@ -68,18 +68,16 @@ export class PasswordResetComponent {
       repeatNewPassword: this.passwordForm.get('repeatNewPassword')?.value
     };
 
-    // Dodati pravilnu putanju
-    this.httpClient.put('http://localhost:8080/api/reset-password', formData).subscribe({
-      next: (res) => {
-        console.log('Response:', res);
-        alert('Password reset successful!');
-        this.passwordForm.reset();
+    this.employeeService.resetPassword("", formData.newPassword).subscribe({
+      next: (message) => {
+        alert(message.message);
       },
-      error: (err) => {
-        console.error('Error resetting password:', err);
-        alert('Failed to reset password. Please try again.');
+      error: (error) => {
+        console.error('Error reseting password:', error);
       }
-    });
+    })
+
+
   }
 
 }
