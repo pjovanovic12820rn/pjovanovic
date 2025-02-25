@@ -80,6 +80,7 @@ export class EmployeeService {
     // Make a PUT request to update the employee
     // return this.http.put<boolean>(`/api/admin/employees/${updatedEmployee.id}`, updatedEmployee);
   }
+
   deleteEmployee(id: number): Observable<void> {
     const index = this.mockEmployees.findIndex(emp => emp.id === id);
     if (index !== -1) {
@@ -97,4 +98,5 @@ export class EmployeeService {
     }
     return throwError(() => new Error('Employee not found'));
   }
+
 }
