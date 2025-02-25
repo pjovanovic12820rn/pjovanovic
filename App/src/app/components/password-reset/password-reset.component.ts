@@ -3,17 +3,19 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { SuccessComponent } from '../success/success.component';
 
 @Component({
   selector: 'app-password-reset',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, SuccessComponent],
   templateUrl: './password-reset.component.html',
-  styleUrl: './password-reset.component.css'
+  styleUrls: ['./password-reset.component.css']  
 })
 export class PasswordResetComponent {
   passwordForm: FormGroup;
   passwordFeedback: string = '';
+  success: boolean = false;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.passwordForm = this.fb.group(
@@ -69,12 +71,13 @@ export class PasswordResetComponent {
 
     this.authService.resetPassword("", formData.newPassword).subscribe({
       next: (message) => {
-        this.router.navigate(['/success-page']); 
+        // Success flow
+        this.success = true;
       },
       error: (error) => {
-        alert(error); 
+        alert(error);
         console.error('Error resetting password:', error);
-      }
-    });
-  }
+      }
+    });
+  }
 }
