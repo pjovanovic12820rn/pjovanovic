@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Employee } from '../models/employee.model';
+import { Employee, Message } from '../models/employee.model';
 import {Observable, of, throwError} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {AuthService} from './auth.service';
@@ -69,6 +69,9 @@ export class EmployeeService {
     const employee = this.mockEmployees.find(emp => emp.id === id);
     return of(employee);
   }
+
+
+ 
 
   updateEmployee(updatedEmployee: Employee): Observable<boolean> {
     // Check if the user has admin permissions
