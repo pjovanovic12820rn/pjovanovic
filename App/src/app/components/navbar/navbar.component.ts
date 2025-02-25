@@ -20,7 +20,7 @@ import {NgIf} from "@angular/common";
   }
 
   checkAuthStatus() {
-    this.isAuthenticated = !!sessionStorage.getItem('auth_token'); // If exist
+    this.isAuthenticated = !!sessionStorage.getItem('jwt'); // If exist
   }
 
   AllEmployees() {
