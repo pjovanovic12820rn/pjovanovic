@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Employee } from '../models/employee.model';
+import { Employee, Message } from '../models/employee.model';
 import {Observable, of, throwError} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {AuthService} from './auth.service';
@@ -70,6 +70,9 @@ export class EmployeeService {
     return of(employee);
   }
 
+
+ 
+
   updateEmployee(updatedEmployee: Employee): Observable<boolean> {
     // Check if the user has admin permissions
     if (!this.authService.isAdmin) {
@@ -79,6 +82,24 @@ export class EmployeeService {
     return of(true)
     // Make a PUT request to update the employee
     // return this.http.put<boolean>(`/api/admin/employees/${updatedEmployee.id}`, updatedEmployee);
+  }
+
+  deleteEmployee(id: number): Observable<void> {
+    const index = this.mockEmployees.findIndex(emp => emp.id === id);
+    if (index !== -1) {
+      this.mockEmployees.splice(index, 1);
+      return of(undefined);
+    }
+    return throwError(() => new Error('Employee not found'));
+  }
+
+  deactivateEmployee(id: number): Observable<void> {
+    const employee = this.mockEmployees.find(emp => emp.id === id);
+    if (employee) {
+      employee.isActive = false;
+      return of(undefined);
+    }
+    return throwError(() => new Error('Employee not found'));
   }
 
 }
