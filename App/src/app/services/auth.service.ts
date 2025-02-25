@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Employee, Message } from '../models/employee.model';
+import { Observable, of, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -29,4 +31,15 @@ export class AuthService {
   getToken(): string | null {
     return sessionStorage.getItem('jwt');
   }
+
+  isAdmin = false;
+
+
+  resetPassword(token: string, newPassword: string): Observable<Message>{
+    const message: Message = {
+      message: "Password reset successfully"
+    };
+    return of(message);
+  }
+
 }

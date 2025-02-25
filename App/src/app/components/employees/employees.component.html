@@ -1,0 +1,59 @@
+<div class="employees-container">
+    <h2>Employees</h2>
+
+    @if (errorMessage) {
+        <div class="error-message">
+            {{ errorMessage }}
+        </div>
+    }
+
+    @if (isAdmin) {
+        <div id="employees-list" class="employee-list">
+            @for (employee of employees; track employee.id) {
+                <div class="employee-card">
+          <span>
+            <strong>{{ employee.firstName }} {{ employee.lastName }}</strong> ({{
+              employee.email
+            }})
+          </span>
+                    <p class="role"><strong>Role:</strong> {{ employee.position }}</p>
+                    <p><strong>Phone:</strong> {{ employee.phoneNumber }}</p>
+                    <p><strong>Status:</strong> {{ employee.isActive ? 'Active' : 'Inactive' }}</p>
+                    <div class="employee-actions">
+                      <button class="view-details-btn" [routerLink]="['/employees', employee.id]">View Details</button>
+                      <button class="delete-btn" (click)="openDeleteModal(employee)">Delete</button>
+
+                      <div class="modal-overlay" *ngIf="showDeleteModal">
+                        <div class="modal">
+                          <h3>Confirm Deletion</h3>
+
+                          @if (isDeleteButtonClickable) {
+                            <p>Are you sure you want to delete <strong>{{ selectedEmployee?.firstName }} {{ selectedEmployee?.lastName }}</strong> ({{ selectedEmployee?.position }})?</p>
+                          } @else {
+                            <div class="error-message">
+                              {{ errorMessageDelete }}
+                            </div>
+                          }
+
+                          <div class="modal-actions">
+                            <button class="cancel-btn" (click)="closeDeleteModal()">Cancel {{ countdown !== null ? countdown : '' }}</button>
+                            <button class="confirm-btn"
+                                    [disabled]="!isDeleteButtonClickable"
+                                    (click)="confirmDelete()">Delete</button>
+                          </div>
+                        </div>
+                      </div>
+                      <button class="deactivate-btn" (click)="deactivateEmployee(employee.id)" [disabled]="!employee.isActive">Deactivate</button>
+                    </div>
+                </div>
+            } @empty {
+                @if (!errorMessage) {
+                    <p>No employees found.</p>
+                }
+            }
+        </div>
+    } @else {
+        <p>You are not authorized to view the employee list.</p>
+    }
+</div>
+
