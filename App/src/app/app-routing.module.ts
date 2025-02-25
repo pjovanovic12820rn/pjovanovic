@@ -7,9 +7,6 @@ import {RegisterEmployeeComponent} from './components/register-employee/register
 export const routes: Routes = [
   { path: 'employees', component: EmployeesComponent },
   { path: 'employees/:id', component: EditEmployeeComponent },
-<<<<<<< HEAD
   {path: 'reset-password', component: PasswordResetComponent},
-=======
   { path: 'register', component: RegisterEmployeeComponent }
->>>>>>> 9caecb05d01a2997d42712b42aab3023ecc403a4
 ];
