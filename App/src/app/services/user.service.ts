@@ -8,27 +8,27 @@ import { Employee } from '../models/employee.model';
   providedIn: 'root',
 })
 export class UserService {
-  private baseUrl = '/api/admin/users';
+  private baseUrl = 'http://localhost:8080/api/admin/users';
   private employeeUrl = '/api/admin/employees';
 
   constructor(private http: HttpClient) {}
+  
+  registerUser(userData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, userData);
+  }
 
-  // Dohvati sve korisnike (samo admin)
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.baseUrl);
   }
 
-  // Dohvati jednog korisnika
   getUserById(id: number): Observable<User> {
     return this.http.get<User>(`${this.baseUrl}/${id}`);
   }
 
-  // Dohvati sve zaposlene (samo admin)
   getAllEmployees(): Observable<Employee[]> {
     return this.http.get<Employee[]>(this.employeeUrl);
   }
 
-  // Dohvati jednog zaposlenog
   getEmployeeById(id: number): Observable<Employee> {
     return this.http.get<Employee>(`${this.employeeUrl}/${id}`);
   }

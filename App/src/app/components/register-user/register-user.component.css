@@ -1,0 +1,44 @@
+.register-container {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    width: 500px;
+    text-align: center;
+  }
+  
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+  }
+  
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+  
+  .input-group label {
+    font-weight: bold;
+  }
+  
+  .error {
+    color: red;
+    font-size: 0.8rem;
+  }
+  
+  button {
+    width: 100%;
+    padding: 10px;
+    background: #6A4BBC;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background: #8E79D2;
+  }
+  
