@@ -81,4 +81,22 @@ export class EmployeeService {
     // return this.http.put<boolean>(`/api/admin/employees/${updatedEmployee.id}`, updatedEmployee);
   }
 
+  deleteEmployee(id: number): Observable<void> {
+    const index = this.mockEmployees.findIndex(emp => emp.id === id);
+    if (index !== -1) {
+      this.mockEmployees.splice(index, 1);
+      return of(undefined);
+    }
+    return throwError(() => new Error('Employee not found'));
+  }
+
+  deactivateEmployee(id: number): Observable<void> {
+    const employee = this.mockEmployees.find(emp => emp.id === id);
+    if (employee) {
+      employee.isActive = false;
+      return of(undefined);
+    }
+    return throwError(() => new Error('Employee not found'));
+  }
+
 }
