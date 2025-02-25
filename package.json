@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@angular/common": "^19.1.7",
+    "@angular/forms": "^19.1.7",
+    "@angular/router": "^19.1.7"
+  }
+}
