@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Employee } from '../models/employee.model';
+import { Employee, Message } from '../models/employee.model';
 import {Observable, of, throwError} from 'rxjs';
 
 @Injectable({
@@ -8,6 +8,15 @@ import {Observable, of, throwError} from 'rxjs';
 export class AuthService {
 
   isAdmin = false;
+
+
+  resetPassword(token: string, newPassword: string): Observable<Message>{
+    const message: Message = {
+      message: "Password reset successfully"
+    };
+    return of(message);
+  }
+
 
 
 }

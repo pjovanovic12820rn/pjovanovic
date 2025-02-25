@@ -71,13 +71,7 @@ export class EmployeeService {
   }
 
 
-  resetPassword(token: string, newPassword: string): Observable<Message>{
-    const message: Message = {
-      message: "Password reset successfully"
-    };
-    return of(message);
-  }
-
+ 
 
   updateEmployee(updatedEmployee: Employee): Observable<boolean> {
     // Check if the user has admin permissions

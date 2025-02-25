@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { EmployeeService } from '../../services/employee.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-password-reset',
@@ -12,48 +13,46 @@ import { EmployeeService } from '../../services/employee.service';
 })
 export class PasswordResetComponent {
   passwordForm: FormGroup;
-  passwordStrength: string = '';
+  passwordFeedback: string = '';
 
-  constructor(private fb: FormBuilder, private employeeService: EmployeeService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.passwordForm = this.fb.group(
       {
-        newPassword: this.fb.control('', [Validators.required]),
+        newPassword: this.fb.control('', [Validators.required, this.passwordStrengthValidator.bind(this)]),
         repeatNewPassword: this.fb.control('', [Validators.required])
       },
       { validators: this.passwordsMatchValidator }
     );
-
-    this.passwordForm.get('newPassword')?.valueChanges.subscribe((password) => {
-      this.passwordStrength = this.checkPasswordStrength(password);
-    });
   }
 
-  passwordsMatchValidator(form: FormGroup) {
+  passwordsMatchValidator(form: FormGroup): ValidationErrors | null {
     const password = form.get('newPassword')?.value;
     const confirmPassword = form.get('repeatNewPassword')?.value;
     return password === confirmPassword ? null : { passwordsMismatch: true };
   }
 
-  checkPasswordStrength(password: string): string {
-    if (!password) return '';
+  passwordStrengthValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.value;
+    if (!password) return null;
 
     const hasLetters = /[a-zA-Z]/.test(password);
     const hasNumbers = /[0-9]/.test(password);
     const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const lengthValid = password.length >= 8;
 
-    if (password.length < 6) {
-      return 'Weak';
+    let missingElements = [];
+    if (!lengthValid) missingElements.push("at least 8 characters");
+    if (!hasLetters) missingElements.push("at least one letter");
+    if (!hasNumbers) missingElements.push("at least one number");
+    if (!hasSpecial) missingElements.push("at least one special character");
+
+    if (missingElements.length > 0) {
+      this.passwordFeedback = "Password must contain: " + missingElements.join(', ');
+      return { weakPassword: true };
     }
 
-    if (hasLetters && hasNumbers && password.length >= 6 && password.length < 8) {
-      return 'Medium';
-    }
-
-    if (hasLetters && hasNumbers && hasSpecial && password.length >= 8) {
-      return 'Strong';
-    }
-
-    return 'Weak';
+    this.passwordFeedback = "Strong password!";
+    return null;
   }
 
   onSubmit() {
@@ -68,16 +67,14 @@ export class PasswordResetComponent {
       repeatNewPassword: this.passwordForm.get('repeatNewPassword')?.value
     };
 
-    this.employeeService.resetPassword("", formData.newPassword).subscribe({
+    this.authService.resetPassword("", formData.newPassword).subscribe({
       next: (message) => {
-        alert(message.message);
+        this.router.navigate(['/success-page']); 
       },
       error: (error) => {
-        console.error('Error reseting password:', error);
-      }
-    })
-
-
-  }
-
+        alert(error); 
+        console.error('Error resetting password:', error);
+      }
+    });
+  }
 }
