@@ -9,6 +9,7 @@ import { RegisterEmployeeComponent } from './components/register-employee/regist
 export const routes: Routes = [
   { path: 'employees', component: EmployeesComponent },
   { path: 'employees/:id', component: EditEmployeeComponent },
+  { path: 'users', component: EmployeesComponent }, // Change after Users are added
   { path: 'reset-password', component: PasswordResetComponent },
   { path: 'register', component: RegisterEmployeeComponent },
   {

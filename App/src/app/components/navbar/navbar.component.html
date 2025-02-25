@@ -4,5 +4,6 @@
     <button class="nav-btn" (click)="AllEmployees()">Users</button>
     <button class="nav-btn" (click)="AllUsers()">Employees</button>
   </div>
-  <button class="logout-btn" (click)="logout()">Logout</button>
+    <button class = "logout-btn" *ngIf="isAuthenticated" (click)="logout()">Logout</button>
+    <button class = "login-btn" *ngIf="!isAuthenticated" (click)="logIn()">Login</button>
 </nav>

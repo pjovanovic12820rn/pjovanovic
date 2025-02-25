@@ -60,3 +60,19 @@ body {
 .logout-btn:hover {
   background: #B71E2F;
 }
+
+
+.login-btn {
+  background: #e33f54;
+  color: white;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 0.9rem;
+}
+
+.login-btn:hover {
+  background: #a64d79;
+}
