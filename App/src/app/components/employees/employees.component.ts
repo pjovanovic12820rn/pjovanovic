@@ -27,7 +27,7 @@ export class EmployeesComponent implements OnInit {
   ngOnInit(): void {
     this.employeeService.getEmployees().subscribe({
       next: (employees) => {
-        this.employees = employees;
+        this.employees = employees.content;
         this.errorMessage = null;
       },
       error: (error) => {
@@ -89,7 +89,7 @@ export class EmployeesComponent implements OnInit {
       next: () => {
         const employee = this.employees.find(emp => emp.id === id);
         if (employee) {
-          employee.isActive = false;
+          employee.active = false;
         }
       },
       error: (error) => {

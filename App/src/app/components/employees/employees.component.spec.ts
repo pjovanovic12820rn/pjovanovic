@@ -25,7 +25,7 @@ describe('EmployeesComponent', () => {
       username: 'john90',
       position: 'Manager',
       department: 'Finance',
-      isActive: true,
+      active: true,
       jmbg: '1234567890123'
     },
     {
@@ -40,7 +40,7 @@ describe('EmployeesComponent', () => {
       username: 'jane92',
       position: 'Software Engineer',
       department: 'IT',
-      isActive: true,
+      active: true,
       jmbg: '9876543210987'
     }
   ];

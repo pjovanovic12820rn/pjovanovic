@@ -26,7 +26,7 @@ describe('EditEmployeeComponent', () => {
     username: 'john90',
     position: 'Manager',
     department: 'Finance',
-    isActive: true,
+    active: true,
     jmbg: '1234567890123'
   };
 

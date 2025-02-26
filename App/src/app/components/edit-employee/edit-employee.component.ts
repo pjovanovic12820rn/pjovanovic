@@ -95,7 +95,7 @@ export class EditEmployeeComponent implements OnInit {
         [Validators.required, Validators.minLength(2), Validators.maxLength(50), this.noWhitespaceValidator]
       ],
       isActive: [
-        this.employee?.isActive,
+        this.employee?.active,
         [Validators.required]
       ]
     });
