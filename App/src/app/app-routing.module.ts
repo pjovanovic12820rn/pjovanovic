@@ -9,7 +9,7 @@ import { RegisterUserComponent } from './components/register-user/register-user.
 import { UsersListComponent } from './components/users-list/users-list.component';
 
 export const routes: Routes = [
-  { path: '', component: UsersListComponent },
+  { path: 'users', component: UsersListComponent },
   { path: 'employees', component: EmployeesComponent },
   { path: 'employees/:id', component: EditEmployeeComponent },
   { path: 'register-user', component: RegisterUserComponent },

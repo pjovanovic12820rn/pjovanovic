@@ -10,7 +10,7 @@ import { SuccessComponent } from '../success/success.component';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, SuccessComponent],
   templateUrl: './password-reset.component.html',
-  styleUrls: ['./password-reset.component.css']  
+  styleUrls: ['./password-reset.component.css']
 })
 export class PasswordResetComponent {
   passwordForm: FormGroup;
