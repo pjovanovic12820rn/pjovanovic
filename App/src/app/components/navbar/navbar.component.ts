@@ -15,7 +15,7 @@ import {NgIf} from "@angular/common";
 
   isAuthenticated: boolean = false; // property for JWT check
 
-  constructor(private router: Router,private authService: AuthService) {
+  constructor(private router: Router, private authService: AuthService) {
     this.checkAuthStatus();
   }
 

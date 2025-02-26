@@ -10,6 +10,7 @@ import {AuthService} from './auth.service';
 export class EmployeeService {
 
   isAdmin = true;
+  private employeeUrl = 'http://localhost:8080/api/admin/employees';
 
   private mockEmployees: Employee[] = [
     {
@@ -62,44 +63,32 @@ export class EmployeeService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   getEmployees(): Observable<Employee[]> {
-    return of(this.mockEmployees);
+    return this.http.get<Employee[]>(this.employeeUrl);
   }
 
-  getEmployee(id: number): Observable<Employee | undefined> {
-    const employee = this.mockEmployees.find(emp => emp.id === id);
-    return of(employee);
+  getEmployee(id: number): Observable<Employee> {
+    return this.http.get<Employee>(`${this.employeeUrl}/${id}`);
   }
-
-
- 
 
   updateEmployee(updatedEmployee: Employee): Observable<boolean> {
-    // Check if the user has admin permissions
     if (!this.authService.isAdmin) {
       return throwError(() => new Error('Permission denied: Admin access required.'));
     }
-
-    return of(true)
-    // Make a PUT request to update the employee
-    // return this.http.put<boolean>(`/api/admin/employees/${updatedEmployee.id}`, updatedEmployee);
+    return this.http.put<boolean>(`${this.employeeUrl}/${updatedEmployee.id}`, updatedEmployee);
   }
 
   deleteEmployee(id: number): Observable<void> {
-    const index = this.mockEmployees.findIndex(emp => emp.id === id);
-    if (index !== -1) {
-      this.mockEmployees.splice(index, 1);
-      return of(undefined);
+    if (!this.authService.isAdmin) {
+      return throwError(() => new Error('Permission denied: Admin access required.'));
     }
-    return throwError(() => new Error('Employee not found'));
+    return this.http.delete<void>(`${this.employeeUrl}/${id}`);
   }
 
   deactivateEmployee(id: number): Observable<void> {
-    const employee = this.mockEmployees.find(emp => emp.id === id);
-    if (employee) {
-      employee.isActive = false;
-      return of(undefined);
+    if (!this.authService.isAdmin) {
+      return throwError(() => new Error('Permission denied: Admin access required.'));
     }
-    return throwError(() => new Error('Employee not found'));
+    return this.http.patch<void>(`${this.employeeUrl}/${id}/deactivate`, {});
   }
 
 }
