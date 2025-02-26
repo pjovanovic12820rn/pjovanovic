@@ -31,7 +31,7 @@ export class UsersComponent implements OnInit {
   fetchUsers() {
     this.userService.getAllUsers(this.currentPage, this.pageSize).subscribe({
       next: (data) => {
-        this.users = data;
+        this.users = data.content;
       },
       error: (err) => {
         console.error('Error fetching users:', err);

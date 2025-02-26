@@ -1,28 +1,40 @@
 <div class="users-container">
-    <h2>All Users</h2>
+  <h2>Users</h2>
 
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
 
-    <div *ngIf="users.length === 0 && !errorMessage">
-      <p>No users found.</p>
-    </div>
+  <!-- Loading State -->
+  <!-- <div *ngIf="loading" class="loading">Loading users...</div> -->
 
-    <div *ngIf="isAdmin; else notAuthorized">
-      <div class="user-card" *ngFor="let user of users">
-        <div class="user-info">
-          <strong>{{ user.firstName }} {{ user.lastName }}</strong> ({{ user.email }})
-        </div>
-        <p>Status: {{ user.isActive ? 'Active' : 'Inactive' }}</p>
-        <div class="user-actions">
-          <button [routerLink]="['/users', user.id]">Edit</button>
-          <button (click)="deleteUser(user.id)">Delete</button>
-        </div>
+  <!-- Admin Section -->
+  <ng-container *ngIf="isAdmin; else notAuthorized">
+
+    <!-- Users List -->
+    <div *ngIf="users.length > 0; else noUsers">
+      <div *ngFor="let user of users" class="user-card">
+        <span class="user-info">{{ user.firstName }} {{ user.lastName }} ({{ user.email }})</span>
+        <p><strong>Phone:</strong> {{ user.phone }}</p>
+        <p><strong>Address:</strong> {{ user.address }}</p>
+        <p><strong>Status:</strong> {{ user.isActive ? 'Active' : 'Inactive' }}</p>
+        <button *ngIf="isAdmin" (click)="deleteUser(user.id)">Delete</button>
+        <a [routerLink]="['/users/', user.id]">Edit</a>
       </div>
     </div>
+    <ng-template #noUsers><p>No users found.</p></ng-template>
 
-    <ng-template #notAuthorized>
-      <p>You are not authorized to see user list.</p>
-    </ng-template>
-  </div>
+    <!-- Pagination Controls -->
+    <div class="pagination">
+      <button (click)="prevPage()" [disabled]="currentPage === 0">Previous</button>
+      <span>Page {{ currentPage + 1 }}</span>
+      <button (click)="nextPage()">Next</button>
+    </div>
+  </ng-container>
+
+  <!-- Unauthorized Message -->
+  <ng-template #notAuthorized>
+    <p>You are not authorized to view this page.</p>
+  </ng-template>
+</div>

@@ -29,7 +29,7 @@ export class RegisterUserComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isAdmin = this.authService.isAdmin;
+    this.isAdmin = true;
     if (!this.isAdmin) {
       this.alertService.showAlert('error', 'You do not have permission to register users.');
       this.router.navigate(['/']);

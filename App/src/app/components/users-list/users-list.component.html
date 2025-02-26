@@ -12,16 +12,6 @@
             </div>
         </div>
         <ng-template #noUsers><p>No users found.</p></ng-template>
-
-        <h2>Employees</h2>
-        <div *ngIf="employees.length > 0; else noEmployees">
-            <div *ngFor="let employee of employees" class="user-card">
-                <span class="user-info">{{ employee.firstName }} {{ employee.lastName }} ({{ employee.email }})</span>
-                <p class="role">Role: {{ employee.position }}</p>
-                <p><strong>Status:</strong> {{ employee.isActive ? 'Active' : 'Inactive' }}</p>
-            </div>
-        </div>
-        <ng-template #noEmployees><p>No employees found.</p></ng-template>
     } @else {
         <p>You are not authorized to view this page.</p>
     }

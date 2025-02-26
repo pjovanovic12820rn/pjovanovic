@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 
 interface Alert {
   type: 'success' | 'error' | 'warning' | 'info';
-  message: string;
+  message: string | null;
 }
 
 @Injectable({
@@ -14,7 +14,7 @@ export class AlertService {
   alert$ = this.alertSubject.asObservable();
 
   showAlert(type: "success" | "error" | "warning" | "info", message: string | null) {
-    this.alertSubject.next({ type, message });
+    this.alertSubject.next({ type, message});
 
     // Auto-hide after 3 seconds
     setTimeout(() => this.clearAlert(), 3000);
