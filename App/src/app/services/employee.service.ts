@@ -31,6 +31,10 @@ export class EmployeeService {
     return this.http.get<Employee>(`${this.employeeUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 
+  registerEmployee(employee: Employee): Observable<Employee> {
+    return this.http.post<Employee>(this.employeeUrl, employee);
+  }
+
   updateEmployee(updatedEmployee: Employee): Observable<boolean> {
     return this.http.put<boolean>(`${this.employeeUrl}/${updatedEmployee.id}`, updatedEmployee,
       { headers: this.getAuthHeaders() }, );

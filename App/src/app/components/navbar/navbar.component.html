@@ -1,9 +1,8 @@
-<nav class="navbar">
+<nav class="navbar" *ngIf="!isLoginPage">
   <div class="logo">B3</div>
   <div class="nav-links">
     <button class="nav-btn" (click)="AllUsers()">Users</button>
     <button class="nav-btn" (click)="AllEmployees()">Employees</button>
   </div>
-    <button class = "logout-btn" *ngIf="isAuthenticated" (click)="logout()">Logout</button>
-    <button class = "login-btn" *ngIf="!isAuthenticated" (click)="logIn()">Login</button>
+  <button class="logout-btn" *ngIf="isAuthenticated" (click)="logout()">Logout</button>
 </nav>

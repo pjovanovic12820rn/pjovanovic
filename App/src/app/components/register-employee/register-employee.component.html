@@ -1,116 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register Employee</title>
-  <link rel="stylesheet" href="register-employee.component.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-</head>
-<body>
 <div class="register-container">
   <h2>Register New Employee</h2>
-  <form [formGroup]="registerEmployeeForm" (ngSubmit)="onSubmit()">
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <form *ngIf="isAdmin" [formGroup]="registerEmployeeForm" (ngSubmit)="onSubmit()">
     <div class="form-row">
-      <div class="input-group">
-        <label for="firstName">First Name</label>
-        <input type="text" id="firstName" formControlName="firstName" required>
-        <div class="error" *ngIf="registerEmployeeForm.get('firstName')?.invalid && registerEmployeeForm.get('firstName')?.touched">
-          <span *ngIf="registerEmployeeForm.get('firstName')?.errors?.['required']">First name is required.</span>
-          <span *ngIf="registerEmployeeForm.get('firstName')?.errors?.['onlyLetters']">Only letters are allowed.</span>
-          <span *ngIf="registerEmployeeForm.get('firstName')?.errors?.['minLengthWithoutSpaces']">Must be at least 2 characters (excluding spaces).</span>
-        </div>
-      </div>
-      <div class="input-group">
-        <label for="lastName">Last Name</label>
-        <input type="text" id="lastName" formControlName="lastName" required>
-        <div class="error" *ngIf="registerEmployeeForm.get('lastName')?.invalid && registerEmployeeForm.get('lastName')?.touched">
-          <span *ngIf="registerEmployeeForm.get('lastName')?.errors?.['required']">Last name is required.</span>
-          <span *ngIf="registerEmployeeForm.get('lastName')?.errors?.['onlyLetters']">Only letters are allowed.</span>
-          <span *ngIf="registerEmployeeForm.get('lastName')?.errors?.['minLengthWithoutSpaces']">Must be at least 2 characters (excluding spaces).</span>
-        </div>
-      </div>
+      <label for="firstName">First Name</label>
+      <input id="firstName" formControlName="firstName">
     </div>
-    <!--
-        <div class="form-row">
-          <div class="input-group">
-            <label for="dob">Date of Birth</label>
-            <input type="date" id="dob" formControlName="dob" required>
-          </div>
-          <div class="input-group">
-            <label for="gender">Gender</label>
-            <select id="gender" formControlName="gender">
-              <option value="M">Male</option>
-              <option value="F">Female</option>
-            </select>
-          </div>
-        </div>
-      -->
-        <div class="form-row">
-          <div class="input-group">
-            <label for="jmbg">JMBG</label>
-            <input type="text" id="jmbg" formControlName="jmbg"  required>
-            <div class="error" *ngIf="registerEmployeeForm.get('jmbg')?.invalid && registerEmployeeForm.get('jmbg')?.touched">
-              <span *ngIf="registerEmployeeForm.get('jmbg')?.errors?.['required']">JMBG is required.</span>
-              <span *ngIf="registerEmployeeForm.get('jmbg')?.errors?.['pattern']">JMBG must be 13 digits.</span>
-            </div>
 
-          </div>
-          <div class="input-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" formControlName="email" required>
-            <div class="error" *ngIf="registerEmployeeForm.get('email')?.invalid && registerEmployeeForm.get('email')?.touched">
-              <span *ngIf="registerEmployeeForm.get('email')?.errors?.['required']">Email is required.</span>
-              <span *ngIf="registerEmployeeForm.get('email')?.errors?.['email']">Invalid email format.</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="input-group">
-            <label for="phone">Phone Number</label>
-            <input type="text" id="phone" formControlName="phone" required>
-            <div class="error" *ngIf="registerEmployeeForm.get('phone')?.invalid && registerEmployeeForm.get('phone')?.touched">
-              <span *ngIf="registerEmployeeForm.get('phone')?.errors?.['required']">Phone number is required.</span>
-              <span *ngIf="registerEmployeeForm.get('phone')?.errors?.['pattern']">Only numbers are allowed.</span>
-            </div>
-          </div>
-          <div class="input-group">
-            <label for="address">Address</label>
-            <input type="text" id="address" formControlName="address" required>
-            <div class="error" *ngIf="registerEmployeeForm.get('address')?.invalid && registerEmployeeForm.get('address')?.touched">
-              Address is required.
-            </div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <!--
-          <div class="input-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" formControlName="username" required>
-          </div>
-          -->
-          <div class="input-group">
-            <label for="active">Active Status</label>
-            <select formControlName="active" id="active">
-              <option [value]="true">Active</option>
-              <option [value]="false">Inactive</option>
-            </select>
-          </div>
-          <div class="input-group">
-            <label for="position">Position</label>
-            <input type="text" id="position" formControlName="position" required>
-            <div class="error" *ngIf="registerEmployeeForm.get('position')?.invalid && registerEmployeeForm.get('position')?.touched">
-              <span *ngIf="registerEmployeeForm.get('position')?.errors?.['required']">Position is required.</span>
-              <span *ngIf="registerEmployeeForm.get('position')?.errors?.['onlyLetters']">Only letters are allowed.</span>
-              <span *ngIf="registerEmployeeForm.get('position')?.errors?.['minLengthWithoutSpaces']">Must be at least 2 characters (excluding spaces).</span>
-            </div>
-          </div>
-        </div>
-
-        <button type="submit">Register</button>
-      </form>
+    <div class="form-row">
+      <label for="lastName">Last Name</label>
+      <input id="lastName" formControlName="lastName">
     </div>
-    </body>
-    </html>
+
+    <div class="form-row">
+      <label for="jmbg">JMBG</label>
+      <input id="jmbg" formControlName="jmbg">
+    </div>
+
+    <div class="form-row">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email">
+    </div>
+
+    <div class="form-row">
+      <label for="phone">Phone Number</label>
+      <input id="phone" formControlName="phone">
+    </div>
+
+    <div class="form-row">
+      <label for="address">Address</label>
+      <input id="address" formControlName="address">
+    </div>
+
+    <div class="form-row">
+      <label for="position">Position</label>
+      <input id="position" formControlName="position">
+    </div>
+
+    <div class="form-row">
+      <label for="department">Department</label>
+      <input id="department" formControlName="department">
+    </div>
+
+    <div class="form-row">
+      <label for="active">Active Status</label>
+      <select id="active" formControlName="active">
+        <option [value]="true">Active</option>
+        <option [value]="false">Inactive</option>
+      </select>
+    </div>
+
+    <button type="submit" [disabled]="!isAdmin">Register Employee</button>
+  </form>
+</div>

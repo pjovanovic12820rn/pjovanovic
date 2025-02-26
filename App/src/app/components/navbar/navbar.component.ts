@@ -1,44 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import {AuthService} from "../../services/auth.service";
-import {NgIf} from "@angular/common";
+import { AuthService } from '../../services/auth.service';
+import { NgIf, CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
-  imports: [
-    NgIf
-  ],
-  templateUrl: './navbar.component.html',
   standalone: true,
-  styleUrl: './navbar.component.css'
-})export class NavbarComponent {
+  imports: [NgIf, CommonModule],
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.css']
+})
+export class NavbarComponent implements OnInit {
+  private router = inject(Router);
+  private authService = inject(AuthService);
 
-  isAuthenticated: boolean = false; // property for JWT check
+  isAuthenticated: boolean = false;
+  isLoginPage: boolean = false;
 
-  constructor(private router: Router, private authService: AuthService) {
+  ngOnInit(): void {
     this.checkAuthStatus();
+
+    // Hide navbar on login page
+    this.router.events.subscribe(() => {
+      this.isLoginPage = this.router.url === '/login';
+    });
   }
 
-  checkAuthStatus() {
-    this.isAuthenticated = !!sessionStorage.getItem('jwt'); // If exist
+  checkAuthStatus(): void {
+    this.isAuthenticated = this.authService.isAuthenticated();
   }
 
-  AllEmployees() {
+  AllEmployees(): void {
     this.router.navigate(['/employees']);
   }
 
-  AllUsers() {
+  AllUsers(): void {
     this.router.navigate(['/users']);
   }
 
-  logout() {
-    console.log("Logging out...");
+  logout(): void {
     this.authService.logout();
     this.isAuthenticated = false;
-    this.router.navigate(['/login']);
-  }
-
-  logIn() {
     this.router.navigate(['/login']);
   }
 }
