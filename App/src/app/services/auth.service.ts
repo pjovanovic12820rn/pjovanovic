@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Employee, Message } from '../models/employee.model';
 import { Observable, of, throwError } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -31,8 +32,22 @@ export class AuthService {
     return sessionStorage.getItem('jwt');
   }
 
-  isAdmin = true;
+  getUserRole(): string | null {
+    const token = this.getToken();
+    if (token) {
+      try {
+        const decoded: any = jwtDecode(token);
+        return decoded.role || null;
+      } catch (error) {
+        console.error('Invalid JWT Token');
+      }
+    }
+    return null;
+  }
 
+  isAdmin(): boolean {
+    return this.getUserRole() === 'admin';
+  }
 
   resetPassword(token: string, newPassword: string): Observable<Message>{
     const message: Message = {

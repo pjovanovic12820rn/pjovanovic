@@ -20,7 +20,7 @@ export class UsersComponent implements OnInit {
   pageSize: number = 10;
   totalUsers: number = 0; // Assuming backend provides total count
 
-  get isAdmin(): boolean {
+  get isAdmin(): () => boolean {
     return this.userService['authService'].isAdmin;
   }
 

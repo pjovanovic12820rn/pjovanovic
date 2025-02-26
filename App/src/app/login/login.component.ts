@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import {Router, RouterLink} from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -19,24 +19,34 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   login() {
-    //todo add validation
+    if (!this.email || !this.password) {
+      this.errorMessage = 'Email and password are required';
+      return;
+    }
 
     this.authService.login(this.email, this.password).subscribe({
       next: (response) => {
         this.authService.saveToken(response.token);
-        this.router.navigate(['/employees']);
+
+        const userRole = this.authService.getUserRole(); // Extract role from JWT
+
+        if (userRole === 'admin') {
+          this.router.navigate(['/employees']); // Admin goes to employees management
+        } else {
+          this.router.navigate(['/users']); // Regular users go to user dashboard
+        }
       },
       error: () => {
         this.errorMessage = 'Invalid email or password';
       }
     });
   }
-  passwordForgot(){
+
+  passwordForgot() {
     this.router.navigate(['/reset-password']);
   }
-  register(){
+
+  register() {
     this.router.navigate(['/register']);
   }
-
-
 }

@@ -1,59 +1,44 @@
 <div class="employees-container">
-    <h2>Employees</h2>
+  <h2>Employees</h2>
 
-    @if (errorMessage) {
-        <div class="error-message">
-            {{ errorMessage }}
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="isAdmin; else unauthorized">
+    <div id="employees-list" class="employee-list">
+      <div *ngFor="let employee of employees;" class="employee-card">
+                <span>
+                    <strong>{{ employee.firstName }} {{ employee.lastName }}</strong> ({{ employee.email }})
+                </span>
+        <p class="role"><strong>Role:</strong> {{ employee.position }}</p>
+        <p><strong>Phone:</strong> {{ employee.phoneNumber }}</p>
+        <p><strong>Status:</strong> {{ employee.active ? 'Active' : 'Inactive' }}</p>
+
+        <div class="employee-actions">
+          <button class="view-details-btn" (click)="viewEmployeeDetails(employee.id)">View Details</button>
+          <button class="delete-btn" (click)="openDeleteModal(employee)">Delete</button>
+          <button class="deactivate-btn" (click)="deactivateEmployee(employee.id)" [disabled]="!employee.active">
+            Deactivate
+          </button>
         </div>
-    }
+      </div>
+    </div>
+  </div>
 
-    @if (isAdmin) {
-        <div id="employees-list" class="employee-list">
-            @for (employee of employees; track employee.id) {
-                <div class="employee-card">
-          <span>
-            <strong>{{ employee.firstName }} {{ employee.lastName }}</strong> ({{
-              employee.email
-            }})
-          </span>
-                    <p class="role"><strong>Role:</strong> {{ employee.position }}</p>
-                    <p><strong>Phone:</strong> {{ employee.phoneNumber }}</p>
-                    <p><strong>Status:</strong> {{ employee.active ? 'Active' : 'Inactive' }}</p>
-                    <div class="employee-actions">
-                      <button class="view-details-btn" [routerLink]="['/employees', employee.id]">View Details</button>
-                      <button class="delete-btn" (click)="openDeleteModal(employee)">Delete</button>
+  <ng-template #unauthorized>
+    <p>You are not authorized to view the employee list.</p>
+  </ng-template>
 
-                      <div class="modal-overlay" *ngIf="showDeleteModal">
-                        <div class="modal">
-                          <h3>Confirm Deletion</h3>
-
-                          @if (isDeleteButtonClickable) {
-                            <p>Are you sure you want to delete <strong>{{ selectedEmployee?.firstName }} {{ selectedEmployee?.lastName }}</strong> ({{ selectedEmployee?.position }})?</p>
-                          } @else {
-                            <div class="error-message">
-                              {{ errorMessageDelete }}
-                            </div>
-                          }
-
-                          <div class="modal-actions">
-                            <button class="cancel-btn" (click)="closeDeleteModal()">Cancel {{ countdown !== null ? countdown : '' }}</button>
-                            <button class="confirm-btn"
-                                    [disabled]="!isDeleteButtonClickable"
-                                    (click)="confirmDelete()">Delete</button>
-                          </div>
-                        </div>
-                      </div>
-                      <button class="deactivate-btn" (click)="deactivateEmployee(employee.id)" [disabled]="!employee.active">Deactivate</button>
-                    </div>
-                </div>
-            } @empty {
-                @if (!errorMessage) {
-                    <p>No employees found.</p>
-                }
-            }
-        </div>
-    } @else {
-        <p>You are not authorized to view the employee list.</p>
-    }
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" *ngIf="showDeleteModal">
+    <div class="modal">
+      <h3>Confirm Deletion</h3>
+      <p>Are you sure you want to delete <strong>{{ selectedEmployee?.firstName }} {{ selectedEmployee?.lastName }}</strong> ({{ selectedEmployee?.position }})?</p>
+      <div class="modal-actions">
+        <button class="cancel-btn" (click)="closeDeleteModal()">Cancel</button>
+        <button class="confirm-btn" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
 </div>
-

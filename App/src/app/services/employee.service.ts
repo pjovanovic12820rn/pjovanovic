@@ -16,7 +16,7 @@ export class EmployeeService {
   private getAuthHeaders(): HttpHeaders {
     const token = this.authService.getToken();
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`, // ✅ Attach JWT
+      Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     });
   }
@@ -32,24 +32,15 @@ export class EmployeeService {
   }
 
   updateEmployee(updatedEmployee: Employee): Observable<boolean> {
-    if (!this.authService.isAdmin) {
-      return throwError(() => new Error('Permission denied: Admin access required.'));
-    }
     return this.http.put<boolean>(`${this.employeeUrl}/${updatedEmployee.id}`, updatedEmployee,
       { headers: this.getAuthHeaders() }, );
   }
 
   deleteEmployee(id: number): Observable<void> {
-    if (!this.authService.isAdmin) {
-      return throwError(() => new Error('Permission denied: Admin access required.'));
-    }
     return this.http.delete<void>(`${this.employeeUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 
   deactivateEmployee(id: number): Observable<void> {
-    if (!this.authService.isAdmin) {
-      return throwError(() => new Error('Permission denied: Admin access required.'));
-    }
     return this.http.patch<void>(`${this.employeeUrl}/${id}/deactivate`, { headers: this.getAuthHeaders() }, );
   }
 

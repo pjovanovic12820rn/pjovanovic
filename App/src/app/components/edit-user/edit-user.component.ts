@@ -26,7 +26,7 @@ export class EditUserComponent implements OnInit {
   userLoaded = false;
   loading = true;
 
-  get isAdmin(): boolean {
+  get isAdmin(): () => boolean {
     return this.authService.isAdmin;
   }
 

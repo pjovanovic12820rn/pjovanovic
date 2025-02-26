@@ -21,12 +21,12 @@ export class UsersListComponent implements OnInit {
   employees: Employee[] = [];
   errorMessage: string | null = null;
 
-  get isAdmin(): boolean {
+  get isAdmin(): () => boolean {
     return this.authService.isAdmin;
   }
 
   ngOnInit(): void {
-    if (this.isAdmin) {
+    if (this.isAdmin()) {
       this.userService.getAllUsers().subscribe({
         next: (data) => {
           this.users = data.content;
