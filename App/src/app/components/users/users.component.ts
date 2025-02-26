@@ -16,16 +16,20 @@ export class UsersComponent implements OnInit {
 
   users: User[] = [];
   errorMessage: string | null = null;
-
+  currentPage: number = 0;
+  pageSize: number = 10;
+  totalUsers: number = 0; // Assuming backend provides total count
 
   get isAdmin(): boolean {
-    return this.userService['authService'].isAdmin; 
-
+    return this.userService['authService'].isAdmin;
   }
 
   ngOnInit() {
-    // Učitavamo korisnike
-    this.userService.getUsers().subscribe({
+    this.fetchUsers();
+  }
+
+  fetchUsers() {
+    this.userService.getAllUsers(this.currentPage, this.pageSize).subscribe({
       next: (data) => {
         this.users = data;
       },
@@ -34,6 +38,18 @@ export class UsersComponent implements OnInit {
         this.errorMessage = 'Failed to load users. Please try again later.';
       },
     });
+  }
+
+  nextPage() {
+    this.currentPage++;
+    this.fetchUsers();
+  }
+
+  prevPage() {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.fetchUsers();
+    }
   }
 
   deleteUser(userId: number) {
@@ -45,7 +61,6 @@ export class UsersComponent implements OnInit {
     if (confirm('Are you sure you want to delete this user?')) {
       this.userService.deleteUser(userId).subscribe({
         next: () => {
-
           this.users = this.users.filter((u) => u.id !== userId);
         },
         error: (err) => {
@@ -55,5 +70,4 @@ export class UsersComponent implements OnInit {
       });
     }
   }
-  
 }

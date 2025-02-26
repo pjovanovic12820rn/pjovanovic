@@ -24,13 +24,13 @@ export class EditUserComponent implements OnInit {
   userId!: number;
   errorMessage: string | null = null;
   userLoaded = false;
+  loading = true;
 
   get isAdmin(): boolean {
     return this.authService.isAdmin;
   }
 
   ngOnInit(): void {
-
     const idParam = this.route.snapshot.paramMap.get('id');
     if (!idParam) {
       this.errorMessage = 'No user ID provided.';
@@ -43,6 +43,11 @@ export class EditUserComponent implements OnInit {
       return;
     }
 
+    this.loadUser();
+  }
+
+  loadUser(): void {
+    this.loading = true;
     this.userService.getUserById(this.userId).subscribe({
       next: (foundUser) => {
         if (!foundUser) {
@@ -54,8 +59,9 @@ export class EditUserComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading user:', err);
-        this.errorMessage = 'Error loading user. Please try again.';
+        this.errorMessage = err?.error?.message || 'Error loading user. Please try again.';
       },
+      complete: () => (this.loading = false),
     });
   }
 
@@ -89,12 +95,11 @@ export class EditUserComponent implements OnInit {
 
     this.userService.updateUser(updatedUser).subscribe({
       next: () => {
-        // Uspešno
-        this.router.navigate(['/users']); // Vrati se na listu
+        this.router.navigate(['/users']); // ✅ Navigate back after update
       },
       error: (err) => {
         console.error('Error updating user:', err);
-        this.errorMessage = err.message || 'Failed to update user.';
+        this.errorMessage = err?.error?.message || 'Failed to update user.';
       },
     });
   }
@@ -103,6 +108,4 @@ export class EditUserComponent implements OnInit {
     const control = this.userForm?.get(controlName);
     return !!(control && control.touched && control.hasError(errorCode));
   }
-
-
 }

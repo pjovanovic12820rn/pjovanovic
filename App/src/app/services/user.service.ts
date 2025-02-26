@@ -1,95 +1,64 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
-import { Observable, of, throwError } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { Employee } from '../models/employee.model';
-import {AuthService} from './auth.service';
+import { Observable, throwError } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  private baseUrl = 'http://localhost:8080/api/admin/clients'; // 🔹 Updated to match backend endpoint
 
-  private baseUrl = 'http://localhost:8080/api/admin/users';
-  private employeeUrl = '/api/admin/employees';
+  constructor(private authService: AuthService, private http: HttpClient) {}
 
-  private mockUsers: User[] = [
-    {
-      id: 101,
-      firstName: 'Alice',
-      lastName: 'Johnson',
-      email: 'alice.johnson@example.com',
-      phone: '+381643211234',
-      address: 'Some Street 1',
-      isActive: true,
-    },
-    {
-      id: 102,
-      firstName: 'Bob',
-      lastName: 'Miller',
-      email: 'bob.miller@example.com',
-      phone: '+381643211235',
-      address: 'Another Street 2',
-      isActive: false,
-    },
-  ];
-
-  constructor(private authService: AuthService, private http: HttpClient) { }
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`, // 🔐 Attach JWT
+      'Content-Type': 'application/json',
+    });
+  }
 
   registerUser(userData: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/register`, userData);
+    if (!this.authService.isAdmin) {
+      return throwError(() => new Error('Permission denied: Only admins can register users.'));
+    }
+
+    return this.http.post<any>(`${this.baseUrl}/register`, userData, {
+      headers: this.getAuthHeaders(),
+    });
   }
 
-  getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.baseUrl);
-  }
-
-  getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`${this.baseUrl}/${id}`);
-  }
-
-  getAllEmployees(): Observable<Employee[]> {
-    return this.http.get<Employee[]>(this.employeeUrl);
-  }
-
-  getEmployeeById(id: number): Observable<Employee> {
-    return this.http.get<Employee>(`${this.employeeUrl}/${id}`);
-  }
-
-  getUsers(): Observable<User[]> {
-    return of(this.mockUsers);
-  }
-
-  getUser(id: number): Observable<User | undefined> {
-
-    const user = this.mockUsers.find((u) => u.id === id);
-    return of(user);
-  }
-
-  updateUser(updatedUser: User): Observable<boolean> {
-
+  getAllUsers(page: number = 0, size: number = 10): Observable<User[]> {
     if (!this.authService.isAdmin) {
       return throwError(() => new Error('Permission denied: Admin access required.'));
     }
 
-    const index = this.mockUsers.findIndex((u) => u.id === updatedUser.id);
-    if (index === -1) {
-      return throwError(() => new Error('User not found.'));
+    const params = new HttpParams().set('page', page).set('size', size);
+    return this.http.get<User[]>(this.baseUrl, { headers: this.getAuthHeaders(), params });
+  }
+
+  getUserById(id: number): Observable<User> {
+    if (!this.authService.isAdmin) {
+      return throwError(() => new Error('Permission denied: Admin access required.'));
     }
-    this.mockUsers[index] = { ...updatedUser };
-    return of(true);
+    return this.http.get<User>(`${this.baseUrl}/${id}`, { headers: this.getAuthHeaders() });
+  }
+
+  updateUser(updatedUser: User): Observable<boolean> {
+    if (!this.authService.isAdmin) {
+      return throwError(() => new Error('Permission denied: Admin access required.'));
+    }
+    return this.http.put<boolean>(`${this.baseUrl}/${updatedUser.id}`, updatedUser, {
+      headers: this.getAuthHeaders(),
+    });
   }
 
   deleteUser(id: number): Observable<boolean> {
     if (!this.authService.isAdmin) {
       return throwError(() => new Error('Permission denied: Admin access required.'));
     }
-
-    const index = this.mockUsers.findIndex((u) => u.id === id);
-    if (index === -1) {
-      return throwError(() => new Error('User not found.'));
-    }
-    this.mockUsers.splice(index, 1);
-    return of(true);
+    return this.http.delete<boolean>(`${this.baseUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 }

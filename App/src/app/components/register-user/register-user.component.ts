@@ -12,11 +12,13 @@ import { AlertService } from '../../services/alert.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './register-user.component.html',
-  styleUrls: ['./register-user.component.css']
+  styleUrls: ['./register-user.component.css'],
 })
 export class RegisterUserComponent implements OnInit {
   registerUserForm!: FormGroup;
   isAdmin = false;
+  loading = false; // ✅ Added loading state
+  errorMessage: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -34,6 +36,10 @@ export class RegisterUserComponent implements OnInit {
       return;
     }
 
+    this.initForm();
+  }
+
+  initForm(): void {
     this.registerUserForm = this.fb.group({
       firstName: ['', [Validators.required, this.onlyLettersValidator, this.minLengthWithoutSpaces(2)]],
       lastName: ['', [Validators.required, this.onlyLettersValidator, this.minLengthWithoutSpaces(2)]],
@@ -42,7 +48,7 @@ export class RegisterUserComponent implements OnInit {
       phone: ['', [Validators.required, Validators.pattern(/^\+?[0-9]{7,15}$/)]],
       address: ['', [Validators.required, Validators.minLength(5)]],
       password: ['', [Validators.required, Validators.minLength(8)]],
-      role: ['user', Validators.required]
+      role: ['user', Validators.required],
     });
   }
 
@@ -52,21 +58,28 @@ export class RegisterUserComponent implements OnInit {
       return;
     }
 
-    if (this.registerUserForm.valid) {
-      const formData = this.registerUserForm.value;
-      this.userService.registerUser(formData).subscribe({
-        next: () => {
-          this.alertService.showAlert('success', 'User registered successfully! Activation email sent.');
-          this.router.navigate(['/users']);
-        },
-        error: () => {
-          this.alertService.showAlert('error', 'Failed to register user. Please try again.');
-        }
-      });
-    } else {
+    if (this.registerUserForm.invalid) {
       this.alertService.showAlert('warning', 'Please correct errors before submitting.');
       this.registerUserForm.markAllAsTouched();
+      return;
     }
+
+    this.loading = true; // ✅ Prevent double submissions
+    const formData = this.registerUserForm.value;
+
+    this.userService.registerUser(formData).subscribe({
+      next: () => {
+        this.alertService.showAlert('success', 'User registered successfully! Activation email sent.');
+        this.router.navigate(['/users']);
+      },
+      error: (err) => {
+        this.errorMessage = err?.error?.message || 'Failed to register user. Please try again.';
+        this.alertService.showAlert('error', this.errorMessage);
+      },
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
   minLengthWithoutSpaces(minLength: number) {
@@ -78,5 +91,10 @@ export class RegisterUserComponent implements OnInit {
 
   onlyLettersValidator(control: AbstractControl): ValidationErrors | null {
     return /^[A-Za-z]+$/.test(control.value.trim()) ? null : { onlyLetters: true };
+  }
+
+  hasError(controlName: string, errorCode: string): boolean {
+    const control = this.registerUserForm?.get(controlName);
+    return !!(control && control.touched && control.hasError(errorCode));
   }
 }
