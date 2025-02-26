@@ -1,0 +1,29 @@
+.users-container {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    width: 600px;
+    margin: 50px auto; 
+  }
+  
+  .error-message {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .user-card {
+    background: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    text-align: left;
+  }
+  
+  .user-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+  }
+  
