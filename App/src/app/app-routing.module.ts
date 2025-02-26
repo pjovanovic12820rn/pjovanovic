@@ -17,7 +17,7 @@ export const routes: Routes = [
   { path: 'employees', component: EmployeesComponent },
   { path: 'register-employee', component: RegisterEmployeeComponent },
   { path: 'employees/:id', component: EditEmployeeComponent },
-  { path: '**', redirectTo: '' },
+  // { path: '**', redirectTo: '' },
   { path: 'reset-password', component: PasswordResetComponent },
   {
     path: '',

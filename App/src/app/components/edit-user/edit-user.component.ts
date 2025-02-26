@@ -43,7 +43,7 @@ export class EditUserComponent implements OnInit {
       return;
     }
 
-    this.userService.getUser(this.userId).subscribe({
+    this.userService.getUserById(this.userId).subscribe({
       next: (foundUser) => {
         if (!foundUser) {
           this.errorMessage = 'User not found.';
@@ -103,6 +103,6 @@ export class EditUserComponent implements OnInit {
     const control = this.userForm?.get(controlName);
     return !!(control && control.touched && control.hasError(errorCode));
   }
-  
+
 
 }
