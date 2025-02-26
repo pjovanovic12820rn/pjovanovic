@@ -1,13 +1,16 @@
-
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { Observable, of, throwError } from 'rxjs';
-import { AuthService } from './auth.service';
+import { HttpClient } from '@angular/common/http';
+import { Employee } from '../models/employee.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+
+  private baseUrl = 'http://localhost:8080/api/admin/users';
+  private employeeUrl = '/api/admin/employees';
   
   private mockUsers: User[] = [
     {
@@ -32,8 +35,27 @@ export class UserService {
 
   constructor(private authService: AuthService) {}
 
+  registerUser(userData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, userData);
+  }
+
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.baseUrl);
+  }
+
+  getUserById(id: number): Observable<User> {
+    return this.http.get<User>(`${this.baseUrl}/${id}`);
+  }
+
+  getAllEmployees(): Observable<Employee[]> {
+    return this.http.get<Employee[]>(this.employeeUrl);
+  }
+
+  getEmployeeById(id: number): Observable<Employee> {
+    return this.http.get<Employee>(`${this.employeeUrl}/${id}`);
+  }
+
   getUsers(): Observable<User[]> {
-    
     return of(this.mockUsers);
   }
 
@@ -58,7 +80,6 @@ export class UserService {
   }
 
   deleteUser(id: number): Observable<boolean> {
-
     if (!this.authService.isAdmin) {
       return throwError(() => new Error('Permission denied: Admin access required.'));
     }
