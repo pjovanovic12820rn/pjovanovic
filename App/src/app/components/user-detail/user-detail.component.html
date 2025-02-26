@@ -1,0 +1,22 @@
+<div class="user-detail-container">
+    <h2>User Details</h2>
+  
+    @if (errorMessage) {
+      <div class="error-message">{{ errorMessage }}</div>
+    }
+    @if (user) {
+      <div class="user-card">
+        <p><strong>ID:</strong> {{ user.id }}</p>
+        <p><strong>First Name:</strong> {{ user.firstName }}</p>
+        <p><strong>Last Name:</strong> {{ user.lastName }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+      </div>
+      <div *ngIf="!isAdmin" class="note">
+        <p>You are viewing your personal information.</p>
+      </div>
+      <div *ngIf="isAdmin" class="note">
+        <p>Admin privilege: You can view any user detail.</p>
+      </div>
+    }
+  </div>
+  
