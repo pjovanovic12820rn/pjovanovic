@@ -29,21 +29,13 @@ export class UsersListComponent implements OnInit {
     if (this.isAdmin) {
       this.userService.getAllUsers().subscribe({
         next: (data) => {
-          this.users = data;
+          this.users = data.content;
         },
         error: () => {
           this.errorMessage = 'Failed to load users. Please try again later.';
         }
       });
 
-      this.userService.getAllEmployees().subscribe({
-        next: (data) => {
-          this.employees = data;
-        },
-        error: () => {
-          this.errorMessage = 'Failed to load employees. Please try again later.';
-        }
-      });
     } else {
       this.errorMessage = 'You are not authorized to view this content.';
     }

@@ -11,7 +11,7 @@ import { RegisterUserComponent } from './components/register-user/register-user.
 import { UsersListComponent } from './components/users-list/users-list.component';
 
 export const routes: Routes = [
-  { path: 'users', component: UsersListComponent },
+  { path: 'users', component: UsersComponent },
   { path: 'register-user', component: RegisterUserComponent },
   { path: 'users/:id', component: EditUserComponent },
   { path: 'employees', component: EmployeesComponent },

@@ -3,6 +3,7 @@ import { Employee, Message } from '../models/employee.model';
 import {Observable, of, throwError} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AuthService} from './auth.service';
+import { Paginated } from '../models/pagination.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +23,8 @@ export class EmployeeService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getEmployees(): Observable<Employee[]> {
-    return this.http.get<Employee[]>(this.employeeUrl, { headers: this.getAuthHeaders() });
+  getEmployees(): Observable<Paginated<Employee>> {
+    return this.http.get<Paginated<Employee>>(this.employeeUrl, { headers: this.getAuthHeaders() });
   }
 
   getEmployee(id: number): Observable<Employee> {

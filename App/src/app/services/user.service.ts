@@ -3,6 +3,7 @@ import { User } from '../models/user.model';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { Paginated } from '../models/pagination.model';
 
 @Injectable({
   providedIn: 'root',
@@ -30,13 +31,13 @@ export class UserService {
     });
   }
 
-  getAllUsers(page: number = 0, size: number = 10): Observable<User[]> {
+  getAllUsers(page: number = 0, size: number = 10): Observable<Paginated<User>> {
     if (!this.authService.isAdmin) {
       return throwError(() => new Error('Permission denied: Admin access required.'));
     }
 
     const params = new HttpParams().set('page', page).set('size', size);
-    return this.http.get<User[]>(this.baseUrl, { headers: this.getAuthHeaders(), params });
+    return this.http.get<Paginated<User>>(this.baseUrl, { headers: this.getAuthHeaders(), params });
   }
 
   getUserById(id: number): Observable<User> {

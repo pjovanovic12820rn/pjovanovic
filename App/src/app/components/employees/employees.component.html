@@ -18,7 +18,7 @@
           </span>
                     <p class="role"><strong>Role:</strong> {{ employee.position }}</p>
                     <p><strong>Phone:</strong> {{ employee.phoneNumber }}</p>
-                    <p><strong>Status:</strong> {{ employee.isActive ? 'Active' : 'Inactive' }}</p>
+                    <p><strong>Status:</strong> {{ employee.active ? 'Active' : 'Inactive' }}</p>
                     <div class="employee-actions">
                       <button class="view-details-btn" [routerLink]="['/employees', employee.id]">View Details</button>
                       <button class="delete-btn" (click)="openDeleteModal(employee)">Delete</button>
@@ -43,7 +43,7 @@
                           </div>
                         </div>
                       </div>
-                      <button class="deactivate-btn" (click)="deactivateEmployee(employee.id)" [disabled]="!employee.isActive">Deactivate</button>
+                      <button class="deactivate-btn" (click)="deactivateEmployee(employee.id)" [disabled]="!employee.active">Deactivate</button>
                     </div>
                 </div>
             } @empty {

@@ -31,7 +31,7 @@ export class AuthService {
     return sessionStorage.getItem('jwt');
   }
 
-  isAdmin = false;
+  isAdmin = true;
 
 
   resetPassword(token: string, newPassword: string): Observable<Message>{
