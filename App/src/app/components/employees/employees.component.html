@@ -8,7 +8,6 @@
   <div *ngIf="isAdmin; else unauthorized">
     <button class="register-btn" (click)="register()">Register new employee</button>
 
-    <!-- 🔹 Filters Section -->
     <div class="filter-container">
       <label for="position">Position:</label>
       <input type="text" id="position" [(ngModel)]="position" placeholder="Enter position">
@@ -45,7 +44,6 @@
       </div>
     </div>
 
-    <!-- Pagination Controls -->
     <div class="pagination">
       <button (click)="prevPage()" [disabled]="currentPage === 0">Previous</button>
       <span>Page {{ currentPage + 1 }}</span>

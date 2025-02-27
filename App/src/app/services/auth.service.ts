@@ -34,15 +34,26 @@ export class AuthService {
 
   getUserRole(): string | null {
     const token = this.getToken();
-    if (token) {
+    if (!token) return null;
       try {
         const decoded: any = jwtDecode(token);
         return decoded.role || null;
       } catch (error) {
         console.error('Invalid JWT Token');
+        return null
       }
+  }
+
+  getUserId(): number | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded.userId || null;
+    } catch {
+      return null;
     }
-    return null;
   }
 
   isAdmin(): boolean {

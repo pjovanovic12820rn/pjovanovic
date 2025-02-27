@@ -16,6 +16,7 @@ export class NavbarComponent implements OnInit {
 
   isAuthenticated: boolean = false;
   isLoginPage: boolean = false;
+  userRole: string | null = null;
 
   ngOnInit(): void {
     this.checkAuthStatus();
@@ -28,6 +29,7 @@ export class NavbarComponent implements OnInit {
 
   checkAuthStatus(): void {
     this.isAuthenticated = this.authService.isAuthenticated();
+    this.userRole = this.authService.getUserRole();
   }
 
   AllEmployees(): void {
@@ -36,6 +38,14 @@ export class NavbarComponent implements OnInit {
 
   AllUsers(): void {
     this.router.navigate(['/users']);
+  }
+
+  MyProfile(): void {
+    if (this.userRole === 'employee') {
+      this.router.navigate(['/employees', this.authService.getUserId()]);
+    } else {
+      this.router.navigate(['/users', this.authService.getUserId()]);
+    }
   }
 
   logout(): void {

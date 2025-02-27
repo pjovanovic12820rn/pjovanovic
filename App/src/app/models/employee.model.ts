@@ -11,6 +11,7 @@ export interface Employee {
     username: string;
     position: string;
     department: string;
+    role: string
     active?: boolean;
     jmbg: string;
   }

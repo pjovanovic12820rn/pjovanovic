@@ -11,7 +11,7 @@ import { Paginated } from '../models/pagination.model';
 export class EmployeeService {
 
   isAdmin = true;
-  private employeeUrl = 'http://localhost:8080/api/admin/employees';
+  private apiUrl = 'http://localhost:8080/api/admin/employees';
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.authService.getToken();
@@ -30,29 +30,34 @@ export class EmployeeService {
     if (department) params.department = department;
     if (active !== null) params.active = active;
 
-    return this.http.get<{ content: Employee[], totalElements: number }>(this.employeeUrl, { params });
+    return this.http.get<{ content: Employee[], totalElements: number }>(this.apiUrl, { params });
+  }
+
+  setEmployeeRole(employeeId: number, role: string): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/${employeeId}/set-role`, { role });
   }
 
 
-  getEmployee(id: number): Observable<Employee> {
-    return this.http.get<Employee>(`${this.employeeUrl}/${id}`, { headers: this.getAuthHeaders() });
+  getEmployeeById(id: number): Observable<Employee> {
+    return this.http.get<Employee>(`${this.apiUrl}/${id}`);
   }
+
 
   registerEmployee(employee: Employee): Observable<Employee> {
-    return this.http.post<Employee>(this.employeeUrl, employee);
+    return this.http.post<Employee>(this.apiUrl, employee);
   }
 
   updateEmployee(updatedEmployee: Employee): Observable<boolean> {
-    return this.http.put<boolean>(`${this.employeeUrl}/${updatedEmployee.id}`, updatedEmployee,
+    return this.http.put<boolean>(`${this.apiUrl}/${updatedEmployee.id}`, updatedEmployee,
       { headers: this.getAuthHeaders() }, );
   }
 
   deleteEmployee(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.employeeUrl}/${id}`, { headers: this.getAuthHeaders() });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 
   deactivateEmployee(id: number): Observable<void> {
-    return this.http.patch<void>(`${this.employeeUrl}/${id}/deactivate`, { headers: this.getAuthHeaders() }, );
+    return this.http.patch<void>(`${this.apiUrl}/${id}/deactivate`, { headers: this.getAuthHeaders() }, );
   }
 
 }

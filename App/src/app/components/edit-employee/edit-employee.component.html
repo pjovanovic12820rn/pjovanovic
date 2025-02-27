@@ -5,64 +5,51 @@
     {{ errorMessage }}
   </div>
 
-  <form *ngIf="employee && editForm" [formGroup]="editForm" (ngSubmit)="onSubmit()">
-    <div class="form-row">
-      <label for="firstName">First Name</label>
-      <input id="firstName" formControlName="firstName" readonly>
-    </div>
+  <div *ngIf="employee">
+    <form [formGroup]="editForm" (ngSubmit)="saveChanges()">
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" formControlName="lastName" />
+      </div>
 
-    <div class="form-row">
-      <label for="lastName">Last Name</label>
-      <input id="lastName" formControlName="lastName">
-      <div *ngIf="isFieldInvalid('lastName')" class="error-message">Invalid last name format.</div>
-    </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="text" formControlName="phone" />
+      </div>
 
-    <div class="form-row">
-      <label for="birthDate">Date of Birth</label>
-      <input id="birthDate" type="date" formControlName="birthDate" readonly>
-    </div>
+      <div class="form-group">
+        <label>Address</label>
+        <input type="text" formControlName="address" />
+      </div>
 
-    <div class="form-row">
-      <label for="gender">Gender</label>
-      <select id="gender" formControlName="gender">
-        <option value="M">Male</option>
-        <option value="F">Female</option>
-      </select>
-    </div>
+      <div class="form-group">
+        <label>Position</label>
+        <input type="text" formControlName="position" />
+      </div>
 
-    <div class="form-row">
-      <label for="email">Email</label>
-      <input id="email" type="email" formControlName="email" readonly>
-    </div>
+      <div class="form-group">
+        <label>Department</label>
+        <input type="text" formControlName="department" />
+      </div>
 
-    <div class="form-row">
-      <label for="phoneNumber">Phone Number</label>
-      <input id="phoneNumber" formControlName="phoneNumber">
-    </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select formControlName="active">
+          <option [value]="true">Active</option>
+          <option [value]="false">Inactive</option>
+        </select>
+      </div>
 
-    <div class="form-row">
-      <label for="address">Address</label>
-      <input id="address" formControlName="address">
-    </div>
+      <button type="submit" [disabled]="loading">Save Changes</button>
 
-    <div class="form-row">
-      <label for="position">Position</label>
-      <input id="position" formControlName="position">
-    </div>
+      <!-- 🔹 Promote/Demote to Admin Section -->
+      <div *ngIf="isAdmin" class="admin-toggle">
+        <label>Admin Privileges</label>
+        <button type="button" (click)="toggleAdminStatus()" [disabled]="updatingAdminStatus">
+          {{ employee.role === 'admin' ? 'Revoke Admin' : 'Make Admin' }}
+        </button>
+      </div>
 
-    <div class="form-row">
-      <label for="department">Department</label>
-      <input id="department" formControlName="department">
-    </div>
-
-    <div class="form-row">
-      <label for="isActive">Active</label>
-      <select id="isActive" formControlName="isActive">
-        <option [value]="true">Active</option>
-        <option [value]="false">Inactive</option>
-      </select>
-    </div>
-
-    <button type="submit" [disabled]="!isAdmin">Save Changes</button>
-  </form>
+    </form>
+  </div>
 </div>
