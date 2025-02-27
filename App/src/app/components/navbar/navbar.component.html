@@ -1,14 +1,8 @@
-<nav class="navbar">
+<nav class="navbar" *ngIf="!isLoginPage">
   <div class="logo">B3</div>
   <div class="nav-links">
-    <button class="nav-btn" (click)="addUser()">Add User</button>
-    <button class="nav-btn" (click)="addEmployee()">Add Employee</button>
-    <button class="nav-btn" (click)="search()">Search</button>
-    <button class="nav-btn" (click)="viewUsers()">View Users & Employees</button>
-    <button class="nav-btn" (click)="viewAccounts()">Accounts</button>
-    <button class="nav-btn" (click)="viewTransactions()">Transactions</button>
-    <button class="nav-btn" (click)="viewLoans()">Loans</button>
-    <button class="nav-btn" (click)="viewExchange()">Exchange</button>
+    <button class="nav-btn" (click)="AllUsers()">Users</button>
+    <button class="nav-btn" (click)="AllEmployees()">Employees</button>
   </div>
-  <button class="logout-btn" (click)="logout()">Logout</button>
+  <button class="logout-btn" *ngIf="isAuthenticated" (click)="logout()">Logout</button>
 </nav>

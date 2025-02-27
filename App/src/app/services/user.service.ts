@@ -1,35 +1,48 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
-import { Employee } from '../models/employee.model';
+import { Observable, throwError } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { AuthService } from './auth.service';
+import { Paginated } from '../models/pagination.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private baseUrl = '/api/admin/users';
-  private employeeUrl = '/api/admin/employees';
+  private baseUrl = 'http://localhost:8080/api/admin/clients'; // 🔹 Updated to match backend endpoint
 
-  constructor(private http: HttpClient) {}
+  constructor(private authService: AuthService, private http: HttpClient) {}
 
-  // Dohvati sve korisnike (samo admin)
-  getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.baseUrl);
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`, // 🔐 Attach JWT
+      'Content-Type': 'application/json',
+    });
   }
 
-  // Dohvati jednog korisnika
+  registerUser(user: any): Observable<User> {
+    return this.http.post<User>(`${this.baseUrl}/register`, user);
+  }
+
+
+  getAllUsers(page: number, size: number): Observable<{ content: User[], totalElements: number }> {
+    return this.http.get<{ content: User[], totalElements: number }>(`${this.baseUrl}?page=${page}&size=${size}`);
+  }
+
   getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`${this.baseUrl}/${id}`);
+    if (!this.authService.isAdmin) {
+      return throwError(() => new Error('Permission denied: Admin access required.'));
+    }
+    return this.http.get<User>(`${this.baseUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 
-  // Dohvati sve zaposlene (samo admin)
-  getAllEmployees(): Observable<Employee[]> {
-    return this.http.get<Employee[]>(this.employeeUrl);
+  updateUser(user: Partial<User>): Observable<User> {
+    return this.http.put<User>(`${this.baseUrl}/${user.id}`, user);
   }
 
-  // Dohvati jednog zaposlenog
-  getEmployeeById(id: number): Observable<Employee> {
-    return this.http.get<Employee>(`${this.employeeUrl}/${id}`);
+
+  deleteUser(userId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${userId}`);
   }
 }

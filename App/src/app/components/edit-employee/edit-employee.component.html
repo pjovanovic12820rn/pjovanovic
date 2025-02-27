@@ -1,122 +1,68 @@
 <div class="edit-container">
   <h2>Edit Employee</h2>
 
-  @if (errorMessage) {
-    <div class="error-message">
-      {{ errorMessage }}
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <form *ngIf="employee && editForm" [formGroup]="editForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <label for="firstName">First Name</label>
+      <input id="firstName" formControlName="firstName" readonly>
     </div>
-  }
 
-  @if (employee && editForm) {
-    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
-      <div class="form-row">
-        <div class="input-group">
-          <label for="firstName">First Name</label>
-          <input type="text" id="firstName" formControlName="firstName" required>
-          <div *ngIf="isFieldInvalid('firstName')" class="error-message">
-            <div *ngIf="getFieldError('firstName', 'required')">First Name is required.</div>
-            <div *ngIf="getFieldError('firstName', 'pattern')">Must start with uppercase and contain only letters.</div>
-          </div>
-        </div>
+    <div class="form-row">
+      <label for="lastName">Last Name</label>
+      <input id="lastName" formControlName="lastName">
+      <div *ngIf="isFieldInvalid('lastName')" class="error-message">Invalid last name format.</div>
+    </div>
 
-        <div class="input-group">
-          <label for="lastName">Last Name</label>
-          <input type="text" id="lastName" formControlName="lastName" required>
-          <div *ngIf="isFieldInvalid('lastName')" class="error-message">
-            <div *ngIf="getFieldError('lastName', 'required')">Last Name is required.</div>
-            <div *ngIf="getFieldError('lastName', 'pattern')">Must start with uppercase and contain only letters.</div>
-          </div>
-        </div>
-      </div>
+    <div class="form-row">
+      <label for="birthDate">Date of Birth</label>
+      <input id="birthDate" type="date" formControlName="birthDate" readonly>
+    </div>
 
-      <!--      <div class="form-row">-->
-      <!--        <div class="input-group">-->
-      <!--          <label for="birthDate">Date of Birth</label>-->
-      <!--          <input type="date" id="birthDate" formControlName="birthDate" required>-->
-      <!--          <div *ngIf="isFieldInvalid('birthDate')" class="error-message">-->
-      <!--            <div *ngIf="getFieldError('birthDate', 'required')">Date of Birth is required.</div>-->
-      <!--            <div *ngIf="getFieldError('birthDate', 'invalidDate')">Birthdate must be in the past.</div>-->
-      <!--          </div>-->
-      <!--        </div>-->
+    <div class="form-row">
+      <label for="gender">Gender</label>
+      <select id="gender" formControlName="gender">
+        <option value="M">Male</option>
+        <option value="F">Female</option>
+      </select>
+    </div>
 
-      <!--        <div class="input-group">-->
-      <!--          <label for="gender">Gender</label>-->
-      <!--          <select id="gender" formControlName="gender" required>-->
-      <!--            <option value="" disabled selected>Select gender</option>-->
-      <!--            <option value="M">Male</option>-->
-      <!--            <option value="F">Female</option>-->
-      <!--            <option value="" disabled>There are only 2 genders</option>-->
-      <!--          </select>-->
-      <!--          <div *ngIf="isFieldInvalid('gender')" class="error-message">-->
-      <!--            <div *ngIf="getFieldError('gender', 'required')">Gender is required.</div>-->
-      <!--          </div>-->
-      <!--        </div>-->
-      <!--      </div>-->
+    <div class="form-row">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" readonly>
+    </div>
 
-      <div class="form-row">
-        <div class="input-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" formControlName="email" required>
-          <div *ngIf="isFieldInvalid('email')" class="error-message">
-            <div *ngIf="getFieldError('email', 'required')">Email is required.</div>
-            <div *ngIf="getFieldError('email', 'email')">Invalid email format.</div>
-          </div>
-        </div>
+    <div class="form-row">
+      <label for="phoneNumber">Phone Number</label>
+      <input id="phoneNumber" formControlName="phoneNumber">
+    </div>
 
-        <div class="input-group">
-          <label for="phoneNumber">Phone Number</label>
-          <input type="text" id="phoneNumber" formControlName="phoneNumber" required>
-          <div *ngIf="isFieldInvalid('phoneNumber')" class="error-message">
-            <div *ngIf="getFieldError('phoneNumber', 'required')">Phone Number is required.</div>
-            <div *ngIf="getFieldError('phoneNumber', 'pattern')">Invalid phone number format.</div>
-          </div>
-        </div>
-      </div>
+    <div class="form-row">
+      <label for="address">Address</label>
+      <input id="address" formControlName="address">
+    </div>
 
-      <div class="form-row">
-        <div class="input-group">
-          <label for="address">Address</label>
-          <input type="text" id="address" formControlName="address" required>
-          <div *ngIf="isFieldInvalid('address')" class="error-message">
-            <div *ngIf="getFieldError('address', 'required')">Address is required.</div>
-            <div *ngIf="getFieldError('address', 'minlength')">Address must be at least 5 characters long.</div>
-          </div>
-        </div>
-      </div>
+    <div class="form-row">
+      <label for="position">Position</label>
+      <input id="position" formControlName="position">
+    </div>
 
-      <div class="form-row">
-        <div class="input-group">
-          <label for="position">Position</label>
-          <input type="text" id="position" formControlName="position" required>
-          <div *ngIf="isFieldInvalid('position')" class="error-message">
-            <div *ngIf="getFieldError('position', 'required')">Position is required.</div>
-          </div>
-        </div>
+    <div class="form-row">
+      <label for="department">Department</label>
+      <input id="department" formControlName="department">
+    </div>
 
-        <div class="input-group">
-          <label for="department">Department</label>
-          <input type="text" id="department" formControlName="department" required>
-          <div *ngIf="isFieldInvalid('department')" class="error-message">
-            <div *ngIf="getFieldError('department', 'required')">Department is required.</div>
-          </div>
-        </div>
-      </div>
+    <div class="form-row">
+      <label for="isActive">Active</label>
+      <select id="isActive" formControlName="isActive">
+        <option [value]="true">Active</option>
+        <option [value]="false">Inactive</option>
+      </select>
+    </div>
 
-      <div class="form-row">
-        <div class="input-group">
-          <label for="isActive">Active</label>
-          <select id="isActive" formControlName="isActive" required>
-            <option [value]="true">Active</option>
-            <option [value]="false">Inactive</option>
-          </select>
-          <div *ngIf="isFieldInvalid('isActive')" class="error-message">
-            <div *ngIf="getFieldError('isActive', 'required')">Status is required.</div>
-          </div>
-        </div>
-      </div>
-
-      <button type="submit" [disabled]="!authService.isAdmin">Save Changes</button>
-    </form>
-
-  }
+    <button type="submit" [disabled]="!isAdmin">Save Changes</button>
+  </form>
 </div>

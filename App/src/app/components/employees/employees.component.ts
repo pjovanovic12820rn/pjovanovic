@@ -1,84 +1,106 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { EmployeeService } from '../../services/employee.service';
+import { AuthService } from '../../services/auth.service';
 import { Employee } from '../../models/employee.model';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employees',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './employees.component.html',
-  styleUrl: './employees.component.css'
+  styleUrls: ['./employees.component.css']
 })
 export class EmployeesComponent implements OnInit {
   private employeeService = inject(EmployeeService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   employees: Employee[] = [];
   errorMessage: string | null = null;
   showDeleteModal = false;
   selectedEmployee: Employee | null = null;
-  isDeleteButtonClickable: boolean = true; //bris?
-  errorMessageDelete: string | null = null;
-  countdown: number | null = null;
+
+  // 🔹 Pagination Variables
+  currentPage: number = 0;
+  pageSize: number = 10;
+  totalEmployees: number = 0;
+
   get isAdmin(): boolean {
-    return this.employeeService.isAdmin;
+    return this.authService.getUserRole() === 'admin';
   }
 
   ngOnInit(): void {
-    this.employeeService.getEmployees().subscribe({
-      next: (employees) => {
-        this.employees = employees;
+    if (!this.isAdmin) {
+      this.errorMessage = "You are not authorized to view this page.";
+      return;
+    }
+
+    this.loadEmployees();
+  }
+
+  loadEmployees(): void {
+    this.employeeService.getEmployees(this.currentPage, this.pageSize).subscribe({
+      next: (response) => {
+        this.employees = response.content;
+        this.totalEmployees = response.totalElements; // Get total count from backend
         this.errorMessage = null;
       },
-      error: (error) => {
-        console.error('Error fetching employees:', error);
+      error: () => {
         this.errorMessage = 'Failed to load employees. Please try again later.';
         this.employees = [];
       }
     });
   }
 
-  //za brisanje
+  nextPage(): void {
+    if ((this.currentPage + 1) * this.pageSize < this.totalEmployees) {
+      this.currentPage++;
+      this.loadEmployees();
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.loadEmployees();
+    }
+  }
+
   openDeleteModal(employee: Employee): void {
     this.selectedEmployee = employee;
     this.showDeleteModal = true;
-    //za cntd
-    this.isDeleteButtonClickable = true;
-    this.countdown = null;
-    this.errorMessageDelete = null;
   }
+
   closeDeleteModal(): void {
     this.selectedEmployee = null;
     this.showDeleteModal = false;
-    //za cntd
-    this.countdown = null;
-    this.errorMessageDelete = null;
-    this.isDeleteButtonClickable = true;
   }
 
   confirmDelete(): void {
     if (!this.isAdmin) {
       this.errorMessage = "You are not authorized to delete employees.";
-      this.isDeleteButtonClickable = false;
-      this.errorMessageDelete = "You are not authorized to delete employees.";
-      this.startCountdown();
-      // this.closeDeleteModal();
       return;
     }
 
     if (this.selectedEmployee) {
       this.employeeService.deleteEmployee(this.selectedEmployee.id).subscribe({
         next: () => {
-          this.employees = this.employees.filter(emp => emp.id !== this.selectedEmployee!.id);
+          this.loadEmployees(); // Reload after delete
           this.closeDeleteModal();
         },
         error: () => {
           this.errorMessage = 'Failed to delete employee. Please try again.';
-          this.closeDeleteModal();
         }
       });
     }
   }
+
+  register() {
+    this.router.navigate(['/register-employee']);
+  }
+
   deactivateEmployee(id: number): void {
     if (!this.isAdmin) {
       this.errorMessage = "You are not authorized to deactivate employees.";
@@ -87,29 +109,15 @@ export class EmployeesComponent implements OnInit {
 
     this.employeeService.deactivateEmployee(id).subscribe({
       next: () => {
-        const employee = this.employees.find(emp => emp.id === id);
-        if (employee) {
-          employee.isActive = false;
-        }
+        this.loadEmployees(); // Reload list after deactivation
       },
-      error: (error) => {
-        console.error('Error deactivating employee:', error);
+      error: () => {
         this.errorMessage = 'Failed to deactivate employee. Please try again.';
       }
     });
   }
 
-  startCountdown(): void {
-    this.countdown = 3;
-
-    const interval = setInterval(() => {
-      if (this.countdown !== null && this.countdown > 0) {
-        this.countdown -= 1;
-      } else {
-        clearInterval(interval);
-        this.closeDeleteModal();
-      }
-    }, 1000);
+  viewEmployeeDetails(id: number): void {
+    this.router.navigate(['/employees', id]);
   }
-
 }

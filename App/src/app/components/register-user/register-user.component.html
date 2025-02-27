@@ -1,0 +1,62 @@
+<div class="register-container">
+  <h2>Register New User</h2>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <form [formGroup]="registerUserForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <label for="firstName">First Name</label>
+      <input id="firstName" formControlName="firstName" required>
+    </div>
+
+    <div class="form-row">
+      <label for="lastName">Last Name</label>
+      <input id="lastName" formControlName="lastName" required>
+    </div>
+
+    <div class="form-row">
+      <label for="birthDate">Birth Date</label>
+      <input id="birthDate" type="date" formControlName="birthDate" required>
+    </div>
+
+    <div class="form-row">
+      <label for="gender">Gender</label>
+      <select id="gender" formControlName="gender">
+        <option value="M">Male</option>
+        <option value="F">Female</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" required>
+    </div>
+
+    <div class="form-row">
+      <label for="phone">Phone</label>
+      <input id="phone" formControlName="phone" required>
+    </div>
+
+    <div class="form-row">
+      <label for="address">Address</label>
+      <input id="address" formControlName="address" required>
+    </div>
+
+    <div class="form-row">
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" required>
+    </div>
+
+    <div class="form-row">
+      <label for="role">Role</label>
+      <select id="role" formControlName="role" required>
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+
+    <button type="submit" [disabled]="loading">Register</button>
+  </form>
+</div>
