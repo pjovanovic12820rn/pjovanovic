@@ -8,6 +8,24 @@
   <div *ngIf="isAdmin; else unauthorized">
     <button class="register-btn" (click)="register()">Register new employee</button>
 
+    <!-- 🔹 Filters Section -->
+    <div class="filter-container">
+      <label for="position">Position:</label>
+      <input type="text" id="position" [(ngModel)]="position" placeholder="Enter position">
+
+      <label for="department">Department:</label>
+      <input type="text" id="department" [(ngModel)]="department" placeholder="Enter department">
+
+      <label for="active">Active Status:</label>
+      <select id="active" [(ngModel)]="active">
+        <option [value]="null">All</option>
+        <option [value]="true">Active</option>
+        <option [value]="false">Inactive</option>
+      </select>
+
+      <button (click)="applyFilters()">Apply Filters</button>
+    </div>
+
     <div id="employees-list" class="employee-list">
       <div *ngFor="let employee of employees;" class="employee-card">
         <span>
@@ -39,16 +57,4 @@
   <ng-template #unauthorized>
     <p>You are not authorized to view the employee list.</p>
   </ng-template>
-
-  <!-- Delete Confirmation Modal -->
-  <div class="modal-overlay" *ngIf="showDeleteModal">
-    <div class="modal">
-      <h3>Confirm Deletion</h3>
-      <p>Are you sure you want to delete <strong>{{ selectedEmployee?.firstName }} {{ selectedEmployee?.lastName }}</strong> ({{ selectedEmployee?.position }})?</p>
-      <div class="modal-actions">
-        <button class="cancel-btn" (click)="closeDeleteModal()">Cancel</button>
-        <button class="confirm-btn" (click)="confirmDelete()">Delete</button>
-      </div>
-    </div>
-  </div>
 </div>

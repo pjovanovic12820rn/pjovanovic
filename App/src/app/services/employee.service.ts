@@ -23,9 +23,16 @@ export class EmployeeService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getEmployees(page: number, size: number): Observable<{ content: Employee[], totalElements: number }> {
-    return this.http.get<{ content: Employee[], totalElements: number }>(`${this.employeeUrl}?page=${page}&size=${size}`);
+  getEmployees(page: number, size: number, position?: string, department?: string, active?: boolean): Observable<{ content: Employee[], totalElements: number }> {
+    let params: any = { page, size };
+
+    if (position) params.position = position;
+    if (department) params.department = department;
+    if (active !== null) params.active = active;
+
+    return this.http.get<{ content: Employee[], totalElements: number }>(this.employeeUrl, { params });
   }
+
 
   getEmployee(id: number): Observable<Employee> {
     return this.http.get<Employee>(`${this.employeeUrl}/${id}`, { headers: this.getAuthHeaders() });

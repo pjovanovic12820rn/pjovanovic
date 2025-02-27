@@ -4,11 +4,12 @@ import { AuthService } from '../../services/auth.service';
 import { Employee } from '../../models/employee.model';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-employees',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './employees.component.html',
   styleUrls: ['./employees.component.css']
 })
@@ -27,6 +28,11 @@ export class EmployeesComponent implements OnInit {
   pageSize: number = 10;
   totalEmployees: number = 0;
 
+  // 🔹 Filters
+  position: string = '';
+  department: string = '';
+  active: boolean | undefined;
+
   get isAdmin(): boolean {
     return this.authService.getUserRole() === 'admin';
   }
@@ -41,10 +47,10 @@ export class EmployeesComponent implements OnInit {
   }
 
   loadEmployees(): void {
-    this.employeeService.getEmployees(this.currentPage, this.pageSize).subscribe({
+    this.employeeService.getEmployees(this.currentPage, this.pageSize, this.position, this.department, this.active).subscribe({
       next: (response) => {
         this.employees = response.content;
-        this.totalEmployees = response.totalElements; // Get total count from backend
+        this.totalEmployees = response.totalElements;
         this.errorMessage = null;
       },
       error: () => {
@@ -52,6 +58,11 @@ export class EmployeesComponent implements OnInit {
         this.employees = [];
       }
     });
+  }
+
+  applyFilters(): void {
+    this.currentPage = 0; // Reset to first page when applying filters
+    this.loadEmployees();
   }
 
   nextPage(): void {

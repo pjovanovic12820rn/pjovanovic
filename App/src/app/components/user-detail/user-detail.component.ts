@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
@@ -8,12 +8,13 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './user-detail.component.html',
   styleUrls: ['./user-detail.component.css']
 })
 export class UserDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private userService = inject(UserService);
   private authService = inject(AuthService);
 
@@ -21,34 +22,39 @@ export class UserDetailComponent implements OnInit {
   errorMessage: string | null = null;
 
   get isAdmin(): boolean {
-    return this.authService.isAdmin;
+    return this.authService.getUserRole() === 'admin';
   }
 
   ngOnInit(): void {
-    // Pročitamo parametar 'id' iz URL-a.
+    let userId: number | null = null;
     const idParam = this.route.snapshot.paramMap.get('id');
-    if (!idParam) {
-      this.errorMessage = 'No user ID provided.';
-      return;
-    }
-    const userId = Number(idParam);
 
-    if (isNaN(userId)) {
-      this.errorMessage = 'Invalid user ID.';
-      return;
+    if (idParam) {
+      userId = Number(idParam);
+      if (isNaN(userId)) {
+        this.errorMessage = 'Invalid user ID.';
+        return;
+      }
     }
 
+    if (userId !== null) {
+      this.loadUser(userId);
+    } else {
+      this.errorMessage = 'No user information available.';
+    }
+  }
 
+  loadUser(userId: number): void {
     this.userService.getUserById(userId).subscribe({
       next: (fetchedUser) => {
         if (!fetchedUser) {
           this.errorMessage = 'User not found.';
+          this.router.navigate(['/']); // Redirect if user not found
           return;
         }
         this.user = fetchedUser;
       },
-      error: (err) => {
-        console.error('Error fetching user:', err);
+      error: () => {
         this.errorMessage = 'Failed to load user details. Please try again later.';
       }
     });
