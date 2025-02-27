@@ -5,6 +5,7 @@ import { User } from '../../models/user.model';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-edit-user',
@@ -19,87 +20,95 @@ export class EditUserComponent implements OnInit {
   private userService = inject(UserService);
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private alertService = inject(AlertService);
 
   userForm!: FormGroup;
   userId!: number;
   errorMessage: string | null = null;
-  userLoaded = false;
   loading = true;
 
-  get isAdmin(): () => boolean {
-    return this.authService.isAdmin;
+  get isAdmin(): boolean {
+    return this.authService.getUserRole() === 'admin';
   }
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
-    if (!idParam) {
-      this.errorMessage = 'No user ID provided.';
+    if (!idParam || isNaN(+idParam)) {
+      this.errorMessage = 'Invalid user ID.';
+      this.router.navigate(['/users']);
       return;
     }
 
     this.userId = +idParam;
-    if (isNaN(this.userId)) {
-      this.errorMessage = 'Invalid user ID.';
-      return;
-    }
-
     this.loadUser();
   }
 
   loadUser(): void {
     this.loading = true;
     this.userService.getUserById(this.userId).subscribe({
-      next: (foundUser) => {
-        if (!foundUser) {
+      next: (user) => {
+        if (!user) {
           this.errorMessage = 'User not found.';
+          this.router.navigate(['/users']);
           return;
         }
-        this.initForm(foundUser);
-        this.userLoaded = true;
+        this.initForm(user);
       },
-      error: (err) => {
-        console.error('Error loading user:', err);
-        this.errorMessage = err?.error?.message || 'Error loading user. Please try again.';
+      error: () => {
+        this.errorMessage = 'Error loading user. Please try again.';
+        this.loading = false;
       },
       complete: () => (this.loading = false),
     });
   }
 
-  initForm(user: User) {
+  initForm(user: User): void {
     this.userForm = this.fb.group({
-      firstName: [user.firstName, [Validators.required, Validators.minLength(2)]],
+      firstName: [{ value: user.firstName, disabled: true }, Validators.required],
       lastName: [user.lastName, [Validators.required, Validators.minLength(2)]],
-      email: [user.email, [Validators.required, Validators.email]],
-      phone: [user.phone],
-      address: [user.address],
-      isActive: [user.isActive ?? true],
+      birthDate: [{ value: this.formatDate(user.birthDate), disabled: true }, Validators.required],
+      gender: [{ value: user.gender, disabled: true }, Validators.required],
+      email: [{ value: user.email, disabled: true }, [Validators.required, Validators.email]],
+      phone: [user.phone, [Validators.required, Validators.pattern(/^\+?[1-9][0-9]{6,14}$/)]],
+      address: [user.address, [Validators.required, Validators.minLength(5)]],
     });
+  }
+
+  private formatDate(date?: Date): string {
+    if (!date) return '';
+    return new Date(date).toISOString().split('T')[0];
   }
 
   saveChanges(): void {
     if (!this.isAdmin) {
-      this.errorMessage = 'Only admins can update user data.';
+      this.alertService.showAlert('error', 'Only admins can update user data.');
       return;
     }
 
     if (this.userForm.invalid) {
-      this.errorMessage = 'Form is invalid. Please fix errors before saving.';
+      this.alertService.showAlert('warning', 'Form is invalid. Please fix errors before saving.');
       this.userForm.markAllAsTouched();
       return;
     }
 
     const updatedUser: User = {
       id: this.userId,
-      ...this.userForm.value,
+      firstName: this.userForm.value.name,
+      lastName: this.userForm.value.lastName,
+      birthDate: this.userForm.value.birthDate,
+      gender: this.userForm.value.gender,
+      email: this.userForm.value.email,
+      phone: this.userForm.value.phone,
+      address: this.userForm.value.address,
     };
 
     this.userService.updateUser(updatedUser).subscribe({
       next: () => {
-        this.router.navigate(['/users']); // ✅ Navigate back after update
+        this.alertService.showAlert('success', 'User updated successfully!');
+        this.router.navigate(['/users']);
       },
-      error: (err) => {
-        console.error('Error updating user:', err);
-        this.errorMessage = err?.error?.message || 'Failed to update user.';
+      error: () => {
+        this.alertService.showAlert('error', 'Failed to update user. Please try again.');
       },
     });
   }

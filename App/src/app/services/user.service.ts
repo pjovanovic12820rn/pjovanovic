@@ -21,23 +21,13 @@ export class UserService {
     });
   }
 
-  registerUser(userData: any): Observable<any> {
-    if (!this.authService.isAdmin) {
-      return throwError(() => new Error('Permission denied: Only admins can register users.'));
-    }
-
-    return this.http.post<any>(`${this.baseUrl}/register`, userData, {
-      headers: this.getAuthHeaders(),
-    });
+  registerUser(user: any): Observable<User> {
+    return this.http.post<User>(`${this.baseUrl}/register`, user);
   }
 
-  getAllUsers(page: number = 0, size: number = 10): Observable<Paginated<User>> {
-    if (!this.authService.isAdmin) {
-      return throwError(() => new Error('Permission denied: Admin access required.'));
-    }
 
-    const params = new HttpParams().set('page', page).set('size', size);
-    return this.http.get<Paginated<User>>(this.baseUrl, { headers: this.getAuthHeaders(), params });
+  getAllUsers(page: number, size: number): Observable<{ content: User[], totalElements: number }> {
+    return this.http.get<{ content: User[], totalElements: number }>(`${this.baseUrl}?page=${page}&size=${size}`);
   }
 
   getUserById(id: number): Observable<User> {
@@ -47,19 +37,12 @@ export class UserService {
     return this.http.get<User>(`${this.baseUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 
-  updateUser(updatedUser: User): Observable<boolean> {
-    if (!this.authService.isAdmin) {
-      return throwError(() => new Error('Permission denied: Admin access required.'));
-    }
-    return this.http.put<boolean>(`${this.baseUrl}/${updatedUser.id}`, updatedUser, {
-      headers: this.getAuthHeaders(),
-    });
+  updateUser(user: Partial<User>): Observable<User> {
+    return this.http.put<User>(`${this.baseUrl}/${user.id}`, user);
   }
 
-  deleteUser(id: number): Observable<boolean> {
-    if (!this.authService.isAdmin) {
-      return throwError(() => new Error('Permission denied: Admin access required.'));
-    }
-    return this.http.delete<boolean>(`${this.baseUrl}/${id}`, { headers: this.getAuthHeaders() });
+
+  deleteUser(userId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${userId}`);
   }
 }

@@ -6,11 +6,13 @@
   </div>
 
   <div *ngIf="isAdmin; else unauthorized">
+    <button class="register-btn" (click)="register()">Register new employee</button>
+
     <div id="employees-list" class="employee-list">
       <div *ngFor="let employee of employees;" class="employee-card">
-                <span>
-                    <strong>{{ employee.firstName }} {{ employee.lastName }}</strong> ({{ employee.email }})
-                </span>
+        <span>
+          <strong>{{ employee.firstName }} {{ employee.lastName }}</strong> ({{ employee.email }})
+        </span>
         <p class="role"><strong>Role:</strong> {{ employee.position }}</p>
         <p><strong>Phone:</strong> {{ employee.phoneNumber }}</p>
         <p><strong>Status:</strong> {{ employee.active ? 'Active' : 'Inactive' }}</p>
@@ -24,6 +26,14 @@
         </div>
       </div>
     </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination">
+      <button (click)="prevPage()" [disabled]="currentPage === 0">Previous</button>
+      <span>Page {{ currentPage + 1 }}</span>
+      <button (click)="nextPage()" [disabled]="(currentPage + 1) * pageSize >= totalEmployees">Next</button>
+    </div>
+
   </div>
 
   <ng-template #unauthorized>

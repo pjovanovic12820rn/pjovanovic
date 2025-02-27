@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
@@ -15,21 +14,21 @@ import { AlertService } from '../../services/alert.service';
   styleUrls: ['./register-user.component.css'],
 })
 export class RegisterUserComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private userService = inject(UserService);
+  private authService = inject(AuthService);
+  private alertService = inject(AlertService);
+
   registerUserForm!: FormGroup;
-  isAdmin = false;
-  loading = false; // ✅ Added loading state
+  loading = false;
   errorMessage: string | null = null;
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private userService: UserService,
-    private authService: AuthService,
-    private alertService: AlertService
-  ) {}
+  get isAdmin(): boolean {
+    return this.authService.getUserRole() === 'admin';
+  }
 
   ngOnInit(): void {
-    this.isAdmin = true;
     if (!this.isAdmin) {
       this.alertService.showAlert('error', 'You do not have permission to register users.');
       this.router.navigate(['/']);
@@ -43,12 +42,13 @@ export class RegisterUserComponent implements OnInit {
     this.registerUserForm = this.fb.group({
       firstName: ['', [Validators.required, this.onlyLettersValidator, this.minLengthWithoutSpaces(2)]],
       lastName: ['', [Validators.required, this.onlyLettersValidator, this.minLengthWithoutSpaces(2)]],
-      username: ['', [Validators.required, Validators.minLength(5)]],
+      birthDate: ['', [Validators.required, this.pastDateValidator]],
+      gender: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^\+?[0-9]{7,15}$/)]],
       address: ['', [Validators.required, Validators.minLength(5)]],
       password: ['', [Validators.required, Validators.minLength(8)]],
-      role: ['user', Validators.required],
+      role: ['user', Validators.required], // Default role is user
     });
   }
 
@@ -64,12 +64,12 @@ export class RegisterUserComponent implements OnInit {
       return;
     }
 
-    this.loading = true; // ✅ Prevent double submissions
+    this.loading = true;
     const formData = this.registerUserForm.value;
 
     this.userService.registerUser(formData).subscribe({
       next: () => {
-        this.alertService.showAlert('success', 'User registered successfully! Activation email sent.');
+        this.alertService.showAlert('success', 'User registered successfully!');
         this.router.navigate(['/users']);
       },
       error: (err) => {
@@ -90,7 +90,13 @@ export class RegisterUserComponent implements OnInit {
   }
 
   onlyLettersValidator(control: AbstractControl): ValidationErrors | null {
-    return /^[A-Za-z]+$/.test(control.value.trim()) ? null : { onlyLetters: true };
+    return /^[A-Za-z\s]+$/.test(control.value.trim()) ? null : { onlyLetters: true };
+  }
+
+  pastDateValidator(control: AbstractControl): ValidationErrors | null {
+    const today = new Date();
+    const inputDate = new Date(control.value);
+    return inputDate < today ? null : { invalidDate: 'Birthdate must be in the past' };
   }
 
   hasError(controlName: string, errorCode: string): boolean {

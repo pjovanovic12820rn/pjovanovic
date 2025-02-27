@@ -23,8 +23,8 @@ export class EmployeeService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getEmployees(): Observable<Paginated<Employee>> {
-    return this.http.get<Paginated<Employee>>(this.employeeUrl, { headers: this.getAuthHeaders() });
+  getEmployees(page: number, size: number): Observable<{ content: Employee[], totalElements: number }> {
+    return this.http.get<{ content: Employee[], totalElements: number }>(`${this.employeeUrl}?page=${page}&size=${size}`);
   }
 
   getEmployee(id: number): Observable<Employee> {

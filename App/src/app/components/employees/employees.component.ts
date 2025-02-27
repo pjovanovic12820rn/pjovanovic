@@ -22,6 +22,11 @@ export class EmployeesComponent implements OnInit {
   showDeleteModal = false;
   selectedEmployee: Employee | null = null;
 
+  // 🔹 Pagination Variables
+  currentPage: number = 0;
+  pageSize: number = 10;
+  totalEmployees: number = 0;
+
   get isAdmin(): boolean {
     return this.authService.getUserRole() === 'admin';
   }
@@ -36,9 +41,10 @@ export class EmployeesComponent implements OnInit {
   }
 
   loadEmployees(): void {
-    this.employeeService.getEmployees().subscribe({
+    this.employeeService.getEmployees(this.currentPage, this.pageSize).subscribe({
       next: (response) => {
         this.employees = response.content;
+        this.totalEmployees = response.totalElements; // Get total count from backend
         this.errorMessage = null;
       },
       error: () => {
@@ -46,6 +52,20 @@ export class EmployeesComponent implements OnInit {
         this.employees = [];
       }
     });
+  }
+
+  nextPage(): void {
+    if ((this.currentPage + 1) * this.pageSize < this.totalEmployees) {
+      this.currentPage++;
+      this.loadEmployees();
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.loadEmployees();
+    }
   }
 
   openDeleteModal(employee: Employee): void {
@@ -67,7 +87,7 @@ export class EmployeesComponent implements OnInit {
     if (this.selectedEmployee) {
       this.employeeService.deleteEmployee(this.selectedEmployee.id).subscribe({
         next: () => {
-          this.employees = this.employees.filter(emp => emp.id !== this.selectedEmployee!.id);
+          this.loadEmployees(); // Reload after delete
           this.closeDeleteModal();
         },
         error: () => {
@@ -75,6 +95,10 @@ export class EmployeesComponent implements OnInit {
         }
       });
     }
+  }
+
+  register() {
+    this.router.navigate(['/register-employee']);
   }
 
   deactivateEmployee(id: number): void {
@@ -85,10 +109,7 @@ export class EmployeesComponent implements OnInit {
 
     this.employeeService.deactivateEmployee(id).subscribe({
       next: () => {
-        const employee = this.employees.find(emp => emp.id === id);
-        if (employee) {
-          employee.active = false;
-        }
+        this.loadEmployees(); // Reload list after deactivation
       },
       error: () => {
         this.errorMessage = 'Failed to deactivate employee. Please try again.';
