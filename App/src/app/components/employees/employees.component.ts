@@ -28,13 +28,14 @@ export class EmployeesComponent implements OnInit {
   pageSize: number = 10;
   totalEmployees: number = 0;
 
-  // 🔹 Filters
+  firstName: string = '';
+  lastName: string = '';
+  email: string = '';
   position: string = '';
-  department: string = '';
-  active: boolean | undefined;
+
 
   get isAdmin(): boolean {
-    return this.authService.getUserPermissions() === 'admin';
+    return <boolean>this.authService.getUserPermissions()?.includes('admin');
   }
 
   ngOnInit(): void {
@@ -47,7 +48,7 @@ export class EmployeesComponent implements OnInit {
   }
 
   loadEmployees(): void {
-    this.employeeService.getEmployees(this.currentPage, this.pageSize, this.position, this.department, this.active).subscribe({
+    this.employeeService.getEmployees(this.currentPage, this.pageSize, this.firstName, this.lastName, this.email, this.position).subscribe({
       next: (response) => {
         this.employees = response.content;
         this.totalEmployees = response.totalElements;
@@ -61,7 +62,7 @@ export class EmployeesComponent implements OnInit {
   }
 
   applyFilters(): void {
-    this.currentPage = 0; // Reset to first page when applying filters
+    this.currentPage = 0;
     this.loadEmployees();
   }
 
@@ -120,13 +121,18 @@ export class EmployeesComponent implements OnInit {
 
     this.employeeService.deactivateEmployee(id).subscribe({
       next: () => {
-        this.loadEmployees(); // Reload list after deactivation
+        const employee = this.employees.find(emp => emp.id === id);
+        if (employee) {
+          employee.active = false;
+        }
       },
-      error: () => {
+      error: (error) => {
+        console.error("❌ Error deactivating employee:", error);
         this.errorMessage = 'Failed to deactivate employee. Please try again.';
       }
     });
   }
+
 
   viewEmployeeDetails(id: number): void {
     this.router.navigate(['/employees', id]);

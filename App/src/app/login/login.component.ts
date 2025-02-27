@@ -18,22 +18,34 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  login() {
+  login(): void {
     if (!this.email || !this.password) {
-      this.errorMessage = 'Email and password are required';
+      this.errorMessage = 'Email and password are required!';
       return;
     }
 
     this.authService.login(this.email, this.password).subscribe({
       next: (response) => {
-        this.authService.saveToken(response.token);
+        this.authService.saveToken(response.token); // Save JWT token
 
-        const userRole = this.authService.getUserPermissions(); // Extract role from JWT
+        const role = this.authService.getUserPermissions();
+        const userId = this.authService.getUserId();
 
-        if (userRole === 'admin') {
-          this.router.navigate(['/employees']); // Admin goes to employees management
+        console.log(role)
+        console.log(userId)
+
+        if (role?.includes('admin')) {
+          console.log("Navigiram")
+          this.router.navigate(['employees']);
+        } else if (role === 'employee') {
+          console.log("Navig2")
+          this.router.navigate([`employee/${userId}`]);
+        } else if (role === 'user') {
+          console.log("Navig3")
+          this.router.navigate([`user/${userId}`]);
         } else {
-          this.router.navigate(['/users']); // Regular users go to user dashboard
+          console.log("Navig4")
+          this.errorMessage = 'Unknown role. Cannot determine redirection.';
         }
       },
       error: () => {

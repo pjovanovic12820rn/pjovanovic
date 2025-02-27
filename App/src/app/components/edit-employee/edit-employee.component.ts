@@ -29,7 +29,7 @@ export class EditEmployeeComponent implements OnInit {
   updatingAdminStatus = false;
 
   get isAdmin(): boolean {
-    return this.authService.getUserPermissions() === 'admin';
+    return <boolean>this.authService.getUserPermissions()?.includes('admin');
   }
 
   ngOnInit(): void {
@@ -64,11 +64,11 @@ export class EditEmployeeComponent implements OnInit {
 
     this.editForm = this.fb.group({
       lastName: [this.employee.lastName, [Validators.required, Validators.minLength(2)]],
-      phone: [this.employee.phoneNumber, [Validators.required, Validators.pattern(/^\+?[1-9][0-9]{6,14}$/)]],
+      gender: [this.employee.gender, [Validators.required]],
+      phone: [this.employee.phone, [Validators.required, Validators.pattern(/^0?[1-9][0-9]{6,14}$/)]],
       address: [this.employee.address, [Validators.required, Validators.minLength(5)]],
       position: [this.employee.position, [Validators.required]],
       department: [this.employee.department, [Validators.required]],
-      active: [this.employee.active, Validators.required],
     });
   }
 
@@ -78,9 +78,20 @@ export class EditEmployeeComponent implements OnInit {
       return;
     }
 
+    console.log(this.editForm.errors); // Log form-level errors
+    console.log(this.editForm.controls); // Check each field
+
     if (this.editForm.invalid) {
       this.alertService.showAlert('warning', 'Please correct errors before submitting.');
       this.editForm.markAllAsTouched();
+
+      Object.keys(this.editForm.controls).forEach((key) => {
+        const control = this.editForm.get(key);
+        if (control && control.invalid) {
+          console.log(`Field "${key}" is invalid:`, control.errors);
+        }
+      });
+
       return;
     }
 

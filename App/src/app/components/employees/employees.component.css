@@ -1,100 +1,115 @@
+/* 🌟 Global Styling */
 body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #B399DD, #D0C9EA);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    padding-top: 30px;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #B399DD, #D0C9EA);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding-top: 30px;
 }
 
-/* Kontejner */
+/* 🔹 Container */
 .employees-container {
-    background: white;
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    text-align: center;
-    width: 600px;
-    animation: fadeIn 0.5s ease-in-out;
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  width: 650px;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Lista zaposlenih */
+/* 🔹 Header */
+h2 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* 🔹 Employee List */
 .employee-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
 }
 
-/* Kartica zaposlenog */
+/* 🔹 Employee Card */
 .employee-card {
-    background: #f9f9f9;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-/* Role stil */
+.employee-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 🔹 Role */
 .role {
-    color: #555;
-    font-size: 0.9rem;
-    margin-top: 5px;
+  color: #777;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-top: 5px;
 }
 
-/* Dugmad */
+/* 🔹 Employee Actions */
 .employee-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .employee-actions button {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    font-size: 0.9rem;
-    font-weight: 600;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
-/* View Details dugme */
+/* 🔹 View Details Button */
 .view-details-btn {
-    background: #4682B4;
-    color: white;
+  background: #4682B4;
+  color: white;
 }
 
 .view-details-btn:hover {
-    background: #6096C4;
+  background: #5A9BD5;
 }
 
-/* Delete dugme */
+/* 🔹 Delete Button */
 .delete-btn {
-    background: #8B4513;
-    color: white;
+  background: #8B4513;
+  color: white;
 }
 
 .delete-btn:hover {
-    background: #A0522D;
+  background: #A0522D;
 }
 
-/* Deactivate dugme */
+/* 🔹 Deactivate Button */
 .deactivate-btn {
-    background: #DAA520;
-    color: white;
+  background: #DAA520;
+  color: white;
 }
 
 .deactivate-btn:hover {
-    background: #FFD700;
+  background: #FFD700;
 }
 
-/* State za deactivated */
+/* 🔹 Disabled Deactivate Button */
 .deactivate-btn:disabled {
   background: #ccc;
   color: #666;
@@ -102,18 +117,108 @@ body {
   opacity: 0.6;
 }
 
-/* Animacija učitavanja */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* 🔹 Register Button */
+.register-btn {
+  background: #4CAF50;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease-in-out;
+  margin-bottom: 20px;
 }
-/* Za modal */
+
+.register-btn:hover {
+  background: #45A049;
+}
+
+/* 🔹 Filters */
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #F5F5F5;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.filter-container label {
+  font-weight: bold;
+  color: #555;
+}
+
+.filter-container input,
+.filter-container select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+.filter-container button {
+  background: #4682B4;
+  color: white;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.filter-container button:hover {
+  background: #5A9BD5;
+}
+
+/* 🔹 Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.pagination button:disabled {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #555;
+}
+
+/* 🔹 Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 🔹 Modal Overlay */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -124,7 +229,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
+
+/* 🔹 Modal */
 .modal {
   background: white;
   padding: 20px;
@@ -133,11 +241,14 @@ body {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   width: 350px;
 }
+
+/* 🔹 Modal Actions */
 .modal-actions {
   display: flex;
   justify-content: space-around;
   margin-top: 15px;
 }
+
 .cancel-btn {
   background: #888;
   color: white;
@@ -146,9 +257,11 @@ body {
   cursor: pointer;
   border: none;
 }
+
 .cancel-btn:hover {
   background: #666;
 }
+
 .confirm-btn {
   background: #8B4513;
   color: white;
@@ -157,6 +270,7 @@ body {
   cursor: pointer;
   border: none;
 }
+
 .confirm-btn:hover {
   background: #A0522D;
 }

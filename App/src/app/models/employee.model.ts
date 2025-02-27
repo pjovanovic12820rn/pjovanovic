@@ -6,7 +6,7 @@ export interface Employee {
     birthDate: Date;
     gender: string;
     email: string;
-    phoneNumber: string;
+    phone: string;
     address: string;
     username: string;
     position: string;

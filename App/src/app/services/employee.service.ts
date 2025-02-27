@@ -1,55 +1,53 @@
 import { Injectable } from '@angular/core';
-import { Employee, Message } from '../models/employee.model';
-import {Observable, of, throwError} from 'rxjs';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {AuthService} from './auth.service';
-import { Paginated } from '../models/pagination.model';
+import { Employee } from '../models/employee.model';
+import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmployeeService {
-
-  isAdmin = true;
   private apiUrl = 'http://localhost:8080/api/admin/employees';
+
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.authService.getToken();
     return new HttpHeaders({
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     });
   }
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  getEmployees(page: number, size: number, firstName?: string, lastName?: string, email?: string, position?: string) {
+    let params = new HttpParams().set('page', page).set('size', size);
 
-  getEmployees(page: number, size: number, position?: string, department?: string, active?: boolean): Observable<{ content: Employee[], totalElements: number }> {
-    let params: any = { page, size };
+    if (firstName && firstName.trim() !== '') params = params.set('firstName', firstName.trim());
+    if (lastName && lastName.trim() !== '') params = params.set('lastName', lastName.trim());
+    if (email && email.trim() !== '') params = params.set('email', email.trim());
+    if (position && position.trim() !== '') params = params.set('position', position.trim());
 
-    if (position) params.position = position;
-    if (department) params.department = department;
-    if (active !== null) params.active = active;
-
-    return this.http.get<{ content: Employee[], totalElements: number }>(this.apiUrl, { params });
-  }
-
-  setEmployeeRole(employeeId: number, role: string): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/${employeeId}/set-role`, { role });
+    return this.http.get<{ content: Employee[], totalElements: number }>(this.apiUrl, {
+      headers: this.getAuthHeaders(),
+      params
+    });
   }
 
 
   getEmployeeById(id: number): Observable<Employee> {
-    return this.http.get<Employee>(`${this.apiUrl}/${id}`);
+    return this.http.get<Employee>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 
-
   registerEmployee(employee: Employee): Observable<Employee> {
-    return this.http.post<Employee>(this.apiUrl, employee);
+    console.log("Poslat zahtev")
+    return this.http.post<Employee>(this.apiUrl, employee, { headers: this.getAuthHeaders() });
   }
 
   updateEmployee(updatedEmployee: Employee): Observable<boolean> {
-    return this.http.put<boolean>(`${this.apiUrl}/${updatedEmployee.id}`, updatedEmployee,
-      { headers: this.getAuthHeaders() }, );
+    return this.http.put<boolean>(`${this.apiUrl}/${updatedEmployee.id}`, updatedEmployee, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   deleteEmployee(id: number): Observable<void> {
@@ -57,7 +55,11 @@ export class EmployeeService {
   }
 
   deactivateEmployee(id: number): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/${id}/deactivate`, { headers: this.getAuthHeaders() }, );
+    const url = `${this.apiUrl}/${id}/deactivate`; // Construct URL with ID
+    return this.http.patch<void>(url, null, { headers: this.getAuthHeaders() });
   }
 
+  setEmployeeRole(employeeId: number, role: string): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/${employeeId}/set-role`, { role }, { headers: this.getAuthHeaders() });
+  }
 }

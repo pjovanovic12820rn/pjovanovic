@@ -5,22 +5,39 @@
     {{ errorMessage }}
   </div>
 
+  <!-- 🔹 Delete Confirmation Modal (Put This Outside *ngFor Loop, but Inside isAdmin Check) -->
+  <div class="modal-overlay" *ngIf="showDeleteModal">
+    <div class="modal">
+      <h3>Confirm Deletion</h3>
+      <p>
+        Are you sure you want to delete
+        <strong>{{ selectedEmployee?.firstName }} {{ selectedEmployee?.lastName }}</strong>
+        ({{ selectedEmployee?.position }})?
+      </p>
+
+      <div class="modal-actions">
+        <button class="cancel-btn" (click)="closeDeleteModal()">Cancel</button>
+        <button class="confirm-btn" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+
   <div *ngIf="isAdmin; else unauthorized">
     <button class="register-btn" (click)="register()">Register new employee</button>
 
     <div class="filter-container">
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" [(ngModel)]="firstName" placeholder="Enter first name">
+
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" [(ngModel)]="lastName" placeholder="Enter last name">
+
+      <label for="email">Email:</label>
+      <input type="text" id="email" [(ngModel)]="email" placeholder="Enter email">
+
       <label for="position">Position:</label>
       <input type="text" id="position" [(ngModel)]="position" placeholder="Enter position">
-
-      <label for="department">Department:</label>
-      <input type="text" id="department" [(ngModel)]="department" placeholder="Enter department">
-
-      <label for="active">Active Status:</label>
-      <select id="active" [(ngModel)]="active">
-        <option [value]="null">All</option>
-        <option [value]="true">Active</option>
-        <option [value]="false">Inactive</option>
-      </select>
 
       <button (click)="applyFilters()">Apply Filters</button>
     </div>
@@ -31,7 +48,7 @@
           <strong>{{ employee.firstName }} {{ employee.lastName }}</strong> ({{ employee.email }})
         </span>
         <p class="role"><strong>Role:</strong> {{ employee.position }}</p>
-        <p><strong>Phone:</strong> {{ employee.phoneNumber }}</p>
+        <p><strong>Phone:</strong> {{ employee.phone }}</p>
         <p><strong>Status:</strong> {{ employee.active ? 'Active' : 'Inactive' }}</p>
 
         <div class="employee-actions">

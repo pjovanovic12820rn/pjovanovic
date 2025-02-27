@@ -57,7 +57,7 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    return this.getUserPermissions() === 'admin';
+    return <boolean>this.getUserPermissions()?.includes('admin');
   }
 
   resetPassword(token: string, newPassword: string): Observable<Message>{

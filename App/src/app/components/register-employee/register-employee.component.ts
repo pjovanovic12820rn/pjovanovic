@@ -24,7 +24,7 @@ export class RegisterEmployeeComponent implements OnInit {
   errorMessage: string | null = null;
 
   get isAdmin(): boolean {
-    return this.authService.getUserPermissions() === 'admin';
+    return <boolean>this.authService.getUserPermissions()?.includes("admin");
   }
 
   ngOnInit(): void {
@@ -36,10 +36,13 @@ export class RegisterEmployeeComponent implements OnInit {
     this.registerEmployeeForm = this.fb.group({
       firstName: ['', [Validators.required, this.onlyLettersValidator, this.minLengthWithoutSpaces(2)]],
       lastName: ['', [Validators.required, this.onlyLettersValidator, this.minLengthWithoutSpaces(2)]],
-      jmbg: ['', [Validators.required, Validators.pattern(/^\d{13}$/)]],
+      birthDate: ['', [Validators.required, this.pastDateValidator]],
+      gender: ['', [Validators.required]],
+      // jmbg: ['', [Validators.required, Validators.pattern(/^\d{13}$/)]],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern(/^\+?[1-9][0-9]{6,14}$/)]],
+      phone: ['', [Validators.required, Validators.pattern(/^0?[1-9][0-9]{6,14}$/)]],
       address: ['', [Validators.required, this.minLengthWithoutSpaces(5)]],
+      username: ['', [Validators.required, this.minLengthWithoutSpaces(3)]],
       position: ['', [Validators.required, this.onlyLettersValidator, this.minLengthWithoutSpaces(2)]],
       department: ['', [Validators.required, this.minLengthWithoutSpaces(2)]],
       active: [false, Validators.required] // Default to inactive
@@ -53,6 +56,7 @@ export class RegisterEmployeeComponent implements OnInit {
     }
 
     if (this.registerEmployeeForm.valid) {
+      console.log("validna foram")
       const formData = this.registerEmployeeForm.value;
 
       this.employeeService.registerEmployee(formData).subscribe({
@@ -65,6 +69,12 @@ export class RegisterEmployeeComponent implements OnInit {
         }
       });
     } else {
+      Object.keys(this.registerEmployeeForm.controls).forEach((key) => {
+        const control = this.registerEmployeeForm.get(key);
+        if (control && control.invalid) {
+          console.log(`Field "${key}" is invalid:`, control.errors);
+        }
+      });
       this.registerEmployeeForm.markAllAsTouched();
     }
   }
@@ -83,4 +93,18 @@ export class RegisterEmployeeComponent implements OnInit {
     const valid = /^[A-Za-z\s]+$/.test(trimmedValue);
     return valid ? null : { onlyLetters: true };
   }
+
+  private formatDate(date: string | Date): string {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toISOString().split('T')[0]; // Converts to YYYY-MM-DD
+  }
+
+  pastDateValidator(control: AbstractControl): { [key: string]: any } | null {
+    const today = new Date();
+    const inputDate = new Date(control.value);
+    return inputDate < today ? null : { invalidDate: 'Birthdate must be in the past' };
+  }
+
+
 }

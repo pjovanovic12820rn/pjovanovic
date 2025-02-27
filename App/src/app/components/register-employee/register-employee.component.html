@@ -17,9 +17,34 @@
     </div>
 
     <div class="form-row">
-      <label for="jmbg">JMBG</label>
-      <input id="jmbg" formControlName="jmbg">
+      <div class="input-group">
+        <label for="birthDate">Date of Birth</label>
+        <input type="date" id="birthDate" formControlName="birthDate" required>
+<!--        <div *ngIf="isFieldInvalid('birthDate')" class="error-message">-->
+<!--          <div *ngIf="getFieldError('birthDate', 'required')">Birthdate is required.</div>-->
+<!--          <div *ngIf="getFieldError('birthDate', 'invalidDate')">Birthdate must be in the past.</div>-->
+<!--        </div>-->
+      </div>
     </div>
+
+    <div class="form-row">
+      <div class="input-group">
+        <label for="gender">Gender</label>
+        <select id="gender" formControlName="gender" required>
+          <option value="" disabled selected>Select gender</option>
+          <option value="M">Male</option>
+          <option value="F">Female</option>
+        </select>
+<!--        <div *ngIf="isFieldInvalid('gender')" class="error-message">-->
+<!--          <div *ngIf="getFieldError('gender', 'required')">Gender is required.</div>-->
+<!--        </div>-->
+      </div>
+    </div>
+
+<!--    <div class="form-row">-->
+<!--      <label for="jmbg">JMBG</label>-->
+<!--      <input id="jmbg" formControlName="jmbg">-->
+<!--    </div>-->
 
     <div class="form-row">
       <label for="email">Email</label>
@@ -34,6 +59,11 @@
     <div class="form-row">
       <label for="address">Address</label>
       <input id="address" formControlName="address">
+    </div>
+
+    <div class="form-row">
+      <label for="username">Username</label>
+      <input id="username" formControlName="username">
     </div>
 
     <div class="form-row">
