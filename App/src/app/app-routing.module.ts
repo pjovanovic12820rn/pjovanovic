@@ -8,11 +8,13 @@ import { RegisterEmployeeComponent } from './components/register-employee/regist
 import { UsersComponent } from './components/users/users.component';
 import { EditUserComponent } from './components/edit-user/edit-user.component';
 import { RegisterUserComponent } from './components/register-user/register-user.component';
+import { UserDetailComponent } from './components/user-detail/user-detail.component';
 
 export const routes: Routes = [
   { path: 'users', component: UsersComponent, canActivate: [adminGuard] },
   { path: 'register-user', component: RegisterUserComponent, canActivate: [adminGuard] },
   { path: 'users/:id', component: EditUserComponent, canActivate: [adminGuard] },
+  { path: 'user/:id', component: UserDetailComponent },
 
   { path: 'employees', component: EmployeesComponent, canActivate: [adminGuard] },
   { path: 'register-employee', component: RegisterEmployeeComponent, canActivate: [adminGuard] },
