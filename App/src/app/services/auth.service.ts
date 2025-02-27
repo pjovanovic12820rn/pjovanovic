@@ -32,12 +32,12 @@ export class AuthService {
     return sessionStorage.getItem('jwt');
   }
 
-  getUserRole(): string | null {
+  getUserPermissions(): string | null {
     const token = this.getToken();
     if (!token) return null;
       try {
         const decoded: any = jwtDecode(token);
-        return decoded.role || null;
+        return decoded.permissions || null;
       } catch (error) {
         console.error('Invalid JWT Token');
         return null
@@ -57,7 +57,7 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    return this.getUserRole() === 'admin';
+    return this.getUserPermissions() === 'admin';
   }
 
   resetPassword(token: string, newPassword: string): Observable<Message>{

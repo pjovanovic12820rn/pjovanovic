@@ -24,7 +24,7 @@ export class UsersComponent implements OnInit {
   totalUsers: number = 0;
 
   get isAdmin(): boolean {
-    return this.authService.getUserRole() === 'admin';
+    return this.authService.getUserPermissions() === 'admin';
   }
 
   ngOnInit(): void {

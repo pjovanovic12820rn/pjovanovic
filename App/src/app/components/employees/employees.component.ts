@@ -34,7 +34,7 @@ export class EmployeesComponent implements OnInit {
   active: boolean | undefined;
 
   get isAdmin(): boolean {
-    return this.authService.getUserRole() === 'admin';
+    return this.authService.getUserPermissions() === 'admin';
   }
 
   ngOnInit(): void {

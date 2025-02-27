@@ -28,7 +28,7 @@ export class LoginComponent {
       next: (response) => {
         this.authService.saveToken(response.token);
 
-        const userRole = this.authService.getUserRole(); // Extract role from JWT
+        const userRole = this.authService.getUserPermissions(); // Extract role from JWT
 
         if (userRole === 'admin') {
           this.router.navigate(['/employees']); // Admin goes to employees management

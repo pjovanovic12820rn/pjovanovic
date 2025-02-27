@@ -29,7 +29,7 @@ export class EditEmployeeComponent implements OnInit {
   updatingAdminStatus = false;
 
   get isAdmin(): boolean {
-    return this.authService.getUserRole() === 'admin';
+    return this.authService.getUserPermissions() === 'admin';
   }
 
   ngOnInit(): void {

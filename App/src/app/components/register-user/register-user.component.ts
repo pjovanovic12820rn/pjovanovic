@@ -25,7 +25,7 @@ export class RegisterUserComponent implements OnInit {
   errorMessage: string | null = null;
 
   get isAdmin(): boolean {
-    return this.authService.getUserRole() === 'admin';
+    return this.authService.getUserPermissions() === 'admin';
   }
 
   ngOnInit(): void {

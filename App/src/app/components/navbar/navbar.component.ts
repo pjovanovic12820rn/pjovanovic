@@ -29,7 +29,7 @@ export class NavbarComponent implements OnInit {
 
   checkAuthStatus(): void {
     this.isAuthenticated = this.authService.isAuthenticated();
-    this.userRole = this.authService.getUserRole();
+    this.userRole = this.authService.getUserPermissions();
   }
 
   AllEmployees(): void {
