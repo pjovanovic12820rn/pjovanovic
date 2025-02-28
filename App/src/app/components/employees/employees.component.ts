@@ -23,7 +23,6 @@ export class EmployeesComponent implements OnInit {
   showDeleteModal = false;
   selectedEmployee: Employee | null = null;
 
-  // 🔹 Pagination Variables
   currentPage: number = 0;
   pageSize: number = 10;
   totalEmployees: number = 0;

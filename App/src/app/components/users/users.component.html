@@ -1,14 +1,14 @@
 <div class="users-container">
   <h2>Users</h2>
 
-  <!-- Error Message -->
   <div *ngIf="errorMessage" class="error-message">
     {{ errorMessage }}
   </div>
 
-  <!-- Admin Section -->
   <ng-container *ngIf="isAdmin; else notAuthorized">
-    <!-- Users List -->
+
+    <button class="register-btn" (click)="registerUser()">Register New User</button>
+
     <div *ngIf="users.length > 0; else noUsers">
       <div *ngFor="let user of users" class="user-card">
         <span class="user-info"><strong>{{ user.firstName }} {{ user.lastName }}</strong> ({{ user.email }})</span>

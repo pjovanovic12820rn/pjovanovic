@@ -25,7 +25,7 @@ export class RegisterUserComponent implements OnInit {
   errorMessage: string | null = null;
 
   get isAdmin(): boolean {
-    return this.authService.getUserPermissions() === 'admin';
+    return <boolean>this.authService.getUserPermissions()?.includes("admin");
   }
 
   ngOnInit(): void {
@@ -40,13 +40,14 @@ export class RegisterUserComponent implements OnInit {
 
   initForm(): void {
     this.registerUserForm = this.fb.group({
-      firstName: ['', [Validators.required, this.onlyLettersValidator, this.minLengthWithoutSpaces(2)]],
-      lastName: ['', [Validators.required, this.onlyLettersValidator, this.minLengthWithoutSpaces(2)]],
+      firstName: ['', [Validators.required, this.onlyLettersValidator, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, this.onlyLettersValidator, Validators.minLength(2)]],
       birthDate: ['', [Validators.required, this.pastDateValidator]],
       gender: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern(/^\+?[0-9]{7,15}$/)]],
+      phone: ['', [Validators.required, Validators.pattern(/^0?[1-9][0-9]{6,14}$/)]],
       address: ['', [Validators.required, Validators.minLength(5)]],
+      jmbg: ['', [Validators.required, Validators.pattern(/^[0-9]{13}$/)]], // ✅ Added JMBG field
       password: ['', [Validators.required, Validators.minLength(8)]],
       role: ['user', Validators.required], // Default role is user
     });
@@ -82,13 +83,6 @@ export class RegisterUserComponent implements OnInit {
     });
   }
 
-  minLengthWithoutSpaces(minLength: number) {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) return null;
-      return control.value.trim().length < minLength ? { minLengthWithoutSpaces: true } : null;
-    };
-  }
-
   onlyLettersValidator(control: AbstractControl): ValidationErrors | null {
     return /^[A-Za-z\s]+$/.test(control.value.trim()) ? null : { onlyLetters: true };
   }
@@ -101,6 +95,6 @@ export class RegisterUserComponent implements OnInit {
 
   hasError(controlName: string, errorCode: string): boolean {
     const control = this.registerUserForm?.get(controlName);
-    return !!(control && control.touched && control.hasError(errorCode));
+    return !!(control && control.hasError(errorCode));
   }
 }

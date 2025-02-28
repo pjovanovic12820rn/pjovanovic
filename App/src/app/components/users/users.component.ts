@@ -24,7 +24,7 @@ export class UsersComponent implements OnInit {
   totalUsers: number = 0;
 
   get isAdmin(): boolean {
-    return this.authService.getUserPermissions() === 'admin';
+    return <boolean>this.authService.getUserPermissions()?.includes("admin");
   }
 
   ngOnInit(): void {
@@ -78,5 +78,9 @@ export class UsersComponent implements OnInit {
 
   editUser(userId: number): void {
     this.router.navigate(['/users', userId]);
+  }
+
+  registerUser() {
+    this.router.navigate(['/register-user']);
   }
 }

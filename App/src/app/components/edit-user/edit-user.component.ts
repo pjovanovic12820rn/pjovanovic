@@ -69,7 +69,7 @@ export class EditUserComponent implements OnInit {
       birthDate: [{ value: this.formatDate(user.birthDate), disabled: true }, Validators.required],
       gender: [{ value: user.gender, disabled: true }, Validators.required],
       email: [{ value: user.email, disabled: true }, [Validators.required, Validators.email]],
-      phone: [user.phone, [Validators.required, Validators.pattern(/^\+?[1-9][0-9]{6,14}$/)]],
+      phone: [user.phone, [Validators.required, Validators.pattern(/^0?[1-9][0-9]{6,14}$/)]],
       address: [user.address, [Validators.required, Validators.minLength(5)]],
     });
   }
@@ -91,18 +91,14 @@ export class EditUserComponent implements OnInit {
       return;
     }
 
-    const updatedUser: User = {
-      id: this.userId,
-      firstName: this.userForm.value.name,
+    const updatedUser: Partial<User> = {
       lastName: this.userForm.value.lastName,
-      birthDate: this.userForm.value.birthDate,
       gender: this.userForm.value.gender,
-      email: this.userForm.value.email,
       phone: this.userForm.value.phone,
       address: this.userForm.value.address,
     };
 
-    this.userService.updateUser(updatedUser).subscribe({
+    this.userService.updateUser(this.userId, updatedUser).subscribe({
       next: () => {
         this.alertService.showAlert('success', 'User updated successfully!');
         this.router.navigate(['/users']);
@@ -115,6 +111,6 @@ export class EditUserComponent implements OnInit {
 
   hasError(controlName: string, errorCode: string): boolean {
     const control = this.userForm?.get(controlName);
-    return !!(control && control.touched && control.hasError(errorCode));
+    return !!(control && control.hasError(errorCode));
   }
 }

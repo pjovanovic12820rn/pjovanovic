@@ -3,8 +3,8 @@
 
   <div class="nav-links">
     <!-- Show "Users" and "Employees" only for Admins -->
-    <button *ngIf="userRole === 'admin'" class="nav-btn" (click)="AllUsers()">Users</button>
-    <button *ngIf="userRole === 'admin'" class="nav-btn" (click)="AllEmployees()">Employees</button>
+    <button *ngIf="userRole?.includes('admin')" class="nav-btn" (click)="AllUsers()">Users</button>
+    <button *ngIf="userRole?.includes('admin')" class="nav-btn" (click)="AllEmployees()">Employees</button>
 
     <!-- Show "My Profile" for Employees and Users -->
     <button *ngIf="userRole === 'employee' || userRole === 'user'" class="nav-btn" (click)="MyProfile()">My Profile</button>
