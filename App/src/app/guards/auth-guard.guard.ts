@@ -6,8 +6,6 @@ export const authGuard = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  console.log("Usao u authguard")
-
   // if (authService.isAuthenticated()) {
   //   return true;
   // }
@@ -19,11 +17,7 @@ export const adminGuard = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  console.log(authService.isAuthenticated())
-  console.log(authService.isAdmin())
-
   if (authService.isAuthenticated() && authService.isAdmin()) {
-    console.log('Uslov ispunjen')
     return true;
   }
 

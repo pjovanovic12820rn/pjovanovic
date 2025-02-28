@@ -15,19 +15,15 @@ export class LoginComponent implements OnInit {
   email = '';
   password = '';
   errorMessage = '';
-  userType: 'client' | 'employee' = 'client'; // Default to client login
+  loginType: 'employee' | 'client' = 'employee';
 
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    // Determine if the route is /login/client or /login/employee
-    this.route.url.subscribe(segments => {
-      if (segments.some(segment => segment.path === 'employee')) {
-        this.userType = 'employee';
-      } else {
-        this.userType = 'client';
-      }
-    });
+    const loginTypeParam = this.route.snapshot.paramMap.get('type');
+    if (loginTypeParam === 'client' || loginTypeParam === 'employee') {
+      this.loginType = loginTypeParam;
+    }
   }
 
   login(): void {
@@ -36,22 +32,21 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.authService.login(this.email, this.password, this.userType).subscribe({
+    this.authService.login(this.email, this.password, this.loginType).subscribe({
       next: (response) => {
         this.authService.saveToken(response.token);
-        const role = this.authService.getUserPermissions();
+
         const userId = this.authService.getUserId();
+        const permissions = this.authService.getUserPermissions();
 
-        console.log(`UserType: ${this.userType}, Role: ${role}, UserId: ${userId}`);
-
-        if (role?.includes('admin')) {
-          this.router.navigate(['employees']);
-        } else if (role?.includes('employee')) {
-          this.router.navigate([`employee/${userId}`]);
-        } else if (role?.includes('user')) {
-          this.router.navigate([`user/${userId}`]);
+        if (this.loginType === 'employee') {
+          if (permissions?.includes('admin')) {
+            this.router.navigate(['/employees']);
+          } else {
+            this.router.navigate([`/employee/${userId}`]);
+          }
         } else {
-          this.errorMessage = 'Unknown role. Cannot determine redirection.';
+          this.router.navigate([`/user/${userId}`]);
         }
       },
       error: () => {

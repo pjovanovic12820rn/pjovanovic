@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
   selector: 'app-success',
   imports: [],
   templateUrl: './success.component.html',
+  standalone: true,
   styleUrl: './success.component.css'
 })
 export class SuccessComponent {

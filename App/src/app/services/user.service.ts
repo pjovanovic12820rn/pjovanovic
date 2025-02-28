@@ -30,7 +30,7 @@ export class UserService {
   }
 
   getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`${this.baseUrl}/${id}`, { headers: this.getAuthHeaders() });
+    return this.http.get<User>(`${this.baseUrl}/me`, { headers: this.getAuthHeaders() });
   }
 
   registerUser(user: any): Observable<User> {

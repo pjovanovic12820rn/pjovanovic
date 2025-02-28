@@ -10,6 +10,7 @@ import { EditUserComponent } from './components/edit-user/edit-user.component';
 import { RegisterUserComponent } from './components/register-user/register-user.component';
 import { UserDetailComponent } from './components/user-detail/user-detail.component';
 import {EmployeeDetailComponent} from './components/employee-detail/employee-detail.component';
+import {WelcomeComponent} from './components/welcome/welcome.component';
 
 export const routes: Routes = [
   { path: 'users', component: UsersComponent, canActivate: [adminGuard] },
@@ -23,8 +24,7 @@ export const routes: Routes = [
   { path: 'employee/:id', component: EmployeeDetailComponent },
 
   { path: 'reset-password', component: PasswordResetComponent },
-  { path: '', component: LoginComponent },
+  { path: '', component: WelcomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'login/employee', component: LoginComponent },
-  { path: 'login/user', component: LoginComponent },
+  { path: 'login/:type', component: LoginComponent }
 ];

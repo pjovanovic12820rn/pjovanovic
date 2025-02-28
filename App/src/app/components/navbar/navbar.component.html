@@ -1,14 +1,18 @@
-<nav class="navbar" *ngIf="!isLoginPage">
+<nav class="navbar" *ngIf="isAuthenticated">
   <div class="logo">B3</div>
 
   <div class="nav-links">
-    <!-- Show "Users" and "Employees" only for Admins -->
-    <button *ngIf="userRole?.includes('admin')" class="nav-btn" (click)="AllUsers()">Users</button>
-    <button *ngIf="userRole?.includes('admin')" class="nav-btn" (click)="AllEmployees()">Employees</button>
+    <!-- Show "All Employees" and "All Users" only for Admins -->
+    <button class="nav-btn" *ngIf="isAdmin" (click)="router.navigate(['/employees'])">All Employees</button>
+    <button class="nav-btn" *ngIf="isAdmin" (click)="router.navigate(['/users'])">All Users</button>
 
-    <!-- Show "My Profile" for Employees and Users -->
-    <button *ngIf="userRole === 'employee' || userRole === 'user'" class="nav-btn" (click)="MyProfile()">My Profile</button>
+    <!-- Normal Employee Profile -->
+    <button class="nav-btn" *ngIf="userType === 'employee' && !isAdmin" (click)="router.navigate(['/employee', authService.getUserId()])">My Profile</button>
+
+    <!-- Normal User Profile -->
+    <button class="nav-btn" *ngIf="userType === 'client'" (click)="router.navigate(['/user', authService.getUserId()])">My Profile</button>
   </div>
 
-  <button class="logout-btn" *ngIf="isAuthenticated" (click)="logout()">Logout</button>
+  <button class="logout-btn" (click)="logout()">Logout</button>
 </nav>
+

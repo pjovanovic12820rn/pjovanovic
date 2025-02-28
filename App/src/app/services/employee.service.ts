@@ -34,9 +34,8 @@ export class EmployeeService {
     });
   }
 
-
   getEmployeeById(id: number): Observable<Employee> {
-    return this.http.get<Employee>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
+    return this.http.get<Employee>(`${this.apiUrl}/me`, { headers: this.getAuthHeaders() });
   }
 
   registerEmployee(employee: Employee): Observable<Employee> {
