@@ -11,6 +11,7 @@ import { RegisterUserComponent } from './components/register-user/register-user.
 import { UserDetailComponent } from './components/user-detail/user-detail.component';
 import {EmployeeDetailComponent} from './components/employee-detail/employee-detail.component';
 import {WelcomeComponent} from './components/welcome/welcome.component';
+import {SuccessComponent} from './components/success/success.component';
 
 export const routes: Routes = [
   { path: 'users', component: UsersComponent, canActivate: [adminGuard] },
@@ -23,6 +24,7 @@ export const routes: Routes = [
   { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard] },
   { path: 'employee/:id', component: EmployeeDetailComponent },
 
+  { path: 'set-password', component: PasswordResetComponent },
   { path: 'reset-password', component: PasswordResetComponent },
   { path: '', component: WelcomeComponent },
   { path: 'login', component: LoginComponent },
