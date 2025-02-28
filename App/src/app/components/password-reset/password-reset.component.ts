@@ -14,17 +14,45 @@ import { SuccessComponent } from '../success/success.component';
 })
 export class PasswordResetComponent {
   passwordForm: FormGroup;
+  emailForm: FormGroup;
   passwordFeedback: string = '';
   success: boolean = false;
+  emailSubmitted: boolean = false;
+  loading: boolean = false;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+    this.emailForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]]
+    });
+
     this.passwordForm = this.fb.group(
       {
-        newPassword: this.fb.control('', [Validators.required, this.passwordStrengthValidator.bind(this)]),
-        repeatNewPassword: this.fb.control('', [Validators.required])
+        newPassword: ['', [Validators.required, this.passwordStrengthValidator.bind(this)]],
+        repeatNewPassword: ['', [Validators.required]]
       },
       { validators: this.passwordsMatchValidator }
     );
+  }
+
+  requestPasswordReset() {
+    if (this.emailForm.invalid) {
+      this.emailForm.markAllAsTouched();
+      return;
+    }
+
+    this.loading = true;
+    const email = this.emailForm.get('email')?.value;
+
+    this.authService.requestPasswordReset(email).subscribe({
+      next: () => {
+        this.emailSubmitted = true;
+      },
+      error: (err) => {
+        alert('Invalid email. Please try again.');
+        console.error('Error requesting password reset:', err);
+      },
+      complete: () => (this.loading = false)
+    });
   }
 
   passwordsMatchValidator(form: FormGroup): ValidationErrors | null {
@@ -60,18 +88,13 @@ export class PasswordResetComponent {
   onSubmit() {
     if (this.passwordForm.invalid) {
       this.passwordForm.markAllAsTouched();
-      console.log('Form is invalid');
       return;
     }
 
-    const formData = {
-      newPassword: this.passwordForm.get('newPassword')?.value,
-      repeatNewPassword: this.passwordForm.get('repeatNewPassword')?.value
-    };
+    const newPassword = this.passwordForm.get('newPassword')?.value;
 
-    this.authService.resetPassword("", formData.newPassword).subscribe({
-      next: (message) => {
-        // Success flow
+    this.authService.resetPassword("", newPassword).subscribe({
+      next: () => {
         this.success = true;
       },
       error: (error) => {

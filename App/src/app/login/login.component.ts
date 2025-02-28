@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -11,12 +11,24 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   email = '';
   password = '';
   errorMessage = '';
+  userType: 'client' | 'employee' = 'client'; // Default to client login
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    // Determine if the route is /login/client or /login/employee
+    this.route.url.subscribe(segments => {
+      if (segments.some(segment => segment.path === 'employee')) {
+        this.userType = 'employee';
+      } else {
+        this.userType = 'client';
+      }
+    });
+  }
 
   login(): void {
     if (!this.email || !this.password) {
@@ -24,27 +36,21 @@ export class LoginComponent {
       return;
     }
 
-    this.authService.login(this.email, this.password).subscribe({
+    this.authService.login(this.email, this.password, this.userType).subscribe({
       next: (response) => {
-        this.authService.saveToken(response.token); // Save JWT token
-
+        this.authService.saveToken(response.token);
         const role = this.authService.getUserPermissions();
         const userId = this.authService.getUserId();
 
-        console.log(role)
-        console.log(userId)
+        console.log(`UserType: ${this.userType}, Role: ${role}, UserId: ${userId}`);
 
         if (role?.includes('admin')) {
-          console.log("Navigiram")
           this.router.navigate(['employees']);
-        } else if (role === 'employee') {
-          console.log("Navig2")
+        } else if (role?.includes('employee')) {
           this.router.navigate([`employee/${userId}`]);
-        } else if (role === 'user') {
-          console.log("Navig3")
+        } else if (role?.includes('user')) {
           this.router.navigate([`user/${userId}`]);
         } else {
-          console.log("Navig4")
           this.errorMessage = 'Unknown role. Cannot determine redirection.';
         }
       },

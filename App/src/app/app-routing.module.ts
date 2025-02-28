@@ -22,7 +22,9 @@ export const routes: Routes = [
   { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard] },
   { path: 'employee/:id', component: EmployeeDetailComponent },
 
-  { path: 'reset-password', component: PasswordResetComponent, canActivate: [adminGuard] },
+  { path: 'reset-password', component: PasswordResetComponent },
   { path: '', component: LoginComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'login/employee', component: LoginComponent },
+  { path: 'login/user', component: LoginComponent },
 ];

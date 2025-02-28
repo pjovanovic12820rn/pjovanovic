@@ -38,7 +38,7 @@ export class RegisterEmployeeComponent implements OnInit {
       lastName: ['', [Validators.required, this.onlyLettersValidator, this.minLengthWithoutSpaces(2)]],
       birthDate: ['', [Validators.required, this.pastDateValidator]],
       gender: ['', [Validators.required]],
-      // jmbg: ['', [Validators.required, Validators.pattern(/^\d{13}$/)]],
+      jmbg: ['', [Validators.required, Validators.pattern(/^\d{13}$/)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^0?[1-9][0-9]{6,14}$/)]],
       address: ['', [Validators.required, this.minLengthWithoutSpaces(5)]],
@@ -105,6 +105,5 @@ export class RegisterEmployeeComponent implements OnInit {
     const inputDate = new Date(control.value);
     return inputDate < today ? null : { invalidDate: 'Birthdate must be in the past' };
   }
-
 
 }
