@@ -15,6 +15,7 @@ describe('EditEmployeeComponent', () => {
   let fb: FormBuilder;
 
   const mockEmployee: Employee = {
+    role: '',
     id: 1,
     firstName: 'John',
     lastName: 'Doe',

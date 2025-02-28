@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { SuccessComponent } from '../success/success.component';
 
@@ -13,14 +13,19 @@ import { SuccessComponent } from '../success/success.component';
   styleUrls: ['./password-reset.component.css']
 })
 export class PasswordResetComponent {
+  private route = inject(ActivatedRoute);
   passwordForm: FormGroup;
   emailForm: FormGroup;
   passwordFeedback: string = '';
   success: boolean = false;
   emailSubmitted: boolean = false;
   loading: boolean = false;
+  token: string | null = '';
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+    this.token = this.route.snapshot.paramMap.get('token');
+
+
     this.emailForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
     });
@@ -93,7 +98,7 @@ export class PasswordResetComponent {
 
     const newPassword = this.passwordForm.get('newPassword')?.value;
 
-    this.authService.resetPassword("", newPassword).subscribe({
+    this.authService.resetPassword(this.token, newPassword).subscribe({
       next: () => {
         this.success = true;
       },
