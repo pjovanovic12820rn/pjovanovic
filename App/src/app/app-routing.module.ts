@@ -12,6 +12,7 @@ import { UserDetailComponent } from './components/user-detail/user-detail.compon
 import {EmployeeDetailComponent} from './components/employee-detail/employee-detail.component';
 import {WelcomeComponent} from './components/welcome/welcome.component';
 import {SuccessComponent} from './components/success/success.component';
+import { MailComponent } from './components/mail/mail.component';
 
 export const routes: Routes = [
   { path: 'users', component: UsersComponent, canActivate: [adminGuard] },
@@ -24,6 +25,7 @@ export const routes: Routes = [
   { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard] },
   { path: 'employee/:id', component: EmployeeDetailComponent },
 
+  { path: 'forgot-password', component: MailComponent },
   { path: 'set-password', component: PasswordResetComponent },
   { path: 'reset-password', component: PasswordResetComponent },
   { path: '', component: WelcomeComponent },
