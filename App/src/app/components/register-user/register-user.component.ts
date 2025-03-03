@@ -6,11 +6,12 @@ import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
 import { User } from '../../models/user.model';
+import { AlertComponent } from '../alert/alert.component';
 
 @Component({
   selector: 'app-register-user',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AlertComponent],
   templateUrl: './register-user.component.html',
   styleUrls: ['./register-user.component.css'],
 })
@@ -23,7 +24,6 @@ export class RegisterUserComponent implements OnInit {
 
   registerUserForm!: FormGroup;
   loading = false;
-  errorMessage: string | null = null;
 
   get isAdmin(): boolean {
     return <boolean>this.authService.getUserPermissions()?.includes("admin");
@@ -48,9 +48,9 @@ export class RegisterUserComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^0?[1-9][0-9]{6,14}$/)]],
       address: ['', [Validators.required, Validators.minLength(5)]],
-      jmbg: ['', [Validators.required, Validators.pattern(/^[0-9]{13}$/)]], // ✅ Added JMBG field
+      jmbg: ['', [Validators.required, Validators.pattern(/^[0-9]{13}$/)]],
       password: ['', [Validators.required, Validators.minLength(8)]],
-      role: ['user', Validators.required], // Default role is user
+      role: ['user', Validators.required],
     });
   }
 
@@ -77,8 +77,7 @@ export class RegisterUserComponent implements OnInit {
         });
       },
       error: (err) => {
-        this.errorMessage = err?.error?.message || 'Failed to register user. Please try again.';
-        this.alertService.showAlert('error', this.errorMessage);
+        this.alertService.showAlert('error', err?.error?.message || 'Failed to register user. Please try again.');
       },
       complete: () => {
         this.loading = false;

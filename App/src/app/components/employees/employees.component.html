@@ -1,27 +1,7 @@
 <div class="employees-container">
   <h2>Employees</h2>
 
-  <div *ngIf="errorMessage" class="error-message">
-    {{ errorMessage }}
-  </div>
-
-  <!-- 🔹 Delete Confirmation Modal (Put This Outside *ngFor Loop, but Inside isAdmin Check) -->
-  <div class="modal-overlay" *ngIf="showDeleteModal">
-    <div class="modal">
-      <h3>Confirm Deletion</h3>
-      <p>
-        Are you sure you want to delete
-        <strong>{{ selectedEmployee?.firstName }} {{ selectedEmployee?.lastName }}</strong>
-        ({{ selectedEmployee?.position }})?
-      </p>
-
-      <div class="modal-actions">
-        <button class="cancel-btn" (click)="closeDeleteModal()">Cancel</button>
-        <button class="confirm-btn" (click)="confirmDelete()">Delete</button>
-      </div>
-    </div>
-  </div>
-
+  <app-alert></app-alert>
 
   <div *ngIf="isAdmin; else unauthorized">
     <button class="register-btn" (click)="register()">Register new employee</button>
@@ -66,10 +46,25 @@
       <span>Page {{ currentPage + 1 }}</span>
       <button (click)="nextPage()" [disabled]="(currentPage + 1) * pageSize >= totalEmployees">Next</button>
     </div>
-
   </div>
 
   <ng-template #unauthorized>
     <p>You are not authorized to view the employee list.</p>
   </ng-template>
+
+  <div class="modal-overlay" *ngIf="showDeleteModal">
+    <div class="modal">
+      <h3>Confirm Deletion</h3>
+      <p>
+        Are you sure you want to delete
+        <strong>{{ selectedEmployee?.firstName }} {{ selectedEmployee?.lastName }}</strong>
+        ({{ selectedEmployee?.position }})?
+      </p>
+
+      <div class="modal-actions">
+        <button class="cancel-btn" (click)="closeDeleteModal()">Cancel</button>
+        <button class="confirm-btn" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
 </div>

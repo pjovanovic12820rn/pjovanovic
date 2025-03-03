@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
+import {AlertComponent} from '../alert/alert.component';
 
 @Component({
   selector: 'app-edit-user',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AlertComponent],
   templateUrl: './edit-user.component.html',
   styleUrls: ['./edit-user.component.css'],
 })
@@ -24,7 +25,6 @@ export class EditUserComponent implements OnInit {
 
   userForm!: FormGroup;
   userId!: number;
-  errorMessage: string | null = null;
   loading = true;
 
   get isAdmin(): boolean {
@@ -34,7 +34,7 @@ export class EditUserComponent implements OnInit {
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (!idParam || isNaN(+idParam)) {
-      this.errorMessage = 'Invalid user ID.';
+      this.alertService.showAlert('error', 'Invalid user ID.');
       this.router.navigate(['/users']);
       return;
     }
@@ -48,14 +48,14 @@ export class EditUserComponent implements OnInit {
     this.userService.getUserById(this.userId).subscribe({
       next: (user) => {
         if (!user) {
-          this.errorMessage = 'User not found.';
+          this.alertService.showAlert('error', 'User not found.');
           this.router.navigate(['/users']);
           return;
         }
         this.initForm(user);
       },
       error: () => {
-        this.errorMessage = 'Error loading user. Please try again.';
+        this.alertService.showAlert('error', 'Error loading user. Please try again.');
         this.loading = false;
       },
       complete: () => (this.loading = false),

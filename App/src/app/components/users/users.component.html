@@ -1,9 +1,7 @@
 <div class="users-container">
   <h2>Users</h2>
 
-  <div *ngIf="errorMessage" class="error-message">
-    {{ errorMessage }}
-  </div>
+  <app-alert></app-alert>
 
   <ng-container *ngIf="isAdmin; else notAuthorized">
 
@@ -25,7 +23,6 @@
     </div>
     <ng-template #noUsers><p>No users found.</p></ng-template>
 
-    <!-- Pagination Controls -->
     <div class="pagination">
       <button (click)="prevPage()" [disabled]="currentPage === 0">Previous</button>
       <span>Page {{ currentPage + 1 }}</span>
@@ -33,7 +30,6 @@
     </div>
   </ng-container>
 
-  <!-- Unauthorized Message -->
   <ng-template #notAuthorized>
     <p>You are not authorized to view this page.</p>
   </ng-template>
