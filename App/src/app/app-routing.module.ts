@@ -11,8 +11,8 @@ import { RegisterUserComponent } from './components/register-user/register-user.
 import { UserDetailComponent } from './components/user-detail/user-detail.component';
 import {EmployeeDetailComponent} from './components/employee-detail/employee-detail.component';
 import {WelcomeComponent} from './components/welcome/welcome.component';
-import {SuccessComponent} from './components/success/success.component';
 import { MailComponent } from './components/mail/mail.component';
+import { CreateForeignCurrencyAccountComponent } from './components/create-foreign-currency-account/create-foreign-currency-account.component';
 
 export const routes: Routes = [
   { path: 'users', component: UsersComponent, canActivate: [adminGuard] },
@@ -30,5 +30,7 @@ export const routes: Routes = [
   { path: 'reset-password', component: PasswordResetComponent },
   { path: '', component: WelcomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'login/:type', component: LoginComponent }
+  { path: 'login/:type', component: LoginComponent },
+
+  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [authGuard] }
 ];
