@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { EmployeeService } from '../../services/employee.service';
 import { Employee } from '../../models/employee.model';
 import { AuthService } from '../../services/auth.service';
@@ -13,7 +13,6 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./employee-detail.component.css']
 })
 export class EmployeeDetailComponent implements OnInit {
-  private route = inject(ActivatedRoute);
   private router = inject(Router);
   private employeeService = inject(EmployeeService);
   private authService = inject(AuthService);
@@ -22,34 +21,19 @@ export class EmployeeDetailComponent implements OnInit {
   errorMessage: string | null = null;
 
   get isAdmin(): boolean {
-    return this.authService.getUserPermissions() === 'admin';
+    return <boolean>this.authService.getUserPermissions()?.includes("admin");
   }
 
   ngOnInit(): void {
-    let employeeId: number | null = null;
-    const idParam = this.route.snapshot.paramMap.get('id');
-
-    if (idParam) {
-      employeeId = Number(idParam);
-      if (isNaN(employeeId)) {
-        this.errorMessage = 'Invalid employee ID.';
-        return;
-      }
-    }
-
-    if (employeeId !== null) {
-      this.loadEmployee(employeeId);
-    } else {
-      this.errorMessage = 'No employee information available.';
-    }
+    this.loadEmployee();
   }
 
-  loadEmployee(employeeId: number): void {
-    this.employeeService.getEmployeeById(employeeId).subscribe({
+  loadEmployee(): void {
+    this.employeeService.getEmployeeSelf().subscribe({
       next: (fetchedEmployee) => {
         if (!fetchedEmployee) {
           this.errorMessage = 'Employee not found.';
-          this.router.navigate(['/employees']); // Redirect if employee not found
+          this.router.navigate(['/']);
           return;
         }
         this.employee = fetchedEmployee;
