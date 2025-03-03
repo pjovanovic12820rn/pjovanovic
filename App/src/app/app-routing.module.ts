@@ -7,6 +7,7 @@ import { EditEmployeeComponent } from './components/edit-employee/edit-employee.
 import { RegisterEmployeeComponent } from './components/register-employee/register-employee.component';
 import { RegisterUserComponent } from './components/register-user/register-user.component';
 import { UsersListComponent } from './components/users-list/users-list.component';
+import { AccountsComponent } from './components/accounts/accounts.component';
 
 export const routes: Routes = [
   { path: '', component: UsersListComponent },
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: '**', redirectTo: '' },
   { path: 'reset-password', component: PasswordResetComponent },
   { path: 'register-employee', component: RegisterEmployeeComponent },
+  { path: 'accounts', component: AccountsComponent },
   {
     path: '',
     component: LoginComponent,
