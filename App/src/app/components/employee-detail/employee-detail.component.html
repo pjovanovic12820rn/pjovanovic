@@ -1,9 +1,7 @@
 <div class="employee-detail-container">
   <h2>Employee Details</h2>
 
-  <div *ngIf="errorMessage" class="error-message">
-    {{ errorMessage }}
-  </div>
+  <app-alert></app-alert>
 
   <div *ngIf="employee">
     <div class="employee-card">

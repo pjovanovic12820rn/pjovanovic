@@ -5,11 +5,13 @@ import { Employee } from '../../models/employee.model';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AlertService } from '../../services/alert.service';
+import {AlertComponent} from '../alert/alert.component';
 
 @Component({
   selector: 'app-employees',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AlertComponent],
   templateUrl: './employees.component.html',
   styleUrls: ['./employees.component.css']
 })
@@ -17,9 +19,9 @@ export class EmployeesComponent implements OnInit {
   private employeeService = inject(EmployeeService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private alertService = inject(AlertService);
 
   employees: Employee[] = [];
-  errorMessage: string | null = null;
   showDeleteModal = false;
   selectedEmployee: Employee | null = null;
 
@@ -32,17 +34,15 @@ export class EmployeesComponent implements OnInit {
   email: string = '';
   position: string = '';
 
-
   get isAdmin(): boolean {
     return <boolean>this.authService.getUserPermissions()?.includes('admin');
   }
 
   ngOnInit(): void {
     if (!this.isAdmin) {
-      this.errorMessage = "You are not authorized to view this page.";
+      this.alertService.showAlert("error", "You are not authorized to view this page.");
       return;
     }
-
     this.loadEmployees();
   }
 
@@ -51,10 +51,9 @@ export class EmployeesComponent implements OnInit {
       next: (response) => {
         this.employees = response.content;
         this.totalEmployees = response.totalElements;
-        this.errorMessage = null;
       },
       error: () => {
-        this.errorMessage = 'Failed to load employees. Please try again later.';
+        this.alertService.showAlert('error', 'Failed to load employees. Please try again later.');
         this.employees = [];
       }
     });
@@ -91,18 +90,19 @@ export class EmployeesComponent implements OnInit {
 
   confirmDelete(): void {
     if (!this.isAdmin) {
-      this.errorMessage = "You are not authorized to delete employees.";
+      this.alertService.showAlert("error", "You are not authorized to delete employees.");
       return;
     }
 
     if (this.selectedEmployee) {
       this.employeeService.deleteEmployee(this.selectedEmployee.id).subscribe({
         next: () => {
-          this.loadEmployees(); // Reload after delete
+          this.alertService.showAlert("success", "Employee deleted successfully.");
+          this.loadEmployees();
           this.closeDeleteModal();
         },
         error: () => {
-          this.errorMessage = 'Failed to delete employee. Please try again.';
+          this.alertService.showAlert('error', 'Failed to delete employee. Please try again.');
         }
       });
     }
@@ -114,7 +114,7 @@ export class EmployeesComponent implements OnInit {
 
   deactivateEmployee(id: number): void {
     if (!this.isAdmin) {
-      this.errorMessage = "You are not authorized to deactivate employees.";
+      this.alertService.showAlert("error", "You are not authorized to deactivate employees.");
       return;
     }
 
@@ -124,14 +124,13 @@ export class EmployeesComponent implements OnInit {
         if (employee) {
           employee.active = false;
         }
+        this.alertService.showAlert("success", "Employee deactivated successfully.");
       },
-      error: (error) => {
-        console.error("❌ Error deactivating employee:", error);
-        this.errorMessage = 'Failed to deactivate employee. Please try again.';
+      error: () => {
+        this.alertService.showAlert('error', 'Failed to deactivate employee. Please try again.');
       }
     });
   }
-
 
   viewEmployeeDetails(id: number): void {
     this.router.navigate(['/employees', id]);

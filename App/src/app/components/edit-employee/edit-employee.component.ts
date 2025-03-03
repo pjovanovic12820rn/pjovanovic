@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlertService } from '../../services/alert.service';
+import { AlertComponent } from '../alert/alert.component';
 
 @Component({
   selector: 'app-edit-employee',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AlertComponent],
   templateUrl: './edit-employee.component.html',
   styleUrls: ['./edit-employee.component.css']
 })
@@ -24,7 +25,6 @@ export class EditEmployeeComponent implements OnInit {
 
   employee: Employee | null = null;
   editForm!: FormGroup;
-  errorMessage: string | null = null;
   loading = true;
   updatingAdminStatus = false;
 
@@ -35,10 +35,10 @@ export class EditEmployeeComponent implements OnInit {
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (!idParam || isNaN(+idParam)) {
-      this.errorMessage = 'Invalid employee ID.';
+      this.alertService.showAlert('error', 'Invalid employee ID.');
+      this.router.navigate(['/employees']);
       return;
     }
-
     this.loadEmployee(+idParam);
   }
 
@@ -46,14 +46,15 @@ export class EditEmployeeComponent implements OnInit {
     this.employeeService.getEmployeeById(employeeId).subscribe({
       next: (fetchedEmployee) => {
         if (!fetchedEmployee) {
-          this.errorMessage = 'Employee not found.';
+          this.alertService.showAlert('error', 'Employee not found.');
+          this.router.navigate(['/employees']);
           return;
         }
         this.employee = fetchedEmployee;
         this.initForm();
       },
       error: () => {
-        this.errorMessage = 'Failed to load employee details.';
+        this.alertService.showAlert('error', 'Failed to load employee details.');
       },
       complete: () => (this.loading = false),
     });
@@ -64,7 +65,6 @@ export class EditEmployeeComponent implements OnInit {
 
     this.editForm = this.fb.group({
       lastName: [this.employee.lastName, [Validators.required, Validators.minLength(2)]],
-      gender: [this.employee.gender, [Validators.required]],
       phone: [this.employee.phone, [Validators.required, Validators.pattern(/^0?[1-9][0-9]{6,14}$/)]],
       address: [this.employee.address, [Validators.required, Validators.minLength(5)]],
       position: [this.employee.position, [Validators.required]],
@@ -78,26 +78,18 @@ export class EditEmployeeComponent implements OnInit {
       return;
     }
 
-    console.log(this.editForm.errors); // Log form-level errors
-    console.log(this.editForm.controls); // Check each field
-
     if (this.editForm.invalid) {
       this.alertService.showAlert('warning', 'Please correct errors before submitting.');
       this.editForm.markAllAsTouched();
-
-      Object.keys(this.editForm.controls).forEach((key) => {
-        const control = this.editForm.get(key);
-        if (control && control.invalid) {
-          console.log(`Field "${key}" is invalid:`, control.errors);
-        }
-      });
-
       return;
     }
 
-    const updatedEmployee = {
-      ...this.employee,
-      ...this.editForm.value,
+    const updatedEmployee: Partial<Employee> = {
+      lastName: this.editForm.value.lastName,
+      phone: this.editForm.value.phone,
+      address: this.editForm.value.address,
+      position: this.editForm.value.position,
+      department: this.editForm.value.department,
     };
 
     this.employeeService.updateEmployee(updatedEmployee).subscribe({
