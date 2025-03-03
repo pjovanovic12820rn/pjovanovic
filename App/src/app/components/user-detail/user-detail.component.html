@@ -1,0 +1,26 @@
+<div class="user-detail-container">
+  <h2>User Details</h2>
+
+  <app-alert></app-alert>
+
+  <div *ngIf="user">
+    <div class="user-card">
+      <p><strong>ID:</strong> {{ user.id }}</p>
+      <p><strong>First Name:</strong> {{ user.firstName }}</p>
+      <p><strong>Last Name:</strong> {{ user.lastName }}</p>
+      <p><strong>Birth Date:</strong> {{ user.birthDate | date:'yyyy-MM-dd' }}</p>
+      <p><strong>Gender:</strong> {{ user.gender }}</p>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Phone:</strong> {{ user.phone }}</p>
+      <p><strong>Address:</strong> {{ user.address }}</p>
+    </div>
+
+    <div *ngIf="!isAdmin" class="note">
+      <p>You are viewing your personal information.</p>
+    </div>
+
+    <div *ngIf="isAdmin" class="note">
+      <p>Admin privilege: You can view any user detail.</p>
+    </div>
+  </div>
+</div>

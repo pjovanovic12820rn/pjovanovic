@@ -1,105 +1,67 @@
 import { Injectable } from '@angular/core';
-import { Employee, Message } from '../models/employee.model';
-import {Observable, of, throwError} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
-import {AuthService} from './auth.service';
+import { Employee } from '../models/employee.model';
+import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmployeeService {
-
-  isAdmin = true;
-
-  private mockEmployees: Employee[] = [
-    {
-      id: 1,
-      firstName: 'John',
-      lastName: 'Doe',
-      birthDate: new Date('1990-05-20'),
-      gender: 'M',
-      email: 'john.doe@example.com',
-      phoneNumber: '+381645555555',
-      address: 'Njegoseva 25',
-      username: 'john90',
-      position: 'Manager',
-      department: 'Finance',
-      isActive: true,
-      jmbg: '1234567890123'
-    },
-    {
-      id: 2,
-      firstName: 'Jane',
-      lastName: 'Doe',
-      birthDate: new Date('1992-08-15'),
-      gender: 'F',
-      email: 'jane.doe@example.com',
-      phoneNumber: '+381645555556',
-      address: 'Some Other Street 10',
-      username: 'jane92',
-      position: 'Software Engineer',
-      department: 'IT',
-      isActive: true,
-      jmbg: '9876543210987'
-    },
-    {
-      id: 3,
-      firstName: 'Peter',
-      lastName: 'Smith',
-      birthDate: new Date('1985-03-10'),
-      gender: 'M',
-      phoneNumber: '+381641234567',
-      address: 'Another Street 5',
-      username: 'petersmith',
-      position: 'Accountant',
-      department: 'Finance',
-      isActive: false,
-      email: 'peter.smith@example.com',
-      jmbg: '4567890123456'
-    }
-  ];
+  private apiUrl = 'http://localhost:8080/api/admin/employees';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getEmployees(): Observable<Employee[]> {
-    return of(this.mockEmployees);
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
   }
 
-  getEmployee(id: number): Observable<Employee | undefined> {
-    const employee = this.mockEmployees.find(emp => emp.id === id);
-    return of(employee);
+  getEmployees(page: number, size: number, firstName?: string, lastName?: string, email?: string, position?: string) {
+    let params = new HttpParams().set('page', page).set('size', size);
+
+    if (firstName && firstName.trim() !== '') params = params.set('firstName', firstName.trim());
+    if (lastName && lastName.trim() !== '') params = params.set('lastName', lastName.trim());
+    if (email && email.trim() !== '') params = params.set('email', email.trim());
+    if (position && position.trim() !== '') params = params.set('position', position.trim());
+
+    return this.http.get<{ content: Employee[], totalElements: number }>(this.apiUrl, {
+      headers: this.getAuthHeaders(),
+      params
+    });
   }
 
+  getEmployeeById(id: number): Observable<Employee> {
+    return this.http.get<Employee>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
+  }
 
- 
+  getEmployeeSelf(): Observable<Employee> {
+    return this.http.get<Employee>(`${this.apiUrl}/me`, { headers: this.getAuthHeaders() });
+  }
 
-  updateEmployee(updatedEmployee: Employee): Observable<boolean> {
-    // Check if the user has admin permissions
-    if (!this.authService.isAdmin) {
-      return throwError(() => new Error('Permission denied: Admin access required.'));
-    }
+  registerEmployee(employee: Employee): Observable<Employee> {
+    return this.http.post<Employee>(this.apiUrl, employee, { headers: this.getAuthHeaders() });
+  }
 
-    return of(true)
-    // Make a PUT request to update the employee
-    // return this.http.put<boolean>(`/api/admin/employees/${updatedEmployee.id}`, updatedEmployee);
+  updateEmployee(updatedEmployee: Partial<Employee>): Observable<boolean> {
+    return this.http.put<boolean>(`${this.apiUrl}/${updatedEmployee.id}`, updatedEmployee, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   deleteEmployee(id: number): Observable<void> {
-    const index = this.mockEmployees.findIndex(emp => emp.id === id);
-    if (index !== -1) {
-      this.mockEmployees.splice(index, 1);
-      return of(undefined);
-    }
-    return throwError(() => new Error('Employee not found'));
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 
   deactivateEmployee(id: number): Observable<void> {
-    const employee = this.mockEmployees.find(emp => emp.id === id);
-    if (employee) {
-      employee.isActive = false;
-      return of(undefined);
-    }
-    return throwError(() => new Error('Employee not found'));
+    const url = `${this.apiUrl}/${id}/deactivate`; // Construct URL with ID
+    return this.http.patch<void>(url, null, { headers: this.getAuthHeaders() });
   }
 
+  setEmployeeRole(employeeId: number, role: string): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/${employeeId}/set-role`, { role }, { headers: this.getAuthHeaders() });
+  }
 }

@@ -1,75 +1,80 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-  AbstractControl,
-  ValidationErrors
-} from '@angular/forms';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { EmployeeService } from '../../services/employee.service';
+import { AuthService } from '../../services/auth.service';
+import { AlertService } from '../../services/alert.service';
+import { AlertComponent } from '../alert/alert.component';
 
 @Component({
   selector: 'app-register-employee',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AlertComponent],
   templateUrl: './register-employee.component.html',
   styleUrls: ['./register-employee.component.css']
 })
 export class RegisterEmployeeComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private employeeService = inject(EmployeeService);
+  private authService = inject(AuthService);
+  private alertService = inject(AlertService);
+
   registerEmployeeForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router, private http: HttpClient) {}
+  get isAdmin(): boolean {
+    return <boolean>this.authService.getUserPermissions()?.includes("admin");
+  }
 
   ngOnInit(): void {
+    if (!this.isAdmin) {
+      this.alertService.showAlert('error', 'You are not authorized to register employees.');
+      return;
+    }
+
     this.registerEmployeeForm = this.fb.group({
       firstName: ['', [Validators.required, this.onlyLettersValidator, this.minLengthWithoutSpaces(2)]],
       lastName: ['', [Validators.required, this.onlyLettersValidator, this.minLengthWithoutSpaces(2)]],
+      birthDate: ['', [Validators.required, this.pastDateValidator]],
+      gender: ['', [Validators.required]],
       jmbg: ['', [Validators.required, Validators.pattern(/^\d{13}$/)]],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
+      phone: ['', [Validators.required, Validators.pattern(/^0?[1-9][0-9]{6,14}$/)]],
       address: ['', [Validators.required, this.minLengthWithoutSpaces(5)]],
+      username: ['', [Validators.required, this.minLengthWithoutSpaces(3)]],
       position: ['', [Validators.required, this.onlyLettersValidator, this.minLengthWithoutSpaces(2)]],
-      active: [true, Validators.required],
+      department: ['', [Validators.required, this.minLengthWithoutSpaces(2)]],
+      active: [false, Validators.required]
     });
   }
 
-  /*
-  if needed
-  dob: ['', Validators.required],
-  gender: ['', Validators.required],
-   */
-
   onSubmit(): void {
+    if (!this.isAdmin) {
+      this.alertService.showAlert('error', 'You do not have permission to register employees.');
+      return;
+    }
+
     if (this.registerEmployeeForm.valid) {
       const formData = this.registerEmployeeForm.value;
-      console.log("Form submitted:", this.registerEmployeeForm.value);
-      console.log("FormData being sent:", formData);
-      this.http.post('http://localhost:8080/api/admin/employees', formData).subscribe({
-        next: (res) => {
-          console.log('Employee registered:', res);
-          //alert('Employee registration successful!');
-          //this.registerEmployeeForm.reset();
-          this.router.navigate(['/users']);
+
+      this.employeeService.registerEmployee(formData).subscribe({
+        next: () => {
+          this.alertService.showAlert('success', 'Employee registered successfully!');
+          this.router.navigate(['/employees']);
         },
-        error: (err) => {
-          console.error('POST Request Error registering employee:', err);
-          //alert('Failed to register employee. Please try again.');
+        error: () => {
+          this.alertService.showAlert('error', 'Failed to register employee. Please try again.');
         }
       });
-      this.router.navigate(['/users']); // move inside successful POST result after implementation
     } else {
       this.registerEmployeeForm.markAllAsTouched();
-      console.log("Form is invalid:", this.registerEmployeeForm.value);
     }
   }
 
   minLengthWithoutSpaces(minLength: number) {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) return null;
-
       const trimmedLength = control.value.trim().length;
       return trimmedLength < minLength ? { minLengthWithoutSpaces: { requiredLength: minLength, actualLength: trimmedLength } } : null;
     };
@@ -77,11 +82,13 @@ export class RegisterEmployeeComponent implements OnInit {
 
   onlyLettersValidator(control: AbstractControl): ValidationErrors | null {
     if (!control.value) return null;
-
     const trimmedValue = control.value.trim();
-    const valid = /^[A-Za-z]+$/.test(trimmedValue);
-    return valid ? null : { onlyLetters: true };
+    return /^[A-Za-z\s]+$/.test(trimmedValue) ? null : { onlyLetters: true };
   }
 
-
+  pastDateValidator(control: AbstractControl): ValidationErrors | null {
+    const today = new Date();
+    const inputDate = new Date(control.value);
+    return inputDate < today ? null : { invalidDate: 'Birthdate must be in the past' };
+  }
 }

@@ -1,159 +1,123 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {EmployeeService} from '../../services/employee.service';
-import {Employee} from '../../models/employee.model';
-import {AbstractControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {CommonModule} from '@angular/common';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {AlertService} from '../../services/alert.service';
-import {AuthService} from '../../services/auth.service';
+import { Component, inject, OnInit } from '@angular/core';
+import { EmployeeService } from '../../services/employee.service';
+import { AuthService } from '../../services/auth.service';
+import { Employee } from '../../models/employee.model';
+import { CommonModule } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AlertService } from '../../services/alert.service';
+import { AlertComponent } from '../alert/alert.component';
 
 @Component({
   selector: 'app-edit-employee',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [CommonModule, ReactiveFormsModule, AlertComponent],
   templateUrl: './edit-employee.component.html',
-  styleUrl: './edit-employee.component.css'
+  styleUrls: ['./edit-employee.component.css']
 })
 export class EditEmployeeComponent implements OnInit {
-  protected authService = inject(AuthService);
-  private router = inject(Router);
   private employeeService = inject(EmployeeService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
+  private alertService = inject(AlertService);
 
-  employee: Employee | undefined;
+  employee: Employee | null = null;
   editForm!: FormGroup;
-  errorMessage: string | null = null;
+  loading = true;
+  updatingAdminStatus = false;
 
-  constructor(private alertService: AlertService) {
+  get isAdmin(): boolean {
+    return <boolean>this.authService.getUserPermissions()?.includes('admin');
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const id = Number(params.get('id'));
-      if (isNaN(id)) {
-        this.errorMessage = 'Invalid employee ID.';
-        return;
-      }
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (!idParam || isNaN(+idParam)) {
+      this.alertService.showAlert('error', 'Invalid employee ID.');
+      this.router.navigate(['/employees']);
+      return;
+    }
+    this.loadEmployee(+idParam);
+  }
 
-      this.employeeService.getEmployee(id).subscribe({
-        next: (employee) => {
-          if (!employee) {
-            this.errorMessage = 'Employee not found.';
-            return;
-          }
-          this.employee = employee;
-          this.initializeForm();
-        },
-        error: (error) => {
-          console.error('Error fetching employee:', error);
-          this.errorMessage = 'Failed to load employee details. Please try again later.';
+  loadEmployee(employeeId: number): void {
+    this.employeeService.getEmployeeById(employeeId).subscribe({
+      next: (fetchedEmployee) => {
+        if (!fetchedEmployee) {
+          this.alertService.showAlert('error', 'Employee not found.');
+          this.router.navigate(['/employees']);
+          return;
         }
-      });
+        this.employee = fetchedEmployee;
+        this.initForm();
+      },
+      error: () => {
+        this.alertService.showAlert('error', 'Failed to load employee details.');
+      },
+      complete: () => (this.loading = false),
     });
   }
 
-  initializeForm(): void {
-    // const formattedBirthDate = this.employee?.birthDate ? this.formatDate(this.employee.birthDate) : '';
+  initForm(): void {
+    if (!this.employee) return;
 
     this.editForm = this.fb.group({
-      firstName: [
-        this.employee?.firstName,
-        [Validators.required, Validators.pattern(/^[A-Z][a-z]+(\s[A-Z][a-z]+)*$/)]
-      ],
-      lastName: [
-        this.employee?.lastName,
-        [Validators.required, Validators.pattern(/^[A-Z][a-z]+(\s[A-Z][a-z]+)*$/)]
-      ],
-      // birthDate: [
-      //   formattedBirthDate,
-      //   [Validators.required, this.pastDateValidator]
-      // ],
-      // gender: [
-      //   this.employee?.gender,
-      //   [Validators.required, Validators.pattern(/^([MF])$/)]
-      // ],
-      email: [
-        this.employee?.email,
-        [Validators.required, Validators.email, Validators.pattern(/^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/)]
-      ],
-      phoneNumber: [
-        this.employee?.phoneNumber,
-        [Validators.required, Validators.pattern(/^\+?[1-9][0-9]{6,14}$/)]
-      ],
-      address: [
-        this.employee?.address,
-        [Validators.required, Validators.minLength(5), this.noWhitespaceValidator]
-      ],
-      position: [
-        this.employee?.position,
-        [Validators.required, Validators.minLength(2), Validators.maxLength(50), this.noWhitespaceValidator]
-      ],
-      department: [
-        this.employee?.department,
-        [Validators.required, Validators.minLength(2), Validators.maxLength(50), this.noWhitespaceValidator]
-      ],
-      isActive: [
-        this.employee?.isActive,
-        [Validators.required]
-      ]
+      lastName: [this.employee.lastName, [Validators.required, Validators.minLength(2)]],
+      phone: [this.employee.phone, [Validators.required, Validators.pattern(/^0?[1-9][0-9]{6,14}$/)]],
+      address: [this.employee.address, [Validators.required, Validators.minLength(5)]],
+      position: [this.employee.position, [Validators.required]],
+      department: [this.employee.department, [Validators.required]],
     });
   }
 
-  noWhitespaceValidator(control: AbstractControl): { [key: string]: boolean } | null {
-    return (control.value || '').trim().length === 0 ? {whitespace: true} : null;
-  }
-
-  private formatDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-
-  onSubmit(): void {
-    if (!this.authService.isAdmin) {
-      this.alertService.showAlert('error', 'Permission denied: Only admins can edit employee details.');
+  saveChanges(): void {
+    if (!this.isAdmin) {
+      this.alertService.showAlert('error', 'Only admins can update employee details.');
       return;
     }
 
-    if (this.editForm.valid) {
-      const formData = {...this.editForm.value};
-      // formData.birthDate = new Date(formData.birthDate);
-
-      this.employeeService.updateEmployee(formData).subscribe({
-        next: () => {
-          this.alertService.showAlert('success', 'Employee successfully updated!');
-          this.router.navigate(['/employees']);
-        },
-        error: (err) => {
-          console.error('Error updating employee:', err);
-          this.alertService.showAlert('error', 'Failed to update employee. Please try again.');
-        }
-      });
-
-    } else {
+    if (this.editForm.invalid) {
       this.alertService.showAlert('warning', 'Please correct errors before submitting.');
       this.editForm.markAllAsTouched();
+      return;
     }
+
+    const updatedEmployee: Partial<Employee> = {
+      lastName: this.editForm.value.lastName,
+      phone: this.editForm.value.phone,
+      address: this.editForm.value.address,
+      position: this.editForm.value.position,
+      department: this.editForm.value.department,
+    };
+
+    this.employeeService.updateEmployee(updatedEmployee).subscribe({
+      next: () => {
+        this.alertService.showAlert('success', 'Employee updated successfully!');
+        this.router.navigate(['/employees']);
+      },
+      error: () => {
+        this.alertService.showAlert('error', 'Failed to update employee.');
+      },
+    });
   }
 
-  isFieldInvalid(field: string) {
-    const formControl = this.editForm.get(field);
-    return formControl && formControl.invalid && (formControl.dirty || formControl.touched);
-  }
+  toggleAdminStatus(): void {
+    if (!this.employee || !this.isAdmin) return;
 
-  getFieldError(field: string, errorType: string) {
-    const formControl = this.editForm.get(field);
-    return formControl?.errors?.[errorType];
-  }
+    this.updatingAdminStatus = true;
+    const newRole = this.employee.role === 'admin' ? 'employee' : 'admin';
 
-  pastDateValidator(control: AbstractControl): { [key: string]: any } | null {
-    const today = new Date();
-    const inputDate = new Date(control.value);
-    return inputDate < today ? null : {invalidDate: 'Birthdate must be in the past'};
+    this.employeeService.setEmployeeRole(this.employee.id, newRole).subscribe({
+      next: () => {
+        this.employee!.role = newRole;
+        this.alertService.showAlert('success', `Employee is now an ${newRole.toUpperCase()}.`);
+      },
+      error: () => {
+        this.alertService.showAlert('error', 'Failed to update employee role.');
+      },
+      complete: () => (this.updatingAdminStatus = false),
+    });
   }
-
 }

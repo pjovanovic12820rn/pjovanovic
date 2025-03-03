@@ -15,18 +15,19 @@ describe('EditEmployeeComponent', () => {
   let fb: FormBuilder;
 
   const mockEmployee: Employee = {
+    role: '',
     id: 1,
     firstName: 'John',
     lastName: 'Doe',
     birthDate: new Date('1990-05-20'),
     gender: 'M',
     email: 'john.doe@example.com',
-    phoneNumber: '+381645555555',
+    phone: '+381645555555',
     address: 'Njegoseva 25',
     username: 'john90',
     position: 'Manager',
     department: 'Finance',
-    isActive: true,
+    active: true,
     jmbg: '1234567890123'
   };
 
@@ -98,7 +99,7 @@ describe('EditEmployeeComponent', () => {
       birthDate: '1990-05-20',
       gender: 'M',
       email: 'john.doe@example.com',
-      phoneNumber: '+381645555555',
+      phone: '+381645555555',
       address: 'Njegoseva 25',
       position: 'Manager',
       department: 'Finance',
@@ -118,7 +119,7 @@ describe('EditEmployeeComponent', () => {
         birthDate: '1991-06-21',
         gender: 'F',
         email: 'updated.john.doe@example.com',
-        phoneNumber: '+987654321',
+        phone: '+987654321',
         address: 'Updated Address 26',
         position: 'Updated Position',
         department: 'Updated Department',
@@ -132,7 +133,7 @@ describe('EditEmployeeComponent', () => {
         birthDate: new Date('1991-06-21T00:00:00.000Z'),
         gender: 'F',
         email: 'updated.john.doe@example.com',
-        phoneNumber: '+987654321',
+        phone: '+987654321',
         address: 'Updated Address 26',
         position: 'Updated Position',
         department: 'Updated Department',

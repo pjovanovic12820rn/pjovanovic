@@ -10,6 +10,16 @@ export const authGuard = () => {
     return true;
   }
 
-  // Redirect to the login page
   return router.parseUrl('/login');
+};
+
+export const adminGuard = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  if (authService.isAuthenticated() && authService.isAdmin()) {
+    return true;
+  }
+
+  return router.parseUrl('/login'); // Redirect non-admins to login
 };

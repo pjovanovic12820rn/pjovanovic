@@ -1,14 +1,20 @@
-<nav class="navbar">
+<nav class="navbar" *ngIf="isAuthenticated">
   <div class="logo">B3</div>
+
   <div class="nav-links">
-    <button class="nav-btn" (click)="addUser()">Add User</button>
-    <button class="nav-btn" (click)="addEmployee()">Add Employee</button>
-    <button class="nav-btn" (click)="search()">Search</button>
-    <button class="nav-btn" (click)="viewUsers()">View Users & Employees</button>
-    <button class="nav-btn" (click)="viewAccounts()">Accounts</button>
-    <button class="nav-btn" (click)="viewTransactions()">Transactions</button>
-    <button class="nav-btn" (click)="viewLoans()">Loans</button>
-    <button class="nav-btn" (click)="viewExchange()">Exchange</button>
+    <button class="nav-btn" *ngIf="isAdmin" (click)="router.navigate(['/employees'])">All Employees</button>
+    <button class="nav-btn" *ngIf="isAdmin" (click)="router.navigate(['/users'])">All Users</button>
+
+    <button class="nav-btn" *ngIf="isEmployee" (click)="router.navigate(['/employee', userId])">
+      My Profile
+    </button>
+
+    <button class="nav-btn" *ngIf="isClient" (click)="router.navigate(['/user', userId])">
+      My Profile
+    </button>
   </div>
+
   <button class="logout-btn" (click)="logout()">Logout</button>
 </nav>
+
+

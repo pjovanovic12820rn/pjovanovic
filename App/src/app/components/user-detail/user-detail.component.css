@@ -1,0 +1,83 @@
+/* 🔹 General Styling */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #B399DD, #D0C9EA);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 30px;
+}
+
+/* 🔹 Container */
+.user-detail-container {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  width: 500px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* 🔹 Heading */
+.user-detail-container h2 {
+  color: #1976D2;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* 🔹 User Card */
+.user-card {
+  background: #F9F9F9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+/* 🔹 User Details */
+.user-card p {
+  font-size: 16px;
+  color: #333;
+  margin: 10px 0;
+}
+
+.user-card strong {
+  color: #555;
+}
+
+/* 🔹 Error Message */
+.error-message {
+  color: #D32F2F;
+  background: #FFEBEE;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* 🔹 Notes (Info for Admin & Users) */
+.note {
+  background: #E3F2FD;
+  color: #1565C0;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 🔹 Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,4 +1,3 @@
-
 export interface Employee {
     id: number;
     firstName: string;
@@ -6,14 +5,15 @@ export interface Employee {
     birthDate: Date;
     gender: string;
     email: string;
-    phoneNumber: string;
+    phone: string;
     address: string;
     username: string;
     position: string;
     department: string;
-    isActive?: boolean;
+    role: string
+    active?: boolean;
     jmbg: string;
-  }
+}
 
 export interface Message {
     message: string;

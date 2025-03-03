@@ -13,7 +13,7 @@ import {AlertService} from '../../services/alert.service';
   styleUrl: './alert.component.css'
 })
 export class AlertComponent implements OnInit {
-  alert: { type: string, message: string } | null = null;
+  alert: { type: string, message: string | null } | null = null;
 
   constructor(private alertService: AlertService) {}
 

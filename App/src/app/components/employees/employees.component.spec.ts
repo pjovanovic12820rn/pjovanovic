@@ -20,12 +20,12 @@ describe('EmployeesComponent', () => {
       birthDate: new Date('1990-05-20'),
       gender: 'M',
       email: 'john.doe@example.com',
-      phoneNumber: '+381645555555',
+      phone: '+381645555555',
       address: 'Njegoseva 25',
       username: 'john90',
       position: 'Manager',
       department: 'Finance',
-      isActive: true,
+      active: true,
       jmbg: '1234567890123'
     },
     {
@@ -35,12 +35,12 @@ describe('EmployeesComponent', () => {
       birthDate: new Date('1992-08-15'),
       gender: 'F',
       email: 'jane.doe@example.com',
-      phoneNumber: '+381645555556',
+      phone: '+381645555556',
       address: 'Some Other Street 10',
       username: 'jane92',
       position: 'Software Engineer',
       department: 'IT',
-      isActive: true,
+      active: true,
       jmbg: '9876543210987'
     }
   ];
