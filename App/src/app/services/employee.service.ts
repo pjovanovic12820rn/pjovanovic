@@ -46,7 +46,7 @@ export class EmployeeService {
     return this.http.post<Employee>(this.apiUrl, employee, { headers: this.getAuthHeaders() });
   }
 
-  updateEmployee(updatedEmployee: Employee): Observable<boolean> {
+  updateEmployee(updatedEmployee: Partial<Employee>): Observable<boolean> {
     return this.http.put<boolean>(`${this.apiUrl}/${updatedEmployee.id}`, updatedEmployee, {
       headers: this.getAuthHeaders()
     });

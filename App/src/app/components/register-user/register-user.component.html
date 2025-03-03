@@ -1,9 +1,7 @@
 <div class="register-container">
   <h2>Register New User</h2>
 
-  <div *ngIf="errorMessage" class="error-message">
-    {{ errorMessage }}
-  </div>
+  <app-alert></app-alert>
 
   <form *ngIf="registerUserForm" [formGroup]="registerUserForm" (ngSubmit)="onSubmit()">
     <div class="form-group">

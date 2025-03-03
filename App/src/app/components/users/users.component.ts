@@ -4,21 +4,23 @@ import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user.model';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { AlertService } from '../../services/alert.service';
+import { AlertComponent } from '../alert/alert.component';
 
 @Component({
   selector: 'app-users',
   standalone: true,
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css'],
-  imports: [CommonModule],
+  imports: [CommonModule, AlertComponent],
 })
 export class UsersComponent implements OnInit {
   private userService = inject(UserService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private alertService = inject(AlertService);
 
   users: User[] = [];
-  errorMessage: string | null = null;
   currentPage: number = 0;
   pageSize: number = 10;
   totalUsers: number = 0;
@@ -35,11 +37,10 @@ export class UsersComponent implements OnInit {
     this.userService.getAllUsers(this.currentPage, this.pageSize).subscribe({
       next: (data) => {
         this.users = data.content;
-        this.totalUsers = data.totalElements; // Total number of users
-        this.errorMessage = null;
+        this.totalUsers = data.totalElements;
       },
       error: () => {
-        this.errorMessage = 'Failed to load users. Please try again later.';
+        this.alertService.showAlert('error', 'Failed to load users. Please try again later.');
       },
     });
   }
@@ -60,7 +61,7 @@ export class UsersComponent implements OnInit {
 
   deleteUser(userId: number): void {
     if (!this.isAdmin) {
-      this.errorMessage = 'Only admins can delete users.';
+      this.alertService.showAlert('error', 'Only admins can delete users.');
       return;
     }
 
@@ -68,9 +69,10 @@ export class UsersComponent implements OnInit {
       this.userService.deleteUser(userId).subscribe({
         next: () => {
           this.users = this.users.filter((u) => u.id !== userId);
+          this.alertService.showAlert('success', 'User deleted successfully.');
         },
         error: () => {
-          this.errorMessage = 'Failed to delete user. Please try again.';
+          this.alertService.showAlert('error', 'Failed to delete user. Please try again.');
         },
       });
     }

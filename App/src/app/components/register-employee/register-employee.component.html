@@ -1,9 +1,7 @@
 <div class="register-container">
   <h2>Register New Employee</h2>
 
-  <div *ngIf="errorMessage" class="error-message">
-    {{ errorMessage }}
-  </div>
+  <app-alert></app-alert>
 
   <form *ngIf="isAdmin" [formGroup]="registerEmployeeForm" (ngSubmit)="onSubmit()">
     <div class="form-row">
@@ -17,28 +15,17 @@
     </div>
 
     <div class="form-row">
-      <div class="input-group">
-        <label for="birthDate">Date of Birth</label>
-        <input type="date" id="birthDate" formControlName="birthDate" required>
-<!--        <div *ngIf="isFieldInvalid('birthDate')" class="error-message">-->
-<!--          <div *ngIf="getFieldError('birthDate', 'required')">Birthdate is required.</div>-->
-<!--          <div *ngIf="getFieldError('birthDate', 'invalidDate')">Birthdate must be in the past.</div>-->
-<!--        </div>-->
-      </div>
+      <label for="birthDate">Date of Birth</label>
+      <input type="date" id="birthDate" formControlName="birthDate" required>
     </div>
 
     <div class="form-row">
-      <div class="input-group">
-        <label for="gender">Gender</label>
-        <select id="gender" formControlName="gender" required>
-          <option value="" disabled selected>Select gender</option>
-          <option value="M">Male</option>
-          <option value="F">Female</option>
-        </select>
-<!--        <div *ngIf="isFieldInvalid('gender')" class="error-message">-->
-<!--          <div *ngIf="getFieldError('gender', 'required')">Gender is required.</div>-->
-<!--        </div>-->
-      </div>
+      <label for="gender">Gender</label>
+      <select id="gender" formControlName="gender" required>
+        <option value="" disabled selected>Select gender</option>
+        <option value="M">Male</option>
+        <option value="F">Female</option>
+      </select>
     </div>
 
     <div class="form-row">
