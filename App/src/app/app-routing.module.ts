@@ -12,22 +12,29 @@ import { UserDetailComponent } from './components/user-detail/user-detail.compon
 import {EmployeeDetailComponent} from './components/employee-detail/employee-detail.component';
 import {WelcomeComponent} from './components/welcome/welcome.component';
 import {SuccessComponent} from './components/success/success.component';
+import {MailComponent} from './components/mail/mail.component';
 
 export const routes: Routes = [
-  { path: 'users', component: UsersComponent, canActivate: [adminGuard] },
-  { path: 'register-user', component: RegisterUserComponent, canActivate: [adminGuard] },
-  { path: 'users/:id', component: EditUserComponent, canActivate: [adminGuard] },
-  { path: 'user/:id', component: UserDetailComponent },
+  // login
+  { path: '', component: WelcomeComponent },
+  { path: 'login/:type', component: LoginComponent },
 
-  { path: 'employees', component: EmployeesComponent, canActivate: [adminGuard] },
-  { path: 'register-employee', component: RegisterEmployeeComponent, canActivate: [adminGuard] },
-  { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard] },
-  { path: 'employee/:id', component: EmployeeDetailComponent },
-
+  // password
   { path: 'forgot-password', component: MailComponent },
   { path: 'set-password/:token', component: PasswordResetComponent },
   { path: 'reset-password/:token', component: PasswordResetComponent },
-  { path: '', component: WelcomeComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'login/:type', component: LoginComponent }
+  { path: 'forgot-password', component: MailComponent },
+
+  // users
+  { path: 'users', component: UsersComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'register-user', component: RegisterUserComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'users/:id', component: EditUserComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'user/:id', component: UserDetailComponent, canActivate: [authGuard] },
+
+  // employees
+  { path: 'employees', component: EmployeesComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'register-employee', component: RegisterEmployeeComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'employee/:id', component: EmployeeDetailComponent, canActivate: [authGuard] },
+
 ];

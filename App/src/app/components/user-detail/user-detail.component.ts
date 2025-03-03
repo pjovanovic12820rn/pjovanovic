@@ -13,7 +13,6 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./user-detail.component.css']
 })
 export class UserDetailComponent implements OnInit {
-  private route = inject(ActivatedRoute);
   private router = inject(Router);
   private userService = inject(UserService);
   private authService = inject(AuthService);
@@ -22,30 +21,15 @@ export class UserDetailComponent implements OnInit {
   errorMessage: string | null = null;
 
   get isAdmin(): boolean {
-    return this.authService.getUserPermissions() === 'admin';
+    return <boolean>this.authService.getUserPermissions()?.includes("admin");
   }
 
   ngOnInit(): void {
-    let userId: number | null = null;
-    const idParam = this.route.snapshot.paramMap.get('id');
-
-    if (idParam) {
-      userId = Number(idParam);
-      if (isNaN(userId)) {
-        this.errorMessage = 'Invalid user ID.';
-        return;
-      }
-    }
-
-    if (userId !== null) {
-      this.loadUser(userId);
-    } else {
-      this.errorMessage = 'No user information available.';
-    }
+    this.loadUser();
   }
 
-  loadUser(userId: number): void {
-    this.userService.getUserById(userId).subscribe({
+  loadUser(): void {
+    this.userService.getUserSelf().subscribe({
       next: (fetchedUser) => {
         if (!fetchedUser) {
           this.errorMessage = 'User not found.';
