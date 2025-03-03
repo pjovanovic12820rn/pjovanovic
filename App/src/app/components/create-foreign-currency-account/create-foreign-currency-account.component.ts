@@ -7,6 +7,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from '../../services/account.service';
 import { AlertService } from '../../services/alert.service';
 import { Currency } from '../../models/currency.model';
+import { EmployeeService } from '../../services/employee.service';
+import { Employee } from '../../models/employee.model';
 
 @Component({
   selector: 'app-create-foreign-currency-account',
@@ -26,6 +28,11 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private accountService = inject(AccountService);
   private alertService = inject(AlertService);
+  private employeeService = inject(EmployeeService);
+
+  loggedInEmployee: Employee | null = null;
+  loggedInEmployeeFullName: string = '';
+  loggedInEmployeePosition: string = '';
 
   constructor(private fb: FormBuilder) {
     this.accountForm = this.fb.group({
@@ -38,7 +45,11 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       companyAddress: ['', Validators.required],
       majorityOwnerId: ['', Validators.required],
       ownerId: ['', Validators.required],
-      accountNumber: ['']
+      accountNumber: [''],
+      dailyLimit: ['', Validators.required],
+      monthlyLimit: ['', Validators.required],
+      createInitialCard: [false],
+      createdById: ['']
     });
   }
 
@@ -54,6 +65,23 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     this.preselectNewUser();
     this.loadCurrencies();
     this.generateAccountNumber();
+    this.loadLoggedInEmployee();
+  }
+
+  private loadLoggedInEmployee() {
+    this.employeeService.getEmployeeSelf().subscribe({
+      next: (employee) => {
+        this.loggedInEmployee = employee;
+        if (employee) {
+          this.loggedInEmployeeFullName = `${employee.firstName} ${employee.lastName}`;
+          this.loggedInEmployeePosition = employee.position;
+          this.accountForm.patchValue({ createdById: employee.id });
+        }
+      },
+      error: (error) => {
+        console.error('Error loading logged-in employee:', error);
+      }
+    });
   }
 
   private loadUsers() {
@@ -99,7 +127,6 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     this.accountForm.patchValue({ accountNumber: this.generatedAccountNumber });
   }
 
-
   updateBusinessFieldsVisibility() {
     if (this.isBusinessAccount) {
       this.accountForm.controls['companyName'].enable();
@@ -126,7 +153,11 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       return;
     }
 
-    this.accountService.createAccount(this.accountForm.value).subscribe({
+    const accountData = this.accountForm.value;
+    accountData.ownerId = parseInt(accountData.ownerId, 10);
+    console.log('Account data to be sent to backend:', accountData);
+
+    this.accountService.createAccount(accountData).subscribe({
       next: (response) => {
         console.log('Account creation successful:', response);
         this.alertService.showAlert('success', 'Account created successfully!');
