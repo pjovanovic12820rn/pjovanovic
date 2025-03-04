@@ -1,6 +1,5 @@
 <nav class="navbar" *ngIf="isAuthenticated">
   <div class="logo">B3</div>
-
   <div class="nav-links">
     <button class="nav-btn" *ngIf="isAdmin" (click)="router.navigate(['/employees'])">All Employees</button>
     <button class="nav-btn" *ngIf="isAdmin" (click)="router.navigate(['/users'])">All Users</button>
@@ -12,9 +11,10 @@
     <button class="nav-btn" *ngIf="isClient" (click)="router.navigate(['/user', userId])">
       My Profile
     </button>
+
+    <button class="nav-btn" *ngIf="userType === 'employee' || isAdmin" (click)="router.navigate(['/create-current-account'])">Create New Current Account</button>
   </div>
 
   <button class="logout-btn" (click)="logout()">Logout</button>
 </nav>
-
 

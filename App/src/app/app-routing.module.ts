@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { authGuard, adminGuard } from './guards/auth-guard.guard';
+import {authGuard, adminGuard, employeeGuard} from './guards/auth-guard.guard';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { EmployeesComponent } from './components/employees/employees.component';
 import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
@@ -11,7 +11,8 @@ import { RegisterUserComponent } from './components/register-user/register-user.
 import { UserDetailComponent } from './components/user-detail/user-detail.component';
 import {EmployeeDetailComponent} from './components/employee-detail/employee-detail.component';
 import {WelcomeComponent} from './components/welcome/welcome.component';
-import {SuccessComponent} from './components/success/success.component';
+import {AccountCreationComponent} from './components/account-creation/account-creation.component';
+import { CreateForeignCurrencyAccountComponent } from './components/create-foreign-currency-account/create-foreign-currency-account.component';
 import {MailComponent} from './components/mail/mail.component';
 import {ClientPortalComponent} from './components/client-portal/client-portal.component';
 import {ClientEditComponent} from './components/client-edit/client-edit.component';
@@ -19,6 +20,7 @@ import {ClientEditComponent} from './components/client-edit/client-edit.componen
 export const routes: Routes = [
   // login
   { path: '', component: WelcomeComponent },
+  { path: 'login', component: LoginComponent },
   { path: 'login/:type', component: LoginComponent },
 
   // password
@@ -42,4 +44,7 @@ export const routes: Routes = [
   { path: 'clients/:id', component: ClientEditComponent, canActivate: [authGuard]},
 
 
+  // bank accounts
+  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeGuard] },
+  { path: 'create-current-account', component: AccountCreationComponent, canActivate: [employeeGuard] }
 ];
