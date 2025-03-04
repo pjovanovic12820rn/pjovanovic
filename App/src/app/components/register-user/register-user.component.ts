@@ -79,7 +79,7 @@ export class RegisterUserComponent implements OnInit {
       next: (createdUser) => {
         this.alertService.showAlert('success', 'User registered successfully!');
         if (this.redirectToAccountCreation) {
-          this.router.navigate(['/account-creation'], { queryParams: { userId: createdUser.id } });
+          this.router.navigate(['/create-current-account'], { queryParams: { userId: createdUser.id } });
         } else {
           this.router.navigate(['/users']);
         }

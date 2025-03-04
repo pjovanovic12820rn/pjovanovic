@@ -7,6 +7,8 @@ import { NewBankAccount } from '../../models/new-bank-account.model';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
+import { EmployeeService } from '../../services/employee.service';
+import { Employee } from '../../models/employee.model';
 // import {NgForOf, NgIf} from '@angular/common';
 
 @Component({
@@ -22,19 +24,24 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrls: ['./account-creation.component.css']
 })
 export class AccountCreationComponent implements OnInit {
+  loggedInEmployee: Employee | null = null;
   users: User[] = [];
-  companies = [
-    { id: 1, name: 'Company One' },
-    { id: 2, name: 'Company Two' },
-    { id: 3, name: 'Company Three' }
-  ];
+  companyInfo = {
+    name: '',
+    registrationNumber: '',
+    taxNumber: '',
+    activityCode: '',
+    address: '',
+    majorityOwner: ''
+  };
+
   isCurrentAccount = true;
   isCompanyAccount = false;
   employeeId: number | null = null;
   availableCurrencies: string[] = ['RSD'];
 
   newAccount: NewBankAccount = {
-    currency: '',
+    currency: 'RSD',
     clientId: 0,
     employeeId: 0,
     initialBalance: 0,
@@ -48,13 +55,13 @@ export class AccountCreationComponent implements OnInit {
     createCard: false,
     monthlyFee: 0
   };
-
   constructor(
     private userService: UserService,
     private authService: AuthService,
     private accountService: AccountService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private employeeService: EmployeeService
   ) {}
 
   ngOnInit(): void {
@@ -72,6 +79,16 @@ export class AccountCreationComponent implements OnInit {
     this.employeeId = this.authService.getUserId();
     if (this.employeeId) {
       this.newAccount.employeeId = this.employeeId;
+      this.employeeService.getEmployeeById(this.employeeId).subscribe(
+        (employee) => {
+          this.loggedInEmployee = employee;
+        },
+        (error) => {
+          console.error('Error fetching employee details:', error);
+        }
+      );
+
+
     }
     this.route.queryParams.subscribe(params => {
       const userId = params['userId'];
@@ -80,7 +97,7 @@ export class AccountCreationComponent implements OnInit {
       }
     });
     // this.loadUsers();
-    this.onAccountTypeChange();
+    // this.onAccountTypeChange();
   }
 
   navigateToRegisterUser() {
@@ -96,18 +113,18 @@ export class AccountCreationComponent implements OnInit {
     });
   }
 
-  onAccountTypeChange() {
-    this.isCurrentAccount = this.newAccount.accountType === 'CURRENT';
-    if (!this.isCurrentAccount) {
-      this.newAccount.monthlyFee = 0;
-      this.availableCurrencies = ['EUR', 'CHF', 'USD', 'GBP', 'JPY', 'CAD', 'AUD'];
-      this.newAccount.currency = '';
-
-    }else {
-      this.availableCurrencies = ['RSD'];
-      this.newAccount.currency = 'RSD';
-    }
-  }
+  // onAccountTypeChange() {
+  //   this.isCurrentAccount = this.newAccount.accountType === 'CURRENT';
+  //   if (!this.isCurrentAccount) {
+  //     this.newAccount.monthlyFee = 0;
+  //     this.availableCurrencies = ['EUR', 'CHF', 'USD', 'GBP', 'JPY', 'CAD', 'AUD'];
+  //     this.newAccount.currency = '';
+  //
+  //   }else {
+  //     this.availableCurrencies = ['RSD'];
+  //     this.newAccount.currency = 'RSD';
+  //   }
+  // }
 
   onAccountOwnerTypeChange() {
     this.isCompanyAccount = this.newAccount.accountOwnerType === 'COMPANY';
@@ -120,8 +137,18 @@ export class AccountCreationComponent implements OnInit {
     this.newAccount.isActive = this.newAccount.isActive === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
   }
 
+
+  isCompanyFormValid(): boolean {
+    if (!this.isCompanyAccount) return true;
+    return Object.values(this.companyInfo).every(value => value.trim() !== '');
+  }
+
   onSubmit() {
     if (!this.newAccount.clientId || !this.employeeId) return;
+
+    if (this.isCompanyAccount) {
+      this.newAccount.companyId = 1; // hardc
+    }
 
     this.accountService.createAccount(this.newAccount).subscribe({
       next: () => {

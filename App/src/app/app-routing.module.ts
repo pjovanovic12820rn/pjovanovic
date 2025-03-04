@@ -33,5 +33,5 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'login/:type', component: LoginComponent },
 
-  {path: 'account-creation', component: AccountCreationComponent, canActivate: [employeeGuard]}
+  {path: 'create-current-account', component: AccountCreationComponent, canActivate: [employeeGuard]}
 ];
