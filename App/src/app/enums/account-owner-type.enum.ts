@@ -1,0 +1,9 @@
+export enum AccountOwnerType {
+    PERSONAL = 'PERSONAL',
+    COMPANY = 'COMPANY',
+    SAVINGS = 'SAVINGS',
+    RETIREMENT = 'RETIREMENT',
+    YOUTH = 'YOUTH',
+    STUDENT = 'STUDENT',
+    UNEMPLOYED = 'UNEMPLOYED'
+}
