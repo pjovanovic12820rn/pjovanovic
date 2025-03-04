@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { authGuard, adminGuard } from './guards/auth-guard.guard';
+import {authGuard, adminGuard, employeeGuard} from './guards/auth-guard.guard';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { EmployeesComponent } from './components/employees/employees.component';
 import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
@@ -16,8 +16,8 @@ import { MailComponent } from './components/mail/mail.component';
 import {AccountCreationComponent} from './components/account-creation/account-creation.component';
 
 export const routes: Routes = [
-  { path: 'users', component: UsersComponent }, //, canActivate: [adminGuard]
-  { path: 'register-user', component: RegisterUserComponent }, //, canActivate: [adminGuard]
+  { path: 'users', component: UsersComponent, canActivate: [employeeGuard]}, //, canActivate: [adminGuard]
+  { path: 'register-user', component: RegisterUserComponent, canActivate: [employeeGuard] }, //, canActivate: [adminGuard]
   { path: 'users/:id', component: EditUserComponent, canActivate: [adminGuard] },
   { path: 'user/:id', component: UserDetailComponent },
 
@@ -33,5 +33,5 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'login/:type', component: LoginComponent },
 
-  {path: 'account-creation', component: AccountCreationComponent}
+  {path: 'account-creation', component: AccountCreationComponent, canActivate: [employeeGuard]}
 ];

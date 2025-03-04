@@ -126,11 +126,12 @@ export class AccountCreationComponent implements OnInit {
     this.accountService.createAccount(this.newAccount).subscribe({
       next: () => {
         console.log('Account created successfully!');
-        alert("uspesno!");
+        alert("Account created successfully!");
+        this.router.navigate(['/users']);
       },
       error: (error) => {
         console.error('Failed to create account:', error);
-        alert("EROR");
+        alert('Failed to create account');
       }
     });
   }
