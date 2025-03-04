@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
+import { User } from '../../models/user.model';
 import { AlertComponent } from '../alert/alert.component';
 
 @Component({
@@ -69,9 +70,11 @@ export class RegisterUserComponent implements OnInit {
     const formData = this.registerUserForm.value;
 
     this.userService.registerUser(formData).subscribe({
-      next: () => {
+      next: (newUser: User) => {
         this.alertService.showAlert('success', 'User registered successfully!');
-        this.router.navigate(['/users']);
+        this.router.navigate(['/create-foreign-currency-account'], {
+          queryParams: { newUserId: newUser.id }
+        });
       },
       error: (err) => {
         this.alertService.showAlert('error', err?.error?.message || 'Failed to register user. Please try again.');
