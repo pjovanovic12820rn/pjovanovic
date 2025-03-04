@@ -31,8 +31,8 @@ export class AccountCreationComponent implements OnInit {
   isCurrentAccount = true;
   isCompanyAccount = false;
   employeeId: number | null = null;
+  availableCurrencies: string[] = ['RSD'];
 
-  // New bank account model to bind to the form
   newAccount: NewBankAccount = {
     currency: '',
     clientId: 0,
@@ -45,7 +45,8 @@ export class AccountCreationComponent implements OnInit {
     isActive: 'INACTIVE',
     accountType: 'CURRENT',
     accountOwnerType: 'PERSONAL',
-    createCard: false
+    createCard: false,
+    monthlyFee: 0
   };
 
   constructor(
@@ -57,6 +58,16 @@ export class AccountCreationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    const userType = this.authService.getUserType();
+    const isAdmin = this.authService.isAdmin();
+
+    if (userType !== 'employee' && !isAdmin) {
+      alert("Access denied. Only employees and admins can create accounts.");
+      this.router.navigate(['/']);
+      return;
+    }
+
     this.loadUsers();
     this.employeeId = this.authService.getUserId();
     if (this.employeeId) {
@@ -69,7 +80,7 @@ export class AccountCreationComponent implements OnInit {
       }
     });
     // this.loadUsers();
-
+    this.onAccountTypeChange();
   }
 
   navigateToRegisterUser() {
@@ -89,6 +100,12 @@ export class AccountCreationComponent implements OnInit {
     this.isCurrentAccount = this.newAccount.accountType === 'CURRENT';
     if (!this.isCurrentAccount) {
       this.newAccount.monthlyFee = 0;
+      this.availableCurrencies = ['EUR', 'CHF', 'USD', 'GBP', 'JPY', 'CAD', 'AUD'];
+      this.newAccount.currency = '';
+
+    }else {
+      this.availableCurrencies = ['RSD'];
+      this.newAccount.currency = 'RSD';
     }
   }
 

@@ -1,6 +1,5 @@
-<nav class="navbar" *ngIf="!isAuthenticated">
+<nav class="navbar" *ngIf="isAuthenticated">
   <div class="logo">B3</div>
-<!--bilo je bez !-->
   <div class="nav-links">
     <!-- Show "All Employees" and "All Users" only for Admins -->
     <button class="nav-btn" *ngIf="isAdmin" (click)="router.navigate(['/employees'])">All Employees</button>
@@ -13,7 +12,7 @@
     <button class="nav-btn" *ngIf="userType === 'client'" (click)="router.navigate(['/user', authService.getUserId()])">My Profile</button>
 
 
-    <button class="nav-btn" (click)="router.navigate(['/account-creation'])">Create new acc</button>
+    <button class="nav-btn" *ngIf="userType === 'employee' || isAdmin" (click)="router.navigate(['/account-creation'])">Create new acc</button>
   </div>
 
   <button class="logout-btn" (click)="logout()">Logout</button>
