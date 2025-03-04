@@ -98,13 +98,13 @@
 
     <div>
       <h3>Account Owner</h3>
-      <label for="accountOwner">Select Existing User:</label>
-      <select id="accountOwner" formControlName="ownerId">
+      <label for="clientId">Select Existing User:</label>
+      <select id="clientId" formControlName="clientId">
         <option value="">Select User</option>
         <option *ngFor="let user of users" [value]="user.id">{{user.firstName}} {{user.lastName}}</option>
       </select>
-      <div *ngIf="accountForm.get('ownerId')?.invalid && (accountForm.get('ownerId')?.touched)">
-        <small class="error-message" *ngIf="accountForm.get('ownerId')?.errors?.['required']">
+      <div *ngIf="accountForm.get('clientId')?.invalid && (accountForm.get('clientId')?.touched)">
+        <small class="error-message" *ngIf="accountForm.get('clientId')?.errors?.['required']">
           Account Owner is required.
         </small>
       </div>
@@ -120,6 +120,9 @@
           <small class="error-message" *ngIf="accountForm.get('dailyLimit')?.errors?.['required']">
             Daily Limit is required.
           </small>
+          <small class="error-message" *ngIf="accountForm.get('dailyLimit')?.errors?.['nonPositive']">
+            Daily Limit must be a positive number.
+          </small>
         </div>
       </div>
       <div>
@@ -129,11 +132,14 @@
           <small class="error-message" *ngIf="accountForm.get('monthlyLimit')?.errors?.['required']">
             Monthly Limit is required.
           </small>
+          <small class="error-message" *ngIf="accountForm.get('monthlyLimit')?.errors?.['nonPositive']">
+            Monthly Limit must be a positive number.
+          </small>
         </div>
       </div>
       <div>
-        <input type="checkbox" id="createInitialCard" formControlName="createInitialCard">
-        <label for="createInitialCard">Create initial card</label>
+        <input type="checkbox" id="createCard" formControlName="createCard">
+        <label for="createCard">Create initial card</label>
       </div>
     </div>
 
@@ -148,7 +154,7 @@
 
     <div>
       <h3>Employee Information</h3>
-      <p>Created by employee: <strong>{{loggedInEmployeeFullName}}</strong>, <strong>{{loggedInEmployeePosition}}</strong></p>
+      <p>Logged in employee: <strong>{{loggedInEmployeeFullName}}</strong>, Position: <strong>{{loggedInEmployeePosition}}</strong></p>
     </div>
 
     <div>

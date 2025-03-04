@@ -1,16 +1,29 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
+import { Account } from '../models/account.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
+  private http = inject(HttpClient);
+  private authService = inject(AuthService);
+  private apiUrl = 'http://localhost:8082/api/account';
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
-  createAccount(accountData: any): Observable<any> {
-    console.log('Account data to be sent to backend:', accountData);
-    return of({ message: 'Account created successfully (mock)' }); // Mock success response
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  }
+
+  createAccount(accountData: Account): Observable<any> {
+    console.log('Account data to be sent to backend (Service):', accountData);
+    return this.http.post(this.apiUrl, accountData, { headers: this.getAuthHeaders() });
   }
 }

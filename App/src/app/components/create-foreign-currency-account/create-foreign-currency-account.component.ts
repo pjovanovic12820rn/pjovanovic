@@ -7,8 +7,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from '../../services/account.service';
 import { AlertService } from '../../services/alert.service';
 import { Currency } from '../../models/currency.model';
+import { AuthService } from '../../services/auth.service';
 import { EmployeeService } from '../../services/employee.service';
-import { Employee } from '../../models/employee.model';
+import { Account as Account } from '../../models/account.model';
+import { AccountType } from '../../enums/account-type.enum';
+import { AccountOwnerType } from '../../enums/account-owner-type.enum';
+import { AccountStatus } from '../../enums/account-status.enum';
 
 @Component({
   selector: 'app-create-foreign-currency-account',
@@ -28,9 +32,9 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private accountService = inject(AccountService);
   private alertService = inject(AlertService);
+  private authService = inject(AuthService);
   private employeeService = inject(EmployeeService);
 
-  loggedInEmployee: Employee | null = null;
   loggedInEmployeeFullName: string = '';
   loggedInEmployeePosition: string = '';
 
@@ -44,12 +48,12 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       companyActivityCode: ['', [Validators.required, Validators.pattern(/^\d{2}\.\d{2}$/)]],
       companyAddress: ['', Validators.required],
       majorityOwnerId: ['', Validators.required],
-      ownerId: ['', Validators.required],
+      clientId: ['', Validators.required],
       accountNumber: [''],
-      dailyLimit: ['', Validators.required],
-      monthlyLimit: ['', Validators.required],
-      createInitialCard: [false],
-      createdById: ['']
+      dailyLimit: ['', [Validators.required]],
+      monthlyLimit: ['', [Validators.required]],
+      createCard: [false],
+      employeeId: ['']
     });
   }
 
@@ -65,21 +69,30 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     this.preselectNewUser();
     this.loadCurrencies();
     this.generateAccountNumber();
-    this.loadLoggedInEmployee();
+    this.populateEmployeeId();
+    this.loadLoggedInEmployeeInfo();
   }
 
-  private loadLoggedInEmployee() {
+  private populateEmployeeId() {
+    const loggedInEmployeeId = this.authService.getUserId();
+    if (loggedInEmployeeId !== null) {
+      this.accountForm.patchValue({ employeeId: loggedInEmployeeId });
+    } else {
+      console.error('Could not retrieve logged-in employee ID from AuthService.');
+    }
+  }
+
+
+  private loadLoggedInEmployeeInfo() {
     this.employeeService.getEmployeeSelf().subscribe({
       next: (employee) => {
-        this.loggedInEmployee = employee;
         if (employee) {
           this.loggedInEmployeeFullName = `${employee.firstName} ${employee.lastName}`;
           this.loggedInEmployeePosition = employee.position;
-          this.accountForm.patchValue({ createdById: employee.id });
         }
       },
       error: (error) => {
-        console.error('Error loading logged-in employee:', error);
+        console.error('Error loading logged-in employee details:', error);
       }
     });
   }
@@ -99,7 +112,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       const newUserId = params['newUserId'];
       if (newUserId) {
-        this.accountForm.patchValue({ ownerId: newUserId });
+        this.accountForm.patchValue({ clientId: newUserId });
       }
     });
   }
@@ -154,10 +167,27 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     }
 
     const accountData = this.accountForm.value;
-    accountData.ownerId = parseInt(accountData.ownerId, 10);
-    console.log('Account data to be sent to backend:', accountData);
+    accountData.clientId = parseInt(accountData.clientId, 10);
+    accountData.employeeId = parseInt(accountData.employeeId, 10);
+    accountData.createCard = !!accountData.createCard;
 
-    this.accountService.createAccount(accountData).subscribe({
+    const foreignCurrencyAccountData: Account = {
+      currency: accountData.currency,
+      clientId: accountData.clientId,
+      employeeId: accountData.employeeId,
+      companyId: accountData.companyName ? accountData.companyId : null,
+      initialBalance: 0,
+      dailyLimit: accountData.dailyLimit,
+      monthlyLimit: accountData.monthlyLimit,
+      dailySpending: 0,
+      monthlySpending: 0,
+      isActive: AccountStatus.ACTIVE,
+      accountType: AccountType.FOREIGN,
+      accountOwnerType: this.isBusinessAccount ? AccountOwnerType.COMPANY : AccountOwnerType.PERSONAL,
+      createCard: accountData.createCard
+    };
+
+    this.accountService.createAccount(foreignCurrencyAccountData).subscribe({
       next: (response) => {
         console.log('Account creation successful:', response);
         this.alertService.showAlert('success', 'Account created successfully!');
