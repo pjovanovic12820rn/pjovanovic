@@ -13,10 +13,11 @@ import {EmployeeDetailComponent} from './components/employee-detail/employee-det
 import {WelcomeComponent} from './components/welcome/welcome.component';
 import {SuccessComponent} from './components/success/success.component';
 import { MailComponent } from './components/mail/mail.component';
+import {AccountCreationComponent} from './components/account-creation/account-creation.component';
 
 export const routes: Routes = [
-  { path: 'users', component: UsersComponent, canActivate: [adminGuard] },
-  { path: 'register-user', component: RegisterUserComponent, canActivate: [adminGuard] },
+  { path: 'users', component: UsersComponent }, //, canActivate: [adminGuard]
+  { path: 'register-user', component: RegisterUserComponent }, //, canActivate: [adminGuard]
   { path: 'users/:id', component: EditUserComponent, canActivate: [adminGuard] },
   { path: 'user/:id', component: UserDetailComponent },
 
@@ -30,5 +31,7 @@ export const routes: Routes = [
   { path: 'reset-password', component: PasswordResetComponent },
   { path: '', component: WelcomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'login/:type', component: LoginComponent }
+  { path: 'login/:type', component: LoginComponent },
+
+  {path: 'account-creation', component: AccountCreationComponent}
 ];

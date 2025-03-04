@@ -1,0 +1,67 @@
+<form #accountForm="ngForm" (ngSubmit)="onSubmit()">
+  <!-- Klijenti -->
+  <label for="clientId">Client:</label>
+  <select id="clientId" name="clientId" [(ngModel)]="newAccount.clientId" required>
+    <option *ngFor="let user of users" [ngValue]="user.id">
+      {{ user.firstName }} {{ user.lastName }} ({{ user.email }})
+    </option>
+  </select>
+  <button (click)="navigateToRegisterUser()">Create New User</button>
+
+  <!-- Account Type -->
+  <label for="accountType">Account Type:</label>
+  <select id="accountType" name="accountType" [(ngModel)]="newAccount.accountType" (change)="onAccountTypeChange()">
+    <option value="CURRENT">CURRENT</option>
+    <option value="FOREIGN">FOREIGN</option>
+  </select>
+
+  <!-- Monthly Fee -->
+  <div *ngIf="isCurrentAccount">
+    <label for="monthlyFee">Održavanje računa (Monthly Fee):</label>
+    <input id="monthlyFee" name="monthlyFee" [(ngModel)]="newAccount.monthlyFee" type="number" />
+  </div>
+
+  <!-- Account Owner Type -->
+  <label for="accountOwnerType">Account Owner Type:</label>
+  <select id="accountOwnerType" name="accountOwnerType" [(ngModel)]="newAccount.accountOwnerType" (change)="onAccountOwnerTypeChange()">
+    <option value="PERSONAL">PERSONAL</option>
+    <option value="COMPANY">COMPANY</option>
+  </select>
+
+  <!-- Company Dropdown (Conditional) -->
+  <div *ngIf="isCompanyAccount">
+    <label for="companyId">Company:</label>
+    <select id="companyId" name="companyId" [(ngModel)]="newAccount.companyId">
+      <option *ngFor="let company of companies" [value]="company.id">
+        {{ company.name }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Ostala polja -->
+  <label for="currency">Currency:</label>
+  <input id="currency" name="currency" [(ngModel)]="newAccount.currency" type="text" required />
+
+  <label for="initialBalance">Initial Balance:</label>
+  <input id="initialBalance" name="initialBalance" [(ngModel)]="newAccount.initialBalance" type="number" required />
+
+  <label for="dailyLimit">Daily Limit:</label>
+  <input id="dailyLimit" name="dailyLimit" [(ngModel)]="newAccount.dailyLimit" type="number" required />
+
+  <label for="monthlyLimit">Monthly Limit:</label>
+  <input id="monthlyLimit" name="monthlyLimit" [(ngModel)]="newAccount.monthlyLimit" type="number" required />
+
+  <label for="dailySpending">Daily Spending:</label>
+  <input id="dailySpending" name="dailySpending" [(ngModel)]="newAccount.dailySpending" type="number" required />
+
+  <label for="monthlySpending">Monthly Spending:</label>
+  <input id="monthlySpending" name="monthlySpending" [(ngModel)]="newAccount.monthlySpending" type="number" required />
+
+  <label for="isActive">Is Active:</label>
+  <input id="isActive" name="isActive" type="checkbox" (change)="toggleIsActive()" [checked]="newAccount.isActive === 'ACTIVE'" />
+
+  <label for="createCard">Create Card:</label>
+  <input id="createCard" name="createCard" [(ngModel)]="newAccount.createCard" type="checkbox" />
+
+  <button type="submit" [disabled]="accountForm.invalid">Create Account</button>
+</form>
