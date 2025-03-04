@@ -6,12 +6,23 @@ export const authGuard = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  // if (authService.isAuthenticated()) {
-  //   return true;
-  // }
+  if (authService.isAuthenticated()) {
+    return true;
+  }
 
   return router.parseUrl('/login');
 };
+
+export const employeeGuard = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  if (authService.isAuthenticated() && authService.isEmployee()) {
+    return true;
+  }
+
+  return router.parseUrl('/login');
+}
 
 export const adminGuard = () => {
   const authService = inject(AuthService);

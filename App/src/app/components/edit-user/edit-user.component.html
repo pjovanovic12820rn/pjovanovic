@@ -1,21 +1,17 @@
 <div class="edit-user-container">
   <h2>Edit User</h2>
 
-  <div *ngIf="errorMessage" class="error-message">
-    {{ errorMessage }}
-  </div>
+  <app-alert></app-alert>
 
   <div *ngIf="loading" class="loading">Loading user...</div>
 
   <form *ngIf="userForm" [formGroup]="userForm" (ngSubmit)="saveChanges()">
 
-    <!-- First Name (Readonly) -->
     <div class="form-group">
       <label>First Name</label>
       <input type="text" formControlName="firstName" readonly />
     </div>
 
-    <!-- Last Name (Editable) -->
     <div class="form-group">
       <label>Last Name</label>
       <input type="text" formControlName="lastName" />
@@ -23,13 +19,11 @@
       <div class="field-error" *ngIf="hasError('lastName', 'minlength')">At least 2 characters.</div>
     </div>
 
-    <!-- Date of Birth (Readonly) -->
     <div class="form-group">
       <label for="birthDate">Date of Birth</label>
       <input id="birthDate" type="date" formControlName="birthDate" readonly>
     </div>
 
-    <!-- Gender (Dropdown) -->
     <div class="form-group">
       <label for="gender">Gender</label>
       <select id="gender" formControlName="gender">
@@ -38,13 +32,11 @@
       </select>
     </div>
 
-    <!-- Email (Readonly) -->
     <div class="form-group">
       <label for="email">Email</label>
       <input id="email" type="email" formControlName="email" readonly>
     </div>
 
-    <!-- Phone Number (Editable) -->
     <div class="form-group">
       <label for="phone">Phone Number</label>
       <input id="phone" formControlName="phone">
@@ -52,14 +44,12 @@
       <div class="field-error" *ngIf="hasError('phone', 'pattern')">Invalid phone format.</div>
     </div>
 
-    <!-- Address (Editable) -->
     <div class="form-group">
       <label for="address">Address</label>
       <input id="address" formControlName="address">
       <div class="field-error" *ngIf="hasError('address', 'required')">Required.</div>
     </div>
 
-    <!-- Submit Button -->
     <button type="submit" [disabled]="loading">Save</button>
   </form>
 </div>

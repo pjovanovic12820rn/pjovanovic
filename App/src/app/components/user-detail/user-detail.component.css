@@ -1,64 +1,51 @@
-/* 🔹 General Page Styling */
+/* 🔹 General Styling */
 body {
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #A8C0FF, #3F2B96); /* Gradient Background */
+  background: linear-gradient(135deg, #B399DD, #D0C9EA);
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   margin: 0;
-  padding-top: 30px;
+  padding: 30px;
 }
 
-/* 🔹 Main Container */
+/* 🔹 Container */
 .user-detail-container {
   background: white;
-  padding: 30px;
+  padding: 40px;
   border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   text-align: center;
   width: 500px;
   animation: fadeIn 0.5s ease-in-out;
 }
 
-/* 🔹 Title */
+/* 🔹 Heading */
 .user-detail-container h2 {
-  margin-bottom: 20px;
-  color: #3F2B96;
+  color: #1976D2;
   font-size: 24px;
-  font-weight: 600;
+  margin-bottom: 20px;
 }
 
 /* 🔹 User Card */
 .user-card {
-  background: #f9f9f9;
+  background: #F9F9F9;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font-size: 16px;
 }
 
+/* 🔹 User Details */
 .user-card p {
-  margin: 5px 0;
+  font-size: 16px;
+  color: #333;
+  margin: 10px 0;
 }
 
-.user-card p strong {
-  color: #3F2B96;
-}
-
-/* 🔹 Notes */
-.note {
-  margin-top: 15px;
-  padding: 12px;
-  background: #E3F2FD;
-  color: #3F51B5;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
+.user-card strong {
+  color: #555;
 }
 
 /* 🔹 Error Message */
@@ -66,12 +53,24 @@ body {
   color: #D32F2F;
   background: #FFEBEE;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
   margin-bottom: 15px;
+}
+
+/* 🔹 Notes (Info for Admin & Users) */
+.note {
+  background: #E3F2FD;
+  color: #1565C0;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 15px;
+  font-size: 14px;
   font-weight: 600;
 }
 
-/* 🔹 Animation */
+/* 🔹 Fade-in Animation */
 @keyframes fadeIn {
   from {
     opacity: 0;

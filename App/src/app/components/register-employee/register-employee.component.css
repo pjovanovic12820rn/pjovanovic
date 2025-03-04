@@ -1,3 +1,4 @@
+/* 🔹 General Styling */
 body {
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(135deg, #B399DD, #D0C9EA);
@@ -6,21 +7,102 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
-  padding-top: 30px;
+  padding: 30px;
 }
 
-/* Kontejner */
+/* 🔹 Container */
 .register-container {
   background: white;
   padding: 40px;
-  border-radius: 15px;
+  border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   text-align: center;
-  width: 600px;
+  width: 500px;
   animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Animacija učitavanja */
+/* 🔹 Heading */
+.register-container h2 {
+  color: #1976D2;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* 🔹 Form Styling */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* 🔹 Form Row */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+/* 🔹 Labels */
+.form-row label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #444;
+}
+
+/* 🔹 Inputs & Select Fields */
+.form-row input,
+.form-row select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 🔹 Focus State */
+.form-row input:focus,
+.form-row select:focus {
+  border-color: #1976D2;
+  outline: none;
+  box-shadow: 0 0 5px rgba(25, 118, 210, 0.3);
+}
+
+/* 🔹 Error Messages */
+.error-message {
+  color: #D32F2F;
+  background: #FFEBEE;
+  padding: 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* 🔹 Submit Button */
+button[type="submit"] {
+  background: #28A745;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 🔹 Submit Button Hover */
+button[type="submit"]:hover {
+  background: #218838;
+}
+
+/* 🔹 Disabled Button */
+button[type="submit"]:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* 🔹 Fade-in Animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -31,69 +113,3 @@ body {
     transform: translateY(0);
   }
 }
-
-/* Dve kolone sa razmakom */
-.form-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 25px; /* Razmak između kolona */
-  margin-bottom: 15px;
-}
-
-/* Pola širine za svako polje */
-.input-group {
-  text-align: left;
-  flex: 1;
-}
-
-.input-group label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-
-.input-group input,
-.input-group select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #C2B4E2;
-  border-radius: 6px;
-  outline: none;
-  transition: 0.3s;
-  font-size: 1rem;
-}
-
-/* Fokus efekat */
-.input-group input:focus,
-.input-group select:focus {
-  border-color: #996FD6;
-  box-shadow: 0 0 8px rgba(153, 111, 214, 0.3);
-}
-
-/* Dugme */
-button {
-  width: 100%;
-  padding: 12px;
-  background: #996FD6;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-top: 20px;
-}
-
-/* Hover efekat na dugme */
-button:hover {
-  background: #9E7CD7;
-  transform: scale(1.05);
-}
-
-.error {
-  color: red;
-  font-size: 0.9rem;
-  margin-top: 5px;
-}
-

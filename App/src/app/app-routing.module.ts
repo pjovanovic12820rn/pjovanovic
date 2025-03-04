@@ -14,24 +14,33 @@ import {WelcomeComponent} from './components/welcome/welcome.component';
 import {SuccessComponent} from './components/success/success.component';
 import { MailComponent } from './components/mail/mail.component';
 import {AccountCreationComponent} from './components/account-creation/account-creation.component';
+import { CreateForeignCurrencyAccountComponent } from './components/create-foreign-currency-account/create-foreign-currency-account.component';
 
 export const routes: Routes = [
-  { path: 'users', component: UsersComponent, canActivate: [employeeGuard]}, //, canActivate: [adminGuard]
-  { path: 'register-user', component: RegisterUserComponent, canActivate: [employeeGuard] }, //, canActivate: [adminGuard]
-  { path: 'users/:id', component: EditUserComponent, canActivate: [adminGuard] },
-  { path: 'user/:id', component: UserDetailComponent },
-
-  { path: 'employees', component: EmployeesComponent, canActivate: [adminGuard] },
-  { path: 'register-employee', component: RegisterEmployeeComponent, canActivate: [adminGuard] },
-  { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard] },
-  { path: 'employee/:id', component: EmployeeDetailComponent },
-
-  { path: 'forgot-password', component: MailComponent },
-  { path: 'set-password', component: PasswordResetComponent },
-  { path: 'reset-password', component: PasswordResetComponent },
+  // login
   { path: '', component: WelcomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'login/:type', component: LoginComponent },
 
-  {path: 'create-current-account', component: AccountCreationComponent, canActivate: [employeeGuard]}
+  // password
+  { path: 'forgot-password', component: MailComponent },
+  { path: 'set-password/:token', component: PasswordResetComponent },
+  { path: 'reset-password/:token', component: PasswordResetComponent },
+  { path: 'forgot-password', component: MailComponent },
+
+  // users
+  { path: 'users', component: UsersComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'register-user', component: RegisterUserComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'users/:id', component: EditUserComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'user/:id', component: UserDetailComponent, canActivate: [authGuard] },
+
+  // employees
+  { path: 'employees', component: EmployeesComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'register-employee', component: RegisterEmployeeComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'employee/:id', component: EmployeeDetailComponent, canActivate: [authGuard] },
+
+  // bank accounts
+  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeGuard] },
+  { path: 'create-current-account', component: AccountCreationComponent, canActivate: [employeeGuard] }
 ];

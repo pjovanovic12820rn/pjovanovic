@@ -1,61 +1,47 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { EmployeeService } from '../../services/employee.service';
 import { Employee } from '../../models/employee.model';
 import { AuthService } from '../../services/auth.service';
+import { AlertService } from '../../services/alert.service';
+import {AlertComponent} from '../alert/alert.component';
 
 @Component({
   selector: 'app-employee-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AlertComponent],
   templateUrl: './employee-detail.component.html',
   styleUrls: ['./employee-detail.component.css']
 })
 export class EmployeeDetailComponent implements OnInit {
-  private route = inject(ActivatedRoute);
   private router = inject(Router);
   private employeeService = inject(EmployeeService);
   private authService = inject(AuthService);
+  private alertService = inject(AlertService);
 
   employee: Employee | null = null;
-  errorMessage: string | null = null;
 
   get isAdmin(): boolean {
-    return this.authService.getUserPermissions() === 'admin';
+    return <boolean>this.authService.getUserPermissions()?.includes("admin");
   }
 
   ngOnInit(): void {
-    let employeeId: number | null = null;
-    const idParam = this.route.snapshot.paramMap.get('id');
-
-    if (idParam) {
-      employeeId = Number(idParam);
-      if (isNaN(employeeId)) {
-        this.errorMessage = 'Invalid employee ID.';
-        return;
-      }
-    }
-
-    if (employeeId !== null) {
-      this.loadEmployee(employeeId);
-    } else {
-      this.errorMessage = 'No employee information available.';
-    }
+    this.loadEmployee();
   }
 
-  loadEmployee(employeeId: number): void {
-    this.employeeService.getEmployeeById(employeeId).subscribe({
+  loadEmployee(): void {
+    this.employeeService.getEmployeeSelf().subscribe({
       next: (fetchedEmployee) => {
         if (!fetchedEmployee) {
-          this.errorMessage = 'Employee not found.';
-          this.router.navigate(['/employees']); // Redirect if employee not found
+          this.alertService.showAlert('error', 'Employee not found.');
+          this.router.navigate(['/']);
           return;
         }
         this.employee = fetchedEmployee;
       },
       error: () => {
-        this.errorMessage = 'Failed to load employee details. Please try again later.';
+        this.alertService.showAlert('error', 'Failed to load employee details. Please try again later.');
       }
     });
   }
