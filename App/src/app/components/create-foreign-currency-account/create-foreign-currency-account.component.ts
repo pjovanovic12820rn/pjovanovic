@@ -78,21 +78,24 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     if (loggedInEmployeeId !== null) {
       this.accountForm.patchValue({ employeeId: loggedInEmployeeId });
     } else {
-      console.error('Could not retrieve logged-in employee ID from AuthService.');
+      this.alertService.showAlert('error', 'Failed to load employee details. Please try again later.');
     }
   }
 
 
   private loadLoggedInEmployeeInfo() {
     this.employeeService.getEmployeeSelf().subscribe({
-      next: (employee) => {
-        if (employee) {
-          this.loggedInEmployeeFullName = `${employee.firstName} ${employee.lastName}`;
-          this.loggedInEmployeePosition = employee.position;
+      next: (fetchedEmployee) => {
+        if (!fetchedEmployee) {
+          this.alertService.showAlert('error', 'Employee not found.');
+          this.router.navigate(['/']);
+          return;
         }
+        this.loggedInEmployeeFullName = `${fetchedEmployee.firstName} ${fetchedEmployee.lastName}`;
+        this.loggedInEmployeePosition = fetchedEmployee.position;
       },
-      error: (error) => {
-        console.error('Error loading logged-in employee details:', error);
+      error: () => {
+        this.alertService.showAlert('error', 'Failed to load employee details. Please try again later.');
       }
     });
   }
@@ -102,8 +105,8 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       next: (response) => {
         this.users = response.content;
       },
-      error: (error) => {
-        console.error('Error loading users:', error);
+      error: () => {
+        this.alertService.showAlert('error', 'Failed to load users. Please try again later.');
       }
     });
   }
@@ -188,11 +191,10 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     };
 
     this.accountService.createAccount(foreignCurrencyAccountData).subscribe({
-      next: (response) => {
+      next: () => {
         this.alertService.showAlert('success', 'Account created successfully!');
       },
-      error: (error) => {
-        console.error('Account creation error:', error);
+      error: () => {
         this.alertService.showAlert('error', 'Failed to create account. Please try again.');
       }
     });
