@@ -38,7 +38,7 @@ export class ClientPortalComponent implements OnInit {
     this.userService.getAllUsers(0, 100).subscribe({
       next: (response) => {
         this.clients = response.content;
-        console.log(response);
+        // console.log(response);
         this.filteredClients = [...this.clients];
         this.updatePagedClients();
       },

@@ -41,7 +41,7 @@ export const routes: Routes = [
   { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard, authGuard] },
   { path: 'employee/:id', component: EmployeeDetailComponent, canActivate: [authGuard] },
   { path: 'client-portal', component: ClientPortalComponent, canActivate: [authGuard]},
-  { path: 'clients/:id', component: ClientEditComponent, canActivate: [authGuard]},
+  // { path: 'clients/:id', component: ClientEditComponent, canActivate: [authGuard]},
 
 
   // bank accounts
