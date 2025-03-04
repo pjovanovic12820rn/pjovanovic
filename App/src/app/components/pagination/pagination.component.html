@@ -1,0 +1,9 @@
+<div class="pagination-container">
+  <button (click)="goToPage(1)" [disabled]="currentPage === 1">First</button>
+  <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">Previous</button>
+
+  <span>Page {{ currentPage }} of {{ totalPages }}</span>
+
+  <button (click)="goToNextPage()" [disabled]="currentPage === totalPages">Next</button>
+  <button (click)="goToPage(totalPages)" [disabled]="currentPage === totalPages">Last</button>
+</div>

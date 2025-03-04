@@ -13,6 +13,8 @@ import {EmployeeDetailComponent} from './components/employee-detail/employee-det
 import {WelcomeComponent} from './components/welcome/welcome.component';
 import {SuccessComponent} from './components/success/success.component';
 import {MailComponent} from './components/mail/mail.component';
+import {ClientPortalComponent} from './components/client-portal/client-portal.component';
+import {ClientEditComponent} from './components/client-edit/client-edit.component';
 
 export const routes: Routes = [
   // login
@@ -36,5 +38,8 @@ export const routes: Routes = [
   { path: 'register-employee', component: RegisterEmployeeComponent, canActivate: [adminGuard, authGuard] },
   { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard, authGuard] },
   { path: 'employee/:id', component: EmployeeDetailComponent, canActivate: [authGuard] },
+  { path: 'client-portal', component: ClientPortalComponent, canActivate: [authGuard]},
+  { path: 'clients/:id', component: ClientEditComponent, canActivate: [authGuard]},
+
 
 ];
