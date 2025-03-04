@@ -23,7 +23,6 @@ export class AccountService {
   }
 
   createAccount(accountData: Account): Observable<any> {
-    console.log('Account data to be sent to backend (Service):', accountData);
     return this.http.post(this.apiUrl, accountData, { headers: this.getAuthHeaders() });
   }
 }

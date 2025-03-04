@@ -189,7 +189,6 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
 
     this.accountService.createAccount(foreignCurrencyAccountData).subscribe({
       next: (response) => {
-        console.log('Account creation successful:', response);
         this.alertService.showAlert('success', 'Account created successfully!');
       },
       error: (error) => {
