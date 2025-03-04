@@ -13,8 +13,7 @@ import {EmployeeDetailComponent} from './components/employee-detail/employee-det
 import {WelcomeComponent} from './components/welcome/welcome.component';
 import {SuccessComponent} from './components/success/success.component';
 import {MailComponent} from './components/mail/mail.component';
-import { AccountsComponent } from './components/accounts/accounts.component';
-import { AccountManagementComponent } from './components/account-management/account-management.component';
+import {CardsComponent} from './components/cards/cards.component';
 
 export const routes: Routes = [
   // login
@@ -39,7 +38,6 @@ export const routes: Routes = [
   { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard, authGuard] },
   { path: 'employee/:id', component: EmployeeDetailComponent, canActivate: [authGuard] },
 
-  { path: 'accounts', component: AccountsComponent },
-  { path: 'account-management', component: AccountManagementComponent },
+  { path: 'account/:accountNumber', component: CardsComponent, canActivate: [authGuard] }
 
 ];

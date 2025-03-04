@@ -2,12 +2,11 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {AuthService} from './auth.service';
-import {Employee} from '../models/employee.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AccountService {
+export class CardService {
   private apiUrl = 'http://localhost:8082/api/account';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
@@ -20,8 +19,7 @@ export class AccountService {
     });
   }
 
-  getAccount(accountNumber: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${accountNumber}`,{ headers: this.getAuthHeaders() });
+  getCardsByAccount(accountNumber: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${accountNumber}/cards`,{ headers: this.getAuthHeaders() });
   }
-
 }
