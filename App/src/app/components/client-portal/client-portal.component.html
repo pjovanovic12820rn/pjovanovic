@@ -1,0 +1,33 @@
+<div class="client-portal-container">
+
+  <app-alert></app-alert>
+
+  <h1>Client Portal</h1>
+
+  <!-- Filter Section -->
+  <div class="filter-section">
+    <span>Filter by:</span>
+    <input type="text" placeholder="Name" [(ngModel)]="filter.name" (input)="filterClients()">
+    <input type="text" placeholder="Last Name" [(ngModel)]="filter.surname" (input)="filterClients()">
+    <input type="email" placeholder="Email" [(ngModel)]="filter.email" (input)="filterClients()">
+  </div>
+
+  <!-- Client List -->
+  <div class="client-list">
+    <div class="client-card" *ngFor="let client of pagedClients">
+      <div class="client-info">
+        <span class="client-name"><strong>{{ client.firstName }} {{ client.lastName }}</strong></span>
+        <span class="client-email">{{ client.email }}</span>
+      </div>
+      <button class="view-btn" [routerLink]="['/users', client.id]">View</button>
+    </div>
+  </div>
+
+  <!-- Pagination Controls -->
+  <app-pagination
+    [totalItems]="filteredClients.length"
+    [pageSize]="pageSize"
+    (pageChanged)="onPageChanged($event)">
+  </app-pagination>
+
+</div>

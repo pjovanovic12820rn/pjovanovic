@@ -12,7 +12,7 @@
       My Profile
     </button>
 
-    <button class="nav-btn" *ngIf="userType === 'employee' || isAdmin" (click)="router.navigate(['/create-current-account'])">Create New Current Account</button>
+    <button class="nav-btn" *ngIf="isAdmin" (click)="router.navigate(['/create-current-account'])">Create New Current Account</button>
   </div>
 
   <button class="logout-btn" (click)="logout()">Logout</button>

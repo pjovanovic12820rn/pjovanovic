@@ -34,14 +34,3 @@ export const adminGuard = () => {
 
   return router.parseUrl('/login'); // Redirect non-admins to login
 };
-
-export const employeeGuard = () => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
-
-  if (authService.isAuthenticated() && (authService.isAdmin() || authService.getUserType() === 'employee')) {
-    return true;
-  }
-
-  return router.parseUrl('/login'); // Redirect non-admins to login
-};

@@ -13,7 +13,7 @@ export class AccountService {
   private authService = inject(AuthService);
   private apiUrl = 'http://localhost:8082/api/account';
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  // constructor(private http: HttpClient, private authService: AuthService) {}
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.authService.getToken();

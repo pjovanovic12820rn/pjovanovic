@@ -11,10 +11,11 @@ import { RegisterUserComponent } from './components/register-user/register-user.
 import { UserDetailComponent } from './components/user-detail/user-detail.component';
 import {EmployeeDetailComponent} from './components/employee-detail/employee-detail.component';
 import {WelcomeComponent} from './components/welcome/welcome.component';
-import {SuccessComponent} from './components/success/success.component';
-import { MailComponent } from './components/mail/mail.component';
 import {AccountCreationComponent} from './components/account-creation/account-creation.component';
 import { CreateForeignCurrencyAccountComponent } from './components/create-foreign-currency-account/create-foreign-currency-account.component';
+import {MailComponent} from './components/mail/mail.component';
+import {ClientPortalComponent} from './components/client-portal/client-portal.component';
+import {ClientEditComponent} from './components/client-edit/client-edit.component';
 
 export const routes: Routes = [
   // login
@@ -39,6 +40,9 @@ export const routes: Routes = [
   { path: 'register-employee', component: RegisterEmployeeComponent, canActivate: [adminGuard, authGuard] },
   { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard, authGuard] },
   { path: 'employee/:id', component: EmployeeDetailComponent, canActivate: [authGuard] },
+  { path: 'client-portal', component: ClientPortalComponent, canActivate: [authGuard]},
+  // { path: 'clients/:id', component: ClientEditComponent, canActivate: [authGuard]},
+
 
   // bank accounts
   { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeGuard] },

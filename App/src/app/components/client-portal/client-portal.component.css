@@ -1,0 +1,107 @@
+/* Global Styles */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #B399DD, #D0C9EA);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 30px;
+}
+
+/* Container */
+.client-portal-container {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  width: 750px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Title */
+h1 {
+  text-align: center;
+  color: #6A4BBC;
+}
+
+/* Filter Section */
+.filter-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.filter-section span {
+  font-weight: 600;
+}
+
+.filter-section input {
+  padding: 8px;
+  border: 1px solid #C2B4E2;
+  border-radius: 6px;
+  outline: none;
+  font-size: 0.9rem;
+  width: 150px;
+}
+
+/* Client List */
+.client-list {
+  margin-top: 10px;
+}
+
+/* Client Card */
+.client-card {
+  background: #F5F3FB;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.client-card:hover {
+  background: #E2DAF7;
+  transform: scale(1.02);
+}
+
+/* Client Info */
+.client-info {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.client-name {
+  font-weight: bold;
+}
+
+.client-email {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.client-jmbg {
+  font-weight: bold;
+  color: #333;
+}
+
+/* View Button */
+.view-btn {
+  background: #996FD6;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.view-btn:hover {
+  background: #9E7CD7;
+}
