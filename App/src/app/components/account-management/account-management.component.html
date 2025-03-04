@@ -1,16 +1,13 @@
 <div class="container">
     <h2>Account Management</h2>
   
-    <!-- Filter section -->
     <div class="filter-section">
-      <!-- Owner Name Filter -->
       <input
         type="text"
         placeholder="Search by owner name..."
         class="filter-input"
         [(ngModel)]="searchOwner"
       />
-      <!-- Account Number Filter -->
       <input
         type="text"
         placeholder="Search by account number..."
@@ -20,7 +17,6 @@
       <button class="filter-btn" (click)="onFilterClick()">Filter</button>
     </div>
   
-    <!-- Accounts table -->
     <section class="account-list">
       <h3>Accounts</h3>
       <table>
@@ -49,7 +45,6 @@
       </table>
     </section>
   
-    <!-- Cards table for the selected account -->
     <section class="card-list" [style.display]="showCardSection ? 'block' : 'none'">
       <h3>Cards Linked to Account</h3>
       <table>

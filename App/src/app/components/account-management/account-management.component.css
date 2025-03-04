@@ -8,13 +8,11 @@ body {
     margin: 0;
   }
   
-  /* Container */
   .container {
     width: 70%;
     text-align: center;
   }
   
-  /* Filter section */
   .filter-section {
     display: flex;
     gap: 10px;
@@ -44,7 +42,6 @@ body {
     background: #8E79D2;
   }
   
-  /* Tables */
   table {
     width: 100%;
     border-collapse: collapse;
@@ -62,7 +59,6 @@ body {
     font-weight: bold;
   }
   
-  /* Details button */
   .details-btn {
     padding: 8px 12px;
     background: #6A4BBC;
@@ -77,7 +73,6 @@ body {
     background: #8E79D2;
   }
   
-  /* Actions for cards */
   .action-btn {
     padding: 8px 10px;
     border: none;

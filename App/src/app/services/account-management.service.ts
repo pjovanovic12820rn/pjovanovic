@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AccountPageDto } from '../../models/account-page-dto.model';  
-import { CardDto } from '../../models/card-dto.model';
+import { AccountPageDto } from '../models/account-page-dto.model';
+import { CardDto } from '../models/card-dto.model';
+
 
 @Injectable({
   providedIn: 'root'
