@@ -121,6 +121,10 @@ input:focus, select:focus {
   accent-color: #6A4BBC;
 }
 
+.monthly-fee-container {
+  width: 120px;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

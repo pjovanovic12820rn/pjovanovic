@@ -28,7 +28,7 @@
 
 
         <!-- Monthly Fee -->
-        <div class="form-group" *ngIf="isCurrentAccount">
+        <div class="form-group monthly-fee-container" *ngIf="isCurrentAccount">
           <label for="monthlyFee">Monthly Fee:</label>
           <input id="monthlyFee" name="monthlyFee" [(ngModel)]="newAccount.monthlyFee" type="number" />
         </div>
