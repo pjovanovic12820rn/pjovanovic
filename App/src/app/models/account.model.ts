@@ -1,4 +1,8 @@
 export interface Account {
+    name: string;             
+    number: string;           
+    availableBalance: number; 
+    
     currency: string;
     clientId: number;
     employeeId: number;

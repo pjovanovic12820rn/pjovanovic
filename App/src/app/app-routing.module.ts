@@ -9,10 +9,14 @@ import { UsersComponent } from './components/users/users.component';
 import { EditUserComponent } from './components/edit-user/edit-user.component';
 import { RegisterUserComponent } from './components/register-user/register-user.component';
 import { UserDetailComponent } from './components/user-detail/user-detail.component';
-import {EmployeeDetailComponent} from './components/employee-detail/employee-detail.component';
-import {WelcomeComponent} from './components/welcome/welcome.component';
-import { MailComponent } from './components/mail/mail.component';
+import { EmployeeDetailComponent } from './components/employee-detail/employee-detail.component';
+import { WelcomeComponent } from './components/welcome/welcome.component';
+import { AccountCreationComponent } from './components/account-creation/account-creation.component';
 import { CreateForeignCurrencyAccountComponent } from './components/create-foreign-currency-account/create-foreign-currency-account.component';
+import { MailComponent } from './components/mail/mail.component';
+import { CardsComponent } from './components/cards/cards.component';
+import { ClientPortalComponent } from './components/client-portal/client-portal.component';
+import { ClientEditComponent } from './components/client-edit/client-edit.component';
 
 export const routes: Routes = [
   // login
@@ -37,7 +41,11 @@ export const routes: Routes = [
   { path: 'register-employee', component: RegisterEmployeeComponent, canActivate: [adminGuard, authGuard] },
   { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard, authGuard] },
   { path: 'employee/:id', component: EmployeeDetailComponent, canActivate: [authGuard] },
+  { path: 'client-portal', component: ClientPortalComponent, canActivate: [authGuard]},
+  // { path: 'clients/:id', component: ClientEditComponent, canActivate: [authGuard]},
 
-  // bank accounts
-  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeGuard] }
+  { path: 'account/:accountNumber', component: CardsComponent, canActivate: [authGuard] }
+  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeGuard] },
+  { path: 'create-current-account', component: AccountCreationComponent, canActivate: [employeeGuard] }
+
 ];

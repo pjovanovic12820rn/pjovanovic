@@ -190,7 +190,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       createCard: accountData.createCard
     };
 
-    this.accountService.createAccount(foreignCurrencyAccountData).subscribe({
+    this.accountService.createForeignAccount(foreignCurrencyAccountData).subscribe({
       next: () => {
         this.alertService.showAlert('success', 'Account created successfully!');
       },
