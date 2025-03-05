@@ -1,0 +1,24 @@
+<section class="account-details">
+  <h3>Account Details</h3>
+  <p><strong>Owner:</strong> {{ account?.accountOwner }}</p>
+  <p><strong>Account Number:</strong> {{ account?.accountNumber }}</p>
+  <p><strong>Balance:</strong> {{ account?.availableBalance }} RSD</p>
+
+  <h3>Associated Cards</h3>
+  <table>
+    <tr>
+      <th>Card Number</th>
+      <th>Status</th>
+      <th>Owner</th>
+      <th>Actions</th>
+    </tr>
+    <tr *ngFor="let card of cards">
+      <td>{{ card.cardNumber }}</td>
+      <td [ngClass]="getCardStatusClass(card.status)">{{ card.status }}</td>
+      <td>{{ card.owner.firstName }} {{ card.owner.lastName }}</td>
+      <td>
+        <button class="payment-btn" (click)="makePayment(card.cardNumber)">New Payment</button>
+      </td>
+    </tr>
+  </table>
+</section>
