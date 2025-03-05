@@ -16,6 +16,8 @@ import { CreateForeignCurrencyAccountComponent } from './components/create-forei
 import {MailComponent} from './components/mail/mail.component';
 import {ClientPortalComponent} from './components/client-portal/client-portal.component';
 import {ClientEditComponent} from './components/client-edit/client-edit.component';
+import {TransferComponent} from './components/transfer/transfer.component';
+import {OverviewComponent} from './components/transaction-overview/overview.component';
 
 export const routes: Routes = [
   // login
@@ -43,6 +45,8 @@ export const routes: Routes = [
   { path: 'client-portal', component: ClientPortalComponent, canActivate: [authGuard]},
   // { path: 'clients/:id', component: ClientEditComponent, canActivate: [authGuard]},
 
+  {path: 'transfer', component: TransferComponent, canActivate: [authGuard]},
+  {path: 'transaction_detail', component: OverviewComponent, canActivate: [authGuard]},
 
   // bank accounts
   { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeGuard] },

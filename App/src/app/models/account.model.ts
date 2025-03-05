@@ -3,7 +3,7 @@ export interface Account {
     clientId: number;
     employeeId: number;
     companyId?: number;
-    initialBalance: number; 
+    initialBalance: number;
     dailyLimit: number;
     monthlyLimit: number;
     dailySpending: number;
