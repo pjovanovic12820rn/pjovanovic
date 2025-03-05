@@ -44,7 +44,7 @@ export const routes: Routes = [
   { path: 'client-portal', component: ClientPortalComponent, canActivate: [authGuard]},
   // { path: 'clients/:id', component: ClientEditComponent, canActivate: [authGuard]},
 
-  { path: 'account/:accountNumber', component: CardsComponent, canActivate: [authGuard] }
+  { path: 'account/:accountNumber', component: CardsComponent, canActivate: [authGuard] },
   { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeGuard] },
   { path: 'create-current-account', component: AccountCreationComponent, canActivate: [employeeGuard] }
 

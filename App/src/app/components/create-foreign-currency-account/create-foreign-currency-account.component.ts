@@ -175,6 +175,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     accountData.createCard = !!accountData.createCard;
 
     const foreignCurrencyAccountData: Account = {
+      availableBalance: 0, name: "", number: "",
       currency: accountData.currency,
       clientId: accountData.clientId,
       employeeId: accountData.employeeId,
