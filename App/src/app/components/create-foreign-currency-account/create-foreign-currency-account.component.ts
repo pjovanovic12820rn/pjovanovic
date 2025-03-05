@@ -75,7 +75,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
   ngOnInit(): void {
     this.accountForm
       .get('accountType')
-      ?.valueChanges.subscribe((accountType) => {
+      ?.valueChanges.subscribe(accountType => {
         this.isBusinessAccount = accountType === 'business';
         this.updateBusinessFieldsVisibility();
         this.generateAccountNumber();
@@ -235,6 +235,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     accountData.createCard = !!accountData.createCard;
 
     const foreignCurrencyAccountData: Account = {
+      availableBalance: 0, name: "", number: "",
       currency: accountData.currency,
       clientId: accountData.clientId,
       employeeId: accountData.employeeId,
@@ -249,7 +250,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       accountOwnerType: this.isBusinessAccount
         ? AccountOwnerType.COMPANY
         : AccountOwnerType.PERSONAL,
-      createCard: accountData.createCard,
+      createCard: accountData.createCard
     };
 
     this.accountService.createForeignAccount(foreignCurrencyAccountData).subscribe({

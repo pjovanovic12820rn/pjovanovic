@@ -33,7 +33,7 @@ interface Account {
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {
-  account!: Account;
+  account: Account | null = null;
   cards: Card[] = [];
 
   constructor(private route: ActivatedRoute, private cardService: CardService, private accountService: AccountService) {}

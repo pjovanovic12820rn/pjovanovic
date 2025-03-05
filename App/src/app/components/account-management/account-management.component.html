@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Account Management</title>
-    <link rel="stylesheet" href="account_management.css" />
+<!--    <link rel="stylesheet" href="./account-management.component.css" />-->
   </head>
   <body>
     <div class="container">
@@ -41,7 +41,7 @@
           <tr *ngFor="let account of accounts">
             <td>{{ account.accountNumber }}</td>
             <td>
-              {{ account.owner?.firstName }} {{ account.owner?.lastName }}
+              {{ account.owner.firstName }} {{ account.owner.lastName }}
             </td>
             <td>{{ account.ownershipType }}</td>
             <td>{{ account.accountCategory }}</td>

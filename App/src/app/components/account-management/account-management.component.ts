@@ -6,13 +6,13 @@ import { AccountResponse } from '../../models/account-response.model';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-account-managment',
+  selector: 'app-account-management',
   imports: [CommonModule, FormsModule],
   standalone: true,
-  templateUrl: './account-managment.component.html',
-  styleUrl: './account-managment.component.css',
+  templateUrl: './account-management.component.html',
+  styleUrl: './account-management.component.css',
 })
-export class AccountManagmentComponent implements OnInit {
+export class AccountManagementComponent implements OnInit {
   selectedAccountNumber: string | undefined;
 
   ngOnInit(): void {
