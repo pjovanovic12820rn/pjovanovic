@@ -8,10 +8,10 @@
       My Profile
     </button>
 
-    <button class="nav-btn" routerLink="/account-management">
+    <button class="nav-btn" (click)="router.navigate(['/account-managment'])">
       Accounts
     </button>
-
+    
     <button class="nav-btn" *ngIf="isClient" (click)="router.navigate(['/user', userId])">
       My Profile
     </button>

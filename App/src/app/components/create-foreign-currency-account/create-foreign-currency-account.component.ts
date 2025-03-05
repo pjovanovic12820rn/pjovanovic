@@ -1,5 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
@@ -19,7 +25,7 @@ import { AccountStatus } from '../../enums/account-status.enum';
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
   templateUrl: './create-foreign-currency-account.component.html',
-  styleUrl: './create-foreign-currency-account.component.css'
+  styleUrl: './create-foreign-currency-account.component.css',
 })
 export class CreateForeignCurrencyAccountComponent implements OnInit {
   accountForm: FormGroup;
@@ -43,9 +49,18 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       accountType: ['client'],
       currency: ['', Validators.required],
       companyName: ['', Validators.required],
-      companyRegistrationNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-      taxIdentificationNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-      companyActivityCode: ['', [Validators.required, Validators.pattern(/^\d{2}\.\d{2}$/)]],
+      companyRegistrationNumber: [
+        '',
+        [Validators.required, Validators.pattern(/^[0-9]+$/)],
+      ],
+      taxIdentificationNumber: [
+        '',
+        [Validators.required, Validators.pattern(/^[0-9]+$/)],
+      ],
+      companyActivityCode: [
+        '',
+        [Validators.required, Validators.pattern(/^\d{2}\.\d{2}$/)],
+      ],
       companyAddress: ['', Validators.required],
       majorityOwnerId: ['', Validators.required],
       clientId: ['', Validators.required],
@@ -53,16 +68,18 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       dailyLimit: ['', [Validators.required]],
       monthlyLimit: ['', [Validators.required]],
       createCard: [false],
-      employeeId: ['']
+      employeeId: [''],
     });
   }
 
   ngOnInit(): void {
-    this.accountForm.get('accountType')?.valueChanges.subscribe(accountType => {
-      this.isBusinessAccount = accountType === 'business';
-      this.updateBusinessFieldsVisibility();
-      this.generateAccountNumber();
-    });
+    this.accountForm
+      .get('accountType')
+      ?.valueChanges.subscribe((accountType) => {
+        this.isBusinessAccount = accountType === 'business';
+        this.updateBusinessFieldsVisibility();
+        this.generateAccountNumber();
+      });
     this.updateBusinessFieldsVisibility();
 
     this.loadUsers();
@@ -78,10 +95,12 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     if (loggedInEmployeeId !== null) {
       this.accountForm.patchValue({ employeeId: loggedInEmployeeId });
     } else {
-      this.alertService.showAlert('error', 'Failed to load employee details. Please try again later.');
+      this.alertService.showAlert(
+        'error',
+        'Failed to load employee details. Please try again later.'
+      );
     }
   }
-
 
   private loadLoggedInEmployeeInfo() {
     this.employeeService.getEmployeeSelf().subscribe({
@@ -95,8 +114,11 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
         this.loggedInEmployeePosition = fetchedEmployee.position;
       },
       error: () => {
-        this.alertService.showAlert('error', 'Failed to load employee details. Please try again later.');
-      }
+        this.alertService.showAlert(
+          'error',
+          'Failed to load employee details. Please try again later.'
+        );
+      },
     });
   }
 
@@ -106,13 +128,16 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
         this.users = response.content;
       },
       error: () => {
-        this.alertService.showAlert('error', 'Failed to load users. Please try again later.');
-      }
+        this.alertService.showAlert(
+          'error',
+          'Failed to load users. Please try again later.'
+        );
+      },
     });
   }
 
   private preselectNewUser() {
-    this.activatedRoute.queryParams.subscribe(params => {
+    this.activatedRoute.queryParams.subscribe((params) => {
       const newUserId = params['newUserId'];
       if (newUserId) {
         this.accountForm.patchValue({ clientId: newUserId });
@@ -120,15 +145,46 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     });
   }
 
-  private loadCurrencies() { // mock data, should be loaded from the server when implemented
+  private loadCurrencies() {
+    // mock data, should be loaded from the server when implemented
     this.currencies = [
-      { code: 'RSD', name: 'Serbian Dinar', symbol: 'RSD', country: ['Serbia'], description: 'Serbian Dinar', isActive: true },
-      { code: 'EUR', name: 'Euro', symbol: '€', country: ['Germany', 'Slovenia', "Other EU"], description: 'Euro', isActive: true },
-      { code: 'USD', name: 'US Dollar', symbol: '$', country: ['USA'], description: 'US Dollar', isActive: true },
-      { code: 'CHF', name: 'Swiss Franc' , symbol: 'CHF', country: ['Switzerland'], description: 'Swiss Franc', isActive: true },
+      {
+        code: 'RSD',
+        name: 'Serbian Dinar',
+        symbol: 'RSD',
+        country: ['Serbia'],
+        description: 'Serbian Dinar',
+        isActive: true,
+      },
+      {
+        code: 'EUR',
+        name: 'Euro',
+        symbol: '€',
+        country: ['Germany', 'Slovenia', 'Other EU'],
+        description: 'Euro',
+        isActive: true,
+      },
+      {
+        code: 'USD',
+        name: 'US Dollar',
+        symbol: '$',
+        country: ['USA'],
+        description: 'US Dollar',
+        isActive: true,
+      },
+      {
+        code: 'CHF',
+        name: 'Swiss Franc',
+        symbol: 'CHF',
+        country: ['Switzerland'],
+        description: 'Swiss Franc',
+        isActive: true,
+      },
     ];
 
-    const rsdIndex = this.currencies.findIndex(currency => currency.code === 'RSD');
+    const rsdIndex = this.currencies.findIndex(
+      (currency) => currency.code === 'RSD'
+    );
     if (rsdIndex > -1) this.currencies.splice(rsdIndex, 1);
   }
 
@@ -136,8 +192,12 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     const bankCode = '111';
     const branchCode = '0001';
     const accountNumberDigits = 9;
-    const randomNumber = Math.random().toString().slice(2, 2 + accountNumberDigits).padEnd(accountNumberDigits, '0');
-    const accountType = this.accountForm.get('accountType')?.value === 'business' ? '22' : '21';
+    const randomNumber = Math.random()
+      .toString()
+      .slice(2, 2 + accountNumberDigits)
+      .padEnd(accountNumberDigits, '0');
+    const accountType =
+      this.accountForm.get('accountType')?.value === 'business' ? '22' : '21';
 
     this.generatedAccountNumber = `${bankCode}${branchCode}${randomNumber}${accountType}`;
     this.accountForm.patchValue({ accountNumber: this.generatedAccountNumber });
@@ -163,7 +223,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
 
   onSubmit() {
     if (this.accountForm.invalid) {
-      Object.keys(this.accountForm.controls).forEach(key => {
+      Object.keys(this.accountForm.controls).forEach((key) => {
         this.accountForm.get(key)?.markAsTouched();
       });
       return;
@@ -186,8 +246,10 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       monthlySpending: 0,
       isActive: AccountStatus.ACTIVE,
       accountType: AccountType.FOREIGN,
-      accountOwnerType: this.isBusinessAccount ? AccountOwnerType.COMPANY : AccountOwnerType.PERSONAL,
-      createCard: accountData.createCard
+      accountOwnerType: this.isBusinessAccount
+        ? AccountOwnerType.COMPANY
+        : AccountOwnerType.PERSONAL,
+      createCard: accountData.createCard,
     };
 
     this.accountService.createForeignAccount(foreignCurrencyAccountData).subscribe({
@@ -195,8 +257,11 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
         this.alertService.showAlert('success', 'Account created successfully!');
       },
       error: () => {
-        this.alertService.showAlert('error', 'Failed to create account. Please try again.');
-      }
+        this.alertService.showAlert(
+          'error',
+          'Failed to create account. Please try again.'
+        );
+      },
     });
   }
 
