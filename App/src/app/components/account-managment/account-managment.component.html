@@ -1,88 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Account Management</title>
-    <link rel="stylesheet" href="account_management.css">
-</head>
-<body>
+    <link rel="stylesheet" href="account_management.css" />
+  </head>
+  <body>
     <div class="container">
-        <h2>Account Management</h2>
+      <h2>Account Management</h2>
 
-        <!-- Filter sekcija -->
-        <div class="filter-section">
-            <input type="text" placeholder="Search by owner name..." class="filter-input">
-            <input type="text" placeholder="Search by account number..." class="filter-input">
-            <button class="filter-btn">Filter</button>
-        </div>
+      <!-- Filter sekcija -->
+      <div class="filter-section">
+        <input
+          type="text"
+          placeholder="Search by owner name..."
+          class="filter-input"
+          [(ngModel)]="ownerNameFilter"
+        />
+        <input
+          type="text"
+          placeholder="Search by account number..."
+          class="filter-input"
+          [(ngModel)]="accountNumberFilter"
+        />
+        <button class="filter-btn" (click)="applyFilters()">Filter</button>
+      </div>
 
-        <!-- Tabela računa -->
-        <section class="account-list">
-            <h3>Accounts</h3>
-            <table>
-                <tr>
-                    <th>Account Number</th>
-                    <th>Owner</th>
-                    <th>Type</th>
-                    <th>Category</th>
-                    <th>Actions</th>
-                </tr>
-                <tr>
-                    <td>{{ account1.number }}</td>
-                    <td>{{ account1.owner }}</td>
-                    <td>{{ account1.type }}</td>
-                    <td>{{ account1.category }}</td>
-                    <td><button class="details-btn" (click)="loadAccounts()">View Cards</button></td>
-                </tr>
-                <tr>
-                    <td>{{ account2.number }}</td>
-                    <td>{{ account2.owner }}</td>
-                    <td>{{ account2.type }}</td>
-                    <td>{{ account2.category }}</td>
-                    <td><button class="details-btn" (click)="loadAccounts()">View Cards</button></td>
-                </tr>
-            </table>
-        </section>
-
-        <!-- Tabela kartica za odabrani račun -->
-        <section class="card-list" id="cardSection" style="display: none;">
-            <h3>Cards Linked to Account</h3>
-            <table>
-                <tr>
-                    <th>Card Number</th>
-                    <th>Owner</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-                <tr>
-                    <td>{{ card1.number }}</td>
-                    <td>{{ card1.owner }}</td>
-                    <td class="{{ card1.status }}">{{ card1.status }}</td>
-                    <td>
-                        <button class="action-btn block">Block</button>
-                        <button class="action-btn unblock">Unblock</button>
-                        <button class="action-btn deactivate">Deactivate</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>{{ card2.number }}</td>
-                    <td>{{ card2.owner }}</td>
-                    <td class="{{ card2.status }}">{{ card2.status }}</td>
-                    <td>
-                        <button class="action-btn block">Block</button>
-                        <button class="action-btn unblock">Unblock</button>
-                        <button class="action-btn deactivate">Deactivate</button>
-                    </td>
-                </tr>
-            </table>
-        </section>
+      <!-- Tabela računa -->
+      <section class="account-list">
+        <h3>Accounts</h3>
+        <table>
+          <tr>
+            <th>Account Number</th>
+            <th>Owner</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Actions</th>
+          </tr>
+          <tr *ngFor="let account of accounts">
+            <td>{{ account.accountNumber }}</td>
+            <td>
+              {{ account.owner?.firstName }} {{ account.owner?.lastName }}
+            </td>
+            <td>{{ account.ownershipType }}</td>
+            <td>{{ account.accountCategory }}</td>
+            <td>
+              <button
+                class="details-btn"
+                (click)="viewCards(account.accountNumber)"
+              >
+                View Cards
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="accounts.length === 0">
+            <td colspan="5" class="no-data">No accounts found</td>
+          </tr>
+        </table>
+      </section>
     </div>
-
-    <script>
-        function showCards() {
-            document.getElementById("cardSection").style.display = "block";
-        }
-    </script>
-</body>
+  </body>
 </html>

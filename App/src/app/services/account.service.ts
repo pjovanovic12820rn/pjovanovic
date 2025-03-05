@@ -8,7 +8,7 @@ import { Employee } from '../models/employee.model';
 import { AccountResponse } from '../models/account-response.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AccountService {
   private http = inject(HttpClient);
@@ -19,16 +19,20 @@ export class AccountService {
     const token = this.authService.getToken();
     return new HttpHeaders({
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
   }
 
   getAccount(accountNumber: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${accountNumber}`,{ headers: this.getAuthHeaders() });
+    return this.http.get<any>(`${this.apiUrl}/${accountNumber}`, {
+      headers: this.getAuthHeaders(),
+    });
   }
 
   createForeignAccount(accountData: Account): Observable<any> {
-    return this.http.post(this.apiUrl, accountData, { headers: this.getAuthHeaders() });
+    return this.http.post(this.apiUrl, accountData, {
+      headers: this.getAuthHeaders(),
+    });
   }
 
   createCurrentAccount(newAccount: NewBankAccount): Observable<void> {
@@ -37,19 +41,19 @@ export class AccountService {
     });
   }
 
-
-  getAllAccounts(page: number, size: number): Observable<{ content: AccountResponse[], totalElements: number }> {
+  getAllAccounts(
+    page: number,
+    size: number
+  ): Observable<{ content: AccountResponse[]; totalElements: number }> {
     let params = new HttpParams().set('page', page).set('size', size);
-    
-    // Debug: Get the auth headers and log them
     const headers = this.getAuthHeaders();
-    console.log('Auth token from service:', this.authService.getToken());
-    console.log('Headers being sent:', headers.get('Authorization'));
-    
-    return this.http.get<{ content: AccountResponse[], totalElements: number }>(this.apiUrl, {
-      headers,
-      params,
-    });
+
+    return this.http.get<{ content: AccountResponse[]; totalElements: number }>(
+      this.apiUrl,
+      {
+        headers,
+        params,
+      }
+    );
   }
-    
 }
