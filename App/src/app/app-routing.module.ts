@@ -13,6 +13,7 @@ import {EmployeeDetailComponent} from './components/employee-detail/employee-det
 import {WelcomeComponent} from './components/welcome/welcome.component';
 import { MailComponent } from './components/mail/mail.component';
 import { CreateForeignCurrencyAccountComponent } from './components/create-foreign-currency-account/create-foreign-currency-account.component';
+import { AccountManagmentComponent } from './components/account-managment/account-managment.component';
 
 export const routes: Routes = [
   // login
@@ -37,6 +38,9 @@ export const routes: Routes = [
   { path: 'register-employee', component: RegisterEmployeeComponent, canActivate: [adminGuard, authGuard] },
   { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard, authGuard] },
   { path: 'employee/:id', component: EmployeeDetailComponent, canActivate: [authGuard] },
+
+  // account managment
+  { path: 'account_managment', component: AccountManagmentComponent, canActivate: [authGuard] },
 
   // bank accounts
   { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeGuard] }
