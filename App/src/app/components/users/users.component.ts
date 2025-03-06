@@ -6,13 +6,14 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AlertService } from '../../services/alert.service';
 import { AlertComponent } from '../alert/alert.component';
+import { PaginationComponent } from '../pagination/pagination.component';
 
 @Component({
   selector: 'app-users',
   standalone: true,
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css'],
-  imports: [CommonModule, AlertComponent],
+  imports: [CommonModule, AlertComponent, PaginationComponent],
 })
 export class UsersComponent implements OnInit {
   private userService = inject(UserService);
@@ -21,9 +22,11 @@ export class UsersComponent implements OnInit {
   private alertService = inject(AlertService);
 
   users: User[] = [];
-  currentPage: number = 0;
+  pagedUsers: User[] = [];
+  filteredUsers: User[] = [];
+
+  currentPage: number = 1;
   pageSize: number = 10;
-  totalUsers: number = 0;
 
   get isAdmin(): boolean {
     return <boolean>this.authService.getUserPermissions()?.includes("admin");
@@ -34,10 +37,11 @@ export class UsersComponent implements OnInit {
   }
 
   fetchUsers(): void {
-    this.userService.getAllUsers(this.currentPage, this.pageSize).subscribe({
+    this.userService.getAllUsers(0, 100).subscribe({
       next: (data) => {
         this.users = data.content;
-        this.totalUsers = data.totalElements;
+        this.filteredUsers = [...this.users];
+        this.updatePagedUsers();
       },
       error: () => {
         this.alertService.showAlert('error', 'Failed to load users. Please try again later.');
@@ -45,18 +49,14 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  nextPage(): void {
-    if ((this.currentPage + 1) * this.pageSize < this.totalUsers) {
-      this.currentPage++;
-      this.fetchUsers();
-    }
+  updatePagedUsers(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    this.pagedUsers = this.filteredUsers.slice(startIndex, startIndex + this.pageSize);
   }
 
-  prevPage(): void {
-    if (this.currentPage > 0) {
-      this.currentPage--;
-      this.fetchUsers();
-    }
+  onPageChanged(page: number): void {
+    this.currentPage = page < 1 ? 1 : page;
+    this.updatePagedUsers();
   }
 
   deleteUser(userId: number): void {
@@ -68,7 +68,8 @@ export class UsersComponent implements OnInit {
     if (confirm('Are you sure you want to delete this user?')) {
       this.userService.deleteUser(userId).subscribe({
         next: () => {
-          this.users = this.users.filter((u) => u.id !== userId);
+          this.filteredUsers = this.filteredUsers.filter((u) => u.id !== userId);
+          this.updatePagedUsers();
           this.alertService.showAlert('success', 'User deleted successfully.');
         },
         error: () => {

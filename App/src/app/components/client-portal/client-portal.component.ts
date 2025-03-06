@@ -28,7 +28,7 @@ export class ClientPortalComponent implements OnInit {
     email: ''
   };
   currentPage = 1;
-  pageSize = 5;
+  pageSize = 10;
 
   ngOnInit(): void {
     this.loadClients();
