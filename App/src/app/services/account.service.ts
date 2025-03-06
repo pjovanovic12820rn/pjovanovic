@@ -1,13 +1,14 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Account } from '../models/account.model';
 import { NewBankAccount } from '../models/new-bank-account.model';
 import { Employee } from '../models/employee.model';
+import { AccountResponse } from '../models/account-response.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AccountService {
   private http = inject(HttpClient);
@@ -18,16 +19,20 @@ export class AccountService {
     const token = this.authService.getToken();
     return new HttpHeaders({
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
   }
 
   getAccount(accountNumber: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${accountNumber}`,{ headers: this.getAuthHeaders() });
+    return this.http.get<any>(`${this.apiUrl}/${accountNumber}`, {
+      headers: this.getAuthHeaders(),
+    });
   }
 
   createForeignAccount(accountData: Account): Observable<any> {
-    return this.http.post(this.apiUrl, accountData, { headers: this.getAuthHeaders() });
+    return this.http.post(this.apiUrl, accountData, {
+      headers: this.getAuthHeaders(),
+    });
   }
 
   createCurrentAccount(newAccount: NewBankAccount): Observable<void> {
@@ -36,4 +41,19 @@ export class AccountService {
     });
   }
 
+  getAllAccounts(
+    page: number,
+    size: number
+  ): Observable<{ content: AccountResponse[]; totalElements: number }> {
+    let params = new HttpParams().set('page', page).set('size', size);
+    const headers = this.getAuthHeaders();
+
+    return this.http.get<{ content: AccountResponse[]; totalElements: number }>(
+      this.apiUrl,
+      {
+        headers,
+        params,
+      }
+    );
+  }
 }
