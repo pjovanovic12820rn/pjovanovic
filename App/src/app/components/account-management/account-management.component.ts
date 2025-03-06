@@ -4,10 +4,13 @@ import { AlertService } from '../../services/alert.service';
 import { AccountService } from '../../services/account.service';
 import { AccountResponse } from '../../models/account-response.model';
 import { FormsModule } from '@angular/forms';
+import {AuthService} from '../../services/auth.service';
+import {ModalComponent} from '../modal/modal.component';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-account-management',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink, ModalComponent],
   standalone: true,
   templateUrl: './account-management.component.html',
   styleUrl: './account-management.component.css',
@@ -18,7 +21,7 @@ export class AccountManagementComponent implements OnInit {
   ngOnInit(): void {
     this.loadAccounts();
   }
-
+  private authService = inject(AuthService);
   private accountService = inject(AccountService);
   private alertService = inject(AlertService);
   allAccounts: AccountResponse[] = [];
@@ -52,6 +55,10 @@ export class AccountManagementComponent implements OnInit {
     }
 
     this.accounts = filteredAccounts;
+  }
+
+  isEmployee(){
+    return this.authService.isEmployee()
   }
 
   loadAccounts() {
@@ -88,4 +95,18 @@ export class AccountManagementComponent implements OnInit {
     this.selectedAccountNumber = accountNumber;
     window.location.href = `/account/${accountNumber}`;
   }
+  
+  isModalOpen: boolean = false;
+
+  // Function to open the modal
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  // Function to close the modal
+  closeModal() {
+    this.isModalOpen = false;
+  }
+
+
 }
