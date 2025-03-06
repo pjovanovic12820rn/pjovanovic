@@ -42,10 +42,12 @@ export const routes: Routes = [
   { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard, authGuard]},
   { path: 'employee/:id', component: EmployeeDetailComponent, canActivate: [authGuard],},
   { path: 'client-portal', component: ClientPortalComponent, canActivate: [authGuard]},
+  // { path: 'clients/:id', component: ClientEditComponent, canActivate: [authGuard]},
 
   // accounts
   { path: 'account/:accountNumber', component: CardsComponent, canActivate: [authGuard]},
-  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeGuard],},
+  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeGuard]},
   { path: 'create-current-account', component: AccountCreationComponent, canActivate: [employeeGuard]},
   { path: 'account-management', component: AccountManagementComponent, canActivate: [authGuard]},
+
 ];
