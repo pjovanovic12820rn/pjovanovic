@@ -6,6 +6,7 @@ import { Account } from '../models/account.model';
 import { NewBankAccount } from '../models/new-bank-account.model';
 import { Employee } from '../models/employee.model';
 import { AccountResponse } from '../models/account-response.model';
+import {AccountTransfer} from '../models/account-transfer';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,10 @@ export class AccountService {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     });
+  }
+
+  getMyAccounts(){
+    return this.http.get<{ content: AccountTransfer[]}>(this.apiUrl, { headers: this.getAuthHeaders()});
   }
 
   getAccount(accountNumber: string): Observable<any> {
