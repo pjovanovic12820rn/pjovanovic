@@ -30,7 +30,7 @@ export class EditEmployeeComponent implements OnInit {
   updatingAdminStatus = false;
 
   get isAdmin(): boolean {
-    return <boolean>this.authService.getUserPermissions()?.includes('admin');
+    return <boolean>this.authService.getUserPermissions()?.includes('ADMIN');
   }
 
   ngOnInit(): void {
@@ -116,7 +116,7 @@ export class EditEmployeeComponent implements OnInit {
     if (!this.employee || !this.isAdmin) return;
 
     this.updatingAdminStatus = true;
-    const newRole = this.employee.role === 'admin' ? 'employee' : 'admin';
+    const newRole = this.employee.role === 'ADMIN' ? 'EMPLOYEE' : 'ADMIN';
 
     this.employeeService.setEmployeeRole(this.employee.id, newRole).subscribe({
       next: () => {

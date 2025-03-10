@@ -28,7 +28,7 @@ export class EditUserComponent implements OnInit {
   loading = true;
 
   get isAdmin(): boolean {
-    return <boolean>this.authService.getUserPermissions()?.includes('admin');
+    return <boolean>this.authService.getUserPermissions()?.includes('ADMIN');
   }
 
   ngOnInit(): void {

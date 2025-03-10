@@ -36,7 +36,7 @@ export class ClientPortalComponent implements OnInit {
     this.loadClients();
   }
   get isAdmin(): boolean {
-    return <boolean>this.authService.getUserPermissions()?.includes("admin");
+    return <boolean>this.authService.getUserPermissions()?.includes("ADMIN");
   }
 
   get isEmployee(): boolean {
