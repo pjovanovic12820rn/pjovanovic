@@ -33,7 +33,7 @@ export class EmployeesComponent implements OnInit {
   pageSize: number = 10;
 
   get isAdmin(): boolean {
-    return <boolean>this.authService.getUserPermissions()?.includes('ADMIN');
+    return this.authService.isAdmin();
   }
 
   ngOnInit(): void {

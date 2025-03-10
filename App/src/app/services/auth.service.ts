@@ -74,7 +74,6 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    console.log(this.getUserPermissions().includes("ADMIN"))
     return this.getUserPermissions().includes('ADMIN');
   }
 
