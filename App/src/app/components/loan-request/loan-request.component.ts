@@ -64,9 +64,10 @@ export class LoanRequestComponent implements OnInit {
 
     this.availableCurrencies = this.loanRequestService.getAvailableCurrencies();
 
-    this.accountService.getMyAccounts().subscribe({
+    // mozda treba drugacije ja samo menjam da ne bi pucao run!
+    this.accountService.getMyAccountsRegular().subscribe({
       next: (response) => {
-        this.userAccounts = response.content.map(acc => ({
+        this.userAccounts = response.map(acc => ({
           accountNumber: acc.accountNumber,
           currencyCode: acc.currencyCode
         }));

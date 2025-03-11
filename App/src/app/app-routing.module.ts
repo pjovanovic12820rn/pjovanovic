@@ -21,6 +21,7 @@ import {TransferComponent} from './components/transfer/transfer.component';
 import {OverviewComponent} from './components/transaction-overview/overview.component';
 import {RecipientsComponent} from './components/recipients/recipients.component';
 import {LoanRequestComponent} from './components/loan-request/loan-request.component';
+import {ExchageRateListComponent} from './components/exchage-rate-list/exchage-rate-list.component';
 
 export const routes: Routes = [
   // login
@@ -55,6 +56,7 @@ export const routes: Routes = [
   { path: 'account-management/:id', component: AccountManagementComponent, canActivate: [authGuard]},
   { path: 'transfer', component: TransferComponent, canActivate: [employeeGuard]},
   { path: 'recipients', component: RecipientsComponent},
+  { path: 'exchange-rate', component: ExchageRateListComponent,canActivate: [employeeGuard]},
 
   //loans
   { path: 'loan-request', component: LoanRequestComponent},
