@@ -56,7 +56,7 @@ export const routes: Routes = [
   { path: 'account-management/:id', component: AccountManagementComponent, canActivate: [authGuard]},
   { path: 'transfer', component: TransferComponent, canActivate: [employeeGuard]},
   { path: 'recipients', component: RecipientsComponent},
-  { path: 'exchange-rate', component: ExchageRateListComponent,canActivate: [employeeGuard]},
+  { path: 'exchange-rate', component: ExchageRateListComponent,canActivate: [authGuard]},
 
   //loans
   { path: 'loan-request', component: LoanRequestComponent},

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject , OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertService } from '../../services/alert.service';
 import { Exchange } from '../../models/exchange';
@@ -12,7 +12,7 @@ import { NgForOf, NgIf } from '@angular/common';
   templateUrl: './exchage-rate-list.component.html',
   styleUrl: './exchage-rate-list.component.css'
 })
-export class ExchageRateListComponent {
+export class ExchageRateListComponent implements OnInit {
   private exchangeService = inject(ExchangeService);
   private router = inject(Router);
   private alertService = inject(AlertService);
@@ -20,15 +20,18 @@ export class ExchageRateListComponent {
   exchageRateList: Exchange[] = [];
   exchangeAmount: number = 0;
   fromCurrency: string = 'RSD';
-  toCurrency: string = 'USD';
+  toCurrency: string = 'EUR';
   convertedAmount: number = 0;
   currencies: string[] = [];
+
+  availableToCurrencies: string[] = []
 
   ngOnInit() {
     this.exchangeService.getExchageRateList().subscribe({
       next: (response) => {
         this.exchageRateList = response;
         this.currencies = this.extractCurrencies(response);
+        this.updateAvailableToCurrencies();
       },
       error: () => {
         this.alertService.showAlert('error', 'Failed to load exchange rate list. Please try again later.');
@@ -46,19 +49,18 @@ export class ExchageRateListComponent {
     return Array.from(currencySet);
   }
 
-  convertCurrency() {
-    const rate = this.exchageRateList.find(
-      r => r.fromCurrency.code === this.fromCurrency && r.toCurrency.code === this.toCurrency
-    );
-
-    if (rate) {
-      this.convertedAmount = this.exchangeAmount * rate.exchangeRate;
-    } else {
-      this.convertedAmount = 0;
-    }
+  updateAvailableToCurrencies() {
+    this.availableToCurrencies = this.exchageRateList
+      .filter(rate => rate.fromCurrency.code === this.fromCurrency)
+      .map(rate => rate.toCurrency.code);
   }
 
   exchangeRateCalculation() {
+
+    if(this.exchangeAmount == null){
+      this.exchangeAmount = 0;
+    }
+
     this.exchangeService.getExchageFromToAmount(this.fromCurrency,this.toCurrency,this.exchangeAmount).subscribe({
       next: (response) => {
         this.convertedAmount = response;
@@ -70,5 +72,18 @@ export class ExchageRateListComponent {
     })
   }
 
+  onFromCurrencyChange() {
+    this.updateAvailableToCurrencies();
+    this.toCurrency = this.availableToCurrencies.length ? this.availableToCurrencies[0] : '';
+    this.exchangeRateCalculation();
+  }
 
+  onToCurrencyChange() {
+    this.exchangeRateCalculation();
+   }
+  // resetValues(){
+  //   this.exchangeAmount = 0;
+  //   this.fromCurrency = 'EUR';
+  //   this.toCurrency = 'RSD';
+  // }
 }
