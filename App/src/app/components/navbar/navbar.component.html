@@ -11,7 +11,7 @@
     </button>
 
 <!--    ruta u routing modulu je sa /:id -->
-    <button class="nav-btn" *ngIf="!(isEmployee && isAdmin)" (click)="router.navigate(['/account-management'])">
+    <button class="nav-btn" *ngIf="!(isEmployee || isAdmin)" (click)="router.navigate(['/account-management'])">
       My Accounts
     </button>
 
