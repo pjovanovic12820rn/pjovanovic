@@ -17,10 +17,11 @@ import { MailComponent } from './components/mail/mail.component';
 import { CardsComponent } from './components/cards/cards.component';
 import { ClientPortalComponent } from './components/client-portal/client-portal.component';
 import { AccountManagementComponent } from './components/account-management/account-management.component';
-import {TransferComponent} from './components/transfer/transfer.component';
-import {OverviewComponent} from './components/transaction-overview/overview.component';
-import {RecipientsComponent} from './components/recipients/recipients.component';
-import {LoanRequestComponent} from './components/loan-request/loan-request.component';
+import { TransferComponent } from './components/transfer/transfer.component';
+import { OverviewComponent } from './components/transaction-overview/overview.component';
+import { RecipientsComponent } from './components/recipients/recipients.component';
+import { LoanRequestComponent } from './components/loan-request/loan-request.component';
+import { ExchageRateListComponent } from './components/exchage-rate-list/exchage-rate-list.component';
 import { NewPaymentComponent } from './components/new-payment/new-payment.component';
 
 export const routes: Routes = [
@@ -56,6 +57,7 @@ export const routes: Routes = [
   { path: 'account-management/:id', component: AccountManagementComponent, canActivate: [authGuard]},
   { path: 'transfer', component: TransferComponent, canActivate: [employeeGuard]},
   { path: 'recipients', component: RecipientsComponent},
+  { path: 'exchange-rate', component: ExchageRateListComponent,canActivate: [authGuard]},
 
   //loans
   { path: 'loan-request', component: LoanRequestComponent},
