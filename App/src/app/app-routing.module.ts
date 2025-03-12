@@ -62,8 +62,8 @@ export const routes: Routes = [
 
   { path: 'card/:cardNumber/transactions',component: TransactionListComponent, canActivate: [authGuard]},
   { path: 'card/:cardNumber/transactions/new', component: NewTransactionComponent, canActivate: [authGuard]},
-  
-  { path: 'transactions/:transactionId',component: TransactionDetailsComponent, canActivate: [authGuard]}
+
+  { path: 'transactions/:transactionId',component: TransactionDetailsComponent, canActivate: [authGuard]},
   { path: 'exchange-rate', component: ExchageRateListComponent,canActivate: [authGuard]},
 
   //loans
