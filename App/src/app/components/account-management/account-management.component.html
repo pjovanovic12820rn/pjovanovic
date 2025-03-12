@@ -1,7 +1,7 @@
 <div class="card">
   <div class="flex justify-between">
     <h2>Account Management</h2>
-    <button class="new-account-btn" *ngIf="isEmployee()" (click)="openModal()">New Account</button>
+    <button class="new-account-btn" *ngIf="isEmployee() || isAdmin()" (click)="openModal()">New Account</button>
   </div>
   <!-- Filter sekcija -->
 <!--  <div class="filter-section">-->

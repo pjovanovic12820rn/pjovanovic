@@ -46,9 +46,9 @@ export class AccountManagementComponent implements OnInit {
   ngOnInit(): void {
     // this.clientId = this.route.snapshot.paramMap.get('id');
     this.clientId = this.route.snapshot.queryParamMap.get('id');
-    if (this.isEmployee() && this.clientId) {
+    if ((this.isEmployee()||this.isAdmin()) && this.clientId) {
       this.fetchAccountsForEmployee(this.clientId);
-    } else if(this.isEmployee() && !this.clientId){
+    } else if((this.isEmployee() || this.isAdmin()) && !this.clientId){
       this.router.navigate(['/client-portal']);
     } else if (this.isClient()) {
       this.fetchAccountsForClient();
@@ -124,6 +124,9 @@ export class AccountManagementComponent implements OnInit {
   }
   isClient(){
     return this.authService.isClient();
+  }
+  isAdmin(){
+    return this.authService.isAdmin();
   }
 
   loadAccounts() {
