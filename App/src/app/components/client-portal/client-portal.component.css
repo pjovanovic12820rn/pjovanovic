@@ -105,3 +105,20 @@ h1 {
 .view-btn:hover {
   background: #9E7CD7;
 }
+
+.new-account-btn {
+  background: #996FD6;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  height: fit-content;
+  margin-bottom: 10px;
+}
+
+.new-account-btn:hover {
+  background: #9E7CD7;
+  transform: scale(1.05);
+}

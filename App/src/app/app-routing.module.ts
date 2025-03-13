@@ -39,7 +39,7 @@ export const routes: Routes = [
   { path: 'forgot-password', component: MailComponent },
 
   // users
-  { path: 'users', component: UsersComponent, canActivate: [employeeOrAdminGuard, authGuard]},
+  // { path: 'users', component: UsersComponent, canActivate: [employeeOrAdminGuard, authGuard]},
   { path: 'register-user', component: RegisterUserComponent, canActivate: [employeeOrAdminGuard, authGuard]},
   { path: 'users/:id', component: EditUserComponent, canActivate: [employeeOrAdminGuard, authGuard]},
   { path: 'user/:id', component: UserDetailComponent, canActivate: [authGuard]},

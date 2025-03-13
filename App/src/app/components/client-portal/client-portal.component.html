@@ -4,6 +4,8 @@
 
   <h1>Client Portal</h1>
 
+  <button class="new-account-btn" *ngIf="isEmployee || isAdmin" (click)="registerNewUser()">Register New User</button>
+
   <!-- Filter Section -->
   <div class="filter-section">
     <span>Filter by:</span>

@@ -90,7 +90,7 @@ export class RegisterUserComponent implements OnInit {
         if (this.redirectToAccountCreation) {
           this.router.navigate(['/create-current-account'], { queryParams: { userId: newUser.id } });
         } else {
-          this.router.navigate(['/users']);
+          this.router.navigate(['/client-portal']);
         }
         // this.router.navigate(['/users']);
       },
