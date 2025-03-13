@@ -76,3 +76,27 @@ body {
 .login-btn:hover {
   background: #a64d79;
 }
+
+.account-option {
+  background: #D0C9EA;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.account-option:hover {
+  background: #B399DD;
+}
+
+.modal-content {
+  padding: 20px;
+  text-align: center;
+}
+
+.new-account-options {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}

@@ -19,7 +19,18 @@
       My Profile
     </button>
 
+    <button class="nav-btn" *ngIf="isEmployee || isAdmin" (click)="openModal()">New Account</button>
+
   </div>
 
   <button class="logout-btn" (click)="logout()">Logout</button>
 </nav>
+
+<app-modal [title]="'New Account'" [isOpen]="isModalOpen" (closeModalEvent)="closeModal()">
+  <div class="modal-content">
+    <div class="new-account-options">
+      <button class="account-option" (click)="navigateTo('/create-current-account')">Checking Account</button>
+      <button class="account-option" (click)="navigateTo('/create-foreign-currency-account')">Foreign Currency Account</button>
+    </div>
+  </div>
+</app-modal>

@@ -164,17 +164,4 @@ export class AccountManagementComponent implements OnInit {
     window.location.href = `/account/${accountNumber}`;
   }
 
-  isModalOpen: boolean = false;
-
-  // Function to open the modal
-  openModal() {
-    this.isModalOpen = true;
-  }
-
-  // Function to close the modal
-  closeModal() {
-    this.isModalOpen = false;
-  }
-
-
 }
