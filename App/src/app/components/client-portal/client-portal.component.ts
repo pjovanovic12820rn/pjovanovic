@@ -112,5 +112,8 @@ export class ClientPortalComponent implements OnInit {
       this.router.navigate(['/account-management'], { queryParams: { id: clientId } });
     }
   }
+  registerNewUser() {
+    this.router.navigate(['/register-user']);
+  }
 
 }

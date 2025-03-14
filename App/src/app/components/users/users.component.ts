@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { AlertService } from '../../services/alert.service';
 import { AlertComponent } from '../shared/alert/alert.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
+import {employeeOrAdminGuard} from '../../guards/auth-guard.guard';
 
 @Component({
   selector: 'app-users',
@@ -30,6 +31,9 @@ export class UsersComponent implements OnInit {
 
   get isAdmin(): boolean {
     return <boolean>this.authService.isAdmin();
+  }
+  get employeeOrAdminGuard(): boolean{
+    return <boolean>(this.authService.isEmployee() || this.authService.isAdmin());
   }
 
   ngOnInit(): void {

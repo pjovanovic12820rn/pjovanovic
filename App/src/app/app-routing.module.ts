@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { authGuard, adminGuard, employeeGuard } from './guards/auth-guard.guard';
+import { authGuard, adminGuard, employeeGuard, employeeOrAdminGuard } from './guards/auth-guard.guard';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { EmployeesComponent } from './components/employees/employees.component';
 import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
@@ -41,9 +41,9 @@ export const routes: Routes = [
   { path: 'forgot-password', component: MailComponent },
 
   // users
-  { path: 'users', component: UsersComponent, canActivate: [adminGuard, authGuard]},
-  { path: 'register-user', component: RegisterUserComponent, canActivate: [adminGuard, authGuard]},
-  { path: 'users/:id', component: EditUserComponent, canActivate: [adminGuard, authGuard]},
+  // { path: 'users', component: UsersComponent, canActivate: [employeeOrAdminGuard, authGuard]},
+  { path: 'register-user', component: RegisterUserComponent, canActivate: [employeeOrAdminGuard, authGuard]},
+  { path: 'users/:id', component: EditUserComponent, canActivate: [employeeOrAdminGuard, authGuard]},
   { path: 'user/:id', component: UserDetailComponent, canActivate: [authGuard]},
 
   // employees
@@ -56,8 +56,8 @@ export const routes: Routes = [
 
   // accounts
   { path: 'account/:accountNumber', component: CardsComponent, canActivate: [authGuard]},
-  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeGuard]},
-  { path: 'create-current-account', component: AccountCreationComponent, canActivate: [employeeGuard]},
+  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeOrAdminGuard]},
+  { path: 'create-current-account', component: AccountCreationComponent, canActivate: [employeeOrAdminGuard]},
   { path: 'account-management', component: AccountManagementComponent, canActivate: [authGuard]},
   { path: 'transfer', component: TransferComponent, canActivate: [employeeGuard]},
   { path: 'recipients', component: RecipientsComponent},
@@ -71,7 +71,7 @@ export const routes: Routes = [
   //loans
   { path: 'loan-request', component: LoanRequestComponent},
   { path: 'new-payment', component: NewPaymentComponent },
-  { path: 'account/:accountNumber/create-card', component: CreateCardComponent, canActivate: [authGuard] }
+  { path: 'account/:accountNumber/create-card', component: CreateCardComponent, canActivate: [authGuard] },
   { path: 'loan-management/:clientId', component: LoansComponent, canActivate: [authGuard] }
 
 ];
