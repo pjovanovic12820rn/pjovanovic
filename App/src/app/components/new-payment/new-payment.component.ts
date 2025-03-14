@@ -27,14 +27,14 @@ export class NewPaymentComponent {
   ) {}
 
   onSubmit(): void {
-    this.paymentService.createPayment(this.payment).subscribe({
-      next: () => {
-        alert('Plaćanje je kreirano')
-        this.router.navigate(['/transaction-overview'])
-      },
-      error: () => {
-        alert('Došlo je do greške')
-      }
-    })
+    // this.paymentService.createPayment(this.payment).subscribe({
+    //   next: () => {
+    //     alert('Plaćanje je kreirano')
+    //     this.router.navigate(['/transaction-overview'])
+    //   },
+    //   error: () => {
+    //     alert('Došlo je do greške')
+    //   }
+    // })
   }
 }
