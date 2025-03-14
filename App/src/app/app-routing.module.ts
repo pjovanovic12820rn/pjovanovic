@@ -27,6 +27,7 @@ import { NewTransactionComponent } from './components/new-transaction/new-transa
 import { TransactionDetailsComponent } from './components/transaction-details/transaction-details.component';
 import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
 import { CreateCardComponent } from './components/create-card/create-card.component';
+import {PaymentDetailsComponent} from './components/payment-details/payment-details.component';
 
 export const routes: Routes = [
   // login
@@ -57,7 +58,7 @@ export const routes: Routes = [
   { path: 'account/:accountNumber', component: CardsComponent, canActivate: [authGuard]},
   { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeGuard]},
   { path: 'create-current-account', component: AccountCreationComponent, canActivate: [employeeGuard]},
-  { path: 'account-management/:id', component: AccountManagementComponent, canActivate: [authGuard]},
+  { path: 'account-management', component: AccountManagementComponent, canActivate: [authGuard]},
   { path: 'transfer', component: TransferComponent, canActivate: [employeeGuard]},
   { path: 'recipients', component: RecipientsComponent},
 
@@ -70,6 +71,8 @@ export const routes: Routes = [
   //loans
   { path: 'loan-request', component: LoanRequestComponent},
   { path: 'new-payment', component: NewPaymentComponent },
+  { path: 'payment-details', component: PaymentDetailsComponent },
   { path: 'account/:accountNumber/create-card', component: CreateCardComponent, canActivate: [authGuard] }
 
 ];
+

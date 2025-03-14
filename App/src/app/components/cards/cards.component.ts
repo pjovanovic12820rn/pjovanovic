@@ -3,7 +3,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router'
 import { CardService, Card } from '../../services/card.service'
 import { AccountService } from '../../services/account.service'
 import { NgClass, NgForOf } from '@angular/common'
-import { ModalComponent } from '../modal/modal.component'
+import {ModalComponent} from '../shared/modal/modal.component';
+// import { ModalComponent } from '../modal/modal.component'
 
 interface Account {
   accountNumber: string
@@ -17,7 +18,7 @@ interface Account {
   selector: 'app-cards',
   templateUrl: './cards.component.html',
   standalone: true,
-  imports: [NgClass, NgForOf, RouterLink, ModalComponent],
+  imports: [NgClass, NgForOf, RouterLink, ModalComponent], //, ModalComponent
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {

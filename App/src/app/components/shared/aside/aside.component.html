@@ -28,9 +28,9 @@
 
       <!-- Plaćanja -->
       <li>
-        <a class="sidebar-link" (click)="router.navigate(['/placanja'])">
+        <a class="sidebar-link" (click)="openModal()">
           <i class="ri-money-dollar-circle-line sidebar-icon"></i>
-          <span class="sidebar-text">Plaćanja</span>
+          <span class="sidebar-text">Payments</span>
         </a>
       </li>
 
@@ -67,4 +67,15 @@
       </li>
     </ul>
   </div>
+
 </aside>
+<app-modal [title]="'Payment'" [isOpen]="isModalOpen" (closeModalEvent)="closeModal()">
+  <div class="modal-content">
+    <div style="display: grid; gap: 0.5rem; margin-top: 1rem; grid-template-columns: repeat(2, 1fr)">
+      <button class="payment-btn" (click)="navigateTo('/new-payment')">New Payment</button>
+      <button class="payment-btn" (click)="navigateTo('/transfer')">Transfer Payment</button>
+      <button class="payment-btn" (click)="navigateTo('/recipients')">Payment Recipients</button>
+      <button class="payment-btn" (click)="navigateTo('/payment-details')">Payment Details</button>
+    </div>
+  </div>
+</app-modal>

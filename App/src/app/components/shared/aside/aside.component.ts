@@ -1,14 +1,17 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
 import {NgClass, NgIf} from '@angular/common';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {AuthService} from '../../../services/auth.service';
 import {Subscription} from 'rxjs';
+import {ModalComponent} from '../modal/modal.component';
 
 @Component({
   selector: 'app-aside',
   imports: [
     NgClass,
-    NgIf
+    NgIf,
+    ModalComponent,
+    RouterLink
   ],
   templateUrl: './aside.component.html',
   standalone: true,
@@ -25,6 +28,7 @@ export class AsideComponent implements OnInit{
   isClient = false;
   userId: number | null = null;
   private authSubscription!: Subscription; // Subscription to track auth changes
+  isModalOpen: boolean = false;
 
   ngOnInit(): void {
     this.authSubscription = this.authService.authStatus$.subscribe((isAuth) => {
@@ -49,4 +53,15 @@ export class AsideComponent implements OnInit{
     }
   }
 
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+  }
+  navigateTo(route: string) {
+    this.closeModal();
+    this.router.navigate([route]);
+  }
 }

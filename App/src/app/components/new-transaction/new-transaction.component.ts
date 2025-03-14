@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PaymentService } from '../../services/payment.service';
@@ -10,7 +10,7 @@ import { CreatePaymentDto } from '../../models/create-payment-dto';
   templateUrl: './new-transaction.component.html',
   styleUrls: ['./new-transaction.component.css'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
 })
 export class NewTransactionComponent implements OnInit {
   transactionForm!: FormGroup;

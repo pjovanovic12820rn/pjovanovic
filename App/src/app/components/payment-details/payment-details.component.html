@@ -1,0 +1,53 @@
+<div class="payments-container">
+  <h2>Payments</h2>
+
+  <app-alert></app-alert>
+
+  <!-- Filters -->
+  <div class="filter-container">
+    <label for="startDate">Start Date</label>
+    <input type="date" id="startDate" [(ngModel)]="startDate">
+
+    <label for="endDate">End Date</label>
+    <input type="date" id="endDate" [(ngModel)]="endDate">
+
+    <label for="minAmount">Min Amount</label>
+    <input type="number" id="minAmount" [(ngModel)]="minAmount">
+
+    <label for="maxAmount">Max Amount</label>
+    <input type="number" id="maxAmount" [(ngModel)]="maxAmount">
+
+    <label for="paymentStatus">Status</label>
+    <input type="text" id="paymentStatus" [(ngModel)]="paymentStatus">
+
+    <label for="accountNumber">Account Number</label>
+    <input type="text" id="accountNumber" [(ngModel)]="accountNumber">
+
+    <label for="cardNumber">Card Number</label>
+    <input type="text" id="cardNumber" [(ngModel)]="cardNumber">
+
+    <button (click)="applyFilters()">Apply Filters</button>
+  </div>
+
+  <!-- Payment List -->
+  <div id="payments-list" class="payment-list">
+    <div *ngFor="let payment of pagedPayments;" class="payment-card">
+      <span>
+        <strong>{{ payment.senderName }}</strong> ({{ payment.cardNumber }})
+      </span>
+      <p class="amount"><strong>Amount:</strong> {{ payment.amount }}</p>
+      <p><strong>Date:</strong> {{ payment.date | date }}</p>
+      <p><strong>Status:</strong> {{ payment.status }}</p>
+
+      <div class="payment-actions">
+        <button class="view-details-btn" (click)="viewPaymentDetails(payment.id)">View Details</button>
+      </div>
+    </div>
+  </div>
+
+  <app-pagination
+    [totalItems]="totalItems"
+    [pageSize]="pageSize"
+    (pageChanged)="onPageChanged($event)">
+  </app-pagination>
+</div>
