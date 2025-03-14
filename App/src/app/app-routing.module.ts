@@ -17,15 +17,21 @@ import { MailComponent } from './components/mail/mail.component';
 import { CardsComponent } from './components/cards/cards.component';
 import { ClientPortalComponent } from './components/client-portal/client-portal.component';
 import { AccountManagementComponent } from './components/account-management/account-management.component';
-import {TransferComponent} from './components/transfer/transfer.component';
-import {OverviewComponent} from './components/transaction-overview/overview.component';
-import {RecipientsComponent} from './components/recipients/recipients.component';
+import { TransferComponent } from './components/transfer/transfer.component';
+import { OverviewComponent } from './components/transaction-overview/overview.component';
+import { RecipientsComponent } from './components/recipients/recipients.component';
+import { LoanRequestComponent } from './components/loan-request/loan-request.component';
+import { ExchageRateListComponent } from './components/exchage-rate-list/exchage-rate-list.component';
+import { NewPaymentComponent } from './components/new-payment/new-payment.component';
+import { NewTransactionComponent } from './components/new-transaction/new-transaction.component';
+import { TransactionDetailsComponent } from './components/transaction-details/transaction-details.component';
+import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
+import { CreateCardComponent } from './components/create-card/create-card.component';
 import { LoansComponent } from './components/loans/loans.component';
 
 export const routes: Routes = [
   // login
   { path: '', component: WelcomeComponent },
-  { path: 'login', component: LoginComponent },
   { path: 'login/:type', component: LoginComponent },
 
   // password
@@ -56,7 +62,16 @@ export const routes: Routes = [
   { path: 'transfer', component: TransferComponent, canActivate: [employeeGuard]},
   { path: 'recipients', component: RecipientsComponent},
 
-  // load
-  {path: 'loan-management/:clientId', component: LoansComponent, canActivate: [authGuard]}
+  { path: 'card/:cardNumber/transactions',component: TransactionListComponent, canActivate: [authGuard]},
+  { path: 'card/:cardNumber/transactions/new', component: NewTransactionComponent, canActivate: [authGuard]},
+
+  { path: 'transactions/:transactionId',component: TransactionDetailsComponent, canActivate: [authGuard]},
+  { path: 'exchange-rate', component: ExchageRateListComponent,canActivate: [authGuard]},
+
+  //loans
+  { path: 'loan-request', component: LoanRequestComponent},
+  { path: 'new-payment', component: NewPaymentComponent },
+  { path: 'account/:accountNumber/create-card', component: CreateCardComponent, canActivate: [authGuard] }
+  { path: 'loan-management/:clientId', component: LoansComponent, canActivate: [authGuard] }
 
 ];

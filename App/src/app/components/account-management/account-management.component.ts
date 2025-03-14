@@ -5,7 +5,7 @@ import { AccountService } from '../../services/account.service';
 import { AccountResponse } from '../../models/account-response.model';
 import { FormsModule } from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
-import {ModalComponent} from '../modal/modal.component';
+import {ModalComponent} from '../shared/modal/modal.component';
 import {RouterLink, ActivatedRoute, Router} from '@angular/router';
 
 @Component({
@@ -123,8 +123,7 @@ export class AccountManagementComponent implements OnInit {
     return this.authService.isEmployee();
   }
   isClient(){
-    return true;
-    // return this.authService.isClient();
+    return this.authService.isClient();
   }
 
   loadAccounts() {
