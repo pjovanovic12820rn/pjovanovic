@@ -3,7 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router'
 import { CardService, Card } from '../../services/card.service'
 import { AccountService } from '../../services/account.service'
 import { NgClass, NgForOf } from '@angular/common'
-import { ModalComponent } from '../modal/modal.component'
+import {ModalComponent} from '../shared/modal/modal.component';
 
 interface Account {
   accountNumber: string

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlertService } from '../../services/alert.service';
 import { AccountService } from '../../services/account.service';
@@ -6,11 +6,11 @@ import { AccountResponse } from '../../models/account-response.model';
 import { FormsModule } from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
 import {ModalComponent} from '../shared/modal/modal.component';
-import {RouterLink, ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-account-management',
-  imports: [CommonModule, FormsModule, RouterLink, ModalComponent],
+  imports: [CommonModule, FormsModule, ModalComponent],
   standalone: true,
   templateUrl: './account-management.component.html',
   styleUrl: './account-management.component.css',

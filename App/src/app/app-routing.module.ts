@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { authGuard, adminGuard, employeeGuard } from './guards/auth-guard.guard';
+import {authGuard, adminGuard, employeeGuard, employeeOrAdminGuard} from './guards/auth-guard.guard';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { EmployeesComponent } from './components/employees/employees.component';
 import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
@@ -71,7 +71,7 @@ export const routes: Routes = [
   //loans
   { path: 'loan-request', component: LoanRequestComponent},
   { path: 'new-payment', component: NewPaymentComponent },
-  { path: 'account/:accountNumber/create-card', component: CreateCardComponent, canActivate: [authGuard] }
+  { path: 'account/:accountNumber/create-card', component: CreateCardComponent, canActivate: [authGuard] },
   { path: 'loan-management/:clientId', component: LoansComponent, canActivate: [authGuard] }
 
 ];
