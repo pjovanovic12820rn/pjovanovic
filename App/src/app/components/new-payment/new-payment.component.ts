@@ -6,12 +6,13 @@ import { CreatePaymentDto } from '../../models/create-payment-dto';
 import { AlertService } from '../../services/alert.service';
 import {AccountResponse} from '../../models/account-response.model';
 import {AccountService} from '../../services/account.service';
+import {NgForOf} from '@angular/common';
 
 @Component({
   selector: 'app-new-payment',
   templateUrl: './new-payment.component.html',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, NgForOf],
   styleUrls: ['./new-payment.component.css']
 })
 export class NewPaymentComponent {
@@ -51,7 +52,7 @@ export class NewPaymentComponent {
     this.paymentService.createPayment(this.payment).subscribe({
       next: (response) => {
         this.alertService.showAlert('success', 'Payment created!');
-        this.router.navigate(['/transaction-overview']);
+        this.router.navigate(['/transaction-overview']); //transaction-overview mejbi
       },
       error: (error) => {
         this.alertService.showAlert('error', 'There has been an error: ' + error.message);
