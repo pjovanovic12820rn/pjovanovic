@@ -29,6 +29,7 @@ export class AsideComponent implements OnInit{
   userId: number | null = null;
   private authSubscription!: Subscription; // Subscription to track auth changes
   isModalOpen: boolean = false;
+  isAccountModalOpen: boolean = false;
 
   ngOnInit(): void {
     this.authSubscription = this.authService.authStatus$.subscribe((isAuth) => {
@@ -59,6 +60,13 @@ export class AsideComponent implements OnInit{
 
   closeModal() {
     this.isModalOpen = false;
+  }
+  openAccountModal() {
+    this.isAccountModalOpen = true;
+  }
+
+  closeAccountModal() {
+    this.isAccountModalOpen = false;
   }
   navigateTo(route: string) {
     this.closeModal();

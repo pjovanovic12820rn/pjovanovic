@@ -52,7 +52,16 @@ export class NewPaymentComponent {
     this.paymentService.createPayment(this.payment).subscribe({
       next: (response) => {
         this.alertService.showAlert('success', 'Payment created!');
-        this.router.navigate(['/payment-details']); //transaction-overview mejbi
+        // this.router.navigate(['/payment-details']);
+        this.router.navigate(['/success'], {
+          state: {
+            title: 'Payment Created!',
+            message: 'Your payment has been successfully processed.',
+            buttonName: 'View Payments',
+            continuePath: '/payment-details'
+          }
+        });
+
       },
       error: (error) => {
         this.alertService.showAlert('error', 'There has been an error: ' + error.message);

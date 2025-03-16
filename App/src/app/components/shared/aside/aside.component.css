@@ -107,3 +107,25 @@
 .payment-btn:hover {
   background: #8E79D2;
 }
+
+
+.new-account-options {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.account-option {
+  padding: 1rem 2rem;
+  background: #6A4BBC;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.account-option:hover {
+  background: #8E79D2;
+}
