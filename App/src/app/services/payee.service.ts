@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Payee } from '../models/payee.model';
@@ -21,25 +21,64 @@ export class PayeeService {
     });
   }
 
-  getPayeesByClientId(): Observable<Payee[]> {
+  // getPayeesByClientId(): Observable<Payee[]> {
+  //   return this.http.get<Payee[]>(this.apiURL, {
+  //     headers: this.getAuthHeaders()
+  //   });
+  // }
+  getPayeesByClientId(cacheBuster?: number): Observable<Payee[]> {
+    let params = new HttpParams();
+    if (cacheBuster) {
+      params = params.set('t', cacheBuster.toString());
+    }
+
     return this.http.get<Payee[]>(this.apiURL, {
-      headers: this.getAuthHeaders()
+      headers: this.getAuthHeaders(),
+      params
     });
   }
 
 
-  createPayee(payee: Payee): Observable<any> {
-    return this.http.post(this.apiURL2,
-      { name: payee.name, accountNumber: payee.accountNumber },
-      { headers: this.getAuthHeaders() }
+  // createPayee(payee: Payee): Observable<any> {
+  //   return this.http.post(this.apiURL2,
+  //     { name: payee.name, accountNumber: payee.accountNumber },
+  //     { headers: this.getAuthHeaders() }
+  //   );
+  // }
+  //
+  //
+  // updatePayee(id: number, payee: Payee): Observable<string> {
+  //   return this.http.put<string>(`${this.apiURL2}/${id}`,
+  //     { name: payee.name, accountNumber: payee.accountNumber },
+  //     { headers: this.getAuthHeaders() }
+  //   );
+  // }
+
+  createPayee(payee: Payee): Observable<string> { // str resp
+    return this.http.post<string>(
+      this.apiURL2,
+      {
+        name: payee.name,
+        accountNumber: payee.accountNumber
+      },
+      {
+        headers: this.getAuthHeaders(),
+        responseType: 'text' as 'json' // fors txt resp
+      }
     );
   }
 
-
-  updatePayee(id: number, payee: Payee): Observable<string> {
-    return this.http.put<string>(`${this.apiURL2}/${id}`,
-      { name: payee.name, accountNumber: payee.accountNumber },
-      { headers: this.getAuthHeaders() }
+  updatePayee(id: number, payee: Payee): Observable<string> { // str resp
+    return this.http.put<string>(
+      `${this.apiURL2}/${id}`,
+      {
+        name: payee.name,
+        accountNumber: payee.accountNumber
+      },
+      {
+        headers: this.getAuthHeaders(),
+        responseType: 'text' as 'json'
+      }
     );
   }
 
