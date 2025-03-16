@@ -39,6 +39,7 @@ export class PaymentDetailsComponent implements OnInit {
   accountNumber?: string;
   cardNumber?: string;
 
+  showAdditionalFilters: boolean = false;
   ngOnInit(): void {
     this.loadPayments();
   }
@@ -60,7 +61,6 @@ export class PaymentDetailsComponent implements OnInit {
         this.filteredPayments = [...this.payments];
         this.totalItems = response.totalElements;
         this.updatePagedPayments();
-        alert("USPESAN ZAHTEV?");
       },
       error: () => {
         this.alertService.showAlert('error', 'Failed to load payments. Please try again later.');
@@ -84,7 +84,11 @@ export class PaymentDetailsComponent implements OnInit {
     this.loadPayments();
   }
 
-  viewPaymentDetails(id: number) {
-    alert(id);
+  // viewPaymentDetails(id: number) {
+  //   alert(id);
+  // }
+
+  toggleFilters(): void {
+    this.showAdditionalFilters = !this.showAdditionalFilters;
   }
 }

@@ -11,21 +11,26 @@
     <label for="endDate">End Date</label>
     <input type="date" id="endDate" [(ngModel)]="endDate">
 
-    <label for="minAmount">Min Amount</label>
-    <input type="number" id="minAmount" [(ngModel)]="minAmount">
+    <button (click)="toggleFilters()" class="toggle-filters-btn">
+      {{ showAdditionalFilters ? 'Hide Filters' : 'Show More Filters' }}
+    </button>
 
-    <label for="maxAmount">Max Amount</label>
-    <input type="number" id="maxAmount" [(ngModel)]="maxAmount">
+    <div *ngIf="showAdditionalFilters" class="additional-filters">
+      <label for="minAmount">Min Amount</label>
+      <input type="number" id="minAmount" [(ngModel)]="minAmount">
 
-    <label for="paymentStatus">Status</label>
-    <input type="text" id="paymentStatus" [(ngModel)]="paymentStatus">
+      <label for="maxAmount">Max Amount</label>
+      <input type="number" id="maxAmount" [(ngModel)]="maxAmount">
 
-    <label for="accountNumber">Account Number</label>
-    <input type="text" id="accountNumber" [(ngModel)]="accountNumber">
+      <label for="paymentStatus">Status</label>
+      <input type="text" id="paymentStatus" [(ngModel)]="paymentStatus">
 
-    <label for="cardNumber">Card Number</label>
-    <input type="text" id="cardNumber" [(ngModel)]="cardNumber">
+      <label for="accountNumber">Account Number</label>
+      <input type="text" id="accountNumber" [(ngModel)]="accountNumber">
 
+      <label for="cardNumber">Card Number</label>
+      <input type="text" id="cardNumber" [(ngModel)]="cardNumber">
+    </div>
     <button (click)="applyFilters()">Apply Filters</button>
   </div>
 
@@ -33,15 +38,16 @@
   <div id="payments-list" class="payment-list">
     <div *ngFor="let payment of pagedPayments;" class="payment-card">
       <span>
-        <strong>{{ payment.senderName }}</strong> ({{ payment.cardNumber }})
+        <strong>{{ payment.senderName }}</strong>
+        <span *ngIf="payment.cardNumber"> ({{ payment.cardNumber }})</span>
       </span>
       <p class="amount"><strong>Amount:</strong> {{ payment.amount }}</p>
       <p><strong>Date:</strong> {{ payment.date | date }}</p>
       <p><strong>Status:</strong> {{ payment.status }}</p>
 
-      <div class="payment-actions">
-        <button class="view-details-btn" (click)="viewPaymentDetails(payment.id)">View Details</button>
-      </div>
+<!--      <div class="payment-actions">-->
+<!--        <button class="view-details-btn" (click)="viewPaymentDetails(payment.id)">View Details</button>-->
+<!--      </div>-->
     </div>
   </div>
 

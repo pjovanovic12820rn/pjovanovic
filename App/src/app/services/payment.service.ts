@@ -74,10 +74,10 @@ export class PaymentService {
       catchError(this.handleError)
     );
   }
-
-  createPayment(dto: CreatePaymentDto): Observable<{ id: number }> {
-    return this.http.post<{ id: number }>(this.baseUrl, dto, {
-      headers: this.getAuthHeaders()
+  createPayment(dto: CreatePaymentDto): Observable<string> {  //bio je id originalno, ali nono (new trans trazi to)
+    return this.http.post(this.baseUrl, dto, {
+      headers: this.getAuthHeaders(),
+      responseType: 'text'
     }).pipe(
       catchError(this.handleError)
     );

@@ -38,9 +38,9 @@ export class NewPaymentComponent {
   }
 
   loadAccounts(): void {
-    this.accountService.getAllAccounts(0, 100).subscribe({
+    this.accountService.getMyAccountsRegular().subscribe({
       next: (response) => {
-        this.accounts = response.content;
+        this.accounts = response;
       },
       error: () => {
         this.alertService.showAlert('error', 'Failed to load accounts. Please try again later.');
@@ -52,7 +52,7 @@ export class NewPaymentComponent {
     this.paymentService.createPayment(this.payment).subscribe({
       next: (response) => {
         this.alertService.showAlert('success', 'Payment created!');
-        this.router.navigate(['/transaction-overview']); //transaction-overview mejbi
+        this.router.navigate(['/payment-details']); //transaction-overview mejbi
       },
       error: (error) => {
         this.alertService.showAlert('error', 'There has been an error: ' + error.message);
