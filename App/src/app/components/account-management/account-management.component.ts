@@ -156,7 +156,7 @@ export class AccountManagementComponent implements OnInit {
 
   viewCards(accountNumber: string): void {
     this.selectedAccountNumber = accountNumber;
-    window.location.href = `/account/${accountNumber}`;
+    this.router.navigate([`/account/${accountNumber}`]);
   }
 
 }

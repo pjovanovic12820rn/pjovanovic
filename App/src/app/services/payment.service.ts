@@ -65,15 +65,12 @@ export class PaymentService {
     );
   }
 
-
-
-
-
   getTransactionDetails(id: number): Observable<PaymentDetailsDto> {
     return this.http.get<PaymentDetailsDto>(`${this.baseUrl}/${id}`).pipe(
       catchError(this.handleError)
     );
   }
+
   createPayment(dto: CreatePaymentDto): Observable<string> {  //bio je id originalno, ali nono (new trans trazi to)
     return this.http.post(this.baseUrl, dto, {
       headers: this.getAuthHeaders(),
@@ -90,10 +87,6 @@ export class PaymentService {
       );
   }
 
-  // private handleError(error: any): Observable<never> {
-  //   console.error('An error occurred:', error);
-  //   return throwError(() => new Error('Something bad happened; please try again later.'));
-  // }
   private handleError(error: any): Observable<never> {
     let errorMessage = 'Something went wrong :(';
     if (error.error instanceof ErrorEvent) {
