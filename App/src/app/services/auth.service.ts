@@ -90,6 +90,10 @@ export class AuthService {
     return this.getUserPermissions().includes('client');
   }
 
+  isActuary(): boolean {
+    return this.getUserPermissions().includes('actuary');
+  }
+
   requestPasswordReset(email: string): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/request-password-reset`, { email });
   }
