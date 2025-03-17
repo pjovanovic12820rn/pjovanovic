@@ -46,10 +46,10 @@ export class NewTransactionComponent implements OnInit {
     const dto: CreatePaymentDto = this.transactionForm.value;
     this.paymentService.createPayment(dto).subscribe({
       next: (res) => {
-        const createdId = res.id;
-        this.router.navigate(['/transactions', createdId], {
-          queryParams: { confirm: 'true' },
-        });
+        // const createdId = res.id;//TODO Ne moze ovo jer ne vraca id!
+        // this.router.navigate(['/transactions', createdId], {
+        //   queryParams: { confirm: 'true' },
+        // });
       },
       error: (err) => {
         console.error('Error creating payment:', err);

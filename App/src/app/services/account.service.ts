@@ -63,8 +63,8 @@ export class AccountService {
   }
 
   getAllAccounts(
-    page: number,
-    size: number
+    page: number = 0,
+    size: number = 100
   ): Observable<{ content: AccountResponse[]; totalElements: number }> {
     let params = new HttpParams().set('page', page).set('size', size);
     const headers = this.getAuthHeaders();
