@@ -28,6 +28,7 @@ import { TransactionDetailsComponent } from './components/transaction-details/tr
 import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
 import { CreateCardComponent } from './components/create-card/create-card.component';
 import { LoansComponent } from './components/loans/loans.component';
+import { OptionsDisplayComponent } from './components/option/option.component';
 
 export const routes: Routes = [
   // login
@@ -72,6 +73,9 @@ export const routes: Routes = [
   { path: 'loan-request', component: LoanRequestComponent},
   { path: 'new-payment', component: NewPaymentComponent },
   { path: 'account/:accountNumber/create-card', component: CreateCardComponent, canActivate: [authGuard] },
-  { path: 'loan-management/:clientId', component: LoansComponent, canActivate: [authGuard] }
+  { path: 'loan-management/:clientId', component: LoansComponent, canActivate: [authGuard] },
+
+  //options
+  { path: 'options/:stockId', component: OptionsDisplayComponent, canActivate: [authGuard] },
 
 ];

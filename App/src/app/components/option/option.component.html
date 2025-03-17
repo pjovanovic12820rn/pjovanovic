@@ -1,0 +1,119 @@
+<!-- options-display.component.html -->
+<div class="options-container">
+    <h3>Options Chain</h3>
+    
+    <div class="expiration-selection" *ngIf="optionChains.length > 0">
+      <table class="expiration-table">
+        <thead>
+          <tr>
+            <th>Expiration Date</th>
+            <th>Days to Expiry</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let chain of optionChains; let i = index" 
+              [class.selected]="i === selectedExpirationIndex"
+              (click)="selectExpiration(i)">
+            <td>{{ chain.expirationDate | date:'dd.MM.yyyy' }}</td>
+            <td>{{ chain.daysToExpiry }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="strike-control">
+      <label for="maxStrikes">Maximum Strike Levels: </label>
+      <input id="maxStrikes" type="number" [(ngModel)]="maxVisibleStrikes" min="1" max="20">
+    </div>
+    
+    <div class="options-chain" *ngIf="selectedExpirationIndex >= 0 && optionChains.length > 0">
+      <div class="options-table-container">
+        <table class="options-table">
+          <thead>
+            <tr>
+              <th colspan="6">CALLS</th>
+              <th></th>
+              <th colspan="6">PUTS</th>
+            </tr>
+            <tr>
+              <th>Last</th>
+              <th>Theta</th>
+              <th>Bid</th>
+              <th>Ask</th>
+              <th>Vol</th>
+              <th>OI</th>
+              <th>Strike</th>
+              <th>Last</th>
+              <th>Theta</th>
+              <th>Bid</th>
+              <th>Ask</th>
+              <th>Vol</th>
+              <th>OI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let pair of getVisiblePairs()">
+              <tr [class.shared-price]="isSharedPrice(pair.strikePrice)">
+                <!-- CALL side -->
+                <td [class.in-the-money]="isInTheMoney(OptionType.CALL, pair.strikePrice)" 
+                    [class.out-of-money]="!isInTheMoney(OptionType.CALL, pair.strikePrice)">
+                  {{ pair.call?.price | currency }}
+                </td>
+                <td [class.in-the-money]="isInTheMoney(OptionType.CALL, pair.strikePrice)" 
+                    [class.out-of-money]="!isInTheMoney(OptionType.CALL, pair.strikePrice)">
+                  {{ calculateTheta(pair.call) }}
+                </td>
+                <td [class.in-the-money]="isInTheMoney(OptionType.CALL, pair.strikePrice)" 
+                    [class.out-of-money]="!isInTheMoney(OptionType.CALL, pair.strikePrice)">
+                  {{ pair.call !== null ? ((pair.call.price - 0.05) | currency) : 'N/A' }}
+                </td>
+                <td [class.in-the-money]="isInTheMoney(OptionType.CALL, pair.strikePrice)" 
+                    [class.out-of-money]="!isInTheMoney(OptionType.CALL, pair.strikePrice)">
+                  {{ pair.call?.ask | currency }}
+                </td>
+                <td [class.in-the-money]="isInTheMoney(OptionType.CALL, pair.strikePrice)" 
+                    [class.out-of-money]="!isInTheMoney(OptionType.CALL, pair.strikePrice)">
+                  {{ pair.call ? (Math.floor(Math.random() * 200)) : 'N/A' }}
+                </td>
+                <td [class.in-the-money]="isInTheMoney(OptionType.CALL, pair.strikePrice)" 
+                    [class.out-of-money]="!isInTheMoney(OptionType.CALL, pair.strikePrice)">
+                  {{ pair.call?.openInterest || 'N/A' }}
+                </td>
+                
+                <!-- Strike Price in the middle -->
+                <td class="strike-price">
+                  {{ isSharedPrice(pair.strikePrice) ? 'Shared $' + pair.strikePrice : '$' + pair.strikePrice }}
+                </td>
+                
+                <!-- PUT side -->
+                <td [class.in-the-money]="isInTheMoney(OptionType.PUT, pair.strikePrice)" 
+                    [class.out-of-money]="!isInTheMoney(OptionType.PUT, pair.strikePrice)">
+                  {{ pair.put?.price | currency }}
+                </td>
+                <td [class.in-the-money]="isInTheMoney(OptionType.PUT, pair.strikePrice)" 
+                    [class.out-of-money]="!isInTheMoney(OptionType.PUT, pair.strikePrice)">
+                  {{ calculateTheta(pair.put) }}
+                </td>
+                <td [class.in-the-money]="isInTheMoney(OptionType.PUT, pair.strikePrice)" 
+                    [class.out-of-money]="!isInTheMoney(OptionType.PUT, pair.strikePrice)">
+                  {{ pair.put !== null ? ((pair.put.price - 0.05) | currency) : 'N/A' }}
+                </td>
+                <td [class.in-the-money]="isInTheMoney(OptionType.PUT, pair.strikePrice)" 
+                    [class.out-of-money]="!isInTheMoney(OptionType.PUT, pair.strikePrice)">
+                  {{ pair.put?.ask | currency }}
+                </td>
+                <td [class.in-the-money]="isInTheMoney(OptionType.PUT, pair.strikePrice)" 
+                    [class.out-of-money]="!isInTheMoney(OptionType.PUT, pair.strikePrice)">
+                  {{ pair.put ? (Math.floor(Math.random() * 200)) : 'N/A' }}
+                </td>
+                <td [class.in-the-money]="isInTheMoney(OptionType.PUT, pair.strikePrice)" 
+                    [class.out-of-money]="!isInTheMoney(OptionType.PUT, pair.strikePrice)">
+                  {{ pair.put?.openInterest || 'N/A' }}
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
