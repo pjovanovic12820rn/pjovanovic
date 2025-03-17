@@ -1,9 +1,13 @@
 export interface Account {
+    name: string;             
+    number: string;           
+    availableBalance: number; 
+    
     currency: string;
     clientId: number;
     employeeId: number;
     companyId?: number;
-    initialBalance: number; 
+    initialBalance: number;
     dailyLimit: number;
     monthlyLimit: number;
     dailySpending: number;
