@@ -53,7 +53,7 @@
     <div *ngIf="isAdmin" class="admin-toggle">
       <label>Admin Privileges</label>
       <button type="button" (click)="toggleAdminStatus()" [disabled]="updatingAdminStatus">
-        {{ employee.role?.includes('ADMIN') ? 'Revoke Admin' : 'Make Admin' }}
+        {{ employee.role.includes('ADMIN') ? 'Revoke Admin' : 'Make Admin' }}
       </button>
     </div>
   </form>

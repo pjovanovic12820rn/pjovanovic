@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { PaymentOverviewDto } from '../models/payment-overview-dto';
 import { PaymentDetailsDto } from '../models/payment-details-dto';
 import { CreatePaymentDto } from '../models/create-payment-dto';
-import {AuthService} from './auth.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',

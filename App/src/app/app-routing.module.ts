@@ -64,11 +64,11 @@ export const routes: Routes = [
   { path: 'transfer', component: TransferComponent, canActivate: [employeeOrAdminGuard]},
   { path: 'recipients', component: RecipientsComponent},
 
-  { path: 'card/:cardNumber/transactions',component: TransactionListComponent, canActivate: [authGuard]},
+  { path: 'card/:cardNumber/transactions', component: TransactionListComponent, canActivate: [authGuard]},
   { path: 'card/:cardNumber/transactions/new', component: NewTransactionComponent, canActivate: [authGuard]},
 
   { path: 'transactions/:transactionId',component: TransactionDetailsComponent, canActivate: [authGuard]},
-  { path: 'exchange-rate', component: ExchageRateListComponent,canActivate: [authGuard]},
+  { path: 'exchange-rate', component: ExchageRateListComponent, canActivate: [authGuard]},
 
   //loans
   { path: 'loan-request', component: LoanRequestComponent},
@@ -79,6 +79,6 @@ export const routes: Routes = [
 
   //success
   { path: 'success', component: SuccessComponent }
-  
+
 ];
 

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { AuthService } from './auth.service'
+import {PaymentOverviewDto} from '../models/payment-overview-dto';
+import {catchError} from 'rxjs/operators';
 
 export interface Card {
   cardNumber: string
@@ -34,13 +36,24 @@ export class CardService {
       'Content-Type': 'application/json'
     })
   }
+
+  getTransactions(cardNumber?: string): Observable<PaymentOverviewDto[]> {
+    let url = this.apiUrl;
+    if (cardNumber) {
+      url += `?cardNumber=${cardNumber}`;
+    }
+    return this.http.get<PaymentOverviewDto[]>(url)
+  }
+
   getCardsByAccount(accountNumber: string): Observable<Card[]> {
     return this.http.get<Card[]>(`${this.apiUrl}/${accountNumber}/cards`, { headers: this.getAuthHeaders() })
   }
+
   blockCard(accountNumber: string, cardNumber: string): Observable<any> {
     const url = `${this.apiUrl}/${accountNumber}/cards/${cardNumber}/block`
     return this.http.post(url, {}, { headers: this.getAuthHeaders() })
   }
+
   createCard(dto: CreateCardDto): Observable<any> {
     const url = `${this.apiUrl}/${dto.accountNumber}/cards/create`
     return this.http.post(url, dto, { headers: this.getAuthHeaders() })

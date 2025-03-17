@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { UserService } from '../../services/user.service';
+import { ClientService } from '../../services/client.service';
 import { User } from '../../models/user.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from '../../services/account.service';
@@ -33,7 +33,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
   users: User[] = [];
   currencies: Currency[] = [];
   generatedAccountNumber: string = '';
-  private userService = inject(UserService);
+  private userService = inject(ClientService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private accountService = inject(AccountService);
