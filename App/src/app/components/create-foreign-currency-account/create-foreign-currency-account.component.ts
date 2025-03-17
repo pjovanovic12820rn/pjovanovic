@@ -256,6 +256,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     this.accountService.createForeignAccount(foreignCurrencyAccountData).subscribe({
       next: () => {
         this.alertService.showAlert('success', 'Account created successfully!');
+        this.router.navigate(['/users']);
       },
       error: () => {
         this.alertService.showAlert(
@@ -268,5 +269,23 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
 
   onCreateNewUserClick() {
     this.router.navigate(['/register-user']);
+  }
+
+  isBusinessFormValid(): boolean {
+    if (!this.isBusinessAccount) return true;
+
+    const businessFields = [
+      'companyName',
+      'companyRegistrationNumber',
+      'taxIdentificationNumber',
+      'companyActivityCode',
+      'companyAddress',
+      'majorityOwnerId'
+    ];
+
+    return businessFields.every(field => {
+      const control = this.accountForm.get(field);
+      return control?.valid && control?.value.trim() !== '';
+    });
   }
 }

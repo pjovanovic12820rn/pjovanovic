@@ -139,3 +139,46 @@ input:focus, select:focus {
     transform: translateY(0);
   }
 }
+/*za da izgleda ~ok*/
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+}
+
+.column {
+  flex: 1;
+}
+
+.employee-info {
+  background: #f8f8f8;
+  padding: 15px;
+  border-radius: 6px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.employee-info p {
+  margin: 5px 0;
+  font-size: 1rem;
+  color: #333;
+  text-align: left;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #6A4BBC;
+}
+.submit-btn:disabled {
+  background: #C2B4E2;
+  cursor: not-allowed;
+  transform: none; /
+}

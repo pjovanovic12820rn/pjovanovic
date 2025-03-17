@@ -67,5 +67,14 @@ export class NewPaymentComponent {
         this.alertService.showAlert('error', 'There has been an error: ' + error.message);
       }
     });
+    // this.paymentService.createPayment(this.payment).subscribe({
+    //   next: () => {
+    //     alert('Plaćanje je kreirano')
+    //     this.router.navigate(['/transaction-overview'])
+    //   },
+    //   error: () => {
+    //     alert('Došlo je do greške')
+    //   }
+    // })
   }
 }

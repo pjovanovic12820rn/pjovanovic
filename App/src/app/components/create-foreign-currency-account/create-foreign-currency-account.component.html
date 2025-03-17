@@ -15,77 +15,93 @@
   </div>
 
   <form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
-    <h3>Account Details</h3>
+    <div class="row">
+      <div class="column">
 
-    <div class="form-group">
-      <label for="currency">Currency:</label>
-      <select id="currency" formControlName="currency">
-        <option value="">Select Currency</option>
-        <option *ngFor="let currency of currencies" [value]="currency.code">{{ currency.name }} ({{ currency.code }})</option>
-      </select>
-    </div>
+        <h3>Account Owner</h3>
+        <div class="form-group">
+          <label for="clientId">Select Existing User:</label>
+          <select id="clientId" formControlName="clientId">
+            <option value="">Select User</option>
+            <option *ngFor="let user of users" [value]="user.id">{{ user.firstName }} {{ user.lastName }}</option>
+          </select>
+        </div>
+        <button type="button" class="alt-btn" (click)="onCreateNewUserClick()">Create New User</button>
 
-    <div *ngIf="isBusinessAccount">
-      <h3>Company Information</h3>
-      <div class="form-group">
-        <label for="companyName">Company Name:</label>
-        <input id="companyName" type="text" formControlName="companyName">
+        <h3>Employee Information</h3>
+        <div class="employee-info">
+          <p>Logged in employee: <strong>{{ loggedInEmployeeFullName }}</strong> Position: <strong>{{ loggedInEmployeePosition }}</strong></p>
+        </div>
+
       </div>
-      <div class="form-group">
-        <label for="companyRegistrationNumber">Company Registration Number:</label>
-        <input id="companyRegistrationNumber" type="text" formControlName="companyRegistrationNumber">
-      </div>
-      <div class="form-group">
-        <label for="taxIdentificationNumber">Tax Identification Number:</label>
-        <input id="taxIdentificationNumber" type="text" formControlName="taxIdentificationNumber">
-      </div>
-      <div class="form-group">
-        <label for="companyActivityCode">Company Activity Code:</label>
-        <input id="companyActivityCode" type="text" formControlName="companyActivityCode">
-      </div>
-      <div class="form-group">
-        <label for="companyAddress">Company Address:</label>
-        <input id="companyAddress" type="text" formControlName="companyAddress">
-      </div>
-      <div class="form-group">
-        <label for="majorityOwnerId">Majority Owner ID:</label>
-        <input id="majorityOwnerId" type="text" formControlName="majorityOwnerId">
-      </div>
-    </div>
 
-    <h3>Account Owner</h3>
-    <div class="form-group">
-      <label for="clientId">Select Existing User:</label>
-      <select id="clientId" formControlName="clientId">
-        <option value="">Select User</option>
-        <option *ngFor="let user of users" [value]="user.id">{{ user.firstName }} {{ user.lastName }}</option>
-      </select>
-    </div>
-    <button type="button" class="alt-btn" (click)="onCreateNewUserClick()">Create New User</button>
+      <div class="column">
+        <h3>Limits and Initial Card</h3>
+        <div class="form-group">
+          <label for="dailyLimit">Daily Limit:</label>
+          <input id="dailyLimit" type="number" formControlName="dailyLimit">
+        </div>
+        <div class="form-group">
+          <label for="monthlyLimit">Monthly Limit:</label>
+          <input id="monthlyLimit" type="number" formControlName="monthlyLimit">
+        </div>
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="createCard" formControlName="createCard">
+          <label for="createCard">Create initial card</label>
+        </div>
 
-    <h3>Limits and Initial Card</h3>
-    <div class="form-group">
-      <label for="dailyLimit">Daily Limit:</label>
-      <input id="dailyLimit" type="number" formControlName="dailyLimit">
-    </div>
-    <div class="form-group">
-      <label for="monthlyLimit">Monthly Limit:</label>
-      <input id="monthlyLimit" type="number" formControlName="monthlyLimit">
-    </div>
-    <div class="form-group">
-      <input type="checkbox" id="createCard" formControlName="createCard">
-      <label for="createCard">Create initial card</label>
-    </div>
+<!--        <h3>Generated Account Number</h3>-->
+<!--        <div class="form-group">-->
+<!--          <label for="accountNumber">Account Number:</label>-->
+<!--          <input id="accountNumber" type="text" formControlName="accountNumber" readonly>-->
+<!--        </div>-->
+        <h3>Account Details</h3>
 
-    <h3>Generated Account Number</h3>
-    <div class="form-group">
-      <label for="accountNumber">Account Number:</label>
-      <input id="accountNumber" type="text" formControlName="accountNumber" readonly>
+        <div class="form-group">
+          <label for="currency">Currency:</label>
+          <select id="currency" formControlName="currency">
+            <option value="">Select Currency</option>
+            <option *ngFor="let currency of currencies" [value]="currency.code">{{ currency.name }} ({{ currency.code }})</option>
+          </select>
+        </div>
+
+        <div *ngIf="isBusinessAccount">
+          <h3>Company Information</h3>
+          <div class="form-group">
+            <label for="companyName">Company Name:</label>
+            <input id="companyName" type="text" formControlName="companyName">
+          </div>
+          <div class="form-group">
+            <label for="companyRegistrationNumber">Company Registration Number:</label>
+            <input id="companyRegistrationNumber" type="text" formControlName="companyRegistrationNumber">
+          </div>
+          <div class="form-group">
+            <label for="taxIdentificationNumber">Tax Identification Number:</label>
+            <input id="taxIdentificationNumber" type="text" formControlName="taxIdentificationNumber">
+          </div>
+          <div class="form-group">
+            <label for="companyActivityCode">Company Activity Code:</label>
+            <input id="companyActivityCode" type="text" formControlName="companyActivityCode">
+          </div>
+          <div class="form-group">
+            <label for="companyAddress">Company Address:</label>
+            <input id="companyAddress" type="text" formControlName="companyAddress">
+          </div>
+          <div class="form-group">
+            <label for="majorityOwnerId">Majority Owner ID:</label>
+            <input id="majorityOwnerId" type="text" formControlName="majorityOwnerId">
+          </div>
+        </div>
+
+      </div>
     </div>
-
-    <h3>Employee Information</h3>
-    <p>Logged in employee: <strong>{{ loggedInEmployeeFullName }}</strong>, Position: <strong>{{ loggedInEmployeePosition }}</strong></p>
-
-    <button type="submit" class="submit-btn" [disabled]="accountForm.invalid">Create Account</button>
+<!--    <button type="submit" class="submit-btn" [disabled]="accountForm.invalid">Create Account</button>-->
+    <button
+      type="submit"
+      class="submit-btn"
+      [disabled]="(accountForm.invalid || !isBusinessFormValid() || !accountForm.get('clientId')?.value)"
+    >
+      Create Account
+    </button>
   </form>
 </div>
