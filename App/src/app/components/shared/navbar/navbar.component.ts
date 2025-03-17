@@ -1,17 +1,22 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
+import {AsideComponent} from '../aside/aside.component';
+import {DropdownComponent} from '../dropdown/dropdown.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AsideComponent, DropdownComponent],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+  isDropdownOpen: boolean = false;
+  isSidebarOpen: boolean = false;
+
   protected router = inject(Router);
   protected authService = inject(AuthService);
 
@@ -48,5 +53,17 @@ export class NavbarComponent implements OnInit {
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
     }
+  }
+
+  toggleDropdown(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  toggleSidebar(): void {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  getUserName() {
+    return this.authService.getUserName();
   }
 }

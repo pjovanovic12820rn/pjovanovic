@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { authGuard, adminGuard, employeeGuard } from './guards/auth-guard.guard';
+import { authGuard, adminGuard, employeeGuard, employeeOrAdminGuard } from './guards/auth-guard.guard';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { EmployeesComponent } from './components/employees/employees.component';
 import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
@@ -17,16 +17,23 @@ import { MailComponent } from './components/mail/mail.component';
 import { CardsComponent } from './components/cards/cards.component';
 import { ClientPortalComponent } from './components/client-portal/client-portal.component';
 import { AccountManagementComponent } from './components/account-management/account-management.component';
-import {TransferComponent} from './components/transfer/transfer.component';
-import {OverviewComponent} from './components/transaction-overview/overview.component';
-import {RecipientsComponent} from './components/recipients/recipients.component';
-import {LoanRequestComponent} from './components/loan-request/loan-request.component';
-import {ExchageRateListComponent} from './components/exchage-rate-list/exchage-rate-list.component';
+import { TransferComponent } from './components/transfer/transfer.component';
+import { OverviewComponent } from './components/transaction-overview/overview.component';
+import { RecipientsComponent } from './components/recipients/recipients.component';
+import { LoanRequestComponent } from './components/loan-request/loan-request.component';
+import { ExchageRateListComponent } from './components/exchage-rate-list/exchage-rate-list.component';
+import { NewPaymentComponent } from './components/new-payment/new-payment.component';
+import { NewTransactionComponent } from './components/new-transaction/new-transaction.component';
+import { TransactionDetailsComponent } from './components/transaction-details/transaction-details.component';
+import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
+import { CreateCardComponent } from './components/create-card/create-card.component';
+import {PaymentDetailsComponent} from './components/payment-details/payment-details.component';
+import {SuccessComponent} from './components/success/success.component';
+import { LoansComponent } from './components/loans/loans.component';
 
 export const routes: Routes = [
   // login
   { path: '', component: WelcomeComponent },
-  { path: 'login', component: LoginComponent },
   { path: 'login/:type', component: LoginComponent },
 
   // password
@@ -36,9 +43,9 @@ export const routes: Routes = [
   { path: 'forgot-password', component: MailComponent },
 
   // users
-  { path: 'users', component: UsersComponent, canActivate: [adminGuard, authGuard]},
-  { path: 'register-user', component: RegisterUserComponent, canActivate: [adminGuard, authGuard]},
-  { path: 'users/:id', component: EditUserComponent, canActivate: [adminGuard, authGuard]},
+  // { path: 'users', component: UsersComponent, canActivate: [employeeOrAdminGuard, authGuard]},
+  { path: 'register-user', component: RegisterUserComponent, canActivate: [employeeOrAdminGuard, authGuard]},
+  { path: 'users/:id', component: EditUserComponent, canActivate: [employeeOrAdminGuard, authGuard]},
   { path: 'user/:id', component: UserDetailComponent, canActivate: [authGuard]},
 
   // employees
@@ -51,15 +58,27 @@ export const routes: Routes = [
 
   // accounts
   { path: 'account/:accountNumber', component: CardsComponent, canActivate: [authGuard]},
-  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeGuard]},
-  { path: 'create-current-account', component: AccountCreationComponent, canActivate: [employeeGuard]},
-  { path: 'account-management/:id', component: AccountManagementComponent, canActivate: [authGuard]},
-  { path: 'transfer', component: TransferComponent, canActivate: [employeeGuard]},
+  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeOrAdminGuard]},
+  { path: 'create-current-account', component: AccountCreationComponent, canActivate: [employeeOrAdminGuard]},
+  { path: 'account-management', component: AccountManagementComponent, canActivate: [authGuard]},
+  { path: 'transfer', component: TransferComponent, canActivate: [employeeOrAdminGuard]},
   { path: 'recipients', component: RecipientsComponent},
+
+  { path: 'card/:cardNumber/transactions',component: TransactionListComponent, canActivate: [authGuard]},
+  { path: 'card/:cardNumber/transactions/new', component: NewTransactionComponent, canActivate: [authGuard]},
+
+  { path: 'transactions/:transactionId',component: TransactionDetailsComponent, canActivate: [authGuard]},
   { path: 'exchange-rate', component: ExchageRateListComponent,canActivate: [authGuard]},
 
   //loans
   { path: 'loan-request', component: LoanRequestComponent},
+  { path: 'new-payment', component: NewPaymentComponent },
+  { path: 'loan-management/:clientId', component: LoansComponent, canActivate: [authGuard] },
+  { path: 'payment-details', component: PaymentDetailsComponent },
+  { path: 'account/:accountNumber/create-card', component: CreateCardComponent, canActivate: [authGuard] },
 
-
+  //success
+  { path: 'success', component: SuccessComponent }
+  
 ];
+

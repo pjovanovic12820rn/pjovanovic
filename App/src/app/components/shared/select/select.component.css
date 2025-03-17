@@ -1,0 +1,35 @@
+/* Label */
+.select-container label {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+/* Common styling for inputs and selects */
+.select-container select{
+  background-color: #f9fafb;
+  border: 1px solid #d1d5db;
+  color: #111827;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  padding: 0.7rem 2.5rem 0.7rem 0.75rem;
+  box-sizing: border-box;
+}
+
+/* Custom select arrow */
+.select-container select {
+  appearance: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='black'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E") no-repeat right 0.75rem center;
+  background-size: 1rem;
+  cursor: pointer;
+}
+
+/* Select focus state */
+.select-container select:focus {
+  outline: none;
+  border-color: #510076;
+  box-shadow: 0 0 0 3px #8A54A3;
+}

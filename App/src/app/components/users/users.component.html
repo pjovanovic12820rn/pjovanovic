@@ -3,7 +3,7 @@
 
   <app-alert></app-alert>
 
-  <ng-container *ngIf="isAdmin; else notAuthorized">
+  <ng-container *ngIf="employeeOrAdminGuard; else notAuthorized">
     <button class="register-btn" (click)="registerUser()">Register New User</button>
 
     <div *ngIf="users.length > 0; else noUsers">

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { AccountService } from '../../services/account.service';
@@ -9,6 +9,7 @@ import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
 import { EmployeeService } from '../../services/employee.service';
 import { Employee } from '../../models/employee.model';
+import {AlertService} from '../../services/alert.service';
 // import {NgForOf, NgIf} from '@angular/common';
 
 @Component({
@@ -61,14 +62,14 @@ export class AccountCreationComponent implements OnInit {
     private accountService: AccountService,
     private router: Router,
     private route: ActivatedRoute,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private alertService: AlertService
   ) {}
 
   ngOnInit(): void {
-
     const isAdmin = this.authService.isAdmin();
-
-    if (!isAdmin) {
+    const isEmployee = this.authService.isEmployee();
+    if (!(isAdmin || isEmployee)) {
       alert("Access denied. Only employees and admins can create accounts.");
       this.router.navigate(['/']);
       return;
@@ -78,7 +79,7 @@ export class AccountCreationComponent implements OnInit {
     this.employeeId = this.authService.getUserId();
     if (this.employeeId) {
       this.newAccount.employeeId = this.employeeId;
-      this.employeeService.getEmployeeById(this.employeeId).subscribe(
+      this.employeeService.getEmployeeSelf().subscribe(
         (employee) => {
           this.loggedInEmployee = employee;
         },
@@ -152,7 +153,8 @@ export class AccountCreationComponent implements OnInit {
     this.accountService.createCurrentAccount(this.newAccount).subscribe({
       next: () => {
         console.log('Account created successfully!');
-        alert("Account created successfully!");
+        // alert("Account created successfully!");
+        this.alertService.showAlert('success', 'Account created successfully!');
         this.router.navigate(['/users']);
       },
       error: (error) => {
