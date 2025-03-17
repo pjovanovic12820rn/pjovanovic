@@ -5,7 +5,7 @@ import { AccountService } from '../../services/account.service';
 import { AccountResponse } from '../../models/account-response.model';
 import { FormsModule } from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
-import {ModalComponent} from '../modal/modal.component';
+import {ModalComponent} from '../shared/modal/modal.component';
 import {RouterLink, ActivatedRoute, Router} from '@angular/router';
 
 @Component({
@@ -46,9 +46,9 @@ export class AccountManagementComponent implements OnInit {
   ngOnInit(): void {
     // this.clientId = this.route.snapshot.paramMap.get('id');
     this.clientId = this.route.snapshot.queryParamMap.get('id');
-    if (this.isEmployee() && this.clientId) {
+    if ((this.isEmployee()||this.isAdmin()) && this.clientId) {
       this.fetchAccountsForEmployee(this.clientId);
-    } else if(this.isEmployee() && !this.clientId){
+    } else if((this.isEmployee() || this.isAdmin()) && !this.clientId){
       this.router.navigate(['/client-portal']);
     } else if (this.isClient()) {
       this.fetchAccountsForClient();
@@ -123,8 +123,10 @@ export class AccountManagementComponent implements OnInit {
     return this.authService.isEmployee();
   }
   isClient(){
-    return true;
-    // return this.authService.isClient();
+    return this.authService.isClient();
+  }
+  isAdmin(){
+    return this.authService.isAdmin();
   }
 
   loadAccounts() {
@@ -161,18 +163,5 @@ export class AccountManagementComponent implements OnInit {
     this.selectedAccountNumber = accountNumber;
     window.location.href = `/account/${accountNumber}`;
   }
-
-  isModalOpen: boolean = false;
-
-  // Function to open the modal
-  openModal() {
-    this.isModalOpen = true;
-  }
-
-  // Function to close the modal
-  closeModal() {
-    this.isModalOpen = false;
-  }
-
 
 }

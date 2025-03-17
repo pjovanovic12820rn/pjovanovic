@@ -3,11 +3,14 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
+import {InputTextComponent} from '../components/shared/input-text/input-text.component';
+import {ButtonComponent} from '../components/shared/button/button.component';
+import {validations} from '../models/validation.model';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, InputTextComponent, ButtonComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -15,13 +18,13 @@ export class LoginComponent implements OnInit {
   email = '';
   password = '';
   errorMessage = '';
-  loginType: 'EMPLOYEE' | 'CLIENT' = 'EMPLOYEE';
+  loginType: 'employee' | 'client' = 'employee';
 
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     const loginTypeParam = this.route.snapshot.paramMap.get('type');
-    if (loginTypeParam === 'CLIENT' || loginTypeParam === 'EMPLOYEE') {
+    if (loginTypeParam === 'client' || loginTypeParam === 'employee') {
       this.loginType = loginTypeParam;
     }
   }
@@ -39,8 +42,8 @@ export class LoginComponent implements OnInit {
         const userId = this.authService.getUserId();
         const permissions = this.authService.getUserPermissions();
 
-        if (this.loginType === 'EMPLOYEE') {
-          if (permissions?.includes('ADMIN')) {
+        if (this.loginType === 'employee') {
+          if (this.authService.isAdmin()) {
             this.router.navigate(['/client-portal']);
           } else {
             this.router.navigate([`/employee/${userId}`]);
@@ -62,4 +65,6 @@ export class LoginComponent implements OnInit {
   register() {
     this.router.navigate(['/register']);
   }
+
+  protected readonly validations = validations;
 }

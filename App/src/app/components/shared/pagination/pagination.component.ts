@@ -16,6 +16,13 @@ export class PaginationComponent {
 
   ngOnChanges() {
     this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+
+    this.currentPage = Math.max(1, this.currentPage);
+
+    if (this.totalPages === 0) {
+      this.totalPages = 1; // da nema 0 str
+    }
+
     if (this.currentPage > this.totalPages) {
       this.currentPage = this.totalPages;
     }

@@ -14,7 +14,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string, loginType: 'EMPLOYEE' | 'CLIENT'): Observable<{ token: string }> {
+  login(email: string, password: string, loginType: 'employee' | 'client'): Observable<{ token: string }> {
     const apiUrl = `${this.baseUrl}/login/${loginType}`;
     return new Observable(observer => {
       this.http.post<{ token: string }>(apiUrl, { email, password }).subscribe({
@@ -58,6 +58,17 @@ export class AuthService {
     } catch (error) {
       console.error('Invalid JWT Token');
       return [];
+    }
+  }
+
+  getUserName(): string {
+    const token = this.getToken();
+    if (!token) return "Not Authenticated"
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded.username;
+    } catch {
+      return "Not Authenticated"
     }
   }
 
