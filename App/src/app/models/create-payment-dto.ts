@@ -6,4 +6,3 @@ export interface CreatePaymentDto {
     purposeOfPayment: string;
     referenceNumber?: string;
   }
-  

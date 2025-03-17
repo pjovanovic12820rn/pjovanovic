@@ -67,8 +67,9 @@ export class AccountCreationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
-    if (!(this.authService.isAdmin() || this.authService.isEmployee())) {
+    const isAdmin = this.authService.isAdmin();
+    const isEmployee = this.authService.isEmployee();
+    if (!(isAdmin || isEmployee)) {
       alert("Access denied. Only employees and admins can create accounts.");
       this.router.navigate(['/']);
       return;

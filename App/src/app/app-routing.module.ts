@@ -29,6 +29,8 @@ import { NewTransactionComponent } from './components/new-transaction/new-transa
 import { TransactionDetailsComponent } from './components/transaction-details/transaction-details.component';
 import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
 import { CreateCardComponent } from './components/create-card/create-card.component';
+import {PaymentDetailsComponent} from './components/payment-details/payment-details.component';
+import {SuccessComponent} from './components/success/success.component';
 import { LoansComponent } from './components/loans/loans.component';
 
 export const routes: Routes = [
@@ -73,9 +75,13 @@ export const routes: Routes = [
   //loans
   { path: 'loan-request', component: LoanRequestComponent},
   { path: 'new-payment', component: NewPaymentComponent },
+  { path: 'loan-management/:clientId', component: LoansComponent, canActivate: [authGuard] },
+  { path: 'payment-details', component: PaymentDetailsComponent },
   { path: 'account/:accountNumber/create-card', component: CreateCardComponent, canActivate: [authGuard] },
-  { path: 'loan-management/:clientId', component: LoansComponent, canActivate: [authGuard] }
 
   // securities
-  { path: 'securities', component: SecuritiesComponent, canActivate: [securitiesGuard] }
+  { path: 'securities', component: SecuritiesComponent, canActivate: [securitiesGuard] },
+  //success
+  { path: 'success', component: SuccessComponent }
 ];
+
