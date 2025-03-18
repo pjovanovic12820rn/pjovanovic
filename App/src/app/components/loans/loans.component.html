@@ -3,17 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Credits</title>
+    <title>Loans</title>
   </head>
   <body>
     <div class="container">
-      <h2>Client Credits</h2>
+      <h2>Client Loans</h2>
 
       <!-- Filter -->
       <input
         type="text"
         class="filter"
-        placeholder="Filter credits..."
+        placeholder="Filter loans..."
         [(ngModel)]="filterText"
       />
 
@@ -35,8 +35,8 @@
       </div>
 
       <!-- New Credit Button -->
-      <button class="new-credit-btn" (click)="openNewCreditPopup()">
-        New Credit
+      <button class="new-credit-btn" (click)="openNewCredit()">
+        New Loan
       </button>
     </div>
 
@@ -97,64 +97,5 @@
       </div>
     </div>
 
-    <!-- New Credit Popup -->
-    <div
-      id="newCreditPopup"
-      class="popup"
-      [style.display]="newCreditPopupVisible ? 'flex' : 'none'"
-    >
-      <div class="popup-content">
-        <span class="close" (click)="closeNewCreditPopup()">&times;</span>
-        <h3>Apply for New Credit</h3>
-        <form
-          [formGroup]="newLoanForm"
-        >
-          <select class="input-field" formControlName="type" required>
-            <option value="" disabled selected>Select Loan Type</option>
-            <option value="CASH">Cash Loan</option>
-            <option value="MORTGAGE">Mortgage</option>
-            <option value="AUTO">Auto Loan</option>
-            <option value="PERSONAL">Personal Loan</option>
-            <option value="BUSINESS">Business Loan</option>
-          </select>
-          <input
-            type="number"
-            class="input-field"
-            placeholder="Loan Amount"
-            formControlName="amount"
-            required
-          />
-          <input
-            type="number"
-            class="input-field"
-            placeholder="Term (months)"
-            formControlName="repaymentPeriod"
-            required
-          />
-          <select class="input-field" formControlName="currencyCode" required>
-            <option value="" disabled selected>Select Currency</option>
-            <option value="EUR">EUR</option>
-            <option value="USD">USD</option>
-            <option value="RSD">RSD</option>
-          </select>
-          <input
-            type="text"
-            class="input-field"
-            placeholder="Purpose (optional)"
-            formControlName="purpose"
-          />
-          <div class="popup-buttons">
-            <button type="submit" class="confirm-btn">Submit</button>
-            <button
-              type="button"
-              class="cancel-btn"
-              (click)="closeNewCreditPopup()"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
   </body>
 </html>

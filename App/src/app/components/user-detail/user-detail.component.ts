@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { UserService } from '../../services/user.service';
+import { ClientService } from '../../services/client.service';
 import { User } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
@@ -16,7 +16,7 @@ import { AlertComponent } from '../shared/alert/alert.component';
 })
 export class UserDetailComponent implements OnInit {
   private router = inject(Router);
-  private userService = inject(UserService);
+  private userService = inject(ClientService);
   private authService = inject(AuthService);
   private alertService = inject(AlertService);
 
