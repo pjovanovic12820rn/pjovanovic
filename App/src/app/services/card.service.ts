@@ -34,15 +34,23 @@ export class CardService {
       'Content-Type': 'application/json'
     })
   }
+
   getCardsByAccount(accountNumber: string): Observable<Card[]> {
     return this.http.get<Card[]>(`${this.apiUrl}/${accountNumber}/cards`, { headers: this.getAuthHeaders() })
   }
+
   blockCard(accountNumber: string, cardNumber: string): Observable<any> {
     const url = `${this.apiUrl}/${accountNumber}/cards/${cardNumber}/block`
     return this.http.post(url, {}, { headers: this.getAuthHeaders() })
   }
+
   createCard(dto: CreateCardDto): Observable<any> {
     const url = `${this.apiUrl}/${dto.accountNumber}/cards/create`
+    return this.http.post(url, dto, { headers: this.getAuthHeaders() })
+  }
+
+  requestCard(dto: CreateCardDto): Observable<any> {
+    const url = `${this.apiUrl}/${dto.accountNumber}/cards/request`
     return this.http.post(url, dto, { headers: this.getAuthHeaders() })
   }
 }

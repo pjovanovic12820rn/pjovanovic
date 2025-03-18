@@ -9,6 +9,8 @@ import {
 import { CommonModule } from '@angular/common';
 import { LoanService } from '../../services/loan.service';
 import { Loan } from '../../models/loan-dto.model';
+import { Router } from '@angular/router';
+import { LoanRequestService } from '../../services/loan-request.service';
 
 @Component({
   selector: 'app-loans',
@@ -20,12 +22,13 @@ import { Loan } from '../../models/loan-dto.model';
 export class LoansComponent implements OnInit {
   @Input() clientId: string = '';
   loans: Loan[] = [];
+  loanRequests: Loan[] = [];
   filterText: string = '';
   selectedLoan: Loan | null = null;
   newCreditPopupVisible: boolean = false;
   newLoanForm: FormGroup;
 
-  constructor(private loanService: LoanService, private fb: FormBuilder) {
+  constructor(private loanService: LoanService, private loanRequestService: LoanRequestService, private fb: FormBuilder, private router: Router) {
     this.newLoanForm = this.fb.group({
       type: ['', Validators.required],
       amount: [0, [Validators.required, Validators.min(1)]],
@@ -39,22 +42,29 @@ export class LoansComponent implements OnInit {
     if (this.clientId) {
       this.loadClientLoans();
     }
+    this.loadLoanRequests();
   }
 
   loadClientLoans(): void {
-    console.log('Client ID: ', this.clientId);
     this.loanService.getClientLoans(this.clientId).subscribe({
       next: (data) => {
-        if (data.content.length > 0) {
-            this.loans = data.content.sort((a, b) => 
-            (b.amount || 0) - (a.amount || 0)
-            );
-        }
-        console.log('Loans: ', this.loans);
+        this.loans = data.content.sort((a, b) => (b.amount || 0) - (a.amount || 0));
       },
       error: (err) => {
         console.error('Error loading client loans:', err);
         this.loans = [];
+      },
+    });
+  }
+
+  loadLoanRequests(): void {
+    this.loanRequestService.getClientLoanRequests().subscribe({
+      next: (data) => {
+        this.loanRequests = data.content;
+      },
+      error: (err) => {
+        console.error('Error loading loan requests:', err);
+        this.loanRequests = [];
       },
     });
   }
@@ -72,19 +82,29 @@ export class LoansComponent implements OnInit {
     );
   }
 
-  showLoanDetails(loan: Loan): void {
-    if (loan.id) {
-      this.loanService.getLoan(loan.id).subscribe({
-        next: (data) => {
-          this.selectedLoan = data;
-        },
-        error: (err) => {
-          console.error('Error loading loan details:', err);
-          this.selectedLoan = null;
-        },
-      });
-    }
+  get filteredLoanRequests(): Loan[] {
+    if (!this.filterText) return this.loanRequests;
+
+    const searchTerm = this.filterText.toLowerCase();
+    return this.loanRequests.filter(
+      (request) =>
+        request.type?.toString().toLowerCase().includes(searchTerm) ||
+        request.status?.toString().toLowerCase().includes(searchTerm) ||
+        request.amount?.toString().includes(searchTerm)
+    );
   }
+
+  // showLoanDetails(loan: Loan): void {
+  //   this.loanService.getLoan(loan.id).subscribe({
+  //     next: (data) => {
+  //       this.selectedLoan = data;
+  //     },
+  //     error: (err) => {
+  //       console.error('Error loading loan details:', err);
+  //       this.selectedLoan = null;
+  //     },
+  //   });
+  // }
 
   closeDetailsPopup(): void {
     this.selectedLoan = null;
@@ -140,4 +160,15 @@ export class LoansComponent implements OnInit {
         return '';
     }
   }
+
+  openNewCredit(): void {
+    this.router.navigate(['/loan-request']);
+  }
+
+  showLoanDetails(loan: Loan): void {
+    if (loan.id) {
+      this.router.navigate(['/loan-details', loan.id]);
+    }
+  }
+
 }

@@ -1,0 +1,58 @@
+<div class="container">
+  <h2>Loan Details</h2>
+
+  <div *ngIf="loan">
+    <p><strong>Loan Number:</strong> {{ loan.loanNumber }}</p>
+    <p><strong>Type:</strong> {{ loan.type }}</p>
+    <p><strong>Amount:</strong> {{ loan.amount }} {{ loan.currencyCode }}</p>
+    <p><strong>Term:</strong> {{ loan.repaymentPeriod }} months</p>
+    <p><strong>Nominal Interest Rate:</strong> {{ loan.nominalInterestRate }}%</p>
+    <p><strong>Effective Interest Rate:</strong> {{ loan.effectiveInterestRate }}%</p>
+    <p><strong>Start Date:</strong> {{ formatDate(loan.startDate) }}</p>
+    <p><strong>Due Date:</strong> {{ formatDate(loan.dueDate) }}</p>
+    <p><strong>Next Installment:</strong> {{ loan.nextInstallmentAmount }} {{ loan.currencyCode }}</p>
+    <p><strong>Next Payment Date:</strong> {{ formatDate(loan.nextInstallmentDate) }}</p>
+    <p><strong>Remaining Debt:</strong> {{ loan.remainingDebt }} {{ loan.currencyCode }}</p>
+    <p>
+      <strong>Status:</strong>
+      <span [ngClass]="getLoanStatusClass(loan.status)">{{ loan.status }}</span>
+    </p>
+
+    <button class="back-btn" (click)="goBack()">Back</button>
+
+    <!-- Installments Button -->
+    <button class="toggle-btn" (click)="toggleInstallments()">
+      {{ showInstallments ? 'Hide Installments' : 'Show Installments' }}
+    </button>
+
+    <!-- Installments Section -->
+    <div *ngIf="showInstallments" class="installments-section">
+      <h3>Installments</h3>
+      <table>
+        <thead>
+        <tr>
+          <th>Amount</th>
+          <th>Interest Rate</th>
+          <th>Expected Due Date</th>
+          <th>Actual Due Date</th>
+          <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let installment of installments">
+          <td>{{ installment.amount }} {{ loan?.currencyCode }}</td>
+          <td>{{ installment.interestRate }}%</td>
+          <td>{{ formatDate(installment.expectedDueDate) }}</td>
+          <td>{{ formatDate(installment.actualDueDate) }}</td>
+          <td [ngClass]="getLoanStatusClass(installment.installmentStatus)">{{ installment.installmentStatus }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="!loan" class="error-message">
+    <p>Loan details not available.</p>
+    <button class="back-btn" (click)="goBack()">Back</button>
+  </div>
+</div>

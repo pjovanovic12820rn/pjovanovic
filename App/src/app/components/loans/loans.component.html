@@ -34,68 +34,31 @@
         </div>
       </div>
 
+      <!-- Loan Requests List -->
+      <h3>Loan Requests</h3>
+      <div class="credits-list">
+        <div class="credit-card" *ngFor="let request of filteredLoanRequests">
+      <span>
+        <strong>Request Type:</strong> {{ request.type }} <br>
+        <strong>Amount:</strong> {{ request.amount }} {{ request.currencyCode }} <br>
+        <strong>Status:</strong> <span [ngClass]="getLoanStatusClass(request.status)">{{ request.status }}</span>
+      </span>
+        </div>
+
+        <div *ngIf="loanRequests.length === 0" class="no-loans-message">
+          No loan requests found.
+        </div>
+      </div>
+
       <!-- New Credit Button -->
       <button class="new-credit-btn" (click)="openNewCreditPopup()">
         New Credit
       </button>
     </div>
 
-    <!-- Credit Details Popup -->
-    <div
-      id="detailsPopup"
-      class="popup"
-      [style.display]="selectedLoan ? 'flex' : 'none'"
-    >
-      <div class="popup-content">
-        <span class="close" (click)="closeDetailsPopup()">&times;</span>
-        <h3>Credit Details</h3>
-        <p><strong>Loan Number:</strong> {{ selectedLoan?.loanNumber }}</p>
-        <p><strong>Loan Type:</strong> {{ selectedLoan?.type }}</p>
-        <p>
-          <strong>Loan Amount:</strong> {{ selectedLoan?.amount }}
-          {{ selectedLoan?.currencyCode }}
-        </p>
-        <p><strong>Term:</strong> {{ selectedLoan?.repaymentPeriod }} months</p>
-        <p>
-          <strong>Nominal Interest Rate:</strong>
-          {{ selectedLoan?.nominalInterestRate }}%
-        </p>
-        <p>
-          <strong>Effective Interest Rate:</strong>
-          {{ selectedLoan?.effectiveInterestRate }}%
-        </p>
-        <p>
-          <strong>Start Date:</strong> {{ formatDate(selectedLoan?.startDate) }}
-        </p>
-        <p>
-          <strong>Due Date:</strong> {{ formatDate(selectedLoan?.dueDate) }}
-        </p>
-        <p>
-          <strong>Next Installment:</strong>
-          {{ selectedLoan?.nextInstallmentAmount }}
-          {{ selectedLoan?.currencyCode }}
-        </p>
-        <p>
-          <strong>Next Payment Date:</strong>
-          {{ formatDate(selectedLoan?.nextInstallmentDate) }}
-        </p>
-        <p>
-          <strong>Remaining Debt:</strong> {{ selectedLoan?.remainingDebt }}
-          {{ selectedLoan?.currencyCode }}
-        </p>
-        <p>
-          <strong>Status:</strong>
-          <span [ngClass]="getLoanStatusClass(selectedLoan?.status)">{{
-            selectedLoan?.status
-          }}</span>
-        </p>
-        <div class="popup-buttons">
-          <button class="cancel-btn" (click)="closeDetailsPopup()">
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
+<!--    <button class="details-btn" (click)="showLoanDetails(loan)">-->
+<!--      Details-->
+<!--    </button>-->
 
     <!-- New Credit Popup -->
     <div
