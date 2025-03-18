@@ -1,37 +1,39 @@
 /// <reference types="cypress" />
-// ***********************************************
-// This example commands.ts shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+
+// Helper function to log in as employee
+Cypress.Commands.add('loginAsEmployee', () => {
+  cy.visit('/login/employee');
+  cy.get('[name="email"] input').type('petar.p@example.com');
+  cy.get('[name="password"] input').type('petarpetar');
+  cy.get('[type="submit"] button').click();
+  cy.url().should('include', '/client-portal');
+});
+
+// Helper function to log in as client
+Cypress.Commands.add('loginAsClient', () => {
+  cy.visit('/login/client');
+  cy.get('[name="email"] input').type('marko.m@example.com');
+  cy.get('[name="password"] input').type('markomarko');
+  cy.get('[type="submit"] button').click();
+  cy.url().should('include', '/user/1');
+});
+
+// Extend Cypress types for custom commands
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      /**
+       * Logs in as an employee.
+       */
+      loginAsEmployee(): Chainable<void>;
+
+      /**
+       * Logs in as a client.
+       */
+      loginAsClient(): Chainable<void>;
+    }
+  }
+}
+
+// Export an empty object to make this file a module
+export {};

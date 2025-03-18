@@ -1,4 +1,4 @@
-describe('Login Buttons Test', () => {
+describe('Welcome Page Test', () => {
   beforeEach(() => {
     cy.visit('/'); // Visit the home page before each test
   });
