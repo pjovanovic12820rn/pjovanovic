@@ -4,10 +4,13 @@ import { CardService, Card } from '../../services/card.service'
 import { AccountService } from '../../services/account.service'
 import { NgClass, NgForOf } from '@angular/common'
 import {ModalComponent} from '../shared/modal/modal.component';
+// import { ModalComponent } from '../modal/modal.component'
 
 interface Account {
+  accountName: string
   accountNumber: string
   accountOwner: string
+  accountType: string
   availableBalance: number
   reservedFunds: number
   balance: number
@@ -17,7 +20,7 @@ interface Account {
   selector: 'app-cards',
   templateUrl: './cards.component.html',
   standalone: true,
-  imports: [NgClass, NgForOf, RouterLink, ModalComponent],
+  imports: [NgClass, NgForOf, RouterLink, ModalComponent], //, ModalComponent
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {
@@ -32,15 +35,16 @@ export class CardsComponent implements OnInit {
     const paramAcc = this.route.snapshot.paramMap.get('accountNumber')
     if (paramAcc) {
       this.accountNumber = paramAcc
-      this.accountService.getAccount(this.accountNumber).subscribe(data => {
+      this.accountService.getAccountDetails(this.accountNumber).subscribe(data => {
         this.account = data
+        console.log(data)
       })
       this.loadCards()
     }
   }
 
   loadCards(): void {
-    this.cardService.getCardsByAccount(this.accountNumber).subscribe(data => {
+    this.cardService.getMyCardsForAccount(this.accountNumber).subscribe(data => {
       this.cards = data
     })
   }

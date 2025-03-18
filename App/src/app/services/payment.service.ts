@@ -1,25 +1,66 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { PaymentOverviewDto } from '../models/payment-overview-dto';
 import { PaymentDetailsDto } from '../models/payment-details-dto';
 import { CreatePaymentDto } from '../models/create-payment-dto';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PaymentService {
-  private baseUrl = 'http://localhost:8080/api/payment';
+  private baseUrl = 'http://localhost:8082/api/payment';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getTransactions(cardNumber?: string): Observable<PaymentOverviewDto[]> {
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  }
+
+  getTransactionsOLD(cardNumber?: string): Observable<PaymentOverviewDto[]> {
     let url = this.baseUrl;
     if (cardNumber) {
       url += `?cardNumber=${cardNumber}`;
     }
     return this.http.get<PaymentOverviewDto[]>(url).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  //moje
+  getTransactions(
+    page: number,
+    size: number,
+    startDate?: string,
+    endDate?: string,
+    minAmount?: number,
+    maxAmount?: number,
+    paymentStatus?: string,
+    accountNumber?: string,
+    cardNumber?: string
+  ): Observable<{ content: PaymentOverviewDto[], totalElements: number }> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    if (startDate) params = params.set('startDate', startDate);
+    if (endDate) params = params.set('endDate', endDate);
+    if (minAmount) params = params.set('minAmount', minAmount.toString());
+    if (maxAmount) params = params.set('maxAmount', maxAmount.toString());
+    if (paymentStatus) params = params.set('paymentStatus', paymentStatus);
+    if (accountNumber) params = params.set('accountNumber', accountNumber);
+    if (cardNumber) params = params.set('cardNumber', cardNumber);
+
+    return this.http.get<{ content: PaymentOverviewDto[], totalElements: number }>(this.baseUrl, {
+      headers: this.getAuthHeaders(), //.set('Accept', '*/*')
+      params
+    }).pipe(
       catchError(this.handleError)
     );
   }
@@ -30,8 +71,11 @@ export class PaymentService {
     );
   }
 
-  createPayment(dto: CreatePaymentDto): Observable<{ id: number }> {
-    return this.http.post<{ id: number }>(this.baseUrl, dto).pipe(
+  createPayment(dto: CreatePaymentDto): Observable<string> {  //bio je id originalno, ali nono (new trans trazi to)
+    return this.http.post(this.baseUrl, dto, {
+      headers: this.getAuthHeaders(),
+      responseType: 'text'
+    }).pipe(
       catchError(this.handleError)
     );
   }
@@ -44,7 +88,15 @@ export class PaymentService {
   }
 
   private handleError(error: any): Observable<never> {
-    console.error('An error occurred:', error);
-    return throwError(() => new Error('Something bad happened; please try again later.'));
+    let errorMessage = 'Something went wrong :(';
+    if (error.error instanceof ErrorEvent) {
+      // Client-side error
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // Server-side error
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    console.error(errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }

@@ -1,11 +1,10 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import {authGuard, adminGuard, employeeGuard, employeeOrAdminGuard} from './guards/auth-guard.guard';
+import { authGuard, adminGuard, employeeGuard, employeeOrAdminGuard } from './guards/auth-guard.guard';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { EmployeesComponent } from './components/employees/employees.component';
 import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
 import { RegisterEmployeeComponent } from './components/register-employee/register-employee.component';
-import { UsersComponent } from './components/users/users.component';
 import { EditUserComponent } from './components/edit-user/edit-user.component';
 import { RegisterUserComponent } from './components/register-user/register-user.component';
 import { UserDetailComponent } from './components/user-detail/user-detail.component';
@@ -18,7 +17,6 @@ import { CardsComponent } from './components/cards/cards.component';
 import { ClientPortalComponent } from './components/client-portal/client-portal.component';
 import { AccountManagementComponent } from './components/account-management/account-management.component';
 import { TransferComponent } from './components/transfer/transfer.component';
-import { OverviewComponent } from './components/transaction-overview/overview.component';
 import { RecipientsComponent } from './components/recipients/recipients.component';
 import { LoanRequestComponent } from './components/loan-request/loan-request.component';
 import { ExchageRateListComponent } from './components/exchage-rate-list/exchage-rate-list.component';
@@ -27,6 +25,8 @@ import { NewTransactionComponent } from './components/new-transaction/new-transa
 import { TransactionDetailsComponent } from './components/transaction-details/transaction-details.component';
 import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
 import { CreateCardComponent } from './components/create-card/create-card.component';
+import { PaymentDetailsComponent } from './components/payment-details/payment-details.component';
+import { SuccessComponent } from './components/success/success.component';
 import { LoansComponent } from './components/loans/loans.component';
 
 export const routes: Routes = [
@@ -41,37 +41,44 @@ export const routes: Routes = [
   { path: 'forgot-password', component: MailComponent },
 
   // users
-  // { path: 'users', component: UsersComponent, canActivate: [employeeOrAdminGuard, authGuard]},
-  { path: 'register-user', component: RegisterUserComponent, canActivate: [employeeOrAdminGuard, authGuard]},
-  { path: 'users/:id', component: EditUserComponent, canActivate: [employeeOrAdminGuard, authGuard]},
-  { path: 'user/:id', component: UserDetailComponent, canActivate: [authGuard]},
+  { path: 'register-user', component: RegisterUserComponent, canActivate: [employeeOrAdminGuard, authGuard] },
+  { path: 'users/:id', component: EditUserComponent, canActivate: [employeeOrAdminGuard, authGuard] },
+  { path: 'user/:id', component: UserDetailComponent, canActivate: [authGuard] },
 
   // employees
-  { path: 'employees', component: EmployeesComponent, canActivate: [adminGuard, authGuard]},
-  { path: 'register-employee', component: RegisterEmployeeComponent, canActivate: [adminGuard, authGuard]},
-  { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard, authGuard]},
-  { path: 'employee/:id', component: EmployeeDetailComponent, canActivate: [authGuard],},
-  { path: 'client-portal', component: ClientPortalComponent, canActivate: [authGuard]},
-  // { path: 'clients/:id', component: ClientEditComponent, canActivate: [authGuard]},
+  { path: 'employees', component: EmployeesComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'register-employee', component: RegisterEmployeeComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'employee/:id', component: EmployeeDetailComponent, canActivate: [authGuard] },
+  { path: 'client-portal', component: ClientPortalComponent, canActivate: [authGuard] },
 
   // accounts
-  { path: 'account/:accountNumber', component: CardsComponent, canActivate: [authGuard]},
-  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeOrAdminGuard]},
-  { path: 'create-current-account', component: AccountCreationComponent, canActivate: [employeeOrAdminGuard]},
-  { path: 'account-management', component: AccountManagementComponent, canActivate: [authGuard]},
-  { path: 'transfer', component: TransferComponent, canActivate: [employeeGuard]},
-  { path: 'recipients', component: RecipientsComponent},
+  { path: 'account/:accountNumber', component: CardsComponent, canActivate: [authGuard] },
+  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeOrAdminGuard] },
+  { path: 'create-current-account', component: AccountCreationComponent, canActivate: [employeeOrAdminGuard] },
+  { path: 'account-management', component: AccountManagementComponent, canActivate: [authGuard] },
 
-  { path: 'card/:cardNumber/transactions',component: TransactionListComponent, canActivate: [authGuard]},
-  { path: 'card/:cardNumber/transactions/new', component: NewTransactionComponent, canActivate: [authGuard]},
+  // payments
+  { path: 'transfer', component: TransferComponent, canActivate: [authGuard] },
+  { path: 'recipients', component: RecipientsComponent, canActivate: [authGuard] },
+  { path: 'new-payment', component: NewPaymentComponent, canActivate: [authGuard] },
+  { path: 'payment-details', component: PaymentDetailsComponent, canActivate: [authGuard] },
 
-  { path: 'transactions/:transactionId',component: TransactionDetailsComponent, canActivate: [authGuard]},
-  { path: 'exchange-rate', component: ExchageRateListComponent,canActivate: [authGuard]},
-
-  //loans
-  { path: 'loan-request', component: LoanRequestComponent},
-  { path: 'new-payment', component: NewPaymentComponent },
+  // cards and transactions
+  { path: 'card/:cardNumber/transactions', component: TransactionListComponent, canActivate: [authGuard] },
+  { path: 'card/:cardNumber/transactions/new', component: NewTransactionComponent, canActivate: [authGuard] },
+  { path: 'transactions/:transactionId', component: TransactionDetailsComponent, canActivate: [authGuard] },
   { path: 'account/:accountNumber/create-card', component: CreateCardComponent, canActivate: [authGuard] },
-  { path: 'loan-management/:clientId', component: LoansComponent, canActivate: [authGuard] }
+
+  // exchange
+  { path: 'exchange-rate', component: ExchageRateListComponent, canActivate: [authGuard] },
+
+  // loans
+  { path: 'loan-request', component: LoanRequestComponent, canActivate: [authGuard] },
+  { path: 'loan-management/:clientId', component: LoansComponent, canActivate: [authGuard] },
+
+  // success
+  { path: 'success', component: SuccessComponent }
 
 ];
+

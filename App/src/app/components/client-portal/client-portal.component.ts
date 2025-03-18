@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { UserService } from '../../services/user.service';
+import { ClientService } from '../../services/client.service';
 import { User } from '../../models/user.model'; // Ispravan User model
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -9,16 +9,17 @@ import { AlertComponent } from '../shared/alert/alert.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { AuthService } from '../../services/auth.service';
 import { AccountService } from '../../services/account.service';
+import {ButtonComponent} from '../shared/button/button.component';
 
 @Component({
   selector: 'app-client-portal',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, AlertComponent, PaginationComponent],
+  imports: [CommonModule, FormsModule, RouterModule, AlertComponent, PaginationComponent, ButtonComponent],
   templateUrl: './client-portal.component.html',
   styleUrls: ['./client-portal.component.css'],
 })
 export class ClientPortalComponent implements OnInit {
-  // private userService = inject(UserService);
+  // private userService = inject(ClientService);
   // private alertService = inject(AlertService);
   // private authService = inject(AuthService);
 
@@ -36,7 +37,7 @@ export class ClientPortalComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private alertService: AlertService,
-    private userService: UserService,
+    private userService: ClientService,
     private router: Router
   ) {}
 

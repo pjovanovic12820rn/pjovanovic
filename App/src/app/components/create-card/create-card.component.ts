@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router'
 import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { CardService, CreateCardDto } from '../../services/card.service'
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-create-card',
@@ -20,7 +21,7 @@ export class CreateCardComponent implements OnInit {
     cardLimit: 0
   }
 
-  constructor(private route: ActivatedRoute, private cardService: CardService) {}
+  constructor(private route: ActivatedRoute, private cardService: CardService, private authService: AuthService) {}
 
   ngOnInit(): void {
     const acc = this.route.snapshot.paramMap.get('accountNumber')
@@ -31,11 +32,9 @@ export class CreateCardComponent implements OnInit {
   }
 
   onSubmit() {
-    this.cardService.createCard(this.newCard).subscribe({
-      next: res => {
-      },
-      error: err => {
-      }
-    })
+    if(this.authService.isClient())
+      this.cardService.requestCard(this.newCard)
+    else
+      this.cardService.createCard(this.newCard)
   }
 }

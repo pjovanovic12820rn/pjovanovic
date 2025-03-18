@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import { UserService } from '../../services/user.service';
+import { ClientService } from '../../services/client.service';
 import { AuthService } from '../../services/auth.service';
 import { AccountService } from '../../services/account.service';
 import { User } from '../../models/user.model';
@@ -57,7 +57,7 @@ export class AccountCreationComponent implements OnInit {
     monthlyFee: 0
   };
   constructor(
-    private userService: UserService,
+    private userService: ClientService,
     private authService: AuthService,
     private accountService: AccountService,
     private router: Router,
@@ -67,8 +67,9 @@ export class AccountCreationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
-    if (!(this.authService.isAdmin() || this.authService.isEmployee())) {
+    const isAdmin = this.authService.isAdmin();
+    const isEmployee = this.authService.isEmployee();
+    if (!(isAdmin || isEmployee)) {
       alert("Access denied. Only employees and admins can create accounts.");
       this.router.navigate(['/']);
       return;

@@ -72,6 +72,14 @@
         </div>
 
         <div class="input-group">
+          <label for="rate-type">Interest Rate Type</label>
+          <select formControlName="interestRateType" id="rate-type" (blur)="resetInvalidField('interestRateType')">
+            <option *ngFor="let type of interestRateTypes" [value]="type">{{ type }}</option>
+          </select>
+          <small class="error" *ngIf="isInvalid('interestRateType')">You must select a interest rate type.</small>
+        </div>
+
+        <div class="input-group">
             <label for="accountNumber">Bank Account Number</label>
             <select formControlName="accountNumber" id="accountNumber" (blur)="resetInvalidField('accountNumber')">
                 <option *ngFor="let account of userAccounts" [value]="account.accountNumber">

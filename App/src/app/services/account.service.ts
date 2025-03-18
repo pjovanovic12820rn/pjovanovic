@@ -24,7 +24,9 @@ export class AccountService {
     });
   }
 
-  getAccountsForClient(clientId: string, page: number = 0, size: number = 10): Observable<{ content: AccountResponse[] }> {
+  getAccountsForClient(clientId: string | number | null, page: number = 0, size: number = 10): Observable<{
+    content: AccountResponse[]
+  }> {
     const headers = this.getAuthHeaders();
     return this.http.get<{ content: AccountResponse[] }>(
       `${this.apiUrl}/${clientId}?page=${page}&size=${size}`,
@@ -50,6 +52,12 @@ export class AccountService {
     });
   }
 
+  getAccountDetails(accountNumber: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/details/${accountNumber}`, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
   createForeignAccount(accountData: Account): Observable<any> {
     return this.http.post(this.apiUrl, accountData, {
       headers: this.getAuthHeaders(),
@@ -63,8 +71,8 @@ export class AccountService {
   }
 
   getAllAccounts(
-    page: number,
-    size: number
+    page: number = 0,
+    size: number = 100
   ): Observable<{ content: AccountResponse[]; totalElements: number }> {
     let params = new HttpParams().set('page', page).set('size', size);
     const headers = this.getAuthHeaders();

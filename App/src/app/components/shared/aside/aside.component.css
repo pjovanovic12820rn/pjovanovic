@@ -82,3 +82,50 @@
     transform: translateX(0); /* sm:translate-x-0 */
   }
 }
+
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 91%;
+}
+
+.payment-btn {
+  padding: 8px 12px;
+  color: white;
+  background: #6A4BBC;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.payment-btn:hover {
+  background: #8E79D2;
+}
+
+
+.new-account-options {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.account-option {
+  padding: 1rem 2rem;
+  background: #6A4BBC;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.account-option:hover {
+  background: #8E79D2;
+}

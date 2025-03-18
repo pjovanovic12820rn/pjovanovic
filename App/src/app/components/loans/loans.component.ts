@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,6 +9,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { LoanService } from '../../services/loan.service';
 import { Loan } from '../../models/loan-dto.model';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-loans',
@@ -22,10 +23,9 @@ export class LoansComponent implements OnInit {
   loans: Loan[] = [];
   filterText: string = '';
   selectedLoan: Loan | null = null;
-  newCreditPopupVisible: boolean = false;
   newLoanForm: FormGroup;
 
-  constructor(private loanService: LoanService, private fb: FormBuilder) {
+  constructor(private loanService: LoanService, private fb: FormBuilder, private router: Router) {
     this.newLoanForm = this.fb.group({
       type: ['', Validators.required],
       amount: [0, [Validators.required, Validators.min(1)]],
@@ -46,7 +46,7 @@ export class LoansComponent implements OnInit {
     this.loanService.getClientLoans(this.clientId).subscribe({
       next: (data) => {
         if (data.content.length > 0) {
-            this.loans = data.content.sort((a, b) => 
+            this.loans = data.content.sort((a, b) =>
             (b.amount || 0) - (a.amount || 0)
             );
         }
@@ -90,28 +90,8 @@ export class LoansComponent implements OnInit {
     this.selectedLoan = null;
   }
 
-  openNewCreditPopup(): void {
-    // this.newCreditPopupVisible = true;
-  }
-
-  closeNewCreditPopup(): void {
-    this.newCreditPopupVisible = false;
-    this.newLoanForm.reset();
-  }
-
-  submitNewCreditApplication(): void {
-    // if (this.newLoanForm.invalid) {
-    //   alert('Please fill all required fields with valid values');
-    //   return;
-    // }
-    // const loanApplication = {
-    //   ...this.newLoanForm.value,
-    //   clientId: parseInt(this.clientId)
-    // };
-    // // Add logic to submit the application through your service
-    // console.log('Submitting loan application:', loanApplication);
-    // // Close the popup after submission
-    // this.closeNewCreditPopup();
+  openNewCredit(): void {
+    this.router.navigate(['/loan-request'])
   }
 
   formatDate(dateString?: string): string {

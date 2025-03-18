@@ -29,7 +29,7 @@ export class TransactionListComponent implements OnInit {
 
   fetchTransactions() {
     this.isLoading = true;
-    this.paymentService.getTransactions(this.cardNumber).subscribe({
+    this.paymentService.getTransactionsOLD(this.cardNumber).subscribe({
       next: (data) => {
         this.transactions = data;
         this.isLoading = false;
