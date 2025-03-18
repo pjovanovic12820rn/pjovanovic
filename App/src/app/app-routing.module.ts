@@ -28,6 +28,7 @@ import { CreateCardComponent } from './components/create-card/create-card.compon
 import { PaymentDetailsComponent } from './components/payment-details/payment-details.component';
 import { SuccessComponent } from './components/success/success.component';
 import { LoansComponent } from './components/loans/loans.component';
+import {LoanDetailsComponent} from './components/loan-details/loan-details.component';
 
 export const routes: Routes = [
   // login
@@ -76,6 +77,7 @@ export const routes: Routes = [
   // loans
   { path: 'loan-request', component: LoanRequestComponent, canActivate: [authGuard] },
   { path: 'loan-management/:clientId', component: LoansComponent, canActivate: [authGuard] },
+  { path: 'loan-details/:loanId', component: LoanDetailsComponent, canActivate: [authGuard] },
 
   // success
   { path: 'success', component: SuccessComponent }
