@@ -1,16 +1,15 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlertService } from '../../services/alert.service';
 import { AccountService } from '../../services/account.service';
 import { AccountResponse } from '../../models/account-response.model';
 import { FormsModule } from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
-import {ModalComponent} from '../shared/modal/modal.component';
-import {RouterLink, ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-account-management',
-  imports: [CommonModule, FormsModule, RouterLink, ModalComponent],
+  imports: [CommonModule, FormsModule],
   standalone: true,
   templateUrl: './account-management.component.html',
   styleUrl: './account-management.component.css',
@@ -29,11 +28,7 @@ export class AccountManagementComponent implements OnInit {
   pageSize: number = 10;
   totalUsers: number = 0;
 
-  ownerNameFilter: string = '';
-  accountNumberFilter: string = '';
-
   clientId: string | null = null;
-  filterText: string = '';
 
   constructor(
     private accountService: AccountService,
@@ -161,7 +156,7 @@ export class AccountManagementComponent implements OnInit {
 
   viewCards(accountNumber: string): void {
     this.selectedAccountNumber = accountNumber;
-    window.location.href = `/account/${accountNumber}`;
+    this.router.navigate([`/account/${accountNumber}`]);
   }
 
 }

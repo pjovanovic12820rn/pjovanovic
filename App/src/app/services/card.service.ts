@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { AuthService } from './auth.service'
+import { PaymentOverviewDto } from '../models/payment-overview-dto';
 
 export interface Card {
   cardNumber: string
@@ -37,10 +38,21 @@ export class CardService {
 
   getCardsByAccount(accountNumber: string): Observable<Card[]> {
     return this.http.get<Card[]>(`${this.apiUrl}/${accountNumber}/cards`, { headers: this.getAuthHeaders() })
+
+  getTransactions(cardNumber?: string): Observable<PaymentOverviewDto[]> {
+    let url = this.apiUrl;
+    if (cardNumber) {
+      url += `?cardNumber=${cardNumber}`;
+    }
+    return this.http.get<PaymentOverviewDto[]>(url)
+  }
+
+  getMyCardsForAccount(accountNumber: string): Observable<Card[]> {
+    return this.http.get<Card[]>(`${this.apiUrl}/${accountNumber}/cards/my-cards`, { headers: this.getAuthHeaders() })
   }
 
   blockCard(accountNumber: string, cardNumber: string): Observable<any> {
-    const url = `${this.apiUrl}/${accountNumber}/cards/${cardNumber}/block`
+    const url = `${this.apiUrl}/${accountNumber}/cards/${cardNumber}/block-by-user` //ako je juzer, a samo /block je ako je admin todo
     return this.http.post(url, {}, { headers: this.getAuthHeaders() })
   }
 

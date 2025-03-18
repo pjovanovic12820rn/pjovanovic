@@ -10,7 +10,7 @@ import {Loan} from '../models/loan-dto.model';
   providedIn: 'root',
 })
 export class LoanRequestService {
-  private apiUrl = 'http://localhost:8080/loan-requests';
+  private apiUrl = 'http://localhost:8082/api/loan-requests';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
