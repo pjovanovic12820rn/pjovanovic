@@ -28,6 +28,7 @@ import { CreateCardComponent } from './components/create-card/create-card.compon
 import { PaymentDetailsComponent } from './components/payment-details/payment-details.component';
 import { SuccessComponent } from './components/success/success.component';
 import { LoansComponent } from './components/loans/loans.component';
+import {MyPortfolioComponent} from './components/my-portfolio/my-portfolio.component';
 import {LoanDetailsComponent} from './components/loan-details/loan-details.component';
 
 export const routes: Routes = [
@@ -73,6 +74,9 @@ export const routes: Routes = [
 
   // exchange
   { path: 'exchange-rate', component: ExchageRateListComponent, canActivate: [authGuard] },
+
+  // securities
+  { path: 'my-portfolio', component: MyPortfolioComponent, canActivate: [authGuard] },
 
   // loans
   { path: 'loan-request', component: LoanRequestComponent, canActivate: [authGuard] },
