@@ -8,7 +8,7 @@ import {Employee} from '../models/employee.model';
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
+export class ClientService {
   private apiUrl = 'http://localhost:8080/api/admin/clients';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
