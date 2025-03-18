@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 import { LoanService } from '../../services/loan.service';
 import { Loan } from '../../models/loan-dto.model';
 import { Router } from '@angular/router';
-import { LoanRequestService } from '../../services/loan-request.service';
+import {LoanRequestService} from '../../services/loan-request.service';
 
 @Component({
   selector: 'app-loans',
@@ -25,7 +25,6 @@ export class LoansComponent implements OnInit {
   loanRequests: Loan[] = [];
   filterText: string = '';
   selectedLoan: Loan | null = null;
-  newCreditPopupVisible: boolean = false;
   newLoanForm: FormGroup;
 
   constructor(private loanService: LoanService, private loanRequestService: LoanRequestService, private fb: FormBuilder, private router: Router) {
@@ -108,36 +107,6 @@ export class LoansComponent implements OnInit {
 
   closeDetailsPopup(): void {
     this.selectedLoan = null;
-  }
-
-  openNewCreditPopup(): void {
-    // this.newCreditPopupVisible = true;
-  }
-
-  closeNewCreditPopup(): void {
-    this.newCreditPopupVisible = false;
-    this.newLoanForm.reset();
-  }
-
-  submitNewCreditApplication(): void {
-    // if (this.newLoanForm.invalid) {
-    //   alert('Please fill all required fields with valid values');
-    //   return;
-    // }
-    // const loanApplication = {
-    //   ...this.newLoanForm.value,
-    //   clientId: parseInt(this.clientId)
-    // };
-    // // Add logic to submit the application through your service
-    // console.log('Submitting loan application:', loanApplication);
-    // // Close the popup after submission
-    // this.closeNewCreditPopup();
-  }
-
-  formatDate(dateString?: string): string {
-    if (!dateString) return 'N/A';
-    const date = new Date(dateString);
-    return date.toLocaleDateString();
   }
 
   getLoanStatusClass(status?: string): string {
