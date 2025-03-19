@@ -290,11 +290,19 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
             address: this.companyInfo.address,
             majorityOwner: this.newAccount.clientId
           };
+          //za err hendl
+          try {
+            const newCompany = await this.companyService.createCompany(createCompanyDto).toPromise();
+            if (newCompany && 'id' in newCompany) {
+              companyId = newCompany.id;
+            }
+          } catch (error: any) {
 
-          const newCompany = await this.companyService.createCompany(createCompanyDto).toPromise();
-          if (newCompany && 'id' in newCompany) {
-            companyId = newCompany.id;
+            const errorMessage = error?.error?.message || 'Failed to create company (try different tax number or registration number';
+            this.alertService.showAlert('error', errorMessage);
+            return;
           }
+
         } else {
           companyId = this.selectedCompanyId || undefined;
         }
@@ -307,18 +315,25 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
           }
           const formattedDate = this.formatDate(selectedUser.birthDate);
 
-          const createPersonnelDto: CreateAuthorizedPersonnel = {
-            firstName: selectedUser.firstName,
-            lastName: selectedUser.lastName,
-            dateOfBirth: formattedDate,
-            gender: selectedUser.gender,
-            email: selectedUser.email,
-            phoneNumber: selectedUser.phone || '',
-            address: selectedUser.address || '',
-            companyId: companyId!
-          };
+          try {
+            const createPersonnelDto: CreateAuthorizedPersonnel = {
+              firstName: selectedUser.firstName,
+              lastName: selectedUser.lastName,
+              dateOfBirth: formattedDate,
+              gender: selectedUser.gender,
+              email: selectedUser.email,
+              phoneNumber: selectedUser.phone || '',
+              address: selectedUser.address || '',
+              companyId: companyId!
+            };
 
-          await this.authorizedPersonnelService.createAuthorizedPersonnel(createPersonnelDto).toPromise();
+            await this.authorizedPersonnelService.createAuthorizedPersonnel(createPersonnelDto).toPromise();
+          } catch (error: any) {
+            const errorMessage = error?.error?.message || 'Failed to create authorized personnel';
+            this.alertService.showAlert('error', errorMessage);
+            return;
+          }
+
         }
 
       }
