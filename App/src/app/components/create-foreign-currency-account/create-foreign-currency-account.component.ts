@@ -149,7 +149,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
   }
 
   navigateToRegisterUser() {
-    this.router.navigate(['/register-user'], { queryParams: { redirect: 'account' } });
+    this.router.navigate(['/register-user'], { queryParams: { redirect: 'foreign-account' } });
   }
 
   loadUsers() {

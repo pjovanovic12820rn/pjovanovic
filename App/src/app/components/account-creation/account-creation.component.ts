@@ -119,7 +119,7 @@ export class AccountCreationComponent implements OnInit {
   }
 
   navigateToRegisterUser() {
-    this.router.navigate(['/register-user'], { queryParams: { redirect: 'account' } });
+    this.router.navigate(['/register-user'], { queryParams: { redirect: 'current-account' } });
   }
 
   loadUsers() {
