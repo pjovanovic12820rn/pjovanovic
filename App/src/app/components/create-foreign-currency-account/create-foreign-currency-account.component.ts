@@ -14,15 +14,17 @@ import { CompanyService } from '../../services/company.service';
 import { Company, CreateCompany } from '../../models/company.model';
 import {CreateAuthorizedPersonnel} from '../../models/authorized-personnel.model';
 import {AuthorizedPersonnelService} from '../../services/authorized-personnel.service';
+import { CurrencyService } from '../../services/currency.service';
+import {CurrencyDto} from '../../models/currency-dto.model';
 
-interface Currency {
-  code: string;
-  name: string;
-  symbol: string;
-  country: string[];
-  description: string;
-  isActive: boolean;
-}
+// interface Currency {
+//   code: string;
+//   name: string;
+//   symbol: string;
+//   country: string[];
+//   description: string;
+//   isActive: boolean;
+// }
 
 @Component({
   selector: 'app-create-foreign-currency-account',
@@ -70,32 +72,33 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
   isNewCompany = false;
   loadingCompanies = false;
 
-  currencies: Currency[] = [ //hard c dok ne vidim odakle se uzimaju zapravo
-    {
-      code: 'EUR',
-      name: 'Euro',
-      symbol: '€',
-      country: ['Germany', 'Slovenia', 'Other EU'],
-      description: 'Euro',
-      isActive: true,
-    },
-    {
-      code: 'USD',
-      name: 'US Dollar',
-      symbol: '$',
-      country: ['USA'],
-      description: 'US Dollar',
-      isActive: true,
-    },
-    {
-      code: 'CHF',
-      name: 'Swiss Franc',
-      symbol: 'CHF',
-      country: ['Switzerland'],
-      description: 'Swiss Franc',
-      isActive: true,
-    }
-  ];
+  currencies: CurrencyDto[] = [];
+  // currencies: Currency[] = [
+  //   {
+  //     code: 'EUR',
+  //     name: 'Euro',
+  //     symbol: '€',
+  //     country: ['Germany', 'Slovenia', 'Other EU'],
+  //     description: 'Euro',
+  //     isActive: true,
+  //   },
+  //   {
+  //     code: 'USD',
+  //     name: 'US Dollar',
+  //     symbol: '$',
+  //     country: ['USA'],
+  //     description: 'US Dollar',
+  //     isActive: true,
+  //   },
+  //   {
+  //     code: 'CHF',
+  //     name: 'Swiss Franc',
+  //     symbol: 'CHF',
+  //     country: ['Switzerland'],
+  //     description: 'Swiss Franc',
+  //     isActive: true,
+  //   }
+  // ];
 
   //za onog dodatnog
   selectedAuthorizedPersonnelId: number | null = null;
@@ -110,13 +113,16 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     private employeeService: EmployeeService,
     private alertService: AlertService,
     private companyService: CompanyService,
-    private authorizedPersonnelService: AuthorizedPersonnelService
+    private authorizedPersonnelService: AuthorizedPersonnelService,
+    private currencyService: CurrencyService
   ) {}
 
   ngOnInit(): void {
     const isAdmin = this.authService.isAdmin();
     const isEmployee = this.authService.isEmployee();
     this.isCurrAdmin = isAdmin;
+    this.currencies = this.currencyService.getCurrencies();
+
     if (!(isAdmin || isEmployee)) {
       alert("Access denied. Only employees and admins can create accounts.");
       this.router.navigate(['/']);

@@ -52,6 +52,12 @@ export class CardService {
   getMyCardsForAccount(accountNumber: string): Observable<Card[]> {
     return this.http.get<Card[]>(`${this.apiUrl}/${accountNumber}/cards/my-cards`, { headers: this.getAuthHeaders() })
   }
+  //pravilno za karte po acc
+  getUserCardsForAccount(accountNumber: string): Observable<Card[]> {
+    const url = `${this.apiUrl}/${accountNumber}/cards/my-account-cards`;
+    return this.http.get<Card[]>(url, { headers: this.getAuthHeaders() });
+  }
+
 
   blockCard(accountNumber: string, cardNumber: string): Observable<any> {
     const url = `${this.apiUrl}/${accountNumber}/cards/${cardNumber}/block-by-user` //ako je juzer, a samo /block je ako je admin todo
