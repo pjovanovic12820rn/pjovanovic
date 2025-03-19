@@ -66,6 +66,7 @@ export class AsideComponent implements OnInit, OnDestroy {
   }
 
   navigateTo(route: string) {
+    this.closeModal();
     this.router.navigate([route]);
   }
 
