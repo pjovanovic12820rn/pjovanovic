@@ -28,8 +28,8 @@ import { CreateCardComponent } from './components/create-card/create-card.compon
 import { PaymentDetailsComponent } from './components/payment-details/payment-details.component';
 import { SuccessComponent } from './components/success/success.component';
 import { LoansComponent } from './components/loans/loans.component';
-import {MyPortfolioComponent} from './components/my-portfolio/my-portfolio.component';
-import {LoanDetailsComponent} from './components/loan-details/loan-details.component';
+import { MyPortfolioComponent } from './components/my-portfolio/my-portfolio.component';
+import { LoanDetailsComponent } from './components/loan-details/loan-details.component';
 
 export const routes: Routes = [
   // login
@@ -43,28 +43,28 @@ export const routes: Routes = [
   { path: 'forgot-password', component: MailComponent },
 
   // users
-  { path: 'register-user', component: RegisterUserComponent, canActivate: [employeeOrAdminGuard, authGuard] },
-  { path: 'users/:id', component: EditUserComponent, canActivate: [employeeOrAdminGuard, authGuard] },
+  { path: 'register-user', component: RegisterUserComponent, canActivate: [authGuard, employeeOrAdminGuard] },
+  { path: 'users/:id', component: EditUserComponent, canActivate: [authGuard, employeeOrAdminGuard] },
   { path: 'user/:id', component: UserDetailComponent, canActivate: [authGuard] },
 
   // employees
-  { path: 'employees', component: EmployeesComponent, canActivate: [adminGuard, authGuard] },
-  { path: 'register-employee', component: RegisterEmployeeComponent, canActivate: [adminGuard, authGuard] },
-  { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'employees', component: EmployeesComponent, canActivate: [authGuard, adminGuard] },
+  { path: 'register-employee', component: RegisterEmployeeComponent, canActivate: [authGuard, adminGuard] },
+  { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [authGuard, adminGuard] },
   { path: 'employee/:id', component: EmployeeDetailComponent, canActivate: [authGuard] },
-  { path: 'client-portal', component: ClientPortalComponent, canActivate: [authGuard] },
+  { path: 'client-portal', component: ClientPortalComponent, canActivate: [authGuard, employeeOrAdminGuard] },
 
   // accounts
   { path: 'account/:accountNumber', component: CardsComponent, canActivate: [authGuard] },
-  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [employeeOrAdminGuard] },
-  { path: 'create-current-account', component: AccountCreationComponent, canActivate: [employeeOrAdminGuard] },
+  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [authGuard, employeeOrAdminGuard] },
+  { path: 'create-current-account', component: AccountCreationComponent, canActivate: [authGuard, employeeOrAdminGuard] },
   { path: 'account-management', component: AccountManagementComponent, canActivate: [authGuard] },
 
   // payments
-  { path: 'transfer', component: TransferComponent, canActivate: [authGuard] },
-  { path: 'recipients', component: RecipientsComponent, canActivate: [authGuard] },
-  { path: 'new-payment', component: NewPaymentComponent, canActivate: [authGuard] },
-  { path: 'payment-details', component: PaymentDetailsComponent, canActivate: [authGuard] },
+  { path: 'transfer', component: TransferComponent, canActivate: [authGuard] }, // nzm koji guard treba
+  { path: 'recipients', component: RecipientsComponent, canActivate: [authGuard] }, // client guard
+  { path: 'new-payment', component: NewPaymentComponent, canActivate: [authGuard] }, // client guard
+  { path: 'payment-details', component: PaymentDetailsComponent, canActivate: [authGuard] }, // client guard
 
   // cards and transactions
   { path: 'card/:cardNumber/transactions', component: TransactionListComponent, canActivate: [authGuard] },
@@ -76,7 +76,7 @@ export const routes: Routes = [
   { path: 'exchange-rate', component: ExchageRateListComponent, canActivate: [authGuard] },
 
   // securities
-  { path: 'my-portfolio', component: MyPortfolioComponent, canActivate: [authGuard] },
+  { path: 'my-portfolio', component: MyPortfolioComponent, canActivate: [authGuard] }, // client guard
 
   // loans
   { path: 'loan-request', component: LoanRequestComponent, canActivate: [authGuard] },
@@ -87,4 +87,3 @@ export const routes: Routes = [
   { path: 'success', component: SuccessComponent }
 
 ];
-

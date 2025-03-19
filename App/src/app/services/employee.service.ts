@@ -57,6 +57,11 @@ export class EmployeeService {
     return this.http.patch<void>(url, null, { headers: this.getAuthHeaders() });
   }
 
+  activateEmployee(id: number): Observable<void> {
+    const url = `${this.apiUrl}/${id}/activate`; // Construct URL with ID
+    return this.http.patch<void>(url, null, { headers: this.getAuthHeaders() });
+  }
+
   setEmployeeRole(employeeId: number, role: string): Observable<void> {
     return this.http.patch<void>(`${this.apiUrl}/${employeeId}/set-role`, { role }, { headers: this.getAuthHeaders() });
   }
