@@ -1,0 +1,59 @@
+<div class="portfolio-container">
+  <h2>My Portfolio</h2>
+
+  <table class="securities-table" *ngIf="securities.length > 0">
+    <thead>
+    <tr>
+      <th>Type</th>
+      <th>Ticker</th>
+      <th>Amount</th>
+      <th>Price</th>
+      <th>Profit</th>
+      <th>Last Modified</th>
+      <th>Public</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let security of securities">
+      <td>{{ security.type }}</td>
+      <td>{{ security.ticker }}</td>
+      <td>{{ security.amount }}</td>
+      <td>{{ security.price }}</td>
+      <td [ngClass]="{'positive': security.profit >= 0, 'negative': security.profit < 0}">
+        {{ security.profit }}
+      </td>
+      <td>{{ security.lastModified }}</td>
+      <td class="public-cell">
+        <span>{{ security.publicCounter }}</span>
+        <button class="publish-button" (click)="publishSecurity(security)">Publish</button>
+      </td>
+      <td><button class="sell-button">Sell</button></td>
+    </tr>
+    </tbody>
+  </table>
+
+
+  <div>
+    <button class="info-button" (click)="openProfitModal()">Profit info</button>
+    <button class="info-button" (click)="openTaxModal()">Tax info</button>
+  </div>
+
+  <!-- Profit Info Modal -->
+  <div class="modal" *ngIf="isProfitModalOpen">
+    <div class="modal-content">
+      <h3>Profit Information</h3>
+      <p>Total Profit: <strong>{{ getTotalProfit().toFixed(2) }} USD</strong></p>
+      <button class="close-button" (click)="closeModals()">Close</button>
+    </div>
+  </div>
+
+  <!-- Tax Info Modal -->
+  <div class="modal" *ngIf="isTaxModalOpen">
+    <div class="modal-content">
+      <h3>Tax Information</h3>
+      <p>Total Tax Paid: <strong>{{ getTotalTax().toFixed(2) }} USD</strong></p>
+      <button class="close-button" (click)="closeModals()">Close</button>
+    </div>
+  </div>
+</div>
