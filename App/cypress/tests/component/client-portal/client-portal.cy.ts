@@ -7,86 +7,13 @@ import {AuthService} from '../../../../src/app/services/auth.service';
 import {AlertService} from '../../../../src/app/services/alert.service';
 import {HttpParams, provideHttpClient} from '@angular/common/http';
 import {User} from '../../../../src/app/models/user.model';
+import {
+  MockActivatedRoute,
+  MockAuthServiceAdmin,
+  MockAuthServiceEmployee,
+  MockClientService
+} from '../../../support/mock';
 
-class MockClientService {
-  getAllUsers(page: number, size: number) {
-    return of({
-      content: [
-        {
-          id: 1,
-          firstName: 'test',
-          lastName: 'test',
-          email: 'test@test.com',
-          gender: 'male',
-          birthDate: new Date(),
-          jmbg: '123123123',
-        },
-        {
-          id: 2,
-          firstName: 'test2',
-          lastName: 'test2',
-          email: 'test2@test.com',
-          gender: 'male',
-          birthDate: new Date(),
-          jmbg: '123123123',
-        },
-      ],
-      totalElements: 2,
-    });
-  }
-
-}
-class MockAuthServiceAdmin {
-  private authStatus = new BehaviorSubject<boolean>(true);
-  authStatus$ = this.authStatus.asObservable();
-
-  isAdmin() {
-    return true;
-  }
-
-  isEmployee() {
-    return false;
-  }
-
-  isClient() {
-    return false;
-  }
-
-  getUserId() {
-    return 1;
-  }
-}
-class MockAuthServiceEmployee {
-  private authStatus = new BehaviorSubject<boolean>(true);
-  authStatus$ = this.authStatus.asObservable();
-
-  isAdmin() {
-    return false;
-  }
-
-  isEmployee() {
-    return true;
-  }
-
-  isClient() {
-    return false;
-  }
-
-  getUserId() {
-    return 1;
-  }
-}
-class MockActivatedRoute {
-  parent = {
-    snapshot: {data: {title: 'myTitle '}},
-    routeConfig: {
-      children: {
-        filter: () => {
-        }
-      }
-    }
-  };
-}
 describe('ClientPortalComponent Admin', () => {
 
   beforeEach(() => {

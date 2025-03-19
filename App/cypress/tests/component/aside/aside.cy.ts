@@ -1,48 +1,18 @@
 import {AsideComponent} from '../../../../src/app/components/shared/aside/aside.component';
 import {provideHttpClient} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
-import {BehaviorSubject} from 'rxjs';
 import {AuthService} from '../../../../src/app/services/auth.service';
-
-class MockActivatedRoute {
-  parent = {
-    snapshot: {data: {title: 'myTitle '}},
-    routeConfig: {
-      children: {
-        filter: () => {
-        }
-      }
-    }
-  };
-}
-
-// Mock AuthService
-class MockAuthService {
-  private authStatus = new BehaviorSubject<boolean>(true);
-  authStatus$ = this.authStatus.asObservable();
-
-  isAdmin() {
-    return false;
-  }
-
-  isEmployee() {
-    return true;
-  }
-
-  isClient() {
-    return false;
-  }
-
-  getUserId() {
-    return 1;
-  }
-}
+import {
+  MockActivatedRoute,
+  MockAuthServiceClient,
+  MockAuthServiceEmployee
+} from '../../../support/mock';
 
 it('mounts', () => {
   cy.mount(AsideComponent, {
     providers: [provideHttpClient(),
       {provide: ActivatedRoute, useClass: MockActivatedRoute},
-      {provide: AuthService, useClass: MockAuthService},
+      {provide: AuthService, useClass: MockAuthServiceClient},
     ],
     componentProperties: {},
   })
@@ -53,7 +23,7 @@ describe('AsideComponent isEmployee', () => {
     cy.mount(AsideComponent, {
       providers: [provideHttpClient(),
         {provide: ActivatedRoute, useClass: MockActivatedRoute},
-        {provide: AuthService, useClass: MockAuthService},
+        {provide: AuthService, useClass: MockAuthServiceEmployee},
       ],
       componentProperties: {
         isAuthenticated: true,
