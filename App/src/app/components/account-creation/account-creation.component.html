@@ -121,9 +121,9 @@
               </div>
 
               <div class="form-group">
-                <label for="majorityOwner">Majority Owner (Client ID):</label>
+                <label for="majorityOwner">Majority Owner:</label>
                 <input id="majorityOwner" name="majorityOwner"
-                       [(ngModel)]="newAccount.clientId"
+                       [value]="getClientName(newAccount.clientId)"
                        type="text"
                        disabled />
               </div>

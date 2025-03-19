@@ -5,7 +5,7 @@ export interface Company {
   taxId: string;
   activityCode: string;
   address: string;
-  majorityOwner: number;
+  // majorityOwner: number;
 }
 
 export interface CreateCompany {

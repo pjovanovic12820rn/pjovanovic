@@ -217,7 +217,8 @@ export class AccountCreationComponent implements OnInit {
       taxNumber: company.taxId,
       activityCode: company.activityCode,
       address: company.address,
-      majorityOwner: company.majorityOwner.toString()
+      // majorityOwner: company.majorityOwner.toString()
+      majorityOwner: this.newAccount.clientId.toString()
     };
   }
 
@@ -235,6 +236,11 @@ export class AccountCreationComponent implements OnInit {
   private formatDate(date: Date): string {
     const isoString = new Date(date).toISOString();
     return isoString.split('T')[0];
+  }
+
+  getClientName(clientId: number): string {
+    const client = this.users.find(u => u.id === clientId);
+    return client ? `${client.firstName} ${client.lastName}` : 'Unknown';
   }
 
   async onSubmit() {
@@ -291,7 +297,15 @@ export class AccountCreationComponent implements OnInit {
       this.accountService.createCurrentAccount(this.newAccount).subscribe({
         next: () => {
           this.alertService.showAlert('success', 'Account created successfully!');
-          this.router.navigate(['/client-portal']);
+          // this.router.navigate(['/client-portal']);
+          this.router.navigate(['/success'], {
+            state: {
+              title: 'Account Created!',
+              message: 'The account has been successfully created.',
+              buttonName: 'Go to Client Portal',
+              continuePath: '/client-portal'
+            }
+          });
         },
         error: (error) => {
           console.error('Failed to create account:', error);
