@@ -28,6 +28,7 @@ export class AccountService {
     });
   }
 
+  // admin or employee
   getAccountsForClient(clientId: string | number | null, page: number = 0, size: number = 10): Observable<{
     content: AccountResponse[]
   }> {
@@ -38,22 +39,10 @@ export class AccountService {
     );
   }
 
-  // jer postoji getmyacc samo sa acctransf
-  // getMyAccountsRegular(){
-  //   const headers = this.getAuthHeaders().set('Accept', '*/*');
-  //   return this.http.get<{ content: AccountResponse[]}>(`${this.apiUrl}`, {headers});
-  // }
-
-  // jer postoji getmyacc samo sa acctransf
+  // client - getMyAccounts
   getMyAccountsRegular(): Observable<AccountResponse[]> {
     const headers = this.getAuthHeaders().set('Accept', '*/*');
     return this.http.get<AccountResponse[]>(`${this.apiUrl}`, { headers });
-  }
-
-  getAccount(accountNumber: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${accountNumber}`, {
-      headers: this.getAuthHeaders(),
-    });
   }
 
   getAccountDetails(accountNumber: string): Observable<any> {
