@@ -48,7 +48,12 @@
           </div>
 
           <div *ngIf="!loggedInEmployee">
-            <p>Loading employee details...</p>
+            <div *ngIf="isCurrAdmin">
+              <p>Admin creating account...</p>
+            </div>
+            <div *ngIf="!isCurrAdmin">
+              <p>Loading employee details...</p>
+            </div>
           </div>
         </div>
       </div>

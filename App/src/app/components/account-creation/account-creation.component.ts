@@ -44,6 +44,7 @@ export class AccountCreationComponent implements OnInit {
   isCompanyAccount = false;
   employeeId: number | null = null;
   availableCurrencies: string[] = ['RSD'];
+  isCurrAdmin: boolean = false;
 
   newAccount: NewBankAccount = {
     currency: 'RSD',
@@ -69,7 +70,6 @@ export class AccountCreationComponent implements OnInit {
   //za onog dodatnog
   selectedAuthorizedPersonnelId: number | null = null;
   availablePersonnel: User[] = [];
-
   constructor(
     private userService: ClientService,
     private authService: AuthService,
@@ -85,6 +85,7 @@ export class AccountCreationComponent implements OnInit {
   ngOnInit(): void {
     const isAdmin = this.authService.isAdmin();
     const isEmployee = this.authService.isEmployee();
+    this.isCurrAdmin = isAdmin;
     if (!(isAdmin || isEmployee)) {
       alert("Access denied. Only employees and admins can create accounts.");
       this.router.navigate(['/']);
