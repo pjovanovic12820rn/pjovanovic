@@ -94,11 +94,11 @@
 
         <div class="form-buttons">
             <button class="btn confirm" type="submit" [disabled]="loanForm.invalid">Submit Request</button>
-            <button class="btn cancel" type="button" (click)="navigateToPage('/')">Cancel</button>
+            <button class="btn cancel" type="button" (click)="navigateToLoanManagement()">Cancel</button>
         </div>
     </form>
 
-    <div *ngIf="success">
-        <app-success message="Your loan request has been successfully submitted!" title="Loan Request Submitted" continuePath="/user/:id"></app-success>
-    </div>
+<!--    <div *ngIf="success">-->
+<!--        <app-success message="Your loan request has been successfully submitted!" title="Loan Request Submitted" continuePath="/user/:id"></app-success>-->
+<!--    </div>-->
 </div>

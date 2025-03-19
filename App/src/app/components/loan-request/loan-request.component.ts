@@ -9,6 +9,7 @@ import {LoanRequest, LoanType, EmploymentStatus, InterestRateType} from '../../m
 import { Currency } from '../../models/currency.model';
 import { AccountService } from '../../services/account.service';
 import { AlertComponent } from '../shared/alert/alert.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-loan-request',
@@ -23,6 +24,7 @@ export class LoanRequestComponent implements OnInit {
   private loanRequestService = inject(LoanRequestService);
   private accountService = inject(AccountService);
   private alertService = inject(AlertService);
+  private authService = inject(AuthService);
 
   loanForm!: FormGroup;
   availableCurrencies: Currency[] = [];
@@ -117,15 +119,37 @@ export class LoanRequestComponent implements OnInit {
     this.router.navigate([route]);
   }
 
+  //da vrati ako odustane
+  navigateToLoanManagement(): void {
+    const userId = this.authService.getUserId();
+    if (userId) {
+      this.router.navigate([`/loan-management/${userId}`]);
+    } else {
+      this.alertService.showAlert('error', 'User not authenticated');
+      this.router.navigate(['/login']);
+    }
+  }
+
   onSubmit(): void {
     if (this.loanForm.valid) {
       const request: LoanRequest = this.loanForm.value;
       request.status = "PENDING"
 
       this.loanRequestService.submitLoanRequest(request).subscribe({
-        next: () => {
-          this.success = true;
-          this.alertService.showAlert('success', 'Loan request submitted successfully!');
+        next: (response: string) => {
+          // this.success = true;
+          // // this.alertService.showAlert('success', 'Loan request submitted successfully!');
+          // this.alertService.showAlert('success', response);
+          //
+          this.router.navigate(['/success'], {
+            state: {
+              title: 'Loan Request Submitted!',
+              message: response,
+              buttonName: 'Go to Loan Management',
+              continuePath: `/loan-management/${this.authService.getUserId()}`
+            }
+          });
+
         },
         error: () => {
           this.alertService.showAlert('error', 'An error occurred while submitting the request.');
