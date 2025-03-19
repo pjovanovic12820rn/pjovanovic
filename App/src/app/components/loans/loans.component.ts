@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -48,12 +48,6 @@ export class LoansComponent implements OnInit {
     this.loanService.getClientLoans(this.clientId).subscribe({
       next: (data) => {
         this.loans = data.content.sort((a, b) => (b.amount || 0) - (a.amount || 0));
-        if (data.content.length > 0) {
-            this.loans = data.content.sort((a, b) =>
-            (b.amount || 0) - (a.amount || 0)
-            );
-        }
-        console.log('Loans: ', this.loans);
       },
       error: (err) => {
         console.error('Error loading client loans:', err);
@@ -99,30 +93,26 @@ export class LoansComponent implements OnInit {
     );
   }
 
-  showLoanDetails(loan: Loan): void {
-    if (loan.id) {
-      this.loanService.getLoan(loan.id).subscribe({
-        next: (data) => {
-          this.selectedLoan = data;
-        },
-        error: (err) => {
-          console.error('Error loading loan details:', err);
-          this.selectedLoan = null;
-        },
-      });
-    }
-  }
+  // showLoanDetails(loan: Loan): void {
+  //   if (loan.id) {
+  //     this.loanService.getLoan(loan.id).subscribe({
+  //       next: (data) => {
+  //         this.selectedLoan = data;
+  //       },
+  //       error: (err) => {
+  //         console.error('Error loading loan details:', err);
+  //         this.selectedLoan = null;
+  //       },
+  //     });
+  //   }
+  // }
 
-  closeDetailsPopup(): void {
-    this.selectedLoan = null;
-  }
+  // closeDetailsPopup(): void {
+  //   this.selectedLoan = null;
+  // }
 
   openNewCredit(): void {
     this.router.navigate(['/loan-request'])
-  }
-
-  closeDetailsPopup(): void {
-    this.selectedLoan = null;
   }
 
   getLoanStatusClass(status?: string): string {
@@ -144,10 +134,6 @@ export class LoansComponent implements OnInit {
       default:
         return '';
     }
-  }
-
-  openNewCredit(): void {
-    this.router.navigate(['/loan-request']);
   }
 
   showLoanDetails(loan: Loan): void {

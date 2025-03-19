@@ -7,6 +7,10 @@ import { NewBankAccount } from '../models/new-bank-account.model';
 import { Employee } from '../models/employee.model';
 import { AccountResponse } from '../models/account-response.model';
 import {AccountTransfer} from '../models/account-transfer';
+import {
+  ChangeAccountLimitDto,
+  ChangeAccountNameDto
+} from '../components/account-management/account-management.component';
 
 @Injectable({
   providedIn: 'root',
@@ -84,5 +88,19 @@ export class AccountService {
         params,
       }
     );
+  }
+
+  changeAccountName(accountNumber: string, newName: string): Observable<void> {
+    const payload: ChangeAccountNameDto = { newName };
+    return this.http.put<void>(`${this.apiUrl}/${accountNumber}/change-name`, payload, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  changeAccountLimit(accountNumber: string, newLimit: number): Observable<void> {
+    const payload: ChangeAccountLimitDto = { newLimit };
+    return this.http.put<void>(`${this.apiUrl}/${accountNumber}/request-change-limit`, payload, {
+      headers: this.getAuthHeaders(),
+    });
   }
 }

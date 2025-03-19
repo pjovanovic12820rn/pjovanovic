@@ -28,6 +28,7 @@ export interface CreateCardDto {
 export class CardService {
   private apiUrl = 'http://localhost:8082/api/account'
   constructor(private http: HttpClient, private authService: AuthService) {}
+
   private getAuthHeaders(): HttpHeaders {
     const token = this.authService.getToken()
     return new HttpHeaders({
@@ -37,7 +38,8 @@ export class CardService {
   }
 
   getCardsByAccount(accountNumber: string): Observable<Card[]> {
-    return this.http.get<Card[]>(`${this.apiUrl}/${accountNumber}/cards`, { headers: this.getAuthHeaders() })
+    return this.http.get<Card[]>(`${this.apiUrl}/${accountNumber}/cards`, {headers: this.getAuthHeaders()})
+  }
 
   getTransactions(cardNumber?: string): Observable<PaymentOverviewDto[]> {
     let url = this.apiUrl;
