@@ -12,12 +12,7 @@
     </div>
     <div class="form-group">
       <label for="receiverAccountNumber">Receiver Account Number</label>
-      <select id="receiverAccountNumber" [(ngModel)]="payment.receiverAccountNumber" name="receiverAccountNumber" required>
-        <option value="" disabled>Select Receiver Account</option>
-        <option *ngFor="let account of accounts" [value]="account.accountNumber">
-          {{ account.accountNumber }} ({{ account.owner.firstName }} {{ account.owner.lastName }})
-        </option>
-      </select>
+      <input id="receiverAccountNumber" type="text" [(ngModel)]="payment.receiverAccountNumber" name="receiverAccountNumber" required />
     </div>
     <div class="form-group">
       <label for="amount">Amount</label>

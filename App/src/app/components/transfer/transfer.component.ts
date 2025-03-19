@@ -32,9 +32,9 @@ export class TransferComponent implements OnInit {
   transferAmount: number | undefined;
 
   ngOnInit(): void {
-    this.accountService.getAccountsForClient(this.authService.getUserId()).subscribe({
+    this.accountService.getMyAccountsRegular().subscribe({
       next: (response) => {
-        this.accounts = response.content;
+        this.accounts = response;
       },
       error: () => {
         this.alertService.showAlert('error', 'Failed to load your account. Please try again later.');
