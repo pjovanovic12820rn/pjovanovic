@@ -6,6 +6,7 @@ import { PaymentOverviewDto } from '../models/payment-overview-dto';
 import { PaymentDetailsDto } from '../models/payment-details-dto';
 import { CreatePaymentDto } from '../models/create-payment-dto';
 import { AuthService } from './auth.service';
+import {TransferDto} from '../models/transfer.model';
 
 @Injectable({
   providedIn: 'root',
@@ -60,6 +61,14 @@ export class PaymentService {
     return this.http.get<{ content: PaymentOverviewDto[], totalElements: number }>(this.baseUrl, {
       headers: this.getAuthHeaders(), //.set('Accept', '*/*')
       params
+    }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  transfer(transferDto: TransferDto): Observable<any>{
+    return this.http.post(`${this.baseUrl}/transfer`, transferDto, {
+      headers: this.getAuthHeaders(),
     }).pipe(
       catchError(this.handleError)
     );

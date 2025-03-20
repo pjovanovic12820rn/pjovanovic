@@ -7,6 +7,8 @@ import {Router} from '@angular/router';
 import {AlertService} from '../../services/alert.service';
 import {AccountResponse} from '../../models/account-response.model';
 import {AuthService} from '../../services/auth.service';
+import {PaymentService} from '../../services/payment.service';
+import {TransferDto} from '../../models/transfer.model';
 
 @Component({
   selector: 'app-transfer',
@@ -22,7 +24,7 @@ import {AuthService} from '../../services/auth.service';
 export class TransferComponent implements OnInit {
 
   private accountService = inject(AccountService);
-  private authService = inject(AuthService);
+  private paymentService = inject(PaymentService);
   private router = inject(Router);
   private alertService = inject(AlertService);
 
@@ -30,6 +32,12 @@ export class TransferComponent implements OnInit {
   selectedFromAccountNumber: string | undefined;
   selectedToAccountNumber: string | undefined;
   transferAmount: number | undefined;
+
+  // transfer: TransferDto = {
+  //   senderAccountNumber = '',
+  //   receiverAccountNumber = '',
+  //   amount = 0
+  // };
 
   ngOnInit(): void {
     this.accountService.getMyAccountsRegular().subscribe({
@@ -62,8 +70,17 @@ export class TransferComponent implements OnInit {
       return;
     }
 
-    this.alertService.showAlert('success', 'Transfer successful!');
+    // if (this.selectedFromAccountNumber != null) {
+    //   this.transfer.senderAccountNumber = this.selectedFromAccountNumber
+    // }
+    // if (this.selectedToAccountNumber != null) {
+    //   this.transfer.receiverAccountNumber = this.selectedToAccountNumber
+    // }
+    // this.transfer.amount = this.transferAmount
+    //
+    // this.paymentService.transfer(this.transfer);
 
+    this.alertService.showAlert('success', 'Transfer successful!');
     this.router.navigate(['/employees']);
   }
 
