@@ -1,12 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
 import { User } from '../../models/user.model';
-import { AlertComponent } from '../alert/alert.component';
+import { AlertComponent } from '../shared/alert/alert.component';
 
 @Component({
   selector: 'app-register-user',
@@ -21,20 +21,31 @@ export class RegisterUserComponent implements OnInit {
   private userService = inject(UserService);
   private authService = inject(AuthService);
   private alertService = inject(AlertService);
+  private route = inject(ActivatedRoute);
 
   registerUserForm!: FormGroup;
   loading = false;
+  redirectToAccountCreation = false;
 
   get isAdmin(): boolean {
-    return <boolean>this.authService.getUserPermissions()?.includes("admin");
+    return <boolean>this.authService.isAdmin();
+  }
+  get isEmployee(): boolean {
+    return <boolean> this.authService.isEmployee();
   }
 
   ngOnInit(): void {
-    if (!this.isAdmin) {
+    if (!(this.isAdmin || this.isEmployee)) {
       this.alertService.showAlert('error', 'You do not have permission to register users.');
       this.router.navigate(['/']);
       return;
     }
+
+    this.route.queryParams.subscribe(params => {
+      if (params['redirect'] === 'account') {
+        this.redirectToAccountCreation = true;
+      }
+    });
 
     this.initForm();
   }
@@ -43,6 +54,7 @@ export class RegisterUserComponent implements OnInit {
     this.registerUserForm = this.fb.group({
       firstName: ['', [Validators.required, this.onlyLettersValidator, Validators.minLength(2)]],
       lastName: ['', [Validators.required, this.onlyLettersValidator, Validators.minLength(2)]],
+      username: ['', [Validators.required, Validators.minLength(4)]],
       birthDate: ['', [Validators.required, this.pastDateValidator]],
       gender: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -55,7 +67,7 @@ export class RegisterUserComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (!this.isAdmin) {
+    if (!(this.isAdmin || this.isEmployee)) {
       this.alertService.showAlert('error', 'Only admins can register users.');
       return;
     }
@@ -72,9 +84,15 @@ export class RegisterUserComponent implements OnInit {
     this.userService.registerUser(formData).subscribe({
       next: (newUser: User) => {
         this.alertService.showAlert('success', 'User registered successfully!');
-        this.router.navigate(['/create-foreign-currency-account'], {
-          queryParams: { newUserId: newUser.id }
-        });
+        // this.router.navigate(['/create-foreign-currency-account'], {
+        //   queryParams: { newUserId: newUser.id }
+        // });
+        if (this.redirectToAccountCreation) {
+          this.router.navigate(['/create-current-account'], { queryParams: { userId: newUser.id } });
+        } else {
+          this.router.navigate(['/client-portal']);
+        }
+        // this.router.navigate(['/users']);
       },
       error: (err) => {
         this.alertService.showAlert('error', err?.error?.message || 'Failed to register user. Please try again.');

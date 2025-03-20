@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
-import {AlertComponent} from '../alert/alert.component';
+import {AlertComponent} from '../shared/alert/alert.component';
 
 @Component({
   selector: 'app-edit-user',
@@ -28,7 +28,7 @@ export class EditUserComponent implements OnInit {
   loading = true;
 
   get isAdmin(): boolean {
-    return <boolean>this.authService.getUserPermissions()?.includes('admin');
+    return <boolean>this.authService.isAdmin();
   }
 
   ngOnInit(): void {
@@ -67,7 +67,7 @@ export class EditUserComponent implements OnInit {
       firstName: [{ value: user.firstName, disabled: true }, Validators.required],
       lastName: [user.lastName, [Validators.required, Validators.minLength(2)]],
       birthDate: [{ value: this.formatDate(user.birthDate), disabled: true }, Validators.required],
-      gender: [{ value: user.gender, disabled: true }, Validators.required],
+      gender: [ user.gender , Validators.required],
       email: [{ value: user.email, disabled: true }, [Validators.required, Validators.email]],
       phone: [user.phone, [Validators.required, Validators.pattern(/^0?[1-9][0-9]{6,14}$/)]],
       address: [user.address, [Validators.required, Validators.minLength(5)]],

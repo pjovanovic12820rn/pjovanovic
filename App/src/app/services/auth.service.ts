@@ -29,14 +29,9 @@ export class AuthService {
     });
   }
 
-  // login(email: string, password: string, loginType: 'employee' | 'client'): Observable<{ token: string }> {
-  //   const apiUrl = `${this.baseUrl}/login/${loginType}`;
-  //   return this.http.post<{ token: string }>(apiUrl, { email, password });
-  // }
-
   logout(): void {
     sessionStorage.removeItem('jwt');
-    this.authStatusSubject.next(false); // 🔹 Notify subscribers that the user is logged out
+    this.authStatusSubject.next(false);
   }
 
   isAuthenticated(): boolean {
@@ -45,7 +40,7 @@ export class AuthService {
 
   saveToken(token: string): void {
     sessionStorage.setItem('jwt', token);
-    this.authStatusSubject.next(true); // 🔹 Emit auth change when token is saved
+    this.authStatusSubject.next(true);
 
   }
 
@@ -59,10 +54,21 @@ export class AuthService {
 
     try {
       const decoded: any = jwtDecode(token);
-      return decoded.permissions || [];
+      return decoded.role || [];
     } catch (error) {
       console.error('Invalid JWT Token');
       return [];
+    }
+  }
+
+  getUserName(): string {
+    const token = this.getToken();
+    if (!token) return "Not Authenticated"
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded.username;
+    } catch {
+      return "Not Authenticated"
     }
   }
 
@@ -79,15 +85,15 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    return this.getUserPermissions().includes('admin');
+    return this.getUserPermissions().includes('ADMIN');
   }
 
   isEmployee(): boolean {
-    return this.getUserPermissions().includes('employee');
+    return this.getUserPermissions().includes('EMPLOYEE');
   }
 
   isClient(): boolean {
-    return this.getUserPermissions().includes('client');
+    return this.getUserPermissions().includes('CLIENT');
   }
 
   isActuary(): boolean {

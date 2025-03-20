@@ -1,164 +1,107 @@
-<h2>Create Foreign Currency Account</h2>
+<div class="top-margin"></div>
 
-<form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
-  <div>
-    <h3>Account Type</h3>
-    <div>
-      <input type="radio" id="accountTypeClient" name="accountType" value="client" formControlName="accountType">
-      <label for="accountTypeClient">Client Checking Account</label>
-    </div>
-    <div>
-      <input type="radio" id="accountTypeBusiness" name="accountType" value="business" formControlName="accountType">
-      <label for="accountTypeBusiness">Business Checking Account</label>
-    </div>
+<div class="container">
+  <h2>Create Foreign Currency Account</h2>
+
+  <div class="toggle-buttons">
+    <button id="clientBtn" class="toggle-btn" [class.active]="accountForm.get('accountType')?.value === 'CLIENT'"
+            (click)="accountForm.patchValue({ accountType: 'CLIENT' })">
+      Client Checking Account
+    </button>
+    <button id="businessBtn" class="toggle-btn" [class.active]="accountForm.get('accountType')?.value === 'business'"
+            (click)="accountForm.patchValue({ accountType: 'business' })">
+      Business Checking Account
+    </button>
   </div>
 
-  <div>
-    <h3>Account Details</h3>
+  <form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="column">
 
-    <div>
-      <label for="currency">Currency:</label>
-      <select id="currency" formControlName="currency">
-        <option value="">Select Currency</option>
-        <option *ngFor="let currency of currencies" [value]="currency.code">{{currency.name}} ({{currency.code}})</option>
-      </select>
-      <div *ngIf="accountForm.get('currency')?.invalid && (accountForm.get('currency')?.touched)">
-        <small class="error-message" *ngIf="accountForm.get('currency')?.errors?.['required']">
-          Currency is required.
-        </small>
+        <h3>Account Owner</h3>
+        <div class="form-group">
+          <label for="clientId">Select Existing User:</label>
+          <select id="clientId" formControlName="clientId">
+            <option value="">Select User</option>
+            <option *ngFor="let user of users" [value]="user.id">{{ user.firstName }} {{ user.lastName }}</option>
+          </select>
+        </div>
+        <button type="button" class="alt-btn" (click)="onCreateNewUserClick()">Create New User</button>
+
+        <h3>Employee Information</h3>
+        <div class="employee-info">
+          <p>Logged in employee: <strong>{{ loggedInEmployeeFullName }}</strong> Position: <strong>{{ loggedInEmployeePosition }}</strong></p>
+        </div>
+
+      </div>
+
+      <div class="column">
+        <h3>Limits and Initial Card</h3>
+        <div class="form-group">
+          <label for="dailyLimit">Daily Limit:</label>
+          <input id="dailyLimit" type="number" formControlName="dailyLimit">
+        </div>
+        <div class="form-group">
+          <label for="monthlyLimit">Monthly Limit:</label>
+          <input id="monthlyLimit" type="number" formControlName="monthlyLimit">
+        </div>
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="createCard" formControlName="createCard">
+          <label for="createCard">Create initial card</label>
+        </div>
+
+<!--        <h3>Generated Account Number</h3>-->
+<!--        <div class="form-group">-->
+<!--          <label for="accountNumber">Account Number:</label>-->
+<!--          <input id="accountNumber" type="text" formControlName="accountNumber" readonly>-->
+<!--        </div>-->
+        <h3>Account Details</h3>
+
+        <div class="form-group">
+          <label for="currency">Currency:</label>
+          <select id="currency" formControlName="currency">
+            <option value="">Select Currency</option>
+            <option *ngFor="let currency of currencies" [value]="currency.code">{{ currency.name }} ({{ currency.code }})</option>
+          </select>
+        </div>
+
+        <div *ngIf="isBusinessAccount">
+          <h3>Company Information</h3>
+          <div class="form-group">
+            <label for="companyName">Company Name:</label>
+            <input id="companyName" type="text" formControlName="companyName">
+          </div>
+          <div class="form-group">
+            <label for="companyRegistrationNumber">Company Registration Number:</label>
+            <input id="companyRegistrationNumber" type="text" formControlName="companyRegistrationNumber">
+          </div>
+          <div class="form-group">
+            <label for="taxIdentificationNumber">Tax Identification Number:</label>
+            <input id="taxIdentificationNumber" type="text" formControlName="taxIdentificationNumber">
+          </div>
+          <div class="form-group">
+            <label for="companyActivityCode">Company Activity Code:</label>
+            <input id="companyActivityCode" type="text" formControlName="companyActivityCode">
+          </div>
+          <div class="form-group">
+            <label for="companyAddress">Company Address:</label>
+            <input id="companyAddress" type="text" formControlName="companyAddress">
+          </div>
+          <div class="form-group">
+            <label for="majorityOwnerId">Majority Owner ID:</label>
+            <input id="majorityOwnerId" type="text" formControlName="majorityOwnerId">
+          </div>
+        </div>
+
       </div>
     </div>
-
-    <div id="business-fields" [style.display]="isBusinessAccount ? 'block' : 'none'">
-      <h3>Company Information</h3>
-      <div>
-        <label for="companyName">Company Name:</label>
-        <input type="text" id="companyName" formControlName="companyName">
-        <div *ngIf="accountForm.get('companyName')?.invalid && (accountForm.get('companyName')?.touched)">
-          <small class="error-message" *ngIf="accountForm.get('companyName')?.errors?.['required']">
-            Company Name is required.
-          </small>
-        </div>
-      </div>
-      <div>
-        <label for="companyRegistrationNumber">Company Registration Number:</label>
-        <input type="text" id="companyRegistrationNumber" formControlName="companyRegistrationNumber">
-        <div *ngIf="accountForm.get('companyRegistrationNumber')?.invalid && (accountForm.get('companyRegistrationNumber')?.touched)">
-          <small class="error-message" *ngIf="accountForm.get('companyRegistrationNumber')?.errors?.['required']">
-            Company Registration Number is required.
-          </small>
-          <small class="error-message" *ngIf="accountForm.get('companyRegistrationNumber')?.errors?.['pattern']">
-            Must be numeric.
-          </small>
-        </div>
-      </div>
-      <div>
-        <label for="taxIdentificationNumber">Tax Identification Number:</label>
-        <input type="text" id="taxIdentificationNumber" formControlName="taxIdentificationNumber">
-        <div *ngIf="accountForm.get('taxIdentificationNumber')?.invalid && (accountForm.get('taxIdentificationNumber')?.touched)">
-          <small class="error-message" *ngIf="accountForm.get('taxIdentificationNumber')?.errors?.['required']">
-            Tax Identification Number is required.
-          </small>
-          <small class="error-message" *ngIf="accountForm.get('taxIdentificationNumber')?.errors?.['pattern']">
-            Must be numeric.
-          </small>
-        </div>
-      </div>
-      <div>
-        <label for="companyActivityCode">Company Activity Code:</label>
-        <input type="text" id="companyActivityCode" formControlName="companyActivityCode">
-        <div *ngIf="accountForm.get('companyActivityCode')?.invalid && (accountForm.get('companyActivityCode')?.touched)">
-          <small class="error-message" *ngIf="accountForm.get('companyActivityCode')?.errors?.['required']">
-            Company Activity Code is required.
-          </small>
-          <small class="error-message" *ngIf="accountForm.get('companyActivityCode')?.errors?.['pattern']">
-            Format must be xx.xx.
-          </small>
-        </div>
-      </div>
-      <div>
-        <label for="companyAddress">Company Address:</label>
-        <input type="text" id="companyAddress" formControlName="companyAddress">
-        <div *ngIf="accountForm.get('companyAddress')?.invalid && (accountForm.get('companyAddress')?.touched)">
-          <small class="error-message" *ngIf="accountForm.get('companyAddress')?.errors?.['required']">
-            Company Address is required.
-          </small>
-        </div>
-      </div>
-      <div>
-        <label for="majorityOwnerId">Majority Owner ID:</label>
-        <input type="text" id="majorityOwnerId" formControlName="majorityOwnerId">
-        <div *ngIf="accountForm.get('majorityOwnerId')?.invalid && (accountForm.get('majorityOwnerId')?.touched)">
-          <small class="error-message" *ngIf="accountForm.get('majorityOwnerId')?.errors?.['required']">
-            Majority Owner ID is required.
-          </small>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <h3>Account Owner</h3>
-      <label for="clientId">Select Existing User:</label>
-      <select id="clientId" formControlName="clientId">
-        <option value="">Select User</option>
-        <option *ngFor="let user of users" [value]="user.id">{{user.firstName}} {{user.lastName}}</option>
-      </select>
-      <div *ngIf="accountForm.get('clientId')?.invalid && (accountForm.get('clientId')?.touched)">
-        <small class="error-message" *ngIf="accountForm.get('clientId')?.errors?.['required']">
-          Account Owner is required.
-        </small>
-      </div>
-      <button type="button" (click)="onCreateNewUserClick()">Create New User</button>
-    </div>
-
-    <div>
-      <h3>Limits and Initial Card</h3>
-      <div>
-        <label for="dailyLimit">Daily Limit:</label>
-        <input type="number" id="dailyLimit" formControlName="dailyLimit">
-        <div *ngIf="accountForm.get('dailyLimit')?.invalid && (accountForm.get('dailyLimit')?.touched)">
-          <small class="error-message" *ngIf="accountForm.get('dailyLimit')?.errors?.['required']">
-            Daily Limit is required.
-          </small>
-          <small class="error-message" *ngIf="accountForm.get('dailyLimit')?.errors?.['nonPositive']">
-            Daily Limit must be a positive number.
-          </small>
-        </div>
-      </div>
-      <div>
-        <label for="monthlyLimit">Monthly Limit:</label>
-        <input type="number" id="monthlyLimit" formControlName="monthlyLimit">
-        <div *ngIf="accountForm.get('monthlyLimit')?.invalid && (accountForm.get('monthlyLimit')?.touched)">
-          <small class="error-message" *ngIf="accountForm.get('monthlyLimit')?.errors?.['required']">
-            Monthly Limit is required.
-          </small>
-          <small class="error-message" *ngIf="accountForm.get('monthlyLimit')?.errors?.['nonPositive']">
-            Monthly Limit must be a positive number.
-          </small>
-        </div>
-      </div>
-      <div>
-        <input type="checkbox" id="createCard" formControlName="createCard">
-        <label for="createCard">Create initial card</label>
-      </div>
-    </div>
-
-
-    <div>
-      <h3>Generated Account Number</h3>
-      <div>
-        <label for="accountNumber">Account Number:</label>
-        <input type="text" id="accountNumber" formControlName="accountNumber" readonly>
-      </div>
-    </div>
-
-    <div>
-      <h3>Employee Information</h3>
-      <p>Logged in employee: <strong>{{loggedInEmployeeFullName}}</strong>, Position: <strong>{{loggedInEmployeePosition}}</strong></p>
-    </div>
-
-    <div>
-      <button type="submit" [disabled]="accountForm.invalid">Create Account</button>
-    </div>
-  </div>
-</form>
+<!--    <button type="submit" class="submit-btn" [disabled]="accountForm.invalid">Create Account</button>-->
+    <button
+      type="submit"
+      class="submit-btn"
+      [disabled]="(accountForm.invalid || !isBusinessFormValid() || !accountForm.get('clientId')?.value)"
+    >
+      Create Account
+    </button>
+  </form>
+</div>

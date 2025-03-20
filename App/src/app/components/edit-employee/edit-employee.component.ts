@@ -6,12 +6,16 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlertService } from '../../services/alert.service';
-import { AlertComponent } from '../alert/alert.component';
+import { AlertComponent } from '../shared/alert/alert.component';
+import {InputTextComponent} from '../shared/input-text/input-text.component';
+import {validations} from '../../models/validation.model';
+import {SelectComponent} from '../shared/select/select.component';
+import {ButtonComponent} from '../shared/button/button.component';
 
 @Component({
   selector: 'app-edit-employee',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AlertComponent],
+  imports: [CommonModule, ReactiveFormsModule, AlertComponent, InputTextComponent, SelectComponent, ButtonComponent],
   templateUrl: './edit-employee.component.html',
   styleUrls: ['./edit-employee.component.css']
 })
@@ -23,13 +27,14 @@ export class EditEmployeeComponent implements OnInit {
   private fb = inject(FormBuilder);
   private alertService = inject(AlertService);
 
+  employeeId!: number;
   employee: Employee | null = null;
   editForm!: FormGroup;
   loading = true;
   updatingAdminStatus = false;
 
   get isAdmin(): boolean {
-    return <boolean>this.authService.getUserPermissions()?.includes('admin');
+    return <boolean>this.authService.isAdmin();
   }
 
   ngOnInit(): void {
@@ -39,11 +44,13 @@ export class EditEmployeeComponent implements OnInit {
       this.router.navigate(['/employees']);
       return;
     }
-    this.loadEmployee(+idParam);
+
+    this.employeeId = +idParam;
+    this.loadEmployee();
   }
 
-  loadEmployee(employeeId: number): void {
-    this.employeeService.getEmployeeById(employeeId).subscribe({
+  loadEmployee(): void {
+    this.employeeService.getEmployeeById(this.employeeId).subscribe({
       next: (fetchedEmployee) => {
         if (!fetchedEmployee) {
           this.alertService.showAlert('error', 'Employee not found.');
@@ -64,7 +71,12 @@ export class EditEmployeeComponent implements OnInit {
     if (!this.employee) return;
 
     this.editForm = this.fb.group({
+      firstName: [{ value: this.employee.firstName, disabled: true }, Validators.required],
       lastName: [this.employee.lastName, [Validators.required, Validators.minLength(2)]],
+      birthDate: [{ value: this.formatDate(this.employee.birthDate), disabled: true }, Validators.required],
+      gender: [this.employee.gender, [Validators.required, Validators.minLength(1), Validators.maxLength(1)]],
+      jmbg: [{ value: this.employee.jmbg, disabled: true }, Validators.required],
+      email: [{ value: this.employee.email, disabled: true }, [Validators.required, Validators.email]],
       phone: [this.employee.phone, [Validators.required, Validators.pattern(/^0?[1-9][0-9]{6,14}$/)]],
       address: [this.employee.address, [Validators.required, Validators.minLength(5)]],
       position: [this.employee.position, [Validators.required]],
@@ -86,13 +98,14 @@ export class EditEmployeeComponent implements OnInit {
 
     const updatedEmployee: Partial<Employee> = {
       lastName: this.editForm.value.lastName,
+      gender: this.editForm.value.gender,
       phone: this.editForm.value.phone,
       address: this.editForm.value.address,
       position: this.editForm.value.position,
       department: this.editForm.value.department,
     };
 
-    this.employeeService.updateEmployee(updatedEmployee).subscribe({
+    this.employeeService.updateEmployee(this.employeeId, updatedEmployee).subscribe({
       next: () => {
         this.alertService.showAlert('success', 'Employee updated successfully!');
         this.router.navigate(['/employees']);
@@ -107,7 +120,7 @@ export class EditEmployeeComponent implements OnInit {
     if (!this.employee || !this.isAdmin) return;
 
     this.updatingAdminStatus = true;
-    const newRole = this.employee.role === 'admin' ? 'employee' : 'admin';
+    const newRole = this.employee.role === 'ADMIN' ? 'EMPLOYEE' : 'ADMIN';
 
     this.employeeService.setEmployeeRole(this.employee.id, newRole).subscribe({
       next: () => {
@@ -120,4 +133,11 @@ export class EditEmployeeComponent implements OnInit {
       complete: () => (this.updatingAdminStatus = false),
     });
   }
+
+  private formatDate(date?: Date): string {
+    if (!date) return '';
+    return new Date(date).toISOString().split('T')[0];
+  }
+
+  protected readonly validations = validations;
 }

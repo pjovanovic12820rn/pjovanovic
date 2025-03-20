@@ -1,20 +1,27 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-success',
-  imports: [],
   templateUrl: './success.component.html',
   standalone: true,
   styleUrl: './success.component.css'
 })
 export class SuccessComponent {
-  @Input() message: string = 'Operation successful!';
-  @Input() title: string = 'Success!';
-  @Input() buttonName: string = 'Continue';
-  @Input() continuePath: string = '/';
+  title: string = 'Success!';
+  message: string = 'Operation successful!';
+  buttonName: string = 'Continue';
+  continuePath: string = '/';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state) {
+      this.title = navigation.extras.state['title'] || this.title;
+      this.message = navigation.extras.state['message'] || this.message;
+      this.buttonName = navigation.extras.state['buttonName'] || this.buttonName;
+      this.continuePath = navigation.extras.state['continuePath'] || this.continuePath;
+    }
+  }
 
   onContinue(): void {
     this.router.navigate([this.continuePath]);

@@ -1,0 +1,59 @@
+<body>
+<div class="container">
+  <h2>Payment Recipients</h2>
+
+  <button class="add-btn" (click)="toggleAddRecipient()">+ Add Recipient</button>
+
+  <!-- Forma za dodavanje primaoca -->
+  <div *ngIf="isAdding" class="add-recipient-form">
+    <h3>Add New Recipient</h3>
+    <div class="input-group">
+      <input type="text" [(ngModel)]="newRecipient.name" placeholder="Recipient Name">
+      <input type="text" [(ngModel)]="newRecipient.accountNumber" placeholder="Account Number">
+
+    </div>
+    <div class="btn-group">
+      <button class="confirm-btn" (click)="addRecipient()">Confirm</button>
+      <button class="cancel-btn" (click)="toggleAddRecipient()">Cancel</button>
+    </div>
+  </div>
+  <div id="recipientsList">
+    <div *ngFor="let recipient of recipients" class="recipient-card">
+      <div class="recipient-content" *ngIf="editingRecipient?.id !== recipient.id">
+        <div class="recipient-info">
+          <p class="recipient-name"><strong>{{ recipient.name }}</strong></p>
+          <p class="recipient-account">{{ recipient.accountNumber }}</p>
+        </div>
+       <div class="button-group">
+         <button class="edit-btn" (click)="startEditing(recipient)">Edit</button>
+<!--         <button class="delete-btn" (click)="deleteRecipient(recipient.id)">Delete</button>-->
+         <button class="delete-btn" (click)="openDeleteModal(recipient.id)">Delete</button>
+       </div>
+      </div>
+
+      <div class="edit-recipient-form" *ngIf="editingRecipient?.id === recipient.id">
+        <div class="input-group">
+          <input type="text" [(ngModel)]="editingRecipient.name" placeholder="Recipient Name" *ngIf="editingRecipient">
+          <input type="text" [(ngModel)]="editingRecipient.accountNumber" placeholder="Account Number" *ngIf="editingRecipient">
+
+        </div>
+        <div class="btn-group">
+          <button class="confirm-btn" (click)="saveEdit()">Save</button>
+          <button class="cancel-btn" (click)="cancelEditing()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showDeleteModal">
+  <div class="confirmation-modal">
+    <h3>Confirm Delete</h3>
+    <p>Are you sure you want to delete this recipient?</p>
+    <div class="modal-actions">
+      <button class="cancel-btn" (click)="cancelDelete()">Cancel</button>
+      <button class="confirm-delete-btn" (click)="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+</body>

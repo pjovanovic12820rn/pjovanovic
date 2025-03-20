@@ -1,0 +1,66 @@
+<div class="card">
+  <div class="flex justify-between">
+    <h2>Account Management</h2>
+<!--    <button class="new-account-btn" *ngIf="isEmployee()" (click)="openModal()">New Account</button>-->
+  </div>
+  <!-- Filter sekcija -->
+<!--  <div class="filter-section">-->
+<!--&lt;!&ndash;    <input&ndash;&gt;-->
+<!--&lt;!&ndash;      type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;      placeholder="Search by owner name..."&ndash;&gt;-->
+<!--&lt;!&ndash;      class="filter-input"&ndash;&gt;-->
+<!--&lt;!&ndash;      [(ngModel)]="ownerNameFilter"&ndash;&gt;-->
+<!--&lt;!&ndash;    />&ndash;&gt;-->
+<!--    <input-->
+<!--      type="text"-->
+<!--      placeholder="Search by account number..."-->
+<!--      class="filter-input"-->
+<!--      (input)="applyFilters()"-->
+<!--      [(ngModel)]="accountNumberFilter"-->
+<!--    />-->
+<!--&lt;!&ndash;    <button class="filter-btn" (click)="applyFilters()">Filter</button>&ndash;&gt;-->
+<!--  </div>-->
+
+  <!-- Tabela računa -->
+  <section class="account-list">
+    <h3>Accounts</h3>
+    <table>
+      <tr>
+        <th>Account Number</th>
+        <th>Owner</th>
+        <th>Type</th>
+        <th>Category</th>
+        <th>Actions</th>
+      </tr>
+      <tr *ngFor="let account of filteredAccounts">
+        <td>{{ account.accountNumber }}</td>
+        <td>
+          {{ account.owner.firstName }} {{ account.owner.lastName }}
+        </td>
+        <td>{{ account.ownershipType }}</td>
+        <td>{{ account.accountCategory }}</td>
+        <td>
+          <button
+            class="details-btn"
+            (click)="viewCards(account.accountNumber)"
+          >
+            View Cards
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="accounts.length === 0">
+        <td colspan="5" class="no-data">No accounts found</td>
+      </tr>
+    </table>
+  </section>
+<!--  <app-modal [title]="'New Account'" [isOpen]="isModalOpen" (closeModalEvent)="closeModal()">-->
+<!--    <div class="modal-content">-->
+<!--      <div class="new-account-options">-->
+<!--        <button class="account-option" [routerLink]="['/create-current-account']">Checking Account</button>-->
+<!--        <button class="account-option" [routerLink]="['/create-foreign-currency-account']">Foreign Currency Account-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </app-modal>-->
+
+</div>

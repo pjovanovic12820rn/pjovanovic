@@ -3,12 +3,11 @@
 
   <app-alert></app-alert>
 
-  <ng-container *ngIf="isAdmin; else notAuthorized">
-
+  <ng-container *ngIf="employeeOrAdminGuard; else notAuthorized">
     <button class="register-btn" (click)="registerUser()">Register New User</button>
 
     <div *ngIf="users.length > 0; else noUsers">
-      <div *ngFor="let user of users" class="user-card">
+      <div *ngFor="let user of pagedUsers" class="user-card">
         <span class="user-info"><strong>{{ user.firstName }} {{ user.lastName }}</strong> ({{ user.email }})</span>
         <p><strong>Birth Date:</strong> {{ user.birthDate | date:'yyyy-MM-dd' }}</p>
         <p><strong>Gender:</strong> {{ user.gender }}</p>
@@ -23,11 +22,12 @@
     </div>
     <ng-template #noUsers><p>No users found.</p></ng-template>
 
-    <div class="pagination">
-      <button (click)="prevPage()" [disabled]="currentPage === 0">Previous</button>
-      <span>Page {{ currentPage + 1 }}</span>
-      <button (click)="nextPage()" [disabled]="(currentPage + 1) * pageSize >= totalUsers">Next</button>
-    </div>
+    <!-- Paginacija -->
+    <app-pagination
+      [totalItems]="filteredUsers.length"
+      [pageSize]="pageSize"
+      (pageChanged)="onPageChanged($event)">
+    </app-pagination>
   </ng-container>
 
   <ng-template #notAuthorized>
