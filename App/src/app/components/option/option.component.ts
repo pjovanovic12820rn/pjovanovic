@@ -7,8 +7,14 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { OptionChain, OptionPair, OptionType } from '../../models/option.model';
-import { OptionService } from '../../services/optin.service';
+import { ActivatedRoute } from '@angular/router';
+import {
+  Option,
+  OptionChain,
+  OptionPair,
+  OptionType,
+} from '../../models/option.model';
+import { OptionService } from '../../services/option.service';
 
 @Component({
   selector: 'app-options-display',
@@ -21,69 +27,237 @@ export class OptionsDisplayComponent implements OnInit, OnChanges {
   @Input() stockId: number = 0;
 
   optionChains: OptionChain[] = [];
-  selectedExpirationIndex: number = 0;
+  currentChain: OptionChain | null = null;
+
+  availableDates: Date[] = [];
+  selectedDateIndex: number = 0;
+  selectedDate: Date = new Date();
+  minDate: Date = new Date();
+  maxDate: Date = new Date(
+    new Date().setFullYear(new Date().getFullYear() + 1)
+  );
+
   maxVisibleStrikes: number = 5;
+  isLoading: boolean = false;
+  errorMessage: string = '';
+
   OptionType = OptionType;
-// Use the global Math object directly
   Math: any = Math;
 
-  constructor(private optionService: OptionService) {}
+  constructor(
+    private optionService: OptionService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    if (this.stockId) {
-      this.loadOptions();
-    }
+    this.route.params.subscribe((params) => {
+      if (params['stockId']) {
+        this.stockId = +params['stockId'];
+        this.initializeDates();
+        this.loadOptions();
+      } else if (this.stockId) {
+        this.initializeDates();
+        this.loadOptions();
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['stockId'] && !changes['stockId'].firstChange) {
+      this.initializeDates();
       this.loadOptions();
     }
   }
 
-  loadOptions(): void {
-    this.optionService
-      .getOptionChainsByStock(this.stockId)
-      .subscribe((chains) => {
-        this.optionChains = chains;
+  // Initialize default available dates
+  initializeDates(): void {
+    const today = new Date();
 
-        if (this.optionChains.length > 0) {
-          this.selectedExpirationIndex = 0;
-        }
+    this.availableDates = [
+      new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7), // 1 week
+      new Date(today.getFullYear(), today.getMonth(), today.getDate() + 30), // 1 month
+      new Date(today.getFullYear(), today.getMonth() + 3, today.getDate()), // 3 months
+      new Date(today.getFullYear(), today.getMonth() + 6, today.getDate()), // 6 months
+      new Date(today.getFullYear() + 1, today.getMonth(), today.getDate()), // 1 year
+    ];
+
+    if (this.availableDates.length > 0) {
+      this.selectedDateIndex = 0;
+      this.selectedDate = this.availableDates[0];
+    }
+  }
+
+  // Handle date selection from the date picker
+  onDateSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.value) {
+      this.selectedDate = new Date(input.value);
+
+      const index = this.availableDates.findIndex((date) =>
+        this.isSameDay(date, this.selectedDate)
+      );
+
+      if (index >= 0) {
+        this.selectedDateIndex = index;
+      } else {
+        this.availableDates.push(this.selectedDate);
+        this.availableDates.sort((a, b) => a.getTime() - b.getTime());
+        this.selectedDateIndex = this.availableDates.findIndex((date) =>
+          this.isSameDay(date, this.selectedDate)
+        );
+      }
+
+      this.loadOptionsForDate();
+    }
+  }
+
+  //  Handle selection from the date dropdown
+  onDateIndexSelected(): void {
+    if (
+      this.selectedDateIndex >= 0 &&
+      this.selectedDateIndex < this.availableDates.length
+    ) {
+      this.selectedDate = this.availableDates[this.selectedDateIndex];
+      this.loadOptionsForDate();
+    }
+  }
+
+  //Check if two dates are the same day (ignoring time)
+  isSameDay(date1: Date, date2: Date): boolean {
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
+    );
+  }
+
+  // Load options for all available dates
+
+  loadOptions(): void {
+    if (!this.stockId) return;
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.loadOptionsForDate();
+  }
+
+  // Load options for the currently selected date
+  loadOptionsForDate(): void {
+    if (!this.stockId) return;
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.optionService
+      .getStockOptionsByDate(this.stockId, this.selectedDate)
+      .subscribe({
+        next: (options) => {
+          if (!options || options.length === 0) {
+            this.currentChain = null;
+            this.errorMessage = `No options available for ${this.selectedDate.toLocaleDateString()}`;
+          } else {
+            this.currentChain = this.createOptionChain(
+              options,
+              this.selectedDate
+            );
+
+            const existingIndex = this.optionChains.findIndex((chain) =>
+              this.isSameDay(chain.expirationDate, this.selectedDate)
+            );
+
+            if (existingIndex >= 0) {
+              this.optionChains[existingIndex] = this.currentChain;
+            } else {
+              this.optionChains.push(this.currentChain);
+              this.optionChains.sort((a, b) => a.daysToExpiry - b.daysToExpiry);
+            }
+          }
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading options:', error);
+          this.errorMessage = 'Failed to load options data. Please try again.';
+          this.isLoading = false;
+        },
       });
   }
 
-  selectExpiration(index: number): void {
-    this.selectedExpirationIndex = index;
-  }
-
-  getVisiblePairs(): OptionPair[] {
-    if (
-      !this.optionChains.length ||
-      this.selectedExpirationIndex >= this.optionChains.length
-    ) {
-      return [];
+  //  Creates an option chain from a list of options
+  private createOptionChain(
+    options: Option[],
+    expirationDate: Date
+  ): OptionChain {
+    if (!options || options.length === 0) {
+      return {
+        expirationDate,
+        daysToExpiry: this.calculateDaysToExpiry(expirationDate),
+        stockPrice: 0,
+        optionPairs: [],
+      };
     }
 
-    const chain = this.optionChains[this.selectedExpirationIndex];
-    const pairs = [...chain.optionPairs];
+    const stockPrice = options[0]?.underlyingStock?.price || 0;
 
-    // Sort by proximity to stock price
-    pairs.sort(
-      (a, b) =>
-        Math.abs(a.strikePrice - chain.stockPrice) -
-        Math.abs(b.strikePrice - chain.stockPrice)
+    const optionsByStrike = options.reduce((strikes, option) => {
+      const strikeKey = option.strikePrice.toString();
+      if (!strikes[strikeKey]) {
+        strikes[strikeKey] = {
+          call: null,
+          put: null,
+          strikePrice: option.strikePrice,
+        };
+      }
+      if (option.optionType === OptionType.CALL) {
+        strikes[strikeKey].call = option;
+      } else {
+        strikes[strikeKey].put = option;
+      }
+      return strikes;
+    }, {} as Record<string, OptionPair>);
+
+    // Convert to array and sort by strike price
+    const optionPairs = Object.values(optionsByStrike).sort(
+      (a, b) => a.strikePrice - b.strikePrice
     );
 
-    // Return pairs closest to current stock price
+    return {
+      expirationDate,
+      daysToExpiry: this.calculateDaysToExpiry(expirationDate),
+      stockPrice,
+      optionPairs,
+    };
+  }
+
+  // Calculate days to expiry from today to the given date
+  calculateDaysToExpiry(expirationDate: Date): number {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset hours to get accurate day count
+    const diffTime = expirationDate.getTime() - today.getTime();
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  }
+
+  // Get option pairs for the current view
+  getVisiblePairs(): OptionPair[] {
+    if (!this.currentChain) return [];
+
+    const pairs = [...this.currentChain.optionPairs];
+
+    pairs.sort(
+      (a, b) =>
+        Math.abs(a.strikePrice - this.currentChain!.stockPrice) -
+        Math.abs(b.strikePrice - this.currentChain!.stockPrice)
+    );
+
     return pairs.slice(0, this.maxVisibleStrikes);
   }
 
-  isInTheMoney(optionType: OptionType, strikePrice: number): boolean {
-    if (!this.optionChains.length) return false;
+  // Check if an option is in the money
 
-    const stockPrice =
-      this.optionChains[this.selectedExpirationIndex].stockPrice;
+  isInTheMoney(optionType: OptionType, strikePrice: number): boolean {
+    if (!this.currentChain) return false;
+
+    const stockPrice = this.currentChain.stockPrice;
 
     if (optionType === OptionType.CALL) {
       return stockPrice > strikePrice;
@@ -92,19 +266,21 @@ export class OptionsDisplayComponent implements OnInit, OnChanges {
     }
   }
 
+  // Check if a strike price is very close to the current stock price
   isSharedPrice(strikePrice: number): boolean {
-    if (!this.optionChains.length) return false;
+    if (!this.currentChain) return false;
 
-    const stockPrice =
-      this.optionChains[this.selectedExpirationIndex].stockPrice;
+    const stockPrice = this.currentChain.stockPrice;
     return Math.abs(stockPrice - strikePrice) < 0.01;
   }
 
-  calculateTheta(option: any): number {
-    if (!option) return 0;
+  // Calculate theta (time decay) for an option
+  calculateTheta(option: any): string {
+    if (!option || !this.currentChain) return 'N/A';
 
-    const daysToExpiry =
-      this.optionChains[this.selectedExpirationIndex].daysToExpiry;
+    const daysToExpiry = this.currentChain.daysToExpiry;
+    if (daysToExpiry <= 0) return 'N/A';
+
     const timeValue =
       option.price -
       Math.max(
@@ -114,6 +290,6 @@ export class OptionsDisplayComponent implements OnInit, OnChanges {
           : option.strikePrice - option.underlyingStock.price
       );
 
-    return parseFloat((-(timeValue / daysToExpiry)).toFixed(2));
+    return (-(timeValue / daysToExpiry)).toFixed(2);
   }
 }
