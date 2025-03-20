@@ -113,14 +113,16 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     this.employeeId = this.authService.getUserId();
     if (this.employeeId) {
       this.newAccount.employeeId = this.employeeId;
-      this.employeeService.getEmployeeSelf().subscribe(
-        (employee) => {
-          this.loggedInEmployee = employee;
-        },
-        (error) => {
-          console.error('Error fetching employee details:', error);
-        }
-      );
+      if (!this.isCurrAdmin) {
+        this.employeeService.getEmployeeSelf().subscribe(
+          (employee) => {
+            this.loggedInEmployee = employee;
+          },
+          (error) => {
+            console.error('Error fetching employee details:', error);
+          }
+        );
+      }
 
 
     }

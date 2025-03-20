@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loans</title>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Loan requests</h2>
+
+      <div class="credits-list">
+        <div class="credit-card" *ngFor="let request of loanRequests">
+            <span>
+              <strong>Request Type:</strong> {{ request.type }} <br>
+              <strong>Amount:</strong> {{ request.amount }} {{ request.currencyCode }} <br>
+              <strong>Status:</strong> <span [ngClass]="getLoanStatusClass(request.status)">{{ request.status }}</span>
+            </span>
+            <button class="details-btn" (click)="approveLoan(request.id)">
+              Approve
+            </button>
+            <button class="details-btn" (click)="rejectLoan(request.id)">
+              Reject
+            </button>
+        </div>
+
+        <div *ngIf="loanRequests.length === 0" class="no-loans-message">
+          No loan requests found.
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

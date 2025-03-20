@@ -6,6 +6,7 @@ import { PaymentOverviewDto } from '../models/payment-overview-dto';
 import { PaymentDetailsDto } from '../models/payment-details-dto';
 import { CreatePaymentDto } from '../models/create-payment-dto';
 import { AuthService } from './auth.service';
+import {TransferDto} from '../models/transfer.model';
 
 @Injectable({
   providedIn: 'root',
@@ -65,6 +66,19 @@ export class PaymentService {
     );
   }
 
+  transfer(transferDto: TransferDto): Observable<string> {
+    return this.http.post(
+      `${this.baseUrl}/transfer`,
+      transferDto,
+      {
+        headers: this.getAuthHeaders(),
+        responseType: 'text'
+      }
+    ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   getTransactionDetails(id: number): Observable<PaymentDetailsDto> {
     return this.http.get<PaymentDetailsDto>(`${this.baseUrl}/${id}`).pipe(
       catchError(this.handleError)
@@ -88,15 +102,23 @@ export class PaymentService {
   }
 
   private handleError(error: any): Observable<never> {
-    let errorMessage = 'Something went wrong :(';
+    let errorMessage = 'Unknown error occurred';
+
     if (error.error instanceof ErrorEvent) {
       // Client-side error
       errorMessage = `Error: ${error.error.message}`;
     } else {
       // Server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      errorMessage = error.error || error.message || `Server returned code ${error.status}`;
+
+      if (errorMessage.startsWith('Currency mismatch')) {
+        errorMessage = errorMessage.replace('Currency mismatch: ', '');
+      }
+      if (errorMessage.startsWith('Insufficient funds')) {
+        errorMessage = errorMessage.replace('Insufficient funds: ', '');
+      }
     }
-    console.error(errorMessage);
+    console.error('PaymentService error:', error);
     return throwError(() => new Error(errorMessage));
   }
 }

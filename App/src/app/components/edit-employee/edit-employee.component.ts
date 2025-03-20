@@ -7,10 +7,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlertService } from '../../services/alert.service';
 import { AlertComponent } from '../shared/alert/alert.component';
-import {InputTextComponent} from '../shared/input-text/input-text.component';
-import {validations} from '../../models/validation.model';
-import {SelectComponent} from '../shared/select/select.component';
-import {ButtonComponent} from '../shared/button/button.component';
+import { InputTextComponent } from '../shared/input-text/input-text.component';
+import { validations } from '../../models/validation.model';
+import { SelectComponent } from '../shared/select/select.component';
+import { ButtonComponent } from '../shared/button/button.component';
 
 @Component({
   selector: 'app-edit-employee',
@@ -32,6 +32,8 @@ export class EditEmployeeComponent implements OnInit {
   editForm!: FormGroup;
   loading = true;
   updatingAdminStatus = false;
+
+  roles = ['EMPLOYEE', 'ADMIN', 'SUPERVISOR', 'AGENT']; // Available roles
 
   get isAdmin(): boolean {
     return <boolean>this.authService.isAdmin();
@@ -81,6 +83,7 @@ export class EditEmployeeComponent implements OnInit {
       address: [this.employee.address, [Validators.required, Validators.minLength(5)]],
       position: [this.employee.position, [Validators.required]],
       department: [this.employee.department, [Validators.required]],
+      role: [this.employee.role, [Validators.required]] // New Role Field
     });
   }
 
@@ -103,6 +106,7 @@ export class EditEmployeeComponent implements OnInit {
       address: this.editForm.value.address,
       position: this.editForm.value.position,
       department: this.editForm.value.department,
+      role: this.editForm.value.role, // Sending role
     };
 
     this.employeeService.updateEmployee(this.employeeId, updatedEmployee).subscribe({
@@ -113,24 +117,6 @@ export class EditEmployeeComponent implements OnInit {
       error: () => {
         this.alertService.showAlert('error', 'Failed to update employee.');
       },
-    });
-  }
-
-  toggleAdminStatus(): void {
-    if (!this.employee || !this.isAdmin) return;
-
-    this.updatingAdminStatus = true;
-    const newRole = this.employee.role === 'ADMIN' ? 'EMPLOYEE' : 'ADMIN';
-
-    this.employeeService.setEmployeeRole(this.employee.id, newRole).subscribe({
-      next: () => {
-        this.employee!.role = newRole;
-        this.alertService.showAlert('success', `Employee is now an ${newRole.toUpperCase()}.`);
-      },
-      error: () => {
-        this.alertService.showAlert('error', 'Failed to update employee role.');
-      },
-      complete: () => (this.updatingAdminStatus = false),
     });
   }
 

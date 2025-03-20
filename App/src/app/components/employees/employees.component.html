@@ -6,6 +6,7 @@
   <div *ngIf="isAdmin; else unauthorized">
     <button class="register-btn" (click)="register()">Register new employee</button>
 
+    <!-- Employee List -->
     <div id="employees-list" class="employee-list">
       <div *ngFor="let employee of pagedEmployees;" class="employee-card">
         <span>
@@ -13,13 +14,22 @@
         </span>
         <p class="role"><strong>Role:</strong> {{ employee.position }}</p>
         <p><strong>Phone:</strong> {{ employee.phone }}</p>
-        <p><strong>Status:</strong> {{ employee.active ? 'Active' : 'Inactive' }}</p>
+        <p>
+          <strong>Status:</strong>
+          <span [ngClass]="employee.active ? 'status-active' : 'status-inactive'">
+            {{ employee.active ? 'Active' : 'Inactive' }}
+          </span>
+        </p>
 
         <div class="employee-actions">
           <button class="view-details-btn" (click)="viewEmployeeDetails(employee.id)">View Details</button>
           <button class="delete-btn" (click)="openDeleteModal(employee)">Delete</button>
-          <button class="deactivate-btn" (click)="deactivateEmployee(employee.id)" [disabled]="!employee.active">
-            Deactivate
+
+          <!-- ✅ Corrected Toggle Activation Button -->
+          <button class="toggle-status-btn"
+                  (click)="deactivateEmployee(employee.id, employee.active)"
+                  [ngClass]="employee.active ? 'deactivate-btn' : 'activate-btn'">
+            {{ employee.active ? 'Deactivate' : 'Activate' }}
           </button>
         </div>
       </div>

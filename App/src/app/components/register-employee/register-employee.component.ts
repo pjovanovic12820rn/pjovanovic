@@ -1,14 +1,14 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { EmployeeService } from '../../services/employee.service';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
-import {validations} from '../../models/validation.model';
-import {InputTextComponent} from '../shared/input-text/input-text.component';
-import {SelectComponent} from '../shared/select/select.component';
-import {ButtonComponent} from '../shared/button/button.component';
+import { validations } from '../../models/validation.model';
+import { InputTextComponent } from '../shared/input-text/input-text.component';
+import { SelectComponent } from '../shared/select/select.component';
+import { ButtonComponent } from '../shared/button/button.component';
 
 @Component({
   selector: 'app-register-employee',
@@ -26,6 +26,8 @@ export class RegisterEmployeeComponent implements OnInit {
 
   registerEmployeeForm!: FormGroup;
 
+  roles = ['EMPLOYEE', 'ADMIN', 'SUPERVISOR', 'AGENT']; // Available roles
+
   get isAdmin(): boolean {
     return <boolean>this.authService.isAdmin();
   }
@@ -39,7 +41,7 @@ export class RegisterEmployeeComponent implements OnInit {
     this.registerEmployeeForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/), Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/), Validators.minLength(2)]],
-      birthDate: ['', [Validators.required, Validators.max(new Date().getDate())]],
+      birthDate: ['', [Validators.required]],
       gender: ['', [Validators.required]],
       jmbg: ['', [Validators.required, Validators.pattern(/^\d{13}$/)]],
       email: ['', [Validators.required, Validators.email]],
@@ -48,7 +50,8 @@ export class RegisterEmployeeComponent implements OnInit {
       username: ['', [Validators.required, Validators.minLength(3)]],
       position: ['', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/), Validators.minLength(2)]],
       department: ['', [Validators.required, Validators.minLength(2)]],
-      active: [false, Validators.required]
+      active: [false, Validators.required],
+      role: ['', [Validators.required]] // New Role Field
     });
   }
 

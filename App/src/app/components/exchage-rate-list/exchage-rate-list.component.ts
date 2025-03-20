@@ -27,7 +27,7 @@ export class ExchageRateListComponent implements OnInit {
   availableToCurrencies: string[] = []
 
   ngOnInit() {
-    this.exchangeService.getExchageRateList().subscribe({
+    this.exchangeService.getExchangeRateList().subscribe({
       next: (response) => {
         this.exchageRateList = response;
         this.currencies = this.extractCurrencies(response);
@@ -61,7 +61,7 @@ export class ExchageRateListComponent implements OnInit {
       this.exchangeAmount = 0;
     }
 
-    this.exchangeService.getExchageFromToAmount(this.fromCurrency,this.toCurrency,this.exchangeAmount).subscribe({
+    this.exchangeService.getExchangeFromToAmount(this.fromCurrency,this.toCurrency,this.exchangeAmount).subscribe({
       next: (response) => {
         this.convertedAmount = response;
       },

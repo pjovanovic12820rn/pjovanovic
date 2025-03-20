@@ -18,6 +18,7 @@ export class CreateCardComponent implements OnInit {
   newCard: CreateCardDto = {
     accountNumber: '',
     type: 'DEBIT',
+    issuer: 'VISA',
     name: '',
     cardLimit: 0
   }

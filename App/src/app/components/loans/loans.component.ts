@@ -11,6 +11,7 @@ import { LoanService } from '../../services/loan.service';
 import { Loan } from '../../models/loan-dto.model';
 import { Router } from '@angular/router';
 import { LoanRequestService } from '../../services/loan-request.service';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-loans',
@@ -27,7 +28,7 @@ export class LoansComponent implements OnInit {
   selectedLoan: Loan | null = null;
   newLoanForm: FormGroup;
 
-  constructor(private loanService: LoanService, private loanRequestService: LoanRequestService, private fb: FormBuilder, private router: Router) {
+  constructor(private authService: AuthService, private loanService: LoanService, private loanRequestService: LoanRequestService, private fb: FormBuilder, private router: Router) {
     this.newLoanForm = this.fb.group({
       type: ['', Validators.required],
       amount: [0, [Validators.required, Validators.min(1)]],
@@ -39,13 +40,29 @@ export class LoansComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.clientId) {
-      this.loadClientLoans();
+      if(this.authService.isClient()){
+        this.loadClientLoans();
+        this.loadLoanRequests();
+      } else {
+        this.loadAllLoans();
+      }
     }
-    this.loadLoanRequests();
   }
 
   loadClientLoans(): void {
     this.loanService.getClientLoans(this.clientId).subscribe({
+      next: (data) => {
+        this.loans = data.content.sort((a, b) => (b.amount || 0) - (a.amount || 0));
+      },
+      error: (err) => {
+        console.error('Error loading client loans:', err);
+        this.loans = [];
+      },
+    });
+  }
+
+  loadAllLoans(): void {
+    this.loanService.getAllLoans().subscribe({
       next: (data) => {
         this.loans = data.content.sort((a, b) => (b.amount || 0) - (a.amount || 0));
       },
