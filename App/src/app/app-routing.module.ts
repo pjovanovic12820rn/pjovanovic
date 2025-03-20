@@ -12,6 +12,8 @@ import { EmployeeDetailComponent } from './components/employee-detail/employee-d
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { AccountCreationComponent } from './components/account-creation/account-creation.component';
 import { CreateForeignCurrencyAccountComponent } from './components/create-foreign-currency-account/create-foreign-currency-account.component';
+import { SecuritiesComponent } from './components/securities/securities.component';
+import { securitiesGuard } from './guards/securities.guard';
 import { MailComponent } from './components/mail/mail.component';
 import { CardsComponent } from './components/cards/cards.component';
 import { ClientPortalComponent } from './components/client-portal/client-portal.component';
@@ -77,14 +79,14 @@ export const routes: Routes = [
 
   // securities
   { path: 'my-portfolio', component: MyPortfolioComponent, canActivate: [authGuard] },
+  { path: 'securities', component: SecuritiesComponent, canActivate: [securitiesGuard] },
 
   // loans
   { path: 'loan-request', component: LoanRequestComponent, canActivate: [authGuard] },
   { path: 'loan-management/:clientId', component: LoansComponent, canActivate: [authGuard] },
   { path: 'loan-details/:loanId', component: LoanDetailsComponent, canActivate: [authGuard] },
 
-  // success
+  //success
   { path: 'success', component: SuccessComponent }
-
 ];
 
