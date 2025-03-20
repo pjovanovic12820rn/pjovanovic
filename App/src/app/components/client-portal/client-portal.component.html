@@ -4,20 +4,19 @@
 
   <h1>Client Portal</h1>
 
-
   <!-- Filter Section -->
   <div class="flex justify-between">
 
-  <div class="flex-col" style="gap: 0.5rem">
-    <span>Filter by:</span>
-    <div class="filter-section">
-
-    <input type="text" placeholder="Name" [(ngModel)]="filter.name" (input)="filterClients()">
-    <input type="text" placeholder="Last Name" [(ngModel)]="filter.surname" (input)="filterClients()">
-    <input type="email" placeholder="Email" [(ngModel)]="filter.email" (input)="filterClients()">
+    <div class="flex-col" style="gap: 0.5rem">
+      <span>Filter by:</span>
+      <div class="filter-section">
+        <input-text placeholder="Name" [(ngModel)]="filter.name" (input)="filterClients()" label=""/>
+        <input-text placeholder="Last Name" [(ngModel)]="filter.surname" (input)="filterClients()" label=""/>
+        <input-text placeholder="Email" type="email" [(ngModel)]="filter.email" (input)="filterClients()" label=""/>
+      </div>
     </div>
-  </div>
-  <app-button *ngIf="isEmployee || isAdmin" (click)="registerNewUser()" label="Register New User"/>
+
+    <app-button *ngIf="isEmployee || isAdmin" (onClick)="registerNewUser()" label="Register New User"/>
   </div>
 
   <!-- Client List -->

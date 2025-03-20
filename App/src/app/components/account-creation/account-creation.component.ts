@@ -16,6 +16,9 @@ import {AuthorizedPersonnel, CreateAuthorizedPersonnel} from '../../models/autho
 import {AuthorizedPersonnelService} from '../../services/authorized-personnel.service';
 import {CardService, CreateCardDto} from '../../services/card.service';
 import {ModalComponent} from '../shared/modal/modal.component';
+import {SelectComponent} from '../shared/select/select.component';
+import {ButtonComponent} from '../shared/button/button.component';
+import {InputTextComponent} from '../shared/input-text/input-text.component';
 // import {NgForOf, NgIf} from '@angular/common';
 
 @Component({
@@ -26,6 +29,9 @@ import {ModalComponent} from '../shared/modal/modal.component';
     FormsModule,
     CommonModule,
     ModalComponent,
+    SelectComponent,
+    ButtonComponent,
+    InputTextComponent,
     // NgForOf,
     // NgIf
   ],

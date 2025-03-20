@@ -6,6 +6,7 @@ import {NgClass, NgForOf, NgIf} from '@angular/common'
 import {ModalComponent} from '../shared/modal/modal.component';
 import {AuthService} from '../../services/auth.service';
 import {AlertService} from '../../services/alert.service';
+import {ButtonComponent} from '../shared/button/button.component';
 // import { ModalComponent } from '../modal/modal.component'
 
 // interface Account {
@@ -41,7 +42,7 @@ interface Account {
   selector: 'app-cards',
   templateUrl: './cards.component.html',
   standalone: true,
-  imports: [NgClass, NgForOf, RouterLink, ModalComponent, NgIf], //, ModalComponent
+  imports: [NgClass, NgForOf, RouterLink, ModalComponent, NgIf, ButtonComponent], //, ModalComponent
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {
@@ -141,7 +142,7 @@ export class CardsComponent implements OnInit {
         this.alertService.showAlert('error', 'Client cant have more than 2 cards');
       }
     }
-    this.router.navigate([`/account/${this.accountNumber}/create-card`])
+    this.router.navigate([`/account/${this.accountNumber}/create-card`]).then(r => {})
   }
 
   getCardStatusClass(status: string): string {

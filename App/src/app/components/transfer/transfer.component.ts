@@ -2,13 +2,14 @@ import {Component, inject, OnInit} from '@angular/core';
 import { AccountService } from '../../services/account.service';
 import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {AccountTransfer} from '../../models/account-transfer';
 import {Router} from '@angular/router';
 import {AlertService} from '../../services/alert.service';
 import {AccountResponse} from '../../models/account-response.model';
-import {AuthService} from '../../services/auth.service';
 import {PaymentService} from '../../services/payment.service';
 import {TransferDto} from '../../models/transfer.model';
+import {InputTextComponent} from '../shared/input-text/input-text.component';
+import {ButtonComponent} from '../shared/button/button.component';
+import {SelectComponent} from '../shared/select/select.component';
 
 @Component({
   selector: 'app-transfer',
@@ -16,7 +17,10 @@ import {TransferDto} from '../../models/transfer.model';
   imports: [
     FormsModule,
     NgIf,
-    NgForOf
+    NgForOf,
+    InputTextComponent,
+    ButtonComponent,
+    SelectComponent
   ],
   standalone: true,
   styleUrls: ['./transfer.component.css']
@@ -89,7 +93,7 @@ export class TransferComponent implements OnInit {
         buttonName: 'View Payment Details',
         continuePath: '/payment-details'
       }
-    });
+    }).then(_=> {});
   }
 
   private handleTransferError(err: Error): void {

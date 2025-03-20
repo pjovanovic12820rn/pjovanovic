@@ -53,21 +53,9 @@ export class AsideComponent implements OnInit, OnDestroy {
     this.isModalOpen = true;
   }
 
-  closeModal() {
-    this.isModalOpen = false;
-  }
-
-  openAccountModal() {
-    this.isAccountModalOpen = true;
-  }
-
-  closeAccountModal() {
-    this.isAccountModalOpen = false;
-  }
-
   navigateTo(route: string) {
-    this.closeModal();
-    this.router.navigate([route]);
+    this.isModalOpen = false;
+    this.router.navigate([route]).then(r => {});
   }
 
   goToClientPortalOrUserDetail() {

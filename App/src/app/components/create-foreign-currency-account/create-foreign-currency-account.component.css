@@ -1,3 +1,4 @@
+/* 🔹 General Styling */
 body {
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(135deg, #B399DD, #D0C9EA);
@@ -25,6 +26,7 @@ h2 {
   color: #444;
 }
 
+<<<<<<< HEAD
 /* Input fields */
 .form-group {
   margin-bottom: 15px;
@@ -113,6 +115,52 @@ input:focus, select:focus {
 
 .column {
   flex: 1;
+=======
+h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-top: 20px;
+  color: #555;
+}
+
+.toggle-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.toggle-btn {
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: 0.3s;
+  background: #E5E3F7;
+  color: #6A4BBC;
+  border-radius: 6px;
+}
+
+.toggle-btn.active {
+  background: #6A4BBC;
+  color: white;
+}
+
+.employee-info {
+  background: #f8f8f8;
+  padding: 15px;
+  border-radius: 6px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.employee-info p {
+  margin: 5px 0;
+  font-size: 1rem;
+  color: #333;
+  text-align: left;
+>>>>>>> 12f6f0c (CSS Fixes)
 }
 
 .checkbox-group {
@@ -121,12 +169,15 @@ input:focus, select:focus {
   gap: 8px;
 }
 
-.checkbox-group input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  accent-color: #6A4BBC;
+/* Layout Adjustments */
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
 }
 
+<<<<<<< HEAD
 .monthly-fee-container {
   width: 120px;
 }
@@ -209,6 +260,13 @@ select[disabled] {
 }
 
 
+=======
+.column {
+  flex: 1;
+}
+
+/* 🔹 Fade-in Animation */
+>>>>>>> 12f6f0c (CSS Fixes)
 @keyframes fadeIn {
   from {
     opacity: 0;

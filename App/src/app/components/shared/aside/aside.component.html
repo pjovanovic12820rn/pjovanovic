@@ -60,7 +60,7 @@
   </div>
 </aside>
 
-<app-modal [title]="'Payment'" [isOpen]="isModalOpen" (closeModalEvent)="closeModal()">
+<app-modal [title]="'Payment'" [isOpen]="isModalOpen" (closeModalEvent)="isModalOpen = false">
   <div class="modal-content">
     <div style="display: grid; gap: 0.5rem; margin-top: 1rem; grid-template-columns: repeat(2, 1fr)">
       <button class="payment-btn" (click)="navigateTo('/new-payment')">New Payment</button>
@@ -71,11 +71,11 @@
   </div>
 </app-modal>
 
-<app-modal [title]="'New Account'" [isOpen]="isAccountModalOpen" (closeModalEvent)="closeAccountModal()">
+<app-modal [title]="'New Account'" [isOpen]="isAccountModalOpen" (closeModalEvent)="this.isAccountModalOpen = false;">
   <div class="modal-content">
     <div class="new-account-options">
-      <button class="account-option" [routerLink]="['/create-current-account']" (click)="closeAccountModal()">Checking Account</button>
-      <button class="account-option" [routerLink]="['/create-foreign-currency-account']" (click)="closeAccountModal()">Foreign Currency Account</button>
+      <button class="account-option" [routerLink]="['/create-current-account']" (click)="this.isAccountModalOpen = false;">Checking Account</button>
+      <button class="account-option" [routerLink]="['/create-foreign-currency-account']" (click)="this.isAccountModalOpen = false;">Foreign Currency Account</button>
     </div>
   </div>
 </app-modal>

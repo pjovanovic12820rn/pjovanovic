@@ -17,11 +17,11 @@
       </div>
 
     </div>
-<!--    <button class="payment-btn" (click)="openModal()">Payment</button>-->
+
+    <app-button label="Payment" (onClick)="openModal()"/>
+    <app-button label="Create New Card" (click)="newCardReq()" [routerLink]="['/account', accountNumber, 'create-card']"/>
   </div>
-  <button class="payment-btn" (click)="newCardReq()" [routerLink]="['/account', accountNumber, 'create-card']">
-    Create New Card
-  </button>
+
   <h3>Associated Cards</h3>
   <table>
     <tr>
@@ -34,19 +34,12 @@
       <td>{{ maskCardNumber(card.cardNumber) }}</td>
       <td [ngClass]="getCardStatusClass(card.status)">{{ card.status }}</td>
       <td>{{ card.owner.firstName }} {{ card.owner.lastName }}</td>
-      <td>
-        <!-- ✅ Dynamic Block/Unblock Button -->
-        <button class="block-card-btn"
-                (click)="blockCard(card.cardNumber, card.status)">
-          {{ card.status === 'BLOCKED' ? 'Unblock Card' : 'Block Card' }}
-        </button>
-
-        <!-- ✅ Show "Deactivate" Only for Admins -->
-        <button *ngIf="authService.isAdmin()" class="block-card-btn"
-                (click)="deactivateCard(card.cardNumber)"
-                [disabled]="card.status === 'DEACTIVATED'">
-          Deactivate Card
-        </button>
+      <td class="action-buttons">
+<!--        <app-button label="New Payment" (onClick)="makePayment(card.cardNumber)"></app-button>-->
+      <!-- ✅ Dynamic Block/Unblock Button -->
+      <app-button [label]="card.status === 'BLOCKED' ? 'Unblock Card' : 'Block Card'" (click)="blockCard(card.cardNumber, card.status)" class="block-card-btn"></app-button>
+      <!-- ✅ Show "Deactivate" Only for Admins -->
+      <app-button label="Deactivate Card" (click)="deactivateCard(card.cardNumber)" *ngIf="authService.isAdmin()" [disabled]="card.status === 'DEACTIVATED'" class="block-card-btn"></app-button>
       </td>
     </tr>
   </table>
@@ -54,10 +47,10 @@
   <app-modal [title]="'Payment'" [isOpen]="isModalOpen" (closeModalEvent)="closeModal()">
     <div class="modal-content">
       <div style="display: grid; gap: 0.5rem; margin-top: 1rem; grid-template-columns: repeat(2, 1fr)">
-        <button class="payment-btn" [routerLink]="['/new-payment']">New Payment</button>
-        <button class="payment-btn" [routerLink]="['/transfer']">Transfer Payment</button>
-        <button class="payment-btn" [routerLink]="['/recipients']">Payment Recipients</button>
-        <button class="payment-btn" [routerLink]="['/payment-details']">Payment Details</button>
+        <app-button label="New Payment" [routerLink]="['/new-payment']"></app-button>
+        <app-button label="Transfer Payment" [routerLink]="['/transfer']"></app-button>
+        <app-button label="Payment Recipients" [routerLink]="['/recipients']"></app-button>
+        <app-button label="Payment Details" [routerLink]="['/payment-details']"></app-button>
       </div>
     </div>
   </app-modal>

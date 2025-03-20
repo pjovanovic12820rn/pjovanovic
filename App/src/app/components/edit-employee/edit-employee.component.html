@@ -2,8 +2,6 @@
   <div class="edit-container">
     <h2>Edit Employee</h2>
 
-    <app-alert></app-alert>
-
     <div *ngIf="loading" class="loading">Loading employee...</div>
 
     <form *ngIf="employee" [formGroup]="editForm" (ngSubmit)="saveChanges()">
@@ -47,10 +45,10 @@
       </div>
 
       <!-- New Role Dropdown -->
-      <div class="form-row">
+      <div class="flex text-left gap-1" *ngIf="isAdmin">
         <app-select label="Role" formControlName="role">
           <option value="" disabled selected>Select Role</option>
-          <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+          <option *ngFor="let role of roles" [value]="role" [selected]="employee.role.includes(role)">{{ role }}</option>
         </app-select>
       </div>
 

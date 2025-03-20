@@ -24,11 +24,11 @@ export class InputTextComponent implements ControlValueAccessor {
   @Input() name: string = '';
   @Input() label: string = '';
   @Input() placeholder: string = '';
+  @Input() value: string = '';
   @Input() type: string = 'text';
   @Input() disabled: boolean | null = false;
   @Input() validationRules: Validation[] = [];
 
-  value: string = '';
   errors: string[] = [];
   isFocused: boolean = false;
   onChange: any = () => {};
