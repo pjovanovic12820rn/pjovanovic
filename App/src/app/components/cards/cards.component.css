@@ -41,19 +41,40 @@
   background: #8E79D2;
 }
 
+.status-active {
+  color: green;
+  font-weight: bold;
+}
+
+.status-blocked {
+  color: orange;
+  font-weight: bold;
+}
+
+.status-deactivated {
+  color: red;
+  font-weight: bold;
+}
+
 .block-card-btn {
-  padding: 8px 12px;
-  color: white;
-  background: #DC143C;
+  padding: 6px 10px;
   border: none;
-  border-radius: 6px;
   cursor: pointer;
-  transition: 0.3s;
-  font-weight: 600;
+  font-size: 14px;
+}
+
+.block-card-btn {
+  background-color: #ff9800; /* Orange for "Block" */
+  color: white;
 }
 
 .block-card-btn:hover {
-  background: #B22222;
+  opacity: 0.8;
+}
+
+.block-card-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 
 .status-active {

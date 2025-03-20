@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
-import { Order } from '../../models/order.model'; 
+import { Order } from '../../models/order.model';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-order-overview',
   templateUrl: './order-overview.component.html',
+  standalone: true,
+  imports: [
+    FormsModule
+  ],
   styleUrls: ['./order-overview.component.css']
 })
 export class OrderOverviewComponent implements OnInit {
