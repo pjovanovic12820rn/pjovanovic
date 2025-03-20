@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Order } from '../models/order.model'; 
+import {Observable, take} from 'rxjs';
+import {Order, PageResponse} from '../models/order.model';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
 })
 export class OrderService {
   // Ako koristiš environment varijablu, ovde se može postaviti npr. environment.apiUrl + '/api/orders'
-  private baseUrl = 'http://localhost:8080/api/orders';
+  private baseUrl = 'http://localhost:8083/api/orders';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -21,12 +21,25 @@ export class OrderService {
     });
   }
 
-  getOrders(status: string): Observable<Order[]> {
+  // getOrders(status: string): Observable<Order[]> {
+  //   let url = this.baseUrl;
+  //   if (status && status !== 'All') {
+  //     url += `?status=${status}`;
+  //   }
+  //   return this.http.get<Order[]>(url, { headers: this.getAuthHeaders() });
+  // }
+  getOrders(status: string): Observable<PageResponse<Order>> {
     let url = this.baseUrl;
+    const params: any = {};
+
     if (status && status !== 'All') {
-      url += `?status=${status}`;
+      params.status = status;
     }
-    return this.http.get<Order[]>(url, { headers: this.getAuthHeaders() });
+
+    return this.http.get<PageResponse<Order>>(url, {
+      headers: this.getAuthHeaders(),
+      params
+    }).pipe(take(1));
   }
 
   approveOrder(orderId: number): Observable<any> {
