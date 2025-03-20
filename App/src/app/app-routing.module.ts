@@ -33,6 +33,7 @@ import { LoansComponent } from './components/loans/loans.component';
 import { OptionsDisplayComponent } from './components/option/option.component';
 import {MyPortfolioComponent} from './components/my-portfolio/my-portfolio.component';
 import {LoanDetailsComponent} from './components/loan-details/loan-details.component';
+import { OrderOverviewComponent } from './components/order-overview/order-overview.component';
 
 export const routes: Routes = [
   // login
@@ -92,6 +93,8 @@ export const routes: Routes = [
   { path: 'loan-details/:loanId', component: LoanDetailsComponent, canActivate: [authGuard] },
 
   //success
-  { path: 'success', component: SuccessComponent }
+  { path: 'success', component: SuccessComponent },
+
+  { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard] }
 ];
 
