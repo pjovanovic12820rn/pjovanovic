@@ -14,7 +14,3 @@ export interface Employee {
     active?: boolean;
     jmbg: string;
 }
-
-export interface Message {
-    message: string;
-}

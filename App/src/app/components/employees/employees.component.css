@@ -99,22 +99,35 @@ h2 {
   background: #A0522D;
 }
 
-/* 🔹 Deactivate Button */
+.status-active {
+  color: green;
+  font-weight: bold;
+}
+
+.status-inactive {
+  color: red;
+  font-weight: bold;
+}
+
+.toggle-status-btn {
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
 .deactivate-btn {
-  background: #DAA520;
+  background-color: #ff6347; /* Red */
   color: white;
 }
 
-.deactivate-btn:hover {
-  background: #FFD700;
+.activate-btn {
+  background-color: #4caf50; /* Green */
+  color: white;
 }
 
-/* 🔹 Disabled Deactivate Button */
-.deactivate-btn:disabled {
-  background: #ccc;
-  color: #666;
-  cursor: not-allowed;
-  opacity: 0.6;
+.deactivate-btn:hover, .activate-btn:hover {
+  opacity: 0.8;
 }
 
 /* 🔹 Register Button */

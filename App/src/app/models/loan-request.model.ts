@@ -4,6 +4,7 @@ export type LoanRequestStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 export type InterestRateType = 'FIXED' | 'CURRENT';
 
 export interface LoanRequest {
+  id: number;
   type: LoanType;
   amount: number;
   purpose: string;

@@ -26,8 +26,9 @@
       <td [ngClass]="getCardStatusClass(card.status)">{{ card.status }}</td>
       <td>{{ card.owner.firstName }} {{ card.owner.lastName }}</td>
       <td>
-        <button class="payment-btn" (click)="makePayment(card.cardNumber)">New Payment</button>
+<!--        <button class="payment-btn" (click)="makePayment(card.cardNumber)">New Payment</button>-->
         <button class="block-card-btn" (click)="blockCard(card.cardNumber)">Block Card</button>
+        <button *ngIf="this.authService.isAdmin()" class="block-card-btn" (click)="deactivateCard(card.cardNumber)">Deactivate Card</button>
       </td>
     </tr>
   </table>

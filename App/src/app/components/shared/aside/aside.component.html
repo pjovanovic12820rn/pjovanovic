@@ -10,24 +10,23 @@
       </li>
 
       <!-- Accounts -->
-      <li>
+      <li *ngIf="isClient">
         <a class="sidebar-link" (click)="goToAccountManagement()">
           <i class="ri-bank-line sidebar-icon"></i>
           <span class="sidebar-text">Accounts</span>
         </a>
       </li>
 
-
       <li *ngIf="isEmployee || isAdmin">
-        <a class="sidebar-link" (click)="openAccountModal()">
+        <a class="sidebar-link" (click)="goToEmployees()">
           <i class="ri-bank-line sidebar-icon"></i>
-          <span class="sidebar-text">New Account</span>
+          <span class="sidebar-text">Employees</span>
         </a>
       </li>
 
       <!-- Payments or employees-->
-      <li>
-        <a class="sidebar-link" (click)="goToPaymentsOrEmployees()">
+      <li *ngIf="isClient">
+        <a class="sidebar-link" (click)="goToPayments()">
           <i class="ri-bank-card-line sidebar-icon"></i>
           <span class="sidebar-text">Payments</span>
         </a>
@@ -50,7 +49,7 @@
       </li>
 
       <!-- Portfolio -->
-      <li>
+      <li *ngIf="isClient">
         <a class="sidebar-link" (click)="goToSecures()">
           <i class="ri-exchange-line sidebar-icon"></i>
           <span class="sidebar-text">My Portfolio</span>

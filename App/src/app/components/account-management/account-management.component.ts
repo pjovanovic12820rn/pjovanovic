@@ -5,7 +5,8 @@ import { AccountService } from '../../services/account.service';
 import { AccountResponse } from '../../models/account-response.model';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {ModalComponent} from '../shared/modal/modal.component';
 
 export interface ChangeAccountNameDto {
   newName: string;
@@ -17,7 +18,7 @@ export interface ChangeAccountLimitDto {
 
 @Component({
   selector: 'app-account-management',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModalComponent, RouterLink],
   standalone: true,
   templateUrl: './account-management.component.html',
   styleUrl: './account-management.component.css',
@@ -36,6 +37,7 @@ export class AccountManagementComponent implements OnInit {
   newAccountName: string = '';
   newAccountLimit: number = 0;
   editingAccountNumber: string | null = null;
+  isAccountModalOpen: boolean = false;
 
   constructor(
     private accountService: AccountService,
@@ -47,6 +49,7 @@ export class AccountManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.clientId = this.route.snapshot.queryParamMap.get('id');
+    console.log(this.clientId)
     if ((this.isEmployee() || this.isAdmin()) && this.clientId) {
       this.fetchAccountsForEmployee(this.clientId);
     } else if ((this.isEmployee() || this.isAdmin()) && !this.clientId) {
@@ -97,6 +100,14 @@ export class AccountManagementComponent implements OnInit {
   viewCards(accountNumber: string): void {
     this.selectedAccountNumber = accountNumber;
     this.router.navigate([`/account/${accountNumber}`]);
+  }
+
+  openAccountModal() {
+    this.isAccountModalOpen = true;
+  }
+
+  closeAccountModal() {
+    this.isAccountModalOpen = false;
   }
 
   openNameModal(accountNumber: string, currentName: string) {

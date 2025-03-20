@@ -20,8 +20,8 @@
         <td>{{ account.accountCategory }}</td>
         <td>
           <button class="details-btn" (click)="viewCards(account.accountNumber)">View Cards</button>
-          <button class="edit-btn" (click)="openNameModal(account.accountNumber, account.name)">Edit Name</button>
-          <button class="edit-btn" (click)="openLimitModal(account.accountNumber, account.dailyLimit)">Edit Limit</button>
+          <button *ngIf="isClient()" class="edit-btn" (click)="openNameModal(account.accountNumber, account.name)">Edit Name</button>
+          <button *ngIf="isClient()" class="edit-btn" (click)="openLimitModal(account.accountNumber, account.dailyLimit)">Edit Limit</button>
         </td>
       </tr>
       <tr *ngIf="accounts.length === 0">
@@ -29,6 +29,7 @@
       </tr>
     </table>
   </section>
+  <button *ngIf="isAdmin()" class="details-btn" (click)="openAccountModal()">New Account</button>
 </div>
 
 <div class="modal" *ngIf="isNameModalOpen">
@@ -48,3 +49,12 @@
     <button (click)="closeLimitModal()">Cancel</button>
   </div>
 </div>
+
+<app-modal [title]="'New Account'" [isOpen]="isAccountModalOpen" (closeModalEvent)="closeAccountModal()">
+  <div class="modal-content">
+    <div class="new-account-options">
+      <button class="account-option" [routerLink]="['/create-current-account']" (click)="closeAccountModal()">Checking Account</button>
+      <button class="account-option" [routerLink]="['/create-foreign-currency-account']" (click)="closeAccountModal()">Foreign Currency Account</button>
+    </div>
+  </div>
+</app-modal>

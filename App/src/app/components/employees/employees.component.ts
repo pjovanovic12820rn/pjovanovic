@@ -31,6 +31,7 @@ export class EmployeesComponent implements OnInit {
 
   currentPage: number = 1;
   pageSize: number = 10;
+  active: boolean = true;
 
   get isAdmin(): boolean {
     return this.authService.isAdmin();
@@ -102,24 +103,42 @@ export class EmployeesComponent implements OnInit {
     this.router.navigate(['/register-employee']);
   }
 
-  deactivateEmployee(id: number): void {
+  deactivateEmployee(id: number, isActive: undefined | boolean): void {
     if (!this.isAdmin) {
-      this.alertService.showAlert("error", "You are not authorized to deactivate employees.");
+      this.alertService.showAlert("error", "You are not authorized to change employee status.");
       return;
     }
 
-    this.employeeService.deactivateEmployee(id).subscribe({
-      next: () => {
-        const employee = this.employees.find(emp => emp.id === id);
-        if (employee) {
-          employee.active = false;
+    if (isActive) {
+      // Deactivate employee
+      this.employeeService.deactivateEmployee(id).subscribe({
+        next: () => {
+          this.updateEmployeeStatus(id, false); // Update UI immediately
+          this.alertService.showAlert("success", "Employee deactivated successfully.");
+        },
+        error: () => {
+          this.alertService.showAlert('error', 'Failed to deactivate employee. Please try again.');
         }
-        this.alertService.showAlert("success", "Employee deactivated successfully.");
-      },
-      error: () => {
-        this.alertService.showAlert('error', 'Failed to deactivate employee. Please try again.');
-      }
-    });
+      });
+    } else {
+      // Activate employee
+      this.employeeService.activateEmployee(id).subscribe({
+        next: () => {
+          this.updateEmployeeStatus(id, true); // Update UI immediately
+          this.alertService.showAlert("success", "Employee activated successfully.");
+        },
+        error: () => {
+          this.alertService.showAlert('error', 'Failed to activate employee. Please try again.');
+        }
+      });
+    }
+  }
+
+  private updateEmployeeStatus(id: number, isActive: boolean): void {
+    const employee = this.employees.find(emp => emp.id === id);
+    if (employee) {
+      employee.active = isActive;
+    }
   }
 
   viewEmployeeDetails(id: number): void {

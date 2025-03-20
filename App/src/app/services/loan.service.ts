@@ -23,7 +23,7 @@ export class LoanService {
 
   // Get all loans for a specific client
   getClientLoans(
-    clientId: string
+    clientId: string | number
   ): Observable<{ content: Loan[]; totalElements: number }> {
     return this.http.get<{ content: Loan[]; totalElements: number }>(
       `${this.apiUrl}`,
@@ -42,6 +42,13 @@ export class LoanService {
     return this.http.get<Installment[]>(`${this.apiUrl}/${loanId}/installments`, {
       headers: this.getAuthHeaders(),
     });
+  }
+
+  getAllLoans(): Observable<{ content: Loan[]; totalElements: number }> {
+    return this.http.get<{ content: Loan[]; totalElements: number }>(
+      `${this.apiUrl}/all`,
+      { headers: this.getAuthHeaders() }
+    );
   }
 
   // Apply for a new loan

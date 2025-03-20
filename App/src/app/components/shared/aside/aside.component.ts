@@ -82,12 +82,12 @@ export class AsideComponent implements OnInit, OnDestroy {
     this.navigateTo(`/account-management`);
   }
 
-  goToPaymentsOrEmployees(){
-    if (this.isClient) {
-      this.openModal()
-    } else {
-      this.navigateTo('/employees');
-    }
+  goToPayments() {
+    this.openModal()
+  }
+
+  goToEmployees(){
+    this.navigateTo('/employees');
   }
 
   goToExchangeRate() {
@@ -98,7 +98,7 @@ export class AsideComponent implements OnInit, OnDestroy {
     if (this.isClient) {
       this.navigateTo(`/loan-management/${this.userId}`);
     } else {
-      this.navigateTo('/loan-management'); // todo
+      this.navigateTo('/loan-requests');
     }
   }
 
