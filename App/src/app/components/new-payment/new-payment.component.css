@@ -44,6 +44,22 @@ body {
     border-color: #6A4BBC;
     box-shadow: 0 0 8px rgba(106, 75, 188, 0.3);
   }
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #C2B4E2;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.3s;
+}
+
+.form-group input:focus, .form-group select:focus {
+  border-color: #6A4BBC;
+  box-shadow: 0 0 8px rgba(106, 75, 188, 0.3);
+}
+
   button {
     width: 100%;
     padding: 12px;
@@ -65,6 +81,7 @@ body {
     background: #C2B4E2;
     cursor: not-allowed;
     transform: none;
+    opacity: 0.7;
   }
   @keyframes fadeIn {
     from {
@@ -76,4 +93,5 @@ body {
       transform: translateY(0);
     }
   }
-  
+
+

@@ -1,70 +1,82 @@
 <aside id="logo-sidebar" [ngClass]="{ 'open': isSidebarOpen }" aria-label="Sidebar">
   <div class="sidebar-content">
     <ul class="sidebar-list">
-      <!-- Client Portal Button -->
-      <li *ngIf="isEmployee || isAdmin">
-        <a class="sidebar-link" (click)="router.navigate(['/client-portal'])">
+      <!-- Client Portal OR User Detail -->
+      <li>
+        <a class="sidebar-link" (click)="goToClientPortalOrUserDetail()">
           <i class="ri-user-line sidebar-icon"></i>
           <span class="sidebar-text">Client Portal</span>
         </a>
       </li>
 
-      <!-- All Employees Button -->
-      <li *ngIf="isAdmin">
-        <a class="sidebar-link" (click)="router.navigate(['/employees'])">
-          <i class="ri-team-line sidebar-icon"></i>
-          <span class="sidebar-text">All Employees</span>
-        </a>
-      </li>
-
-
-      <!-- Računi -->
+      <!-- Accounts -->
       <li>
-        <a class="sidebar-link" (click)="router.navigate(['/create-foreign-currency-account'])">
+        <a class="sidebar-link" (click)="goToAccountManagement()">
           <i class="ri-bank-line sidebar-icon"></i>
-          <span class="sidebar-text">Računi</span>
+          <span class="sidebar-text">Accounts</span>
         </a>
       </li>
 
-      <!-- Plaćanja -->
-      <li>
-        <a class="sidebar-link" (click)="router.navigate(['/recipients'])">
-          <i class="ri-money-dollar-circle-line sidebar-icon"></i>
-          <span class="sidebar-text">Plaćanja</span>
+
+      <li *ngIf="isEmployee || isAdmin">
+        <a class="sidebar-link" (click)="openAccountModal()">
+          <i class="ri-bank-line sidebar-icon"></i>
+          <span class="sidebar-text">New Account</span>
         </a>
       </li>
 
-      <!-- Transferi -->
+      <!-- Payments or employees-->
       <li>
-        <a class="sidebar-link" (click)="router.navigate(['/transfer'])">
-          <i class="ri-exchange-funds-line sidebar-icon"></i>
-          <span class="sidebar-text">Transferi</span>
-        </a>
-      </li>
-
-      <!-- Menjačnica -->
-      <li>
-        <a class="sidebar-link" (click)="router.navigate(['/exchange-rate'])">
-          <i class="ri-exchange-line sidebar-icon"></i>
-          <span class="sidebar-text">Menjačnica</span>
-        </a>
-      </li>
-
-      <!-- Kartice -->
-      <li>
-        <a class="sidebar-link" (click)="router.navigate(['/kartice'])">
+        <a class="sidebar-link" (click)="goToPaymentsOrEmployees()">
           <i class="ri-bank-card-line sidebar-icon"></i>
-          <span class="sidebar-text">Kartice</span>
+          <span class="sidebar-text">Payments</span>
         </a>
       </li>
 
-      <!-- Krediti -->
+      <!-- Loans -->
       <li>
-        <a class="sidebar-link" (click)="router.navigate(['/loan-request'])">
+        <a class="sidebar-link" (click)="goToLoans()">
           <i class="ri-hand-coin-line sidebar-icon"></i>
-          <span class="sidebar-text">Krediti</span>
+          <span class="sidebar-text">Loans</span>
         </a>
       </li>
+
+      <!-- Currency Exchange -->
+      <li>
+        <a class="sidebar-link" (click)="goToExchangeRate()">
+          <i class="ri-exchange-line sidebar-icon"></i>
+          <span class="sidebar-text">Currency Exchange</span>
+        </a>
+      </li>
+
+      <!-- Portfolio -->
+      <li>
+        <a class="sidebar-link" (click)="goToSecures()">
+          <i class="ri-exchange-line sidebar-icon"></i>
+          <span class="sidebar-text">My Portfolio</span>
+        </a>
+      </li>
+
     </ul>
   </div>
 </aside>
+
+<app-modal [title]="'Payment'" [isOpen]="isModalOpen" (closeModalEvent)="closeModal()">
+  <div class="modal-content">
+    <div style="display: grid; gap: 0.5rem; margin-top: 1rem; grid-template-columns: repeat(2, 1fr)">
+      <button class="payment-btn" (click)="navigateTo('/new-payment')">New Payment</button>
+      <button class="payment-btn" (click)="navigateTo('/transfer')">Transfer Payment</button>
+      <button class="payment-btn" (click)="navigateTo('/recipients')">Payment Recipients</button>
+      <button class="payment-btn" (click)="navigateTo('/payment-details')">Payment Details</button>
+    </div>
+  </div>
+</app-modal>
+
+<app-modal [title]="'New Account'" [isOpen]="isAccountModalOpen" (closeModalEvent)="closeAccountModal()">
+  <div class="modal-content">
+    <div class="new-account-options">
+      <button class="account-option" [routerLink]="['/create-current-account']" (click)="closeAccountModal()">Checking Account</button>
+      <button class="account-option" [routerLink]="['/create-foreign-currency-account']" (click)="closeAccountModal()">Foreign Currency Account</button>
+    </div>
+  </div>
+</app-modal>

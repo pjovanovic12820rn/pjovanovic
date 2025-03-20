@@ -7,6 +7,10 @@ import { NewBankAccount } from '../models/new-bank-account.model';
 import { Employee } from '../models/employee.model';
 import { AccountResponse } from '../models/account-response.model';
 import {AccountTransfer} from '../models/account-transfer';
+import {
+  ChangeAccountLimitDto,
+  ChangeAccountNameDto
+} from '../components/account-management/account-management.component';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +28,10 @@ export class AccountService {
     });
   }
 
-  getAccountsForClient(clientId: string, page: number = 0, size: number = 10): Observable<{ content: AccountResponse[] }> {
+  // admin or employee
+  getAccountsForClient(clientId: string | number | null, page: number = 0, size: number = 10): Observable<{
+    content: AccountResponse[]
+  }> {
     const headers = this.getAuthHeaders();
     return this.http.get<{ content: AccountResponse[] }>(
       `${this.apiUrl}/${clientId}?page=${page}&size=${size}`,
@@ -32,20 +39,14 @@ export class AccountService {
     );
   }
 
-  // jer postoji getmyacc samo sa acctransf
-  // getMyAccountsRegular(){
-  //   const headers = this.getAuthHeaders().set('Accept', '*/*');
-  //   return this.http.get<{ content: AccountResponse[]}>(`${this.apiUrl}`, {headers});
-  // }
-
-  // jer postoji getmyacc samo sa acctransf
+  // client - getMyAccounts
   getMyAccountsRegular(): Observable<AccountResponse[]> {
     const headers = this.getAuthHeaders().set('Accept', '*/*');
     return this.http.get<AccountResponse[]>(`${this.apiUrl}`, { headers });
   }
 
-  getAccount(accountNumber: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${accountNumber}`, {
+  getAccountDetails(accountNumber: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/details/${accountNumber}`, {
       headers: this.getAuthHeaders(),
     });
   }
@@ -63,8 +64,8 @@ export class AccountService {
   }
 
   getAllAccounts(
-    page: number,
-    size: number
+    page: number = 0,
+    size: number = 100
   ): Observable<{ content: AccountResponse[]; totalElements: number }> {
     let params = new HttpParams().set('page', page).set('size', size);
     const headers = this.getAuthHeaders();
@@ -76,5 +77,19 @@ export class AccountService {
         params,
       }
     );
+  }
+
+  changeAccountName(accountNumber: string, newName: string): Observable<void> {
+    const payload: ChangeAccountNameDto = { newName };
+    return this.http.put<void>(`${this.apiUrl}/${accountNumber}/change-name`, payload, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  changeAccountLimit(accountNumber: string, newLimit: number): Observable<void> {
+    const payload: ChangeAccountLimitDto = { newLimit };
+    return this.http.put<void>(`${this.apiUrl}/${accountNumber}/request-change-limit`, payload, {
+      headers: this.getAuthHeaders(),
+    });
   }
 }

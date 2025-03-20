@@ -1,39 +1,41 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlertService } from '../../services/alert.service';
 import { AccountService } from '../../services/account.service';
 import { AccountResponse } from '../../models/account-response.model';
 import { FormsModule } from '@angular/forms';
-import {AuthService} from '../../services/auth.service';
-import {ModalComponent} from '../shared/modal/modal.component';
-import {RouterLink, ActivatedRoute, Router} from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
+
+export interface ChangeAccountNameDto {
+  newName: string;
+}
+
+export interface ChangeAccountLimitDto {
+  newLimit: number;
+}
 
 @Component({
   selector: 'app-account-management',
-  imports: [CommonModule, FormsModule, RouterLink, ModalComponent],
+  imports: [CommonModule, FormsModule],
   standalone: true,
   templateUrl: './account-management.component.html',
   styleUrl: './account-management.component.css',
 })
 export class AccountManagementComponent implements OnInit {
-  selectedAccountNumber: string | undefined;
-
-  // private authService = inject(AuthService);
-  // private accountService = inject(AccountService);
-  // private alertService = inject(AlertService);
-  allAccounts: AccountResponse[] = [];
   accounts: AccountResponse[] = [];
   filteredAccounts: AccountResponse[] = [];
-
+  selectedAccountNumber: string | undefined;
+  clientId: string | null = null;
   currentPage: number = 0;
   pageSize: number = 10;
   totalUsers: number = 0;
 
-  ownerNameFilter: string = '';
-  accountNumberFilter: string = '';
-
-  clientId: string | null = null;
-  filterText: string = '';
+  isNameModalOpen: boolean = false;
+  isLimitModalOpen: boolean = false;
+  newAccountName: string = '';
+  newAccountLimit: number = 0;
+  editingAccountNumber: string | null = null;
 
   constructor(
     private accountService: AccountService,
@@ -44,20 +46,15 @@ export class AccountManagementComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.clientId = this.route.snapshot.paramMap.get('id');
     this.clientId = this.route.snapshot.queryParamMap.get('id');
-    if ((this.isEmployee()||this.isAdmin()) && this.clientId) {
+    if ((this.isEmployee() || this.isAdmin()) && this.clientId) {
       this.fetchAccountsForEmployee(this.clientId);
-    } else if((this.isEmployee() || this.isAdmin()) && !this.clientId){
+    } else if ((this.isEmployee() || this.isAdmin()) && !this.clientId) {
       this.router.navigate(['/client-portal']);
     } else if (this.isClient()) {
       this.fetchAccountsForClient();
     } else {
-      // alert('Invalid access. Redirecting...');
-      this.alertService.showAlert(
-        'error',
-        'Invalid access. Redirecting...'
-      );
+      this.alertService.showAlert('error', 'Invalid access. Redirecting...');
       this.router.navigate(['/client-portal']);
     }
   }
@@ -65,15 +62,11 @@ export class AccountManagementComponent implements OnInit {
   fetchAccountsForClient(): void {
     this.accountService.getMyAccountsRegular().subscribe({
       next: (accounts) => {
-        this.accounts = accounts; //.content
-        this.filteredAccounts = accounts; //.content
+        this.accounts = accounts;
+        this.filteredAccounts = accounts;
       },
       error: () => {
-        // alert('Failed to load your accounts.');
-        this.alertService.showAlert(
-          'error',
-          'Failed to load your accounts.'
-        );
+        this.alertService.showAlert('error', 'Failed to load your accounts.');
       },
     });
   }
@@ -85,83 +78,88 @@ export class AccountManagementComponent implements OnInit {
         this.filteredAccounts = response.content;
       },
       error: () => {
-        // alert('Invalid client ID. Redirecting   :(...');
-        this.alertService.showAlert(
-          'error',
-          'Invalid client ID. Redirecting.'
-        );
+        this.alertService.showAlert('error', 'Invalid client ID. Redirecting.');
         this.router.navigate(['/client-portal']);
       },
     });
   }
 
-
-  // applyFilters(): void {
-  //   let filteredAccounts = [...this.allAccounts];
-  //
-  //   if (this.ownerNameFilter.trim()) {
-  //     const searchTerm = this.ownerNameFilter.toLowerCase().trim();
-  //     filteredAccounts = filteredAccounts.filter((account) => {
-  //       const firstName = (account.owner?.firstName || '').trim().toLowerCase();
-  //       const lastName = (account.owner?.lastName || '').trim().toLowerCase();
-  //       const fullName = `${firstName} ${lastName}`.trim();
-  //       return fullName.includes(searchTerm);
-  //     });
-  //   }
-  //
-  //   if (this.accountNumberFilter.trim()) {
-  //     const searchTerm = this.accountNumberFilter.toLowerCase().trim();
-  //     filteredAccounts = filteredAccounts.filter((account) =>
-  //       account.accountNumber.trim().toLowerCase().includes(searchTerm)
-  //     );
-  //   }
-  //
-  //   this.accounts = filteredAccounts;
-  // }
-
-  isEmployee(){
+  isEmployee() {
     return this.authService.isEmployee();
   }
-  isClient(){
+  isClient() {
     return this.authService.isClient();
   }
-  isAdmin(){
+  isAdmin() {
     return this.authService.isAdmin();
-  }
-
-  loadAccounts() {
-    this.accountService
-      .getAllAccounts(this.currentPage, this.pageSize)
-      .subscribe({
-        next: (data) => {
-          this.allAccounts = data.content.sort((a, b) => {
-            const nameA = `${a.owner?.firstName || ''} ${
-              a.owner?.lastName || ''
-            }`
-              .trim()
-              .toLowerCase();
-            const nameB = `${b.owner?.firstName || ''} ${
-              b.owner?.lastName || ''
-            }`
-              .trim()
-              .toLowerCase();
-            return nameA.localeCompare(nameB);
-          });
-          this.accounts = [...this.allAccounts];
-          this.totalUsers = data.totalElements;
-        },
-        error: () => {
-          this.alertService.showAlert(
-            'error',
-            'Failed to create account. Please try again.'
-          );
-        },
-      });
   }
 
   viewCards(accountNumber: string): void {
     this.selectedAccountNumber = accountNumber;
-    window.location.href = `/account/${accountNumber}`;
+    this.router.navigate([`/account/${accountNumber}`]);
   }
 
+  openNameModal(accountNumber: string, currentName: string) {
+    this.editingAccountNumber = accountNumber;
+    this.newAccountName = currentName;
+    this.isNameModalOpen = true;
+  }
+
+  closeNameModal() {
+    this.isNameModalOpen = false;
+    this.editingAccountNumber = null;
+  }
+
+  openLimitModal(accountNumber: string, currentLimit: number) {
+    this.editingAccountNumber = accountNumber;
+    this.newAccountLimit = currentLimit;
+    this.isLimitModalOpen = true;
+  }
+
+  closeLimitModal() {
+    this.isLimitModalOpen = false;
+    this.editingAccountNumber = null;
+  }
+
+  changeAccountName() {
+    if (!this.editingAccountNumber || !this.newAccountName.trim()) return;
+
+    this.accountService
+      .changeAccountName(this.editingAccountNumber, this.newAccountName.trim())
+      .subscribe({
+        next: () => {
+          this.alertService.showAlert('success', 'Account name updated successfully.');
+          this.closeNameModal();
+          this.refreshAccounts();
+        },
+        error: () => {
+          this.alertService.showAlert('error', 'Failed to update account name.');
+        },
+      });
+  }
+
+  changeAccountLimit() {
+    if (!this.editingAccountNumber || this.newAccountLimit <= 0) return;
+
+    this.accountService
+      .changeAccountLimit(this.editingAccountNumber, this.newAccountLimit)
+      .subscribe({
+        next: () => {
+          this.alertService.showAlert('success', 'Account limit change requested.');
+          this.closeLimitModal();
+          this.refreshAccounts();
+        },
+        error: () => {
+          this.alertService.showAlert('error', 'Failed to request account limit change.');
+        },
+      });
+  }
+
+  refreshAccounts() {
+    if (this.isClient()) {
+      this.fetchAccountsForClient();
+    } else if (this.clientId) {
+      this.fetchAccountsForEmployee(this.clientId);
+    }
+  }
 }

@@ -6,6 +6,7 @@ import {AccountTransfer} from '../../models/account-transfer';
 import {Router} from '@angular/router';
 import {AlertService} from '../../services/alert.service';
 import {AccountResponse} from '../../models/account-response.model';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-transfer',
@@ -21,6 +22,7 @@ import {AccountResponse} from '../../models/account-response.model';
 export class TransferComponent implements OnInit {
 
   private accountService = inject(AccountService);
+  private authService = inject(AuthService);
   private router = inject(Router);
   private alertService = inject(AlertService);
 
@@ -29,12 +31,10 @@ export class TransferComponent implements OnInit {
   selectedToAccountNumber: string | undefined;
   transferAmount: number | undefined;
 
-
-
   ngOnInit(): void {
-    this.accountService.getAccountsForClient("2").subscribe({
+    this.accountService.getMyAccountsRegular().subscribe({
       next: (response) => {
-        this.accounts = response.content;
+        this.accounts = response;
       },
       error: () => {
         this.alertService.showAlert('error', 'Failed to load your account. Please try again later.');
@@ -64,7 +64,15 @@ export class TransferComponent implements OnInit {
 
     this.alertService.showAlert('success', 'Transfer successful!');
 
-    this.router.navigate(['/employees']);
+    // this.router.navigate(['/employees']);
+    this.router.navigate(['/success'], {
+      state: {
+        title: 'Transfer Successful! 🎉',
+        message: 'Your funds have been transferred successfully.',
+        buttonName: 'View Payment Details',
+        continuePath: '/payment-details'
+      }
+    });
   }
 
 }

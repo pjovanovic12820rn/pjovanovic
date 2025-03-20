@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { UserService } from '../../services/user.service';
+import { ClientService } from '../../services/client.service';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
 import { User } from '../../models/user.model';
@@ -18,7 +18,7 @@ import { AlertComponent } from '../shared/alert/alert.component';
 export class RegisterUserComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
-  private userService = inject(UserService);
+  private userService = inject(ClientService);
   private authService = inject(AuthService);
   private alertService = inject(AlertService);
   private route = inject(ActivatedRoute);
@@ -26,6 +26,8 @@ export class RegisterUserComponent implements OnInit {
   registerUserForm!: FormGroup;
   loading = false;
   redirectToAccountCreation = false;
+
+  redirectTarget = '';
 
   get isAdmin(): boolean {
     return <boolean>this.authService.isAdmin();
@@ -40,12 +42,14 @@ export class RegisterUserComponent implements OnInit {
       this.router.navigate(['/']);
       return;
     }
-
     this.route.queryParams.subscribe(params => {
-      if (params['redirect'] === 'account') {
-        this.redirectToAccountCreation = true;
-      }
+      this.redirectTarget = params['redirect'] || '';
     });
+    // this.route.queryParams.subscribe(params => {
+    //   if (params['redirect'] === 'account') {
+    //     this.redirectToAccountCreation = true;
+    //   }
+    // });
 
     this.initForm();
   }
@@ -84,15 +88,25 @@ export class RegisterUserComponent implements OnInit {
     this.userService.registerUser(formData).subscribe({
       next: (newUser: User) => {
         this.alertService.showAlert('success', 'User registered successfully!');
-        // this.router.navigate(['/create-foreign-currency-account'], {
-        //   queryParams: { newUserId: newUser.id }
-        // });
-        if (this.redirectToAccountCreation) {
-          this.router.navigate(['/create-current-account'], { queryParams: { userId: newUser.id } });
+
+        if (this.redirectTarget) {
+          switch(this.redirectTarget) {
+            case 'current-account':
+              this.router.navigate(['/create-current-account'], {
+                queryParams: { userId: newUser.id }
+              });
+              break;
+            case 'foreign-account':
+              this.router.navigate(['/create-foreign-currency-account'], {
+                queryParams: { userId: newUser.id }
+              });
+              break;
+            default:
+              this.router.navigate(['/client-portal']);
+          }
         } else {
           this.router.navigate(['/client-portal']);
         }
-        // this.router.navigate(['/users']);
       },
       error: (err) => {
         this.alertService.showAlert('error', err?.error?.message || 'Failed to register user. Please try again.');

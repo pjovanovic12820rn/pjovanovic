@@ -72,6 +72,14 @@
         </div>
 
         <div class="input-group">
+          <label for="rate-type">Interest Rate Type</label>
+          <select formControlName="interestRateType" id="rate-type" (blur)="resetInvalidField('interestRateType')">
+            <option *ngFor="let type of interestRateTypes" [value]="type">{{ type }}</option>
+          </select>
+          <small class="error" *ngIf="isInvalid('interestRateType')">You must select a interest rate type.</small>
+        </div>
+
+        <div class="input-group">
             <label for="accountNumber">Bank Account Number</label>
             <select formControlName="accountNumber" id="accountNumber" (blur)="resetInvalidField('accountNumber')">
                 <option *ngFor="let account of userAccounts" [value]="account.accountNumber">
@@ -86,11 +94,11 @@
 
         <div class="form-buttons">
             <button class="btn confirm" type="submit" [disabled]="loanForm.invalid">Submit Request</button>
-            <button class="btn cancel" type="button" (click)="navigateToPage('/')">Cancel</button>
+            <button class="btn cancel" type="button" (click)="navigateToLoanManagement()">Cancel</button>
         </div>
     </form>
 
-    <div *ngIf="success">
-        <app-success message="Your loan request has been successfully submitted!" title="Loan Request Submitted" continuePath="/user/:id"></app-success>
-    </div>
+<!--    <div *ngIf="success">-->
+<!--        <app-success message="Your loan request has been successfully submitted!" title="Loan Request Submitted" continuePath="/user/:id"></app-success>-->
+<!--    </div>-->
 </div>

@@ -1,21 +1,19 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
-import {NgClass, NgIf} from '@angular/common';
-import {Router} from '@angular/router';
-import {AuthService} from '../../../services/auth.service';
-import {Subscription} from 'rxjs';
+import { Component, inject, Input, OnInit, OnDestroy } from '@angular/core';
+import { NgClass, NgIf } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
+import { Subscription } from 'rxjs';
+import { ModalComponent } from '../modal/modal.component';
 
 @Component({
   selector: 'app-aside',
-  imports: [
-    NgClass,
-    NgIf
-  ],
-  templateUrl: './aside.component.html',
   standalone: true,
+  imports: [NgClass, NgIf, ModalComponent, RouterLink],
+  templateUrl: './aside.component.html',
   styleUrl: './aside.component.css'
 })
-export class AsideComponent implements OnInit{
-  @Input() isSidebarOpen: boolean = false; // Input property to control sidebar visibility
+export class AsideComponent implements OnInit, OnDestroy {
+  @Input() isSidebarOpen: boolean = false;
   protected router = inject(Router);
   protected authService = inject(AuthService);
 
@@ -24,7 +22,9 @@ export class AsideComponent implements OnInit{
   isEmployee = false;
   isClient = false;
   userId: number | null = null;
-  private authSubscription!: Subscription; // Subscription to track auth changes
+  private authSubscription!: Subscription;
+  isModalOpen: boolean = false;
+  isAccountModalOpen: boolean = false;
 
   ngOnInit(): void {
     this.authSubscription = this.authService.authStatus$.subscribe((isAuth) => {
@@ -49,4 +49,60 @@ export class AsideComponent implements OnInit{
     }
   }
 
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+  }
+
+  openAccountModal() {
+    this.isAccountModalOpen = true;
+  }
+
+  closeAccountModal() {
+    this.isAccountModalOpen = false;
+  }
+
+  navigateTo(route: string) {
+    this.closeModal();
+    this.router.navigate([route]);
+  }
+
+  goToClientPortalOrUserDetail() {
+    if (this.isClient && this.userId) {
+      this.navigateTo(`/user/${this.userId}`);
+    } else {
+      this.navigateTo('/client-portal');
+    }
+  }
+
+  goToAccountManagement() {
+    this.navigateTo(`/account-management`);
+  }
+
+  goToPaymentsOrEmployees(){
+    if (this.isClient) {
+      this.openModal()
+    } else {
+      this.navigateTo('/employees');
+    }
+  }
+
+  goToExchangeRate() {
+    this.navigateTo('/exchange-rate');
+  }
+
+  goToLoans() {
+    if (this.isClient) {
+      this.navigateTo(`/loan-management/${this.userId}`);
+    } else {
+      this.navigateTo('/loan-management'); // todo
+    }
+  }
+
+  goToSecures() {
+    this.navigateTo('/my-portfolio');
+  }
 }
