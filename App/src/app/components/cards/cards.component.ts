@@ -59,31 +59,50 @@ export class CardsComponent implements OnInit {
 //     })
   }
 
-  blockCard(cardNumber: string): void {
-    if(this.authService.isClient()) {
-      this.cardService.blockCardByUser(this.accountNumber, cardNumber).subscribe({
+  blockCard(cardNumber: string, status: string): void {
+    if (status === 'BLOCKED') {
+      // Unblock the card
+      this.cardService.unblockCard(this.accountNumber, cardNumber).subscribe({
         next: () => {
-          this.loadCards()
+          this.updateCardStatus(cardNumber, 'ACTIVE'); // Update UI immediately
         },
-      })
+      });
     } else {
-      this.cardService.blockCardByAdmin(this.accountNumber, cardNumber).subscribe({
-        next: () => {
-          this.loadCards()
-        },
-      })
+      // Block the card
+      if (this.authService.isClient()) {
+        this.cardService.blockCardByUser(this.accountNumber, cardNumber).subscribe({
+          next: () => {
+            this.updateCardStatus(cardNumber, 'BLOCKED'); // Update UI immediately
+          },
+        });
+      } else {
+        this.cardService.blockCardByAdmin(this.accountNumber, cardNumber).subscribe({
+          next: () => {
+            this.updateCardStatus(cardNumber, 'BLOCKED'); // Update UI immediately
+          },
+        });
+      }
     }
   }
 
   deactivateCard(cardNumber: string): void {
-    if(this.authService.isAdmin()) {
+    if (this.authService.isAdmin()) {
       this.cardService.deactivateCard(this.accountNumber, cardNumber).subscribe({
         next: () => {
-          this.loadCards()
+          this.updateCardStatus(cardNumber, 'DEACTIVATED'); // Update UI immediately
         },
-      })
+      });
     }
   }
+
+// ✅ Helper function to update the card's status in the UI
+  private updateCardStatus(cardNumber: string, newStatus: string): void {
+    const card = this.cards.find(c => c.cardNumber === cardNumber);
+    if (card) {
+      card.status = newStatus;
+    }
+  }
+
 
   getCardStatusClass(status: string): string {
     switch (status) {

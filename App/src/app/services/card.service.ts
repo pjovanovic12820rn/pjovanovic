@@ -17,6 +17,7 @@ export interface Card {
 export interface CreateCardDto {
   accountNumber: string
   type: string
+  issuer: string
   name: string
   cardLimit: number
   authorizedPersonId?: number
@@ -68,6 +69,11 @@ export class CardService {
 
   blockCardByAdmin(accountNumber: string, cardNumber: string): Observable<any> {
     const url = `${this.apiUrl}/${accountNumber}/cards/${cardNumber}/block`
+    return this.http.post(url, {}, { headers: this.getAuthHeaders() })
+  }
+
+  unblockCard(accountNumber: string, cardNumber: string): Observable<any> {
+    const url = `${this.apiUrl}/${accountNumber}/cards/${cardNumber}/unblock`
     return this.http.post(url, {}, { headers: this.getAuthHeaders() })
   }
 
