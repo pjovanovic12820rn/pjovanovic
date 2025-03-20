@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { CardService, Card } from '../../services/card.service'
 import { AccountService } from '../../services/account.service'
-import { NgClass, NgForOf } from '@angular/common'
+import {NgClass, NgForOf, NgIf} from '@angular/common'
 import {ModalComponent} from '../shared/modal/modal.component';
+import {AuthService} from '../../services/auth.service';
 // import { ModalComponent } from '../modal/modal.component'
 
 interface Account {
@@ -20,7 +21,7 @@ interface Account {
   selector: 'app-cards',
   templateUrl: './cards.component.html',
   standalone: true,
-  imports: [NgClass, NgForOf, RouterLink, ModalComponent], //, ModalComponent
+  imports: [NgClass, NgForOf, RouterLink, ModalComponent, NgIf], //, ModalComponent
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {
@@ -29,7 +30,7 @@ export class CardsComponent implements OnInit {
   accountNumber: string = ''
   isModalOpen: boolean = false
 
-  constructor(private route: ActivatedRoute, private cardService: CardService, private accountService: AccountService) {}
+  constructor(protected authService: AuthService, private route: ActivatedRoute, private cardService: CardService, private accountService: AccountService) {}
 
   ngOnInit(): void {
     const paramAcc = this.route.snapshot.paramMap.get('accountNumber')
@@ -44,19 +45,41 @@ export class CardsComponent implements OnInit {
   }
 
   loadCards(): void {
-    this.cardService.getMyCardsForAccount(this.accountNumber).subscribe(data => {
-      this.cards = data
-    })
+    if(this.authService.isClient()) {
+      this.cardService.getMyCardsForAccount(this.accountNumber).subscribe(data => {
+        this.cards = data
+      })
+    } else {
+      this.cardService.getCardsByAccount(this.accountNumber).subscribe(data => {
+        this.cards = data
+      })
+    }
   }
 
   blockCard(cardNumber: string): void {
-    this.cardService.blockCard(this.accountNumber, cardNumber).subscribe({
-      next: () => {
-        this.loadCards()
-      },
-      error: err => {
-      }
-    })
+    if(this.authService.isClient()) {
+      this.cardService.blockCardByUser(this.accountNumber, cardNumber).subscribe({
+        next: () => {
+          this.loadCards()
+        },
+      })
+    } else {
+      this.cardService.blockCardByAdmin(this.accountNumber, cardNumber).subscribe({
+        next: () => {
+          this.loadCards()
+        },
+      })
+    }
+  }
+
+  deactivateCard(cardNumber: string): void {
+    if(this.authService.isAdmin()) {
+      this.cardService.deactivateCard(this.accountNumber, cardNumber).subscribe({
+        next: () => {
+          this.loadCards()
+        },
+      })
+    }
   }
 
   getCardStatusClass(status: string): string {

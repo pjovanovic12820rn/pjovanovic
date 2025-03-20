@@ -31,6 +31,7 @@
         <app-button *ngIf="isAdmin || isEmployee" (click)="listAccounts(client.id)" label="List Accounts"/>
         <app-button *ngIf="isAdmin || isEmployee" [routerLink]="['/users', client.id]" label="Edit User"/>
         <app-button *ngIf="isAdmin" (click)="deleteUser(client.id)" label="Delete User"/>
+        <app-button *ngIf="isAdmin" (click)="clientLoans(client.id)" label="Loans"/>
       </div>
     </div>
   </div>

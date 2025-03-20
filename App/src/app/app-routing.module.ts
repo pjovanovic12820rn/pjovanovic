@@ -30,6 +30,7 @@ import { SuccessComponent } from './components/success/success.component';
 import { LoansComponent } from './components/loans/loans.component';
 import { MyPortfolioComponent } from './components/my-portfolio/my-portfolio.component';
 import { LoanDetailsComponent } from './components/loan-details/loan-details.component';
+import {NewLoanRequestsComponent} from './components/new-loan-requests/new-loan-requests.component';
 
 export const routes: Routes = [
   // login
@@ -80,6 +81,7 @@ export const routes: Routes = [
 
   // loans
   { path: 'loan-request', component: LoanRequestComponent, canActivate: [authGuard] },
+  { path: 'loan-requests', component: NewLoanRequestsComponent, canActivate: [authGuard] },
   { path: 'loan-management/:clientId', component: LoansComponent, canActivate: [authGuard] },
   { path: 'loan-details/:loanId', component: LoanDetailsComponent, canActivate: [authGuard] },
 

@@ -98,7 +98,7 @@ export class AsideComponent implements OnInit, OnDestroy {
     if (this.isClient) {
       this.navigateTo(`/loan-management/${this.userId}`);
     } else {
-      this.navigateTo('/loan-requests'); // todo
+      this.navigateTo('/loan-requests');
     }
   }
 

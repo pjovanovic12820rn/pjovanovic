@@ -40,6 +40,24 @@ export class LoanRequestService {
     });
   }
 
+  getAllLoanRequests(): Observable<{ content: LoanRequest[] }> {
+    return this.http.get<{ content: LoanRequest[] }>(`${this.apiUrl}/all`, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  approveLoanRequest(loanId: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/approve/${loanId}`, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  rejectLoanRequest(loanId: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/reject/${loanId}`, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
   getAvailableCurrencies(): Currency[] {
     return [
       { code: 'RSD', name: 'Serbian Dinar', symbol: 'RSD', country: ['Serbia'], description: 'Serbian Dinar', isActive: true },

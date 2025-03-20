@@ -10,6 +10,7 @@ import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { AuthService } from '../../services/auth.service';
 import { AccountService } from '../../services/account.service';
 import {ButtonComponent} from '../shared/button/button.component';
+import {LoanService} from '../../services/loan.service';
 
 @Component({
   selector: 'app-client-portal',
@@ -37,6 +38,7 @@ export class ClientPortalComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private alertService: AlertService,
+    private loanService: LoanService,
     private userService: ClientService,
     private router: Router
   ) {}
@@ -106,6 +108,10 @@ export class ClientPortalComponent implements OnInit {
         },
       });
     }
+  }
+
+  clientLoans(clientId: number): void {
+    this.router.navigate([`loan-management/${clientId}`]);
   }
 
   listAccounts(clientId: number): void {
