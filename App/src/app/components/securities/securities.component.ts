@@ -42,13 +42,13 @@ export class SecuritiesComponent implements OnInit, OnDestroy {
   }
 
   refreshSecurity(securityToRefresh: Security): void {
-    this.securityService.getSecurityByTicker(securityToRefresh.ticker).subscribe(updatedSecurity => {
+    this.securityService.getSecurityById(securityToRefresh.id).subscribe(updatedSecurity => {
       this.allSecurities = this.allSecurities.map(sec => {
-        if (sec.ticker === updatedSecurity.ticker) {
+        if (updatedSecurity && sec.id === updatedSecurity.id) {
           return updatedSecurity;
         }
         return sec;
-      });
+      }).filter((sec): sec is Security => sec !== undefined);
       this.filterSecurities();
     });
   }

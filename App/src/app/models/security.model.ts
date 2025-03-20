@@ -1,4 +1,5 @@
 export interface Security {
+  id: number;
   ticker: string;
   price: number;
   change: number;
