@@ -80,8 +80,15 @@ export class TransferComponent implements OnInit {
     //
     // this.paymentService.transfer(this.transfer);
 
-    this.alertService.showAlert('success', 'Transfer successful!');
-    this.router.navigate(['/employees']);
+    // this.router.navigate(['/employees']);
+    this.router.navigate(['/success'], {
+      state: {
+        title: 'Transfer Successful! 🎉',
+        message: 'Your funds have been transferred successfully.',
+        buttonName: 'View Payment Details',
+        continuePath: '/payment-details'
+      }
+    });
   }
 
 }

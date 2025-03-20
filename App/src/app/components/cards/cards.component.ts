@@ -54,6 +54,9 @@ export class CardsComponent implements OnInit {
         this.cards = data
       })
     }
+// idk was this     this.cardService.getUserCardsForAccount(this.accountNumber).subscribe(data => {
+//       this.cards = data
+//     })
   }
 
   blockCard(cardNumber: string): void {
