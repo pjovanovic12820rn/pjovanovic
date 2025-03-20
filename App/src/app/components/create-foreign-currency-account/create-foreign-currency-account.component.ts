@@ -12,19 +12,11 @@ import { Employee } from '../../models/employee.model';
 import {AlertService} from '../../services/alert.service';
 import { CompanyService } from '../../services/company.service';
 import { Company, CreateCompany } from '../../models/company.model';
-import {CreateAuthorizedPersonnel} from '../../models/authorized-personnel.model';
+import {AuthorizedPersonnel, CreateAuthorizedPersonnel} from '../../models/authorized-personnel.model';
 import {AuthorizedPersonnelService} from '../../services/authorized-personnel.service';
 import { CurrencyService } from '../../services/currency.service';
 import {CurrencyDto} from '../../models/currency-dto.model';
 
-// interface Currency {
-//   code: string;
-//   name: string;
-//   symbol: string;
-//   country: string[];
-//   description: string;
-//   isActive: boolean;
-// }
 
 @Component({
   selector: 'app-create-foreign-currency-account',
@@ -73,36 +65,23 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
   loadingCompanies = false;
 
   currencies: CurrencyDto[] = [];
-  // currencies: Currency[] = [
-  //   {
-  //     code: 'EUR',
-  //     name: 'Euro',
-  //     symbol: '€',
-  //     country: ['Germany', 'Slovenia', 'Other EU'],
-  //     description: 'Euro',
-  //     isActive: true,
-  //   },
-  //   {
-  //     code: 'USD',
-  //     name: 'US Dollar',
-  //     symbol: '$',
-  //     country: ['USA'],
-  //     description: 'US Dollar',
-  //     isActive: true,
-  //   },
-  //   {
-  //     code: 'CHF',
-  //     name: 'Swiss Franc',
-  //     symbol: 'CHF',
-  //     country: ['Switzerland'],
-  //     description: 'Swiss Franc',
-  //     isActive: true,
-  //   }
-  // ];
 
   //za onog dodatnog
   selectedAuthorizedPersonnelId: number | null = null;
-  availablePersonnel: User[] = [];
+  availablePersonnel: AuthorizedPersonnel[] = [];
+
+  //za personelu takodje
+  isNewPersonnel = false;
+  newPersonnel: CreateAuthorizedPersonnel = {
+    firstName: '',
+    lastName: '',
+    dateOfBirth: '',
+    gender: '',
+    email: '',
+    phoneNumber: '',
+    address: '',
+    companyId: 0
+  };
 
   constructor(
     private userService: ClientService,
@@ -130,7 +109,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     }
 
     this.loadUsers();
-    this.loadAvailablePersonnel();
+    // this.loadAvailablePersonnel();
     this.employeeId = this.authService.getUserId();
     if (this.employeeId) {
       this.newAccount.employeeId = this.employeeId;
@@ -168,10 +147,11 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       error: (error) => console.error('Failed to load users:', error)
     });
   }
-  private loadAvailablePersonnel() {
-    this.userService.getAllUsers(0, 100).subscribe({
-      next: (response) => {
-        this.availablePersonnel = response.content;
+
+  private loadAvailablePersonnel(companyId: number): void {
+    this.authorizedPersonnelService.getByCompany(companyId).subscribe({
+      next: (personnel) => {
+        this.availablePersonnel = personnel;
       },
       error: (error) => console.error('Failed to load personnel:', error)
     });
@@ -195,15 +175,35 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
 
   isCompanyFormValid(): boolean {
     if (!this.isCompanyAccount) return true;
+
+    // Existing company val
+    if (!this.isNewCompany && !this.selectedCompanyId) return false;
+
+    // New company val
     if (this.isNewCompany) {
-      // validiraj sve osim majority ownera za sad
-      return this.companyInfo.name.trim() !== '' &&
+      const companyValid = this.companyInfo.name.trim() !== '' &&
         this.companyInfo.registrationNumber.trim() !== '' &&
         this.companyInfo.taxNumber.trim() !== '' &&
         this.companyInfo.activityCode.trim() !== '' &&
         this.companyInfo.address.trim() !== '';
+
+      if (!companyValid) return false;
     }
-    return !!this.selectedCompanyId; // just sel comp
+
+    // New personnel val
+    if (this.isNewPersonnel) {
+      const personnelValid = this.newPersonnel.firstName.trim() !== '' &&
+        this.newPersonnel.lastName.trim() !== '' &&
+        this.newPersonnel.dateOfBirth !== '' &&
+        this.newPersonnel.gender !== '' &&
+        this.newPersonnel.email.trim() !== '' &&
+        this.newPersonnel.phoneNumber.trim() !== '' &&
+        this.newPersonnel.address.trim() !== '';
+
+      if (!personnelValid) return false;
+    }
+
+    return true;
   }
 
   //novo za kompanije
@@ -229,22 +229,41 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
   }
 
   onCompanySelect() {
-    // alert(this.selectedCompanyId);
-    // alert(`Value: ${this.selectedCompanyId}, Type: ${typeof this.selectedCompanyId}`);
     if (this.selectedCompanyId === -1) { // Create new company selektovano
       // alert("dakle jes -1, sto onda nisu slobodna polja");
       this.isNewCompany = true;
       this.resetCompanyForm();
+      this.availablePersonnel = [];
     } else {
       // alert("ne registruje da je isto?");
       this.isNewCompany = false;
       const selectedCompany = this.companies.find(c => c.id === Number(this.selectedCompanyId));
       if (selectedCompany) {
         this.populateCompanyForm(selectedCompany);
+        this.loadAvailablePersonnel(selectedCompany.id);
       } else {
         // alert("NITI OVDE");
         this.resetCompanyForm();
+        this.availablePersonnel = [];
       }
+    }
+    this.isNewPersonnel = false;
+    this.selectedAuthorizedPersonnelId = null;
+  }
+
+  onPersonnelSelect() {
+    this.isNewPersonnel = this.selectedAuthorizedPersonnelId === -1;
+    if (!this.isNewPersonnel) {
+      this.newPersonnel = {
+        firstName: '',
+        lastName: '',
+        dateOfBirth: '',
+        gender: '',
+        email: '',
+        phoneNumber: '',
+        address: '',
+        companyId: 0
+      };
     }
   }
 
@@ -284,6 +303,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     //nov
     try {
       let companyId: number | undefined;
+      let authorizedPersonId: number | undefined;
 
       if (this.isCompanyAccount) {
         // create if new
@@ -312,40 +332,32 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
         } else {
           companyId = this.selectedCompanyId || undefined;
         }
-        //za personelu
-        if (this.selectedAuthorizedPersonnelId) {
-          const selectedUser = this.availablePersonnel.find(u => u.id === this.selectedAuthorizedPersonnelId);
+        //todo za personelu
 
-          if (!selectedUser) {
-            throw new Error('Selected authorized personnel not found');
-          }
-          const formattedDate = this.formatDate(selectedUser.birthDate);
+        if (this.isNewPersonnel && companyId) {
+          const createPersonnelDto: CreateAuthorizedPersonnel = {
+            ...this.newPersonnel,
+            companyId: companyId
+          };
 
           try {
-            const createPersonnelDto: CreateAuthorizedPersonnel = {
-              firstName: selectedUser.firstName,
-              lastName: selectedUser.lastName,
-              dateOfBirth: formattedDate,
-              gender: selectedUser.gender,
-              email: selectedUser.email,
-              phoneNumber: selectedUser.phone || '',
-              address: selectedUser.address || '',
-              companyId: companyId!
-            };
-
-            await this.authorizedPersonnelService.createAuthorizedPersonnel(createPersonnelDto).toPromise();
+            const createdPersonnel = await this.authorizedPersonnelService.createAuthorizedPersonnel(createPersonnelDto).toPromise();
+            if (createdPersonnel && 'id' in createdPersonnel) {
+              authorizedPersonId = createdPersonnel.id;
+            }
           } catch (error: any) {
             const errorMessage = error?.error?.message || 'Failed to create authorized personnel';
             this.alertService.showAlert('error', errorMessage);
             return;
           }
-
+        } else if (this.selectedAuthorizedPersonnelId) {
+          authorizedPersonId = this.selectedAuthorizedPersonnelId;
         }
-
       }
 
       this.newAccount.companyId = companyId;
-
+      this.newAccount.authorizedPersonId = authorizedPersonId;
+      // alert(this.newAccount.authorizedPersonId);
       this.accountService.createCurrentAccount(this.newAccount).subscribe({
         next: () => {
           this.alertService.showAlert('success', 'Account created successfully!');

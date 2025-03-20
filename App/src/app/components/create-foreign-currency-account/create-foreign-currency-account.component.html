@@ -111,7 +111,7 @@
               </div>
 
               <div class="form-group">
-                <label for="majorityOwner">Majority Owner (Client ID):</label>
+                <label for="majorityOwner">Majority Owner:</label>
                 <input id="majorityOwner" name="majorityOwner"
                        [value]="getClientName(newAccount.clientId)"
                        type="text"
@@ -125,15 +125,56 @@
                        type="text"
                        [disabled]="!isNewCompany" />
               </div>
+
+
               <div class="form-group">
                 <label for="authorizedPersonnel">Authorized Personnel (Optional):</label>
-                <select id="authorizedPersonnel" name="authorizedPersonnel" [(ngModel)]="selectedAuthorizedPersonnelId">
+                <select id="authorizedPersonnel" name="authorizedPersonnel"
+                        [(ngModel)]="selectedAuthorizedPersonnelId"
+                        (change)="onPersonnelSelect()">
                   <option [ngValue]="null">Select authorized personnel</option>
-                  <option *ngFor="let user of availablePersonnel" [ngValue]="user.id">
-                    {{ user.firstName }} {{ user.lastName }} ({{ user.email }})
+                  <option [ngValue]="-1">Create new authorized personnel</option>
+                  <option *ngFor="let personnel of availablePersonnel" [ngValue]="personnel.id">
+                    {{ personnel.firstName }} {{ personnel.lastName }}
                   </option>
                 </select>
               </div>
+
+              <div *ngIf="isNewPersonnel" class="authorized-personnel-form">
+                <h4>New Authorized Personnel Details</h4>
+                <div class="form-group">
+                  <label for="firstName">First Name:</label>
+                  <input id="firstName" name="firstName" [(ngModel)]="newPersonnel.firstName" required>
+                </div>
+                <div class="form-group">
+                  <label for="lastName">Last Name:</label>
+                  <input id="lastName" name="lastName" [(ngModel)]="newPersonnel.lastName" required>
+                </div>
+                <div class="form-group">
+                  <label for="dateOfBirth">Date of Birth:</label>
+                  <input id="dateOfBirth" name="dateOfBirth" type="date" [(ngModel)]="newPersonnel.dateOfBirth" required>
+                </div>
+                <div class="form-group">
+                  <label for="gender">Gender:</label>
+                  <select id="gender" name="gender" [(ngModel)]="newPersonnel.gender" required>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="email">Email:</label>
+                  <input id="email" name="email" type="email" [(ngModel)]="newPersonnel.email" required>
+                </div>
+                <div class="form-group">
+                  <label for="phoneNumber">Phone Number:</label>
+                  <input id="phoneNumber" name="phoneNumber" [(ngModel)]="newPersonnel.phoneNumber" required>
+                </div>
+                <div class="form-group">
+                  <label for="personnelAddress">Address:</label>
+                  <input id="personnelAddress" name="personnelAddress" [(ngModel)]="newPersonnel.address" required>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
