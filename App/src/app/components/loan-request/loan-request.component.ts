@@ -4,17 +4,17 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LoanRequestService } from '../../services/loan-request.service';
 import { AlertService } from '../../services/alert.service';
-// import { AlertComponent } from '../alert/alert.component';
 import { SuccessComponent } from '../success/success.component';
-import { LoanRequest, LoanType, EmploymentStatus } from '../../models/loan-request.model';
+import {LoanRequest, LoanType, EmploymentStatus, InterestRateType} from '../../models/loan-request.model';
 import { Currency } from '../../models/currency.model';
 import { AccountService } from '../../services/account.service';
-import {AlertComponent} from '../shared/alert/alert.component';
+import { AlertComponent } from '../shared/alert/alert.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-loan-request',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SuccessComponent, AlertComponent], // AlertComponent,
+  imports: [CommonModule, ReactiveFormsModule, SuccessComponent, AlertComponent],
   templateUrl: './loan-request.component.html',
   styleUrls: ['./loan-request.component.css']
 })
@@ -24,6 +24,7 @@ export class LoanRequestComponent implements OnInit {
   private loanRequestService = inject(LoanRequestService);
   private accountService = inject(AccountService);
   private alertService = inject(AlertService);
+  private authService = inject(AuthService);
 
   loanForm!: FormGroup;
   availableCurrencies: Currency[] = [];
@@ -36,6 +37,7 @@ export class LoanRequestComponent implements OnInit {
 
   loanTypes: LoanType[] = ['CASH', 'MORTGAGE', 'CAR', 'REFINANCING', 'STUDENT'];
   employmentStatuses: EmploymentStatus[] = ['PERMANENT', 'TEMPORARY', 'UNEMPLOYED'];
+  interestRateTypes: InterestRateType[] = ['FIXED', 'CURRENT'];
 
   repaymentOptions: { [key in LoanType]: number[] } = {
     CASH: [12, 24, 36, 48, 60, 72, 84],
@@ -60,7 +62,8 @@ export class LoanRequestComponent implements OnInit {
       employmentDuration: ['', [Validators.required, Validators.min(0)]],
       repaymentPeriod: [{ value: '', disabled: true }, Validators.required],
       contactPhone: ['', [Validators.required, Validators.pattern(/^\+?[0-9]{9,15}$/)]],
-      accountNumber: ['', [Validators.required, this.validateAccountCurrency.bind(this)]]
+      accountNumber: ['', [Validators.required, this.validateAccountCurrency.bind(this)]],
+      interestRateType: ['', [Validators.required]]
     });
 
     this.availableCurrencies = this.loanRequestService.getAvailableCurrencies();
@@ -116,15 +119,37 @@ export class LoanRequestComponent implements OnInit {
     this.router.navigate([route]);
   }
 
+  //da vrati ako odustane
+  navigateToLoanManagement(): void {
+    const userId = this.authService.getUserId();
+    if (userId) {
+      this.router.navigate([`/loan-management/${userId}`]);
+    } else {
+      this.alertService.showAlert('error', 'User not authenticated');
+      this.router.navigate(['/login']);
+    }
+  }
+
   onSubmit(): void {
     if (this.loanForm.valid) {
       const request: LoanRequest = this.loanForm.value;
       request.status = "PENDING"
 
       this.loanRequestService.submitLoanRequest(request).subscribe({
-        next: () => {
-          this.success = true;
-          this.alertService.showAlert('success', 'Loan request submitted successfully!');
+        next: (response: string) => {
+          // this.success = true;
+          // // this.alertService.showAlert('success', 'Loan request submitted successfully!');
+          // this.alertService.showAlert('success', response);
+          //
+          this.router.navigate(['/success'], {
+            state: {
+              title: 'Loan Request Submitted!',
+              message: response,
+              buttonName: 'Go to Loan Management',
+              continuePath: `/loan-management/${this.authService.getUserId()}`
+            }
+          });
+
         },
         error: () => {
           this.alertService.showAlert('error', 'An error occurred while submitting the request.');

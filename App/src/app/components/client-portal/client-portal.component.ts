@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { UserService } from '../../services/user.service';
+import { ClientService } from '../../services/client.service';
 import { User } from '../../models/user.model'; // Ispravan User model
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -19,7 +19,7 @@ import {ButtonComponent} from '../shared/button/button.component';
   styleUrls: ['./client-portal.component.css'],
 })
 export class ClientPortalComponent implements OnInit {
-  // private userService = inject(UserService);
+  // private userService = inject(ClientService);
   // private alertService = inject(AlertService);
   // private authService = inject(AuthService);
 
@@ -37,7 +37,7 @@ export class ClientPortalComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private alertService: AlertService,
-    private userService: UserService,
+    private userService: ClientService,
     private router: Router
   ) {}
 
