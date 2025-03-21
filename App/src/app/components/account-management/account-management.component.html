@@ -20,8 +20,8 @@
         <td>{{ account.accountCategory }}</td>
         <td>
           <button class="details-btn" (click)="viewCards(account.accountNumber)">View Cards</button>
-          <button *ngIf="isClient()" class="edit-btn" (click)="openNameModal(account.accountNumber, account.name)">Edit Name</button>
-          <button *ngIf="isClient()" class="edit-btn" (click)="openLimitModal(account.accountNumber, account.dailyLimit)">Edit Limit</button>
+          <button *ngIf="isClient()" class="details-btn" (click)="openNameModal(account.accountNumber, account.name)">Edit Name</button>
+          <button *ngIf="isClient()" class="details-btn" (click)="openLimitModal(account.accountNumber, account.dailyLimit)">Edit Limit</button>
         </td>
       </tr>
       <tr *ngIf="accounts.length === 0">

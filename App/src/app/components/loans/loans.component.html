@@ -10,12 +10,14 @@
       <h2>Client Loans</h2>
 
       <!-- Filter -->
-      <input
-        type="text"
-        class="filter"
-        placeholder="Filter loans..."
-        [(ngModel)]="filterText"
-      />
+      <div *ngIf="authService.isAdmin()">
+        <input
+          type="text"
+          class="filter"
+          placeholder="Filter loans..."
+          [(ngModel)]="filterText"
+        />
+      </div>
 
       <!-- List of credits -->
       <div class="credits-list">
