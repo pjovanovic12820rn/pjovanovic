@@ -28,7 +28,7 @@ export class LoansComponent implements OnInit {
   selectedLoan: Loan | null = null;
   newLoanForm: FormGroup;
 
-  constructor(private authService: AuthService, private loanService: LoanService, private loanRequestService: LoanRequestService, private fb: FormBuilder, private router: Router) {
+  constructor(protected authService: AuthService, private loanService: LoanService, private loanRequestService: LoanRequestService, private fb: FormBuilder, private router: Router) {
     this.newLoanForm = this.fb.group({
       type: ['', Validators.required],
       amount: [0, [Validators.required, Validators.min(1)]],

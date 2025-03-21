@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute, RouterLink } from '@angular/router'
+import {ActivatedRoute, Router, RouterLink} from '@angular/router'
 import { CardService, Card } from '../../services/card.service'
 import { AccountService } from '../../services/account.service'
 import {NgClass, NgForOf, NgIf} from '@angular/common'
 import {ModalComponent} from '../shared/modal/modal.component';
 import {AuthService} from '../../services/auth.service';
+import {AlertService} from '../../services/alert.service';
 // import { ModalComponent } from '../modal/modal.component'
 
 interface Account {
@@ -30,7 +31,7 @@ export class CardsComponent implements OnInit {
   accountNumber: string = ''
   isModalOpen: boolean = false
 
-  constructor(protected authService: AuthService, private route: ActivatedRoute, private cardService: CardService, private accountService: AccountService) {}
+  constructor(protected authService: AuthService, private route: ActivatedRoute, private cardService: CardService, private accountService: AccountService, private alertService: AlertService, private router: Router) {}
 
   ngOnInit(): void {
     const paramAcc = this.route.snapshot.paramMap.get('accountNumber')
@@ -95,7 +96,6 @@ export class CardsComponent implements OnInit {
     }
   }
 
-// ✅ Helper function to update the card's status in the UI
   private updateCardStatus(cardNumber: string, newStatus: string): void {
     const card = this.cards.find(c => c.cardNumber === cardNumber);
     if (card) {
@@ -103,6 +103,14 @@ export class CardsComponent implements OnInit {
     }
   }
 
+  newCardReq(){
+    if(this.authService.isClient()){
+      if(this.cards.length >= 2){
+        this.alertService.showAlert('error', 'Client cant have more than 2 cards');
+      }
+    }
+    this.router.navigate([`/account/${this.accountNumber}/create-card`])
+  }
 
   getCardStatusClass(status: string): string {
     switch (status) {
@@ -122,9 +130,6 @@ export class CardsComponent implements OnInit {
     const first4 = fullCardNumber.slice(0, 4)
     const last4 = fullCardNumber.slice(-4)
     return `${first4}********${last4}`
-  }
-
-  makePayment(cardNumber: string): void {
   }
 
   openModal() {
