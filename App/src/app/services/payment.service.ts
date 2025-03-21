@@ -50,8 +50,13 @@ export class PaymentService {
       .set('page', page.toString())
       .set('size', size.toString());
 
-    if (startDate) params = params.set('startDate', startDate);
-    if (endDate) params = params.set('endDate', endDate);
+    if (startDate) {
+      params = params.set('startDate', `${startDate}T00:00:00`);
+    }
+    if (endDate) {
+      params = params.set('endDate', `${endDate}T23:59:59`);
+    }
+
     if (minAmount) params = params.set('minAmount', minAmount.toString());
     if (maxAmount) params = params.set('maxAmount', maxAmount.toString());
     if (paymentStatus) params = params.set('paymentStatus', paymentStatus);
