@@ -19,7 +19,7 @@
     </div>
 <!--    <button class="payment-btn" (click)="openModal()">Payment</button>-->
   </div>
-  <button class="payment-btn" [routerLink]="['/account', accountNumber, 'create-card']">
+  <button class="payment-btn" (click)="newCardReq()" [routerLink]="['/account', accountNumber, 'create-card']">
     Create New Card
   </button>
   <h3>Associated Cards</h3>
