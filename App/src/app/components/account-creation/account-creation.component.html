@@ -201,6 +201,11 @@
         </div>
 
         <div class="form-group">
+          <label for="name">Account Name:</label>
+          <input id="name" name="name" [(ngModel)]="newAccount.name" required />
+        </div>
+
+        <div class="form-group">
           <label for="dailyLimit">Daily Limit:</label>
           <input id="dailyLimit" name="dailyLimit" [(ngModel)]="newAccount.dailyLimit" type="number" required />
         </div>
@@ -225,3 +230,38 @@
                                             || !isCompanyFormValid()">Create Account</button>
   </form>
 </div>
+
+<app-modal [title]="'Create Card'" [isOpen]="showCardModal" (closeModalEvent)="showCardModal = false">
+  <div class="modal-content">
+    <form #cardForm="ngForm" (ngSubmit)="submitCardForm()" class="create-card-form">
+      <div class="form-group">
+        <label>Card Type</label>
+        <select [(ngModel)]="newCard.type" name="type" required>
+          <option value="DEBIT">DEBIT</option>
+          <option value="CREDIT">CREDIT</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Issuer</label>
+        <select [(ngModel)]="newCard.issuer" name="issuer" required>
+          <option value="VISA">VISA</option>
+          <option value="MASTER">MASTER</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Card Name</label>
+        <input type="text" [(ngModel)]="newCard.name" name="name" required />
+      </div>
+
+      <div class="form-group">
+        <label>Card Limit</label>
+        <input type="number" [(ngModel)]="newCard.cardLimit" name="cardLimit" required />
+      </div>
+
+      <button type="submit" class="submit-btn" [disabled]="cardForm.invalid">Create Card</button>
+    </form>
+  </div>
+</app-modal>
+

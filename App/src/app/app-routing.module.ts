@@ -78,15 +78,8 @@ export const routes: Routes = [
   { path: 'account/:accountNumber/create-card', component: CreateCardComponent, canActivate: [authGuard] },
   { path: 'loan-management/:clientId', component: LoansComponent, canActivate: [authGuard] },
 
-  //options
-  { path: 'options/:stockId', component: OptionsDisplayComponent, canActivate: [authGuard] },
-
   // exchange
   { path: 'exchange-rate', component: ExchageRateListComponent, canActivate: [authGuard] },
-
-  // securities
-  { path: 'my-portfolio', component: MyPortfolioComponent, canActivate: [authGuard] },
-  { path: 'securities', component: SecuritiesComponent, canActivate: [securitiesGuard] },
 
   // loans
   { path: 'loan-request', component: LoanRequestComponent, canActivate: [authGuard] },
@@ -97,5 +90,10 @@ export const routes: Routes = [
   //success
   { path: 'success', component: SuccessComponent },
 
+  // securities
+  { path: 'my-portfolio', component: MyPortfolioComponent, canActivate: [authGuard] },
+  { path: 'securities', component: SecuritiesComponent, canActivate: [authGuard] },
+  //options
+  { path: 'options/:stockId', component: OptionsDisplayComponent, canActivate: [authGuard] },
   { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard] }
 ];

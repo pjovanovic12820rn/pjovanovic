@@ -2,11 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
-import { Account } from '../models/account.model';
 import { NewBankAccount } from '../models/new-bank-account.model';
-import { Employee } from '../models/employee.model';
 import { AccountResponse } from '../models/account-response.model';
-import {AccountTransfer} from '../models/account-transfer';
 import {
   ChangeAccountLimitDto,
   ChangeAccountNameDto
@@ -51,14 +48,14 @@ export class AccountService {
     });
   }
 
-  createForeignAccount(accountData: Account): Observable<any> {
-    return this.http.post(this.apiUrl, accountData, {
+  createForeignAccount(newAccount: NewBankAccount): Observable<AccountResponse> {
+    return this.http.post<AccountResponse>(this.apiUrl, newAccount, {
       headers: this.getAuthHeaders(),
     });
   }
 
-  createCurrentAccount(newAccount: NewBankAccount): Observable<void> {
-    return this.http.post<void>(this.apiUrl, newAccount, {
+  createCurrentAccount(newAccount: NewBankAccount): Observable<AccountResponse> {
+    return this.http.post<AccountResponse>(this.apiUrl, newAccount, {
       headers: this.getAuthHeaders(),
     });
   }

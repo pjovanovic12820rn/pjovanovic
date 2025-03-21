@@ -8,7 +8,7 @@ import {AuthService} from '../../services/auth.service';
 // import { ModalComponent } from '../modal/modal.component'
 
 interface Account {
-  accountName: string
+  name: string
   accountNumber: string
   accountOwner: string
   accountType: string
