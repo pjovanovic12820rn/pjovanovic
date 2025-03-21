@@ -53,13 +53,14 @@ export class LoanRequestService {
   }
 
   approveLoanRequest(loanId: number): Observable<any> {
-    return this.http.put(`${this.apiUrl}/approve/${loanId}`, {
+    console.log(`Sending loan approval request ${loanId}`);
+    return this.http.put(`${this.apiUrl}/approve/${loanId}`, null, {
       headers: this.getAuthHeaders(),
     });
   }
 
   rejectLoanRequest(loanId: number): Observable<any> {
-    return this.http.put(`${this.apiUrl}/reject/${loanId}`, {
+    return this.http.put(`${this.apiUrl}/reject/${loanId}`, null, {
       headers: this.getAuthHeaders(),
     });
   }

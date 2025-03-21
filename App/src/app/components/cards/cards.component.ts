@@ -17,7 +17,7 @@ import {AuthService} from '../../services/auth.service';
 //   balance: number
 // }
 interface Account {
-  accountName: string;
+  name: string;
   accountNumber: string;
   accountOwner: string;
   accountType: string;
@@ -127,7 +127,6 @@ export class CardsComponent implements OnInit {
     }
   }
 
-// ✅ Helper function to update the card's status in the UI
   private updateCardStatus(cardNumber: string, newStatus: string): void {
     const card = this.cards.find(c => c.cardNumber === cardNumber);
     if (card) {

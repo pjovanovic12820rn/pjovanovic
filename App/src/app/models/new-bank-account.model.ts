@@ -14,4 +14,5 @@ export interface NewBankAccount {
   accountOwnerType: string;
   createCard: boolean;
   authorizedPersonId?: number;
+  name: string;
 }

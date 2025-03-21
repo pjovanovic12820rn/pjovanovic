@@ -16,6 +16,7 @@ import {AuthorizedPersonnel, CreateAuthorizedPersonnel} from '../../models/autho
 import {AuthorizedPersonnelService} from '../../services/authorized-personnel.service';
 import { CurrencyService } from '../../services/currency.service';
 import {CurrencyDto} from '../../models/currency-dto.model';
+import {CardService, CreateCardDto} from '../../services/card.service';
 
 
 @Component({
@@ -56,7 +57,8 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     accountType: 'FOREIGN',
     accountOwnerType: 'PERSONAL',
     createCard: false,
-    monthlyFee: 0
+    monthlyFee: 0,
+    name: ''
   };
   //za kompaniju novo
   companies: Company[] = [];
@@ -69,6 +71,15 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
   //za onog dodatnog
   selectedAuthorizedPersonnelId: number | null = null;
   availablePersonnel: AuthorizedPersonnel[] = [];
+
+  showCardModal: boolean = false;
+  newCard: CreateCardDto = {
+    accountNumber: '',
+    name: '',
+    type: 'DEBIT',
+    issuer: 'VISA',
+    cardLimit: 0
+  };
 
   //za personelu takodje
   isNewPersonnel = false;
@@ -93,6 +104,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     private alertService: AlertService,
     private companyService: CompanyService,
     private authorizedPersonnelService: AuthorizedPersonnelService,
+    private cardService: CardService,
     private currencyService: CurrencyService
   ) {}
 
@@ -360,18 +372,24 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       this.newAccount.companyId = companyId;
       this.newAccount.authorizedPersonId = authorizedPersonId;
       // alert(this.newAccount.authorizedPersonId);
-      this.accountService.createCurrentAccount(this.newAccount).subscribe({
-        next: () => {
-          this.alertService.showAlert('success', 'Account created successfully!');
-          // this.router.navigate(['/client-portal']);
-          this.router.navigate(['/success'], {
-            state: {
-              title: 'Account Created!',
-              message: 'The account has been successfully created.',
-              buttonName: 'Go to Client Portal',
-              continuePath: '/client-portal'
-            }
-          });
+
+      this.accountService.createForeignAccount(this.newAccount).subscribe({
+        next: (createdAccount) => {
+          if (this.newAccount.createCard) {
+            this.newCard.accountNumber = createdAccount.accountNumber;
+            this.showCardModal = true;
+          } else {
+            this.alertService.showAlert('success', 'Account created successfully!');
+            // this.router.navigate(['/client-portal']);
+            this.router.navigate(['/success'], {
+              state: {
+                title: 'Account Created!',
+                message: 'The account has been successfully created.',
+                buttonName: 'Go to Client Portal',
+                continuePath: '/client-portal'
+              }
+            });
+          }
         },
         error: (error) => {
           console.error('Failed to create account:', error);
