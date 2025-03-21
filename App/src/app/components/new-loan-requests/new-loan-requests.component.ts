@@ -33,14 +33,32 @@ export class NewLoanRequestsComponent implements OnInit {
     });
   }
 
-  approveLoan(loanId: number){
-    console.log(loanId)
-    if(loanId)
-      this.loanRequestService.approveLoanRequest(loanId);
+  approveLoan(loanId: number) {
+    this.loanRequestService.approveLoanRequest(loanId).subscribe({
+      next: (updatedLoan) => {
+        const idx = this.loanRequests.findIndex(lr => lr.id === loanId);
+        if (idx !== -1) {
+          this.loanRequests[idx].status = updatedLoan.status;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to approve loan:', err);
+      }
+    });
   }
 
-  rejectLoan(loanId: number){
-    this.loanRequestService.rejectLoanRequest(loanId);
+  rejectLoan(loanId: number) {
+    this.loanRequestService.rejectLoanRequest(loanId).subscribe({
+      next: (updatedLoan) => {
+        const idx = this.loanRequests.findIndex(lr => lr.id === loanId);
+        if (idx !== -1) {
+          this.loanRequests[idx].status = updatedLoan.status;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to reject loan:', err);
+      }
+    });
   }
 
   getLoanStatusClass(status?: string): string {

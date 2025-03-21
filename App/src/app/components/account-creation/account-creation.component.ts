@@ -14,6 +14,8 @@ import { CompanyService } from '../../services/company.service';
 import { Company, CreateCompany } from '../../models/company.model';
 import {AuthorizedPersonnel, CreateAuthorizedPersonnel} from '../../models/authorized-personnel.model';
 import {AuthorizedPersonnelService} from '../../services/authorized-personnel.service';
+import {CardService, CreateCardDto} from '../../services/card.service';
+import {ModalComponent} from '../shared/modal/modal.component';
 // import {NgForOf, NgIf} from '@angular/common';
 
 @Component({
@@ -22,7 +24,8 @@ import {AuthorizedPersonnelService} from '../../services/authorized-personnel.se
   standalone: true,
   imports: [
     FormsModule,
-    CommonModule
+    CommonModule,
+    ModalComponent,
     // NgForOf,
     // NgIf
   ],
@@ -45,6 +48,15 @@ export class AccountCreationComponent implements OnInit {
   employeeId: number | null = null;
   availableCurrencies: string[] = ['RSD'];
   isCurrAdmin: boolean = false;
+  showCardModal: boolean = false;
+
+  newCard: CreateCardDto = {
+    accountNumber: '',
+    name: '',
+    type: 'DEBIT',
+    issuer: 'VISA',
+    cardLimit: 0
+  };
 
   newAccount: NewBankAccount = {
     currency: 'RSD',
@@ -59,7 +71,8 @@ export class AccountCreationComponent implements OnInit {
     accountType: 'CURRENT',
     accountOwnerType: 'PERSONAL',
     createCard: false,
-    monthlyFee: 0
+    monthlyFee: 0,
+    name: '',
   };
   //za kompaniju novo
   companies: Company[] = [];
@@ -83,6 +96,7 @@ export class AccountCreationComponent implements OnInit {
     address: '',
     companyId: 0
   };
+
   constructor(
     private userService: ClientService,
     private authService: AuthService,
@@ -92,6 +106,7 @@ export class AccountCreationComponent implements OnInit {
     private employeeService: EmployeeService,
     private alertService: AlertService,
     private companyService: CompanyService,
+    private cardService: CardService,
     private authorizedPersonnelService: AuthorizedPersonnelService
   ) {}
 
@@ -358,17 +373,22 @@ export class AccountCreationComponent implements OnInit {
       this.newAccount.authorizedPersonId = authorizedPersonId;
 
       this.accountService.createCurrentAccount(this.newAccount).subscribe({
-        next: () => {
-          this.alertService.showAlert('success', 'Account created successfully!');
-          // this.router.navigate(['/client-portal']);
-          this.router.navigate(['/success'], {
-            state: {
-              title: 'Account Created!',
-              message: 'The account has been successfully created.',
-              buttonName: 'Go to Client Portal',
-              continuePath: '/client-portal'
-            }
-          });
+        next: (createdAccount) => {
+          if (this.newAccount.createCard) {
+            this.newCard.accountNumber = createdAccount.accountNumber;
+            this.showCardModal = true;
+          } else {
+            this.alertService.showAlert('success', 'Account created successfully!');
+            // this.router.navigate(['/client-portal']);
+            this.router.navigate(['/success'], {
+              state: {
+                title: 'Account Created!',
+                message: 'The account has been successfully created.',
+                buttonName: 'Go to Client Portal',
+                continuePath: '/client-portal'
+              }
+            });
+          }
         },
         error: (error) => {
           console.error('Failed to create account:', error);
@@ -381,4 +401,29 @@ export class AccountCreationComponent implements OnInit {
       this.alertService.showAlert('error', 'Failed to create company');
     }
   }
+
+  submitCardForm(): void {
+    const request = this.authService.isClient()
+      ? this.cardService.requestCard(this.newCard)
+      : this.cardService.createCard(this.newCard);
+
+    request.subscribe({
+      next: () => {
+        this.showCardModal = false;
+        this.router.navigate(['/success'], {
+          state: {
+            title: 'Card Created!',
+            message: 'The card has been successfully created.',
+            buttonName: 'Go to Account',
+            continuePath: `/account/${this.newCard.accountNumber}`
+          }
+        });
+      },
+      error: (err) => {
+        this.alertService.showAlert('error', 'Failed to create card.');
+        console.error(err);
+      }
+    });
+  }
+
 }
