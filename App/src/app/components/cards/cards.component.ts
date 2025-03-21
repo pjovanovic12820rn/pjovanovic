@@ -8,14 +8,33 @@ import {AuthService} from '../../services/auth.service';
 import {AlertService} from '../../services/alert.service';
 // import { ModalComponent } from '../modal/modal.component'
 
+// interface Account {
+//   accountName: string
+//   accountNumber: string
+//   accountOwner: string
+//   accountType: string
+//   availableBalance: number
+//   reservedFunds: number
+//   balance: number
+// }
 interface Account {
-  name: string
-  accountNumber: string
-  accountOwner: string
-  accountType: string
-  availableBalance: number
-  reservedFunds: number
-  balance: number
+  name: string;
+  accountNumber: string;
+  accountOwner: string;
+  accountType: string;
+  availableBalance: number;
+  reservedFunds: number;
+  balance: number;
+  companyDetails?: {
+    companyName: string;
+    registrationNumber: string;
+    taxId: string;
+    address: string;
+    authorizedPerson?: {
+      firstName: string;
+      lastName: string;
+    };
+  };
 }
 
 @Component({
@@ -37,10 +56,23 @@ export class CardsComponent implements OnInit {
     const paramAcc = this.route.snapshot.paramMap.get('accountNumber')
     if (paramAcc) {
       this.accountNumber = paramAcc
-      this.accountService.getAccountDetails(this.accountNumber).subscribe(data => {
-        this.account = data
-        console.log(data)
-      })
+      this.accountService.getAccountDetails(this.accountNumber).subscribe({
+        next: (data: any) => {
+          this.account = {
+            ...data,
+            companyDetails: data.companyDetails ? {
+              name: data.companyDetails.companyName,
+              registrationNumber: data.companyDetails.registrationNumber,
+              taxId: data.companyDetails.taxId,
+              address: data.companyDetails.address,
+              authorizedPerson: data.authorizedPerson
+            } : undefined
+          };
+        },
+        error: (error) => {
+          console.error('Error loading account:', error);
+        }
+      });
       this.loadCards()
     }
   }

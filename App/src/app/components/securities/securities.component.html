@@ -106,7 +106,7 @@
               <td *ngIf="selectedSecurityType === 'Future' || selectedSecurityType === 'All'">{{ security.settlementDate }}</td>
               <td class="actions-column">
                 <button class="action-button refresh-button" (click)="refreshSecurity(security)">Refresh</button>
-                <button class="action-button buy-button">Buy</button>
+                <button class="action-button buy-button" (click)="viewOptions(security.id)">Details</button>
               </td>
             </tr>
           </tbody>

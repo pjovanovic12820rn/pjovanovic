@@ -23,14 +23,17 @@
 
         <div class="employee-actions">
           <button class="view-details-btn" (click)="viewEmployeeDetails(employee.id)">View Details</button>
-          <button class="delete-btn" (click)="openDeleteModal(employee)">Delete</button>
 
-          <!-- ✅ Corrected Toggle Activation Button -->
-          <button class="toggle-status-btn"
-                  (click)="deactivateEmployee(employee.id, employee.active)"
-                  [ngClass]="employee.active ? 'deactivate-btn' : 'activate-btn'">
-            {{ employee.active ? 'Deactivate' : 'Activate' }}
-          </button>
+          <ng-container *ngIf="employee.id !== currentUserId">
+            <button class="delete-btn" (click)="openDeleteModal(employee)">Delete</button>
+
+            <!-- ✅ Corrected Toggle Activation Button -->
+            <button class="toggle-status-btn"
+                    (click)="deactivateEmployee(employee.id, employee.active)"
+                    [ngClass]="employee.active ? 'deactivate-btn' : 'activate-btn'">
+              {{ employee.active ? 'Deactivate' : 'Activate' }}
+            </button>
+          </ng-container>
         </div>
       </div>
     </div>

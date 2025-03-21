@@ -45,6 +45,7 @@ export class EmployeesComponent implements OnInit {
     this.loadEmployees();
   }
 
+  currentUserId = this.authService.getUserId();
   loadEmployees(): void {
     this.employeeService.getEmployees(0, 100).subscribe({
       next: (response) => {

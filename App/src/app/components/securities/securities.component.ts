@@ -5,6 +5,7 @@ import { Security } from '../../models/security.model';
 import { FormsModule } from '@angular/forms';
 import { interval, Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-securities',
@@ -16,6 +17,7 @@ import { AuthService } from '../../services/auth.service';
 export class SecuritiesComponent implements OnInit, OnDestroy {
   private securityService = inject(SecurityService);
   private authService = inject(AuthService);
+  private router = inject(Router);
   private allSecurities: Security[] = [];
   securities: Security[] = [];
   filteredSecurities: Security[] = [];
@@ -39,6 +41,9 @@ export class SecuritiesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.clearDataRefreshInterval();
+  }
+  viewOptions(securityId: number): void {
+    this.router.navigate(['/options', securityId]);
   }
 
   refreshSecurity(securityToRefresh: Security): void {
