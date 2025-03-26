@@ -38,8 +38,7 @@ export class MyPortfolioComponent implements OnInit {
   }
 
   getTotalTax(): number {
-    // Pretpostavka: Porez je 15% od profita
-    return this.getTotalProfit() * 0.15;
+    return this.getTotalProfit() * 0.15; // taxes 15%
   }
 
   openProfitModal(): void {

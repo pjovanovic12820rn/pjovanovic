@@ -35,6 +35,7 @@ import { LoanDetailsComponent } from './components/loan-details/loan-details.com
 import { NewLoanRequestsComponent } from './components/new-loan-requests/new-loan-requests.component';
 import { OptionsDisplayComponent } from './components/option/option.component';
 import { OrderOverviewComponent } from './components/order-overview/order-overview.component';
+import {TaxCalculationComponent} from './components/tax-calculation/tax-calculation.component';
 
 export const routes: Routes = [
   // login
@@ -93,6 +94,8 @@ export const routes: Routes = [
   // securities
   { path: 'my-portfolio', component: MyPortfolioComponent, canActivate: [authGuard] },
   { path: 'securities', component: SecuritiesComponent, canActivate: [authGuard] },
+  { path: 'tax-portal', component: TaxCalculationComponent, canActivate: [authGuard, employeeOrAdminGuard] }, // not sure if this is the right guard!
+
   //options
   { path: 'options/:stockId', component: OptionsDisplayComponent, canActivate: [authGuard] },
   { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard] }
