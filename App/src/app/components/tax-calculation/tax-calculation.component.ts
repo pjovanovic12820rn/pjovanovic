@@ -90,4 +90,9 @@ export class TaxCalculationComponent implements OnInit {
     }
   }
 
+  calculateTax(): void {
+    alert('Sent to everyone: Tax calculated, value at ' + this.taxValue + ' RSD');
+  }
+
+
 }

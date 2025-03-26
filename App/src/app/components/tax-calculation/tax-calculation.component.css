@@ -47,6 +47,35 @@ h2 {
   gap: 10px;
   margin-bottom: 15px;
 }
+.tax-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-top: 2px solid #ccc;
+  margin-top: 20px;
+}
+
+.calculate-tax-btn {
+  background-color: #d8b3ff; /* Svetlo ljubičasta */
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.calculate-tax-btn:hover {
+  background-color: #c599ff; /* Tamnija ljubičasta na hover */
+}
+
+.total-tax {
+  font-size: 16px;
+  font-weight: bold;
+}
 
 .filter-container label {
   font-weight: bold;
