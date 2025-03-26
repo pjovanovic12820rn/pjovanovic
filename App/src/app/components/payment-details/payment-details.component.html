@@ -1,8 +1,6 @@
 <div class="payments-container">
   <h2>Payments</h2>
 
-  <app-alert></app-alert>
-
   <!-- Filters -->
   <div class="filter-container">
     <input-text label="Start Date" type="date" [(ngModel)]="startDate"></input-text>
@@ -10,11 +8,11 @@
 
     <div class="filter-buttons">
       <app-button
-        (click)="toggleFilters()"
-        label="{{ showAdditionalFilters ? 'Hide Filters' : 'Show More Filters' }}">
+        (click)="toggleFilters()">
+        {{ showAdditionalFilters ? 'Hide Filters' : 'Show More Filters' }}
       </app-button>
 
-      <app-button (click)="applyFilters()" label="Apply Filters"></app-button>
+      <app-button (click)="applyFilters()">Apply Filters</app-button>
     </div>
 
     <div *ngIf="showAdditionalFilters" class="additional-filters">

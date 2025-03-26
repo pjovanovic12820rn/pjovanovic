@@ -11,6 +11,6 @@
     </app-select>
     <input-text label="Card Name" [(ngModel)]="newCard.name" name="name" required/>
     <input-text label="Card Limit" type="number" [(ngModel)]="newCard.cardLimit" name="cardLimit" required/>
-    <app-button type="submit" [disabled]="createCardForm.invalid" label="Create"/>
+    <app-button type="submit" [disabled]="createCardForm.invalid">Create</app-button>
   </form>
 </div>

@@ -1,6 +1,6 @@
 /* Default styles */
 .input-container {
-  flex: 1 1 auto;
+  flex: auto;
 }
 
 label {
@@ -9,6 +9,10 @@ label {
   font-size: 0.875rem; /* text-sm */
   font-weight: 500; /* font-medium */
   color: #374151; /* Default text color (gray-700) */
+}
+
+input[type="date" i] {
+  padding: 0.5rem .625rem !important; /* p-2.5 */
 }
 
 input, textarea {

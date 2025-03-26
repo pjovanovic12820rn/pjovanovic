@@ -12,7 +12,9 @@
               {{ user.firstName }} {{ user.lastName }} ({{ user.email }})
             </option>
           </app-select>
-          <app-button (click)="navigateToRegisterUser()" label="Create New User" class="create-user-link"></app-button>
+          <app-button (click)="navigateToRegisterUser()" class="create-user-link">
+            Create New User
+          </app-button>
         </div>
 
         <div class="form-group">
@@ -162,7 +164,7 @@
         </div>
       </div>
 
-    <app-button type="submit" label="Create Account" [disabled]="accountForm.invalid || !newAccount.clientId || !employeeId || !isCompanyFormValid()" class="submit-btn"></app-button>
+    <app-button type="submit" [disabled]="accountForm.invalid || !newAccount.clientId || !employeeId || !isCompanyFormValid()" class="submit-btn">Create Account</app-button>
   </form>
 </div>
 

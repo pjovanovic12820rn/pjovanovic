@@ -26,96 +26,6 @@ h2 {
   color: #444;
 }
 
-<<<<<<< HEAD
-/* Input fields */
-.form-group {
-  margin-bottom: 15px;
-  text-align: left;
-}
-
-.form-group label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-
-input, select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #C2B4E2;
-  border-radius: 6px;
-  font-size: 1rem;
-  outline: none;
-  transition: 0.3s;
-}
-
-input:focus, select:focus {
-  border-color: #6A4BBC;
-  box-shadow: 0 0 8px rgba(106, 75, 188, 0.3);
-}
-
-/* Owner row */
-.owner-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.create-user-link {
-  width: 65%;
-  padding: 12px;
-  background: #6A4BBC;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-top: 10px;
-}
-
-.create-user-link:hover {
-  background: #8E79D2;
-  transform: scale(1.05);
-}
-
-/* Submit button */
-.submit-btn {
-  width: 100%;
-  padding: 12px;
-  background: #6A4BBC;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-top: 20px;
-}
-
-.submit-btn:hover {
-  background: #8E79D2;
-  transform: scale(1.05);
-}
-
-.submit-btn:disabled {
-  background: #C2B4E2;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.row {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  width: 100%;
-}
-
-.column {
-  flex: 1;
-=======
 h3 {
   font-size: 1.3rem;
   font-weight: 600;
@@ -160,7 +70,6 @@ h3 {
   font-size: 1rem;
   color: #333;
   text-align: left;
->>>>>>> 12f6f0c (CSS Fixes)
 }
 
 .checkbox-group {
@@ -177,96 +86,11 @@ h3 {
   width: 100%;
 }
 
-<<<<<<< HEAD
-.monthly-fee-container {
-  width: 120px;
-}
-
-
-h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: #444;
-  text-align: left;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #C2B4E2;
-  border-radius: 6px;
-  font-size: 1rem;
-  outline: none;
-  transition: 0.3s;
-}
-
-.form-group input:focus {
-  border-color: #6A4BBC;
-  box-shadow: 0 0 8px rgba(106, 75, 188, 0.3);
-}
-
-.employee-info {
-  background: #f8f8f8;
-  padding: 15px;
-  border-radius: 6px;
-  margin-top: 20px;
-  text-align: left;
-}
-
-.employee-info h3 {
-  margin-bottom: 10px;
-  text-align: left;
-}
-
-.employee-info p {
-  margin: 5px 0;
-  font-size: 1rem;
-  color: #333;
-  text-align: left;
-}
-
-.info-message {
-  color: #666;
-  font-style: italic;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin: 10px 0;
-}
-
-.loading-message {
-  color: #666;
-  padding: 5px 0;
-}
-
-.company-form {
-  margin-top: 20px;
-  border-top: 1px solid #eee;
-  padding-top: 15px;
-}
-
-select[disabled] {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-#authorizedPersonnel {
-  margin-top: 10px;
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-
-=======
 .column {
   flex: 1;
 }
 
 /* 🔹 Fade-in Animation */
->>>>>>> 12f6f0c (CSS Fixes)
 @keyframes fadeIn {
   from {
     opacity: 0;

@@ -1,10 +1,7 @@
-<div class="card">
-  <div class="flex justify-between">
-    <h2>Account Management</h2>
-  </div>
+<div class="card" style="width: 70vw; padding: 2rem">
+  <h1>Account Management</h1>
 
-  <section class="account-list">
-    <h3>Accounts</h3>
+<!--    <h2>Accounts</h2>-->
     <table>
       <tr>
         <th>Account Number</th>
@@ -19,10 +16,7 @@
         <td>{{ account.ownershipType }}</td>
         <td>{{ account.accountCategory }}</td>
         <td>
-          <app-button
-            label="View Cards"
-            (onClick)="viewCards(account.accountNumber)"
-          ></app-button>
+          <app-button (onClick)="viewCards(account.accountNumber)">View Cards</app-button>
           <app-button *ngIf="isClient()" (click)="openNameModal(account.accountNumber, account.name)">Edit Name</app-button>
           <app-button *ngIf="isClient()" (click)="openLimitModal(account.accountNumber, account.dailyLimit)">Edit Limit</app-button>
         </td>
@@ -31,8 +25,9 @@
         <td colspan="5" class="no-data">No accounts found</td>
       </tr>
     </table>
-  </section>
+  <br>
   <app-button *ngIf="isAdmin()" class="details-btn" (click)="openAccountModal()">New Account</app-button>
+
 </div>
 
 <div class="modal" *ngIf="isNameModalOpen">

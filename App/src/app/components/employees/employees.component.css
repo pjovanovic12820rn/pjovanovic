@@ -1,31 +1,12 @@
-/* 🔹 General Styling */
-body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #B399DD, #D0C9EA);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-  padding-top: 30px;
-}
-
 /* 🔹 Container */
 .employees-container {
   background: white;
-  padding: 40px;
+  padding: 2.5rem 2rem;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   text-align: center;
-  width: 650px;
+  width: 750px;
   animation: fadeIn 0.5s ease-in-out;
-}
-
-/* 🔹 Header */
-h2 {
-  color: #6A4BBC; /* Changed to project’s purple */
-  font-size: 24px;
-  margin-bottom: 20px;
 }
 
 /* 🔹 Employee List */

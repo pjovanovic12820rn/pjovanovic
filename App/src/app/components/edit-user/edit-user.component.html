@@ -1,8 +1,6 @@
 <div class="edit-user-container">
   <h2>Edit User</h2>
 
-  <app-alert></app-alert>
-
   <div *ngIf="loading" class="loading">Loading user...</div>
 
   <form *ngIf="userForm" [formGroup]="userForm" (ngSubmit)="saveChanges()">
@@ -29,6 +27,6 @@
     <input-text formControlName="address" label="Address" placeholder="Address"/>
     <div class="field-error" *ngIf="hasError('address', 'required')">Required.</div>
 
-    <app-button type="submit" [disabled]="loading" label="Save"/>
+    <app-button type="submit" [disabled]="loading">Save</app-button>
   </form>
 </div>

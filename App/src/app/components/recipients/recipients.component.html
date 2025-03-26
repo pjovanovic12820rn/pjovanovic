@@ -1,7 +1,7 @@
 <div class="recipients-container">
   <h2>Payment Recipients</h2>
 
-  <app-button label="+ Add Recipient" (click)="toggleAddRecipient()"></app-button>
+  <app-button (click)="toggleAddRecipient()">+ Add Recipient</app-button>
 
   <!-- Add Recipient Form -->
   <div *ngIf="isAdding" class="add-recipient-form">
@@ -11,8 +11,8 @@
       <input-text [(ngModel)]="newRecipient.accountNumber" placeholder="Account Number"></input-text>
     </div>
     <div class="btn-group">
-      <app-button label="Confirm" (click)="addRecipient()"></app-button>
-      <app-button label="Cancel" (click)="toggleAddRecipient()" type="secondary"></app-button>
+      <app-button (click)="addRecipient()">Confirm</app-button>
+      <app-button (click)="toggleAddRecipient()" type="secondary">Cancel</app-button>
     </div>
   </div>
 
@@ -24,8 +24,8 @@
           <p class="recipient-account">{{ recipient.accountNumber }}</p>
         </div>
         <div class="button-group">
-          <app-button label="Edit" (click)="startEditing(recipient)"></app-button>
-          <app-button label="Delete" (click)="openDeleteModal(recipient.id)" type="danger"></app-button>
+          <app-button (click)="startEditing(recipient)">Edit</app-button>
+          <app-button (click)="openDeleteModal(recipient.id)" type="danger">Delete</app-button>
         </div>
       </div>
 
@@ -35,8 +35,8 @@
           <input-text [(ngModel)]="editingRecipient.accountNumber" placeholder="Account Number"></input-text>
         </div>
         <div class="btn-group">
-          <app-button label="Save" (click)="saveEdit()"></app-button>
-          <app-button label="Cancel" (click)="cancelEditing()" type="secondary"></app-button>
+          <app-button (click)="saveEdit()">Save</app-button>
+          <app-button (click)="cancelEditing()" type="secondary">Cancel</app-button>
         </div>
       </div>
     </div>
@@ -49,8 +49,8 @@
     <h3>Confirm Delete</h3>
     <p>Are you sure you want to delete this recipient?</p>
     <div class="modal-actions">
-      <app-button label="Cancel" (click)="cancelDelete()" type="secondary"></app-button>
-      <app-button label="Delete" (click)="confirmDelete()" type="danger"></app-button>
+      <app-button (click)="cancelDelete()" type="secondary">Cancel</app-button>
+      <app-button (click)="confirmDelete()" type="danger">Delete</app-button>
     </div>
   </div>
 </div>

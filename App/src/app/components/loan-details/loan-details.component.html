@@ -19,8 +19,8 @@
     </p>
 
     <div class="button-container">
-      <app-button (click)="goBack()" label="Back"></app-button>
-      <app-button (click)="toggleInstallments()" [label]="showInstallments ? 'Hide Installments' : 'Show Installments'"></app-button>
+      <app-button (click)="goBack()">Back</app-button>
+      <app-button (click)="toggleInstallments()">{{showInstallments ? 'Hide Installments' : 'Show Installments'}}</app-button>
     </div>
 
     <!-- Installments Section -->
@@ -52,7 +52,7 @@
   <div *ngIf="!loan" class="error-message">
     <p>Loan details not available.</p>
     <div class="button-container">
-      <app-button (click)="goBack()" label="Back"></app-button>
+      <app-button (click)="goBack()">Back</app-button>
     </div>
   </div>
 </div>

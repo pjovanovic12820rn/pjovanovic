@@ -1,6 +1,6 @@
 <div class="register-container">
   <h2>Register New Employee</h2>
-
+  <br>
   <form *ngIf="isAdmin" [formGroup]="registerEmployeeForm" (ngSubmit)="onSubmit()">
     <div class="flex" style="width: 100%;text-align: left;gap: 1rem;">
       <input-text formControlName="firstName" placeholder="First Name" label="First Name"
@@ -38,14 +38,15 @@
     </div>
 
     <div class="flex" style="width: 100%;text-align: left;gap: 1rem;">
-      <app-select label="Gender" formControlName="gender">
+      <app-select class="flex-1" label="Gender" formControlName="gender">
         <option value="" disabled selected>Select gender</option>
         <option value="M">Male</option>
         <option value="F">Female</option>
       </app-select>
-      <input-text formControlName="birthDate" type="date" placeholder="Date of Birth" label="Date of Birth"
+      <input-text class="flex-1" formControlName="birthDate" type="date" placeholder="Date of Birth"
+                  label="Date of Birth"
                   [validationRules]="[validations.required, validations.pastDate()]"/>
-      <app-select label="Active Status" formControlName="active">
+      <app-select class="flex-1" label="Active Status" formControlName="active">
         <option [value]="true">Active</option>
         <option [value]="false">Inactive</option>
       </app-select>
@@ -59,6 +60,6 @@
       </app-select>
     </div>
 
-    <app-button type="submit" label="Register Employee"/>
+    <app-button type="submit">Register Employee</app-button>
   </form>
 </div>

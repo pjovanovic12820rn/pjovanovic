@@ -7,11 +7,14 @@ import { FormsModule } from '@angular/forms';
 import { NgForOf, NgIf } from '@angular/common';
 import {InputTextComponent} from '../shared/input-text/input-text.component';
 import {SelectComponent} from '../shared/select/select.component';
+import {ButtonComponent} from '../shared/button/button.component';
+import {ModalComponent} from '../shared/modal/modal.component';
 
 @Component({
   selector: 'app-exchage-rate-list',
-  imports: [FormsModule, NgForOf, NgIf, InputTextComponent, SelectComponent],
+  imports: [FormsModule, NgForOf, NgIf, InputTextComponent, SelectComponent, ButtonComponent, ModalComponent],
   templateUrl: './exchage-rate-list.component.html',
+  standalone: true,
   styleUrl: './exchage-rate-list.component.css'
 })
 export class ExchageRateListComponent implements OnInit {
@@ -88,4 +91,5 @@ export class ExchageRateListComponent implements OnInit {
   //   this.fromCurrency = 'EUR';
   //   this.toCurrency = 'RSD';
   // }
+  isCurrencyConversionModalOpen: boolean = false;
 }

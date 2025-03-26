@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
-import {AlertComponent} from '../shared/alert/alert.component';
 import {InputTextComponent} from '../shared/input-text/input-text.component';
 import {SelectComponent} from '../shared/select/select.component';
 import {ButtonComponent} from '../shared/button/button.component';
@@ -14,7 +13,7 @@ import {ButtonComponent} from '../shared/button/button.component';
 @Component({
   selector: 'app-edit-user',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AlertComponent, InputTextComponent, SelectComponent, ButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, InputTextComponent, SelectComponent, ButtonComponent],
   templateUrl: './edit-user.component.html',
   styleUrls: ['./edit-user.component.css'],
 })

@@ -14,12 +14,12 @@
     <p><strong>Reference #:</strong> {{ transaction.referenceNumber }}</p>
 
     <div *ngIf="isConfirmMode; else readOnlyButtons">
-      <app-button label="Confirm" (click)="onConfirm()" class="confirm-btn"></app-button>
-      <app-button label="Cancel" (click)="onCancel()" class="cancel-btn"></app-button>
+      <app-button (click)="onConfirm()" class="confirm-btn">Confirm</app-button>
+      <app-button (click)="onCancel()" class="cancel-btn">Cancel</app-button>
     </div>
 
     <ng-template #readOnlyButtons>
-      <app-button label="OK" (click)="onOk()" class="ok-btn"></app-button>
+      <app-button (click)="onOk()" class="ok-btn">OK</app-button>
     </ng-template>
   </div>
 </div>

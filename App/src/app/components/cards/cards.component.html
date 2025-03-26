@@ -18,8 +18,17 @@
 
     </div>
 
-    <app-button label="Payment" (onClick)="openModal()"/>
-    <app-button label="Create New Card" (click)="newCardReq()" [routerLink]="['/account', accountNumber, 'create-card']"/>
+    <div class="flex-col gap-1">
+
+      <div>
+        <app-button class="width-full" (onClick)="openModal()">Payment</app-button>
+      </div>
+      <div>
+        <app-button class="width-full" (click)="newCardReq()" [routerLink]="['/account', accountNumber, 'create-card']">
+          Create New Card
+        </app-button>
+      </div>
+    </div>
   </div>
 
   <h3>Associated Cards</h3>
@@ -34,12 +43,21 @@
       <td>{{ maskCardNumber(card.cardNumber) }}</td>
       <td [ngClass]="getCardStatusClass(card.status)">{{ card.status }}</td>
       <td>{{ card.owner.firstName }} {{ card.owner.lastName }}</td>
-      <td class="action-buttons">
-<!--        <app-button label="New Payment" (onClick)="makePayment(card.cardNumber)"></app-button>-->
-      <!-- ✅ Dynamic Block/Unblock Button -->
-      <app-button [label]="card.status === 'BLOCKED' ? 'Unblock Card' : 'Block Card'" (click)="blockCard(card.cardNumber, card.status)" class="block-card-btn"></app-button>
-      <!-- ✅ Show "Deactivate" Only for Admins -->
-      <app-button label="Deactivate Card" (click)="deactivateCard(card.cardNumber)" *ngIf="authService.isAdmin()" [disabled]="card.status === 'DEACTIVATED'" class="block-card-btn"></app-button>
+      <td class="width-fit">
+        <!--        <app-button label="New Payment" (onClick)="makePayment(card.cardNumber)"></app-button>-->
+        <!-- ✅ Dynamic Block/Unblock Button -->
+        <div class="flex gap-1 justify-center">
+          <app-button class="width-full"
+            (click)="blockCard(card.cardNumber, card.status)">{{ card.status === 'BLOCKED' ? 'Unblock Card' : 'Block Card' }}
+          </app-button>
+
+          <!-- ✅ Show "Deactivate" Only for Admins -->
+          <app-button class="width-full"
+                      (click)="deactivateCard(card.cardNumber)" *ngIf="authService.isAdmin()"
+                      [disabled]="card.status === 'DEACTIVATED'">Deactivate Card
+          </app-button>
+        </div>
+
       </td>
     </tr>
   </table>
@@ -47,10 +65,10 @@
   <app-modal [title]="'Payment'" [isOpen]="isModalOpen" (closeModalEvent)="closeModal()">
     <div class="modal-content">
       <div style="display: grid; gap: 0.5rem; margin-top: 1rem; grid-template-columns: repeat(2, 1fr)">
-        <app-button label="New Payment" [routerLink]="['/new-payment']"></app-button>
-        <app-button label="Transfer Payment" [routerLink]="['/transfer']"></app-button>
-        <app-button label="Payment Recipients" [routerLink]="['/recipients']"></app-button>
-        <app-button label="Payment Details" [routerLink]="['/payment-details']"></app-button>
+        <app-button class="width-full" [routerLink]="['/new-payment']">New Payment</app-button>
+        <app-button class="width-full" [routerLink]="['/transfer']">Transfer Payment</app-button>
+        <app-button class="width-full" [routerLink]="['/recipients']">Payment Recipients</app-button>
+        <app-button class="width-full" [routerLink]="['/payment-details']">Payment Details</app-button>
       </div>
     </div>
   </app-modal>

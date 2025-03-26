@@ -29,15 +29,15 @@
         <button class="publish-button" (click)="publishSecurity(security)">Publish</button>
       </td>
       <td>
-        <app-button class="sell-button" label="Sell"></app-button>
+        <app-button class="sell-button">Sell</app-button>
       </td>
     </tr>
     </tbody>
   </table>
 
   <div class="portfolio-buttons">
-    <app-button class="info-button" (click)="openProfitModal()" label="Profit Info"></app-button>
-    <app-button class="info-button" (click)="openTaxModal()" label="Tax Info"></app-button>
+    <app-button class="info-button" (click)="openProfitModal()">Profit Info</app-button>
+    <app-button class="info-button" (click)="openTaxModal()">Tax Info</app-button>
   </div>
 
   <!-- Profit Info Modal -->
@@ -45,7 +45,7 @@
     <div class="modal-content">
       <h3>Profit Information</h3>
       <p>Total Profit: <strong>{{ getTotalProfit().toFixed(2) }} USD</strong></p>
-      <app-button class="close-button" (click)="closeModals()" label="Close"></app-button>
+      <app-button class="close-button" (click)="closeModals()">Close</app-button>
     </div>
   </div>
 
@@ -54,7 +54,7 @@
     <div class="modal-content">
       <h3>Tax Information</h3>
       <p>Total Tax Paid: <strong>{{ getTotalTax().toFixed(2) }} USD</strong></p>
-      <app-button class="close-button" (click)="closeModals()" label="Close"></app-button>
+      <app-button class="close-button" (click)="closeModals()">Close</app-button>
     </div>
   </div>
 </div>

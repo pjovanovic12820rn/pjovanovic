@@ -1,7 +1,5 @@
 <div class="client-portal-container">
 
-  <app-alert></app-alert>
-
   <h1>Client Portal</h1>
 
   <!-- Filter Section -->
@@ -16,7 +14,7 @@
       </div>
     </div>
 
-    <app-button *ngIf="isEmployee || isAdmin" (onClick)="registerNewUser()" label="Register New User"/>
+    <app-button *ngIf="isEmployee || isAdmin" (onClick)="registerNewUser()">Register New User</app-button>
   </div>
 
   <!-- Client List -->
@@ -27,10 +25,10 @@
         <span class="client-email">{{ client.email }}</span>
       </div>
       <div class="flex" style="gap: 0.4rem">
-        <app-button *ngIf="isAdmin || isEmployee" (click)="listAccounts(client.id)" label="List Accounts"/>
-        <app-button *ngIf="isAdmin || isEmployee" [routerLink]="['/users', client.id]" label="Edit User"/>
-        <app-button *ngIf="isAdmin" (click)="deleteUser(client.id)" label="Delete User"/>
-        <app-button *ngIf="isAdmin" (click)="clientLoans(client.id)" label="Loans"/>
+        <app-button *ngIf="isAdmin || isEmployee" (click)="listAccounts(client.id)">List Accounts</app-button>
+        <app-button *ngIf="isAdmin || isEmployee" [routerLink]="['/users', client.id]">Edit User</app-button>
+        <app-button *ngIf="isAdmin" (click)="deleteUser(client.id)">Delete User</app-button>
+        <app-button *ngIf="isAdmin" (click)="clientLoans(client.id)">Loans</app-button>
       </div>
     </div>
   </div>

@@ -1,10 +1,14 @@
 <div class="employees-container">
-  <h2>Employees</h2>
+  <div class="flex justify-between" style="margin-bottom: 2rem">
 
-  <app-alert></app-alert>
+    <h1 style="margin-bottom: 0">Employees</h1>
+    <app-button *ngIf="isAdmin; else unauthorized" (click)="register()"
+                class="register-btn">
+      Register new employee
+    </app-button>
+  </div>
 
   <div *ngIf="isAdmin; else unauthorized">
-    <app-button (click)="register()" label="Register new employee" class="register-btn"></app-button>
 
     <!-- Employee List -->
     <div id="employees-list" class="employee-list">
@@ -29,9 +33,9 @@
 
             <!-- ✅ Corrected Toggle Activation Button -->
             <app-button class="toggle-status-btn"
-                    (click)="deactivateEmployee(employee.id, employee.active)"
-                    [ngClass]="employee.active ? 'deactivate-btn' : 'activate-btn'">
-              {{ employee.active ? 'Deactivate' : 'Activate' }}
+                        (click)="deactivateEmployee(employee.id, employee.active)"
+                        [ngClass]="employee.active ? 'deactivate-btn' : 'activate-btn'">
+              {{employee.active ? 'Deactivate' : 'Activate'}}
             </app-button>
           </ng-container>
         </div>
@@ -60,8 +64,8 @@
       </p>
 
       <div class="modal-actions">
-        <app-button (click)="closeDeleteModal()" label="Cancel" class="cancel-btn"></app-button>
-        <app-button (click)="confirmDelete()" label="Delete" class="confirm-btn"></app-button>
+        <app-button (click)="closeDeleteModal()" class="cancel-btn">Cancel</app-button>
+        <app-button (click)="confirmDelete()" class="confirm-btn">Delete</app-button>
       </div>
     </div>
   </div>

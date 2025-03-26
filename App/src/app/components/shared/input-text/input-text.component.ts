@@ -26,7 +26,7 @@ export class InputTextComponent implements ControlValueAccessor {
   @Input() placeholder: string = '';
   @Input() value: string = '';
   @Input() type: string = 'text';
-  @Input() disabled: boolean | null = false;
+  @Input() disabledInput: boolean | null = false;
   @Input() validationRules: Validation[] = [];
 
   errors: string[] = [];

@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { SuccessComponent } from '../success/success.component';
 import {ButtonComponent} from '../shared/button/button.component';
 import {InputTextComponent} from '../shared/input-text/input-text.component';
+import {validations} from '../../models/validation.model';
 
 @Component({
   selector: 'app-mail',
@@ -45,4 +46,6 @@ export class MailComponent {
       complete: () => (this.loading = false)
     });
   }
+
+  protected readonly validations = validations;
 }

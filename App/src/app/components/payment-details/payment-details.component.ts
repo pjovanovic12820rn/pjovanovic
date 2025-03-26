@@ -5,17 +5,14 @@ import { PaymentOverviewDto } from '../../models/payment-overview-dto';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AlertService } from '../../services/alert.service';
-import {AlertComponent} from '../shared/alert/alert.component';
 import {PaginationComponent} from '../shared/pagination/pagination.component';
 import {InputTextComponent} from '../shared/input-text/input-text.component';
 import {ButtonComponent} from '../shared/button/button.component';
-// import { AlertComponent } from '../alert/alert.component';
-// import { PaginationComponent } from '../pagination/pagination.component';
 
 @Component({
   selector: 'app-payment-details',
   standalone: true,
-  imports: [CommonModule, FormsModule, AlertComponent, PaginationComponent, InputTextComponent, ButtonComponent],
+  imports: [CommonModule, FormsModule, PaginationComponent, InputTextComponent, ButtonComponent],
   templateUrl: './payment-details.component.html',
   styleUrls: ['./payment-details.component.css']
 })

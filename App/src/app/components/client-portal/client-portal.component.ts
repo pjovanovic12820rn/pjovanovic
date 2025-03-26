@@ -5,7 +5,6 @@ import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AlertService } from '../../services/alert.service';
-import { AlertComponent } from '../shared/alert/alert.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { AuthService } from '../../services/auth.service';
 import {ButtonComponent} from '../shared/button/button.component';
@@ -14,7 +13,7 @@ import {InputTextComponent} from '../shared/input-text/input-text.component';
 @Component({
   selector: 'app-client-portal',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, AlertComponent, PaginationComponent, ButtonComponent, InputTextComponent],
+  imports: [CommonModule, FormsModule, RouterModule, PaginationComponent, ButtonComponent, InputTextComponent],
   templateUrl: './client-portal.component.html',
   styleUrls: ['./client-portal.component.css'],
 })

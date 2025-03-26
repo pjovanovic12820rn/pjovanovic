@@ -3,26 +3,7 @@
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.account-details h3 {
-  color: #6A4BBC;
-  margin-bottom: 10px;
-}
-
-.account-details table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
-
-.account-details th,
-.account-details td {
-  text-align: left;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+  width: 70vw;
 }
 
 /* Ispravka preklapanja dugmadi */

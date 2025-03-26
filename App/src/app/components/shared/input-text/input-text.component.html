@@ -9,17 +9,17 @@
     (blur)="onBlur()"
     (focus)="onFocus()"
     [name]="name"
-    [disabled]="disabled"
-    [class.disabled]="disabled"
+    [disabled]="disabledInput"
+    [class.disabled]="disabledInput"
   />
-  <textarea [placeholder]="placeholder"
+  <textarea *ngIf="type === 'textarea'" [placeholder]="placeholder"
             [value]="value"
             (input)="onInput($event)"
             (blur)="onBlur()"
             (focus)="onFocus()"
             [name]="name"
-            [disabled]="disabled"
-            [class.disabled]="disabled"
+            [disabled]="disabledInput"
+            [class.disabled]="disabledInput"
   ></textarea>
   <div *ngIf="showErrors" class="error-messages">
     <div *ngFor="let error of errors" class="error-message">{{ error }}</div>

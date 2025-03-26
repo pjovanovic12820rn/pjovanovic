@@ -1,7 +1,7 @@
 <div class="transaction-list-container">
   <h2>Transactions for Card: {{ cardNumber }}</h2>
 
-  <app-button label="New Transaction" (click)="createNewTransaction()" class="new-transaction-btn"></app-button>
+  <app-button (click)="createNewTransaction()" class="new-transaction-btn">New Transaction</app-button>
 
   <div *ngIf="isLoading" class="loading-msg">Loading transactions...</div>
 
@@ -24,7 +24,7 @@
       <td>{{ t.date | date: 'short' }}</td>
       <td>{{ t.status }}</td>
       <td>
-        <app-button label="Details" (click)="viewDetails(t.id)" class="details-btn"></app-button>
+        <app-button (click)="viewDetails(t.id)" class="details-btn">Details</app-button>
       </td>
     </tr>
     </tbody>

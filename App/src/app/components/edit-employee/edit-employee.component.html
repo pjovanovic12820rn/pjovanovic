@@ -1,58 +1,61 @@
-<div class="edit-main">
-  <div class="edit-container">
-    <h2>Edit Employee</h2>
+<div class="edit-container">
+  <h2>Edit Employee</h2>
+  <br>
+  <div *ngIf="loading" class="loading">Loading employee...</div>
 
-    <div *ngIf="loading" class="loading">Loading employee...</div>
+  <form *ngIf="employee && !loading" [formGroup]="editForm" (ngSubmit)="saveChanges()">
+    <div class="flex gap-1">
+      <input-text class="flex-1" formControlName="firstName" placeholder="First Name" label="First Name" [disabledInput]="true"
+                  [validationRules]="[validations.required, validations.onlyLetters(), validations.minLengthWithoutSpaces(2)]"/>
+      <input-text class="flex-1" formControlName="lastName" placeholder="Last Name" label="Last Name"
+                  [validationRules]="[validations.required, validations.onlyLetters(), validations.minLengthWithoutSpaces(2)]"/>
+    </div>
 
-    <form *ngIf="employee" [formGroup]="editForm" (ngSubmit)="saveChanges()">
-      <div class="flex text-left gap-1">
-        <input-text formControlName="firstName" [disabled]="true" placeholder="First Name" label="First Name"
-                    [validationRules]="[validations.required, validations.onlyLetters(), validations.minLengthWithoutSpaces(2)]"/>
-        <input-text formControlName="lastName" placeholder="Last Name" label="Last Name"
-                    [validationRules]="[validations.required, validations.onlyLetters(), validations.minLengthWithoutSpaces(2)]"/>
-      </div>
+    <div class="text-left">
+      <input-text formControlName="email" placeholder="Email" label="Email" type="email" [disabledInput]="true"
+                  [validationRules]="[validations.required, validations.isEmail]"/>
+    </div>
+    <div class="text-left">
+      <input-text formControlName="jmbg" placeholder="JMBG" label="JMBG" [disabledInput]="true"
+                  [validationRules]="[validations.required, validations.isValidJMBG()]"/>
+    </div>
 
-      <div class="flex text-left gap-1">
-        <input-text [disabled]="true" formControlName="jmbg" placeholder="JMBG" label="JMBG"
-                    [validationRules]="[validations.required, validations.isValidJMBG()]"/>
-        <input-text [disabled]="true" formControlName="email" placeholder="Email" label="Email" type="email"
-                    [validationRules]="[validations.required, validations.isEmail]"/>
-      </div>
+<div>
+  <input-text formControlName="phone" placeholder="Phone Number" label="Phone Number"
+                  [validationRules]="[validations.required, validations.isValidPhone()]"/>
+    </div>
 
-      <div class="flex text-left gap-1">
-        <input-text [disabled]="true" formControlName="birthDate" type="date" placeholder="Date of Birth"
-                    label="Date of Birth"
-                    [validationRules]="[validations.required, validations.pastDate()]"/>
-        <app-select label="Gender" formControlName="gender">
-          <option value="" disabled selected>Select gender</option>
-          <option value="M">Male</option>
-          <option value="F">Female</option>
-        </app-select>
-      </div>
+    <div class="text-left">
+      <input-text formControlName="address" placeholder="Address" label="Address"
+                  [validationRules]="[validations.required, validations.minLengthWithoutSpaces(5)]"/>
+    </div>
 
-      <div class="flex text-left gap-1">
-        <input-text formControlName="phone" placeholder="Phone Number" label="Phone Number"
-                    [validationRules]="[validations.required, validations.isValidPhone()]"/>
-        <input-text formControlName="address" placeholder="Address" label="Address"
-                    [validationRules]="[validations.required, validations.minLengthWithoutSpaces(5)]"/>
-      </div>
+    <div class="flex gap-1">
+      <input-text class="flex-1" formControlName="position" placeholder="Position" label="Position"
+                  [validationRules]="[validations.required, validations.onlyLetters(), validations.minLengthWithoutSpaces(3)]"/>
+      <input-text class="flex-1" formControlName="department" placeholder="Department" label="Department"
+                  [validationRules]="[validations.required, validations.minLengthWithoutSpaces(2)]"/>
+    </div>
 
-      <div class="flex text-left gap-1">
-        <input-text formControlName="position" placeholder="Position" label="Position"
-                    [validationRules]="[validations.required, validations.onlyLetters(), validations.minLengthWithoutSpaces(3)]"/>
-        <input-text formControlName="department" placeholder="Department" label="Department"
-                    [validationRules]="[validations.required, validations.minLengthWithoutSpaces(2)]"/>
-      </div>
+    <div class="flex gap-1">
+      <app-select class="flex-1" label="Gender" formControlName="gender">
+        <option value="" disabled selected>Select gender</option>
+        <option value="M">Male</option>
+        <option value="F">Female</option>
+      </app-select>
+      <input-text class="flex-1" formControlName="birthDate" type="date" placeholder="Date of Birth" label="Date of Birth" [disabledInput]="true"
+                  [validationRules]="[validations.required, validations.pastDate()]"/>
 
-      <!-- New Role Dropdown -->
-      <div class="flex text-left gap-1" *ngIf="isAdmin">
-        <app-select label="Role" formControlName="role">
-          <option value="" disabled selected>Select Role</option>
-          <option *ngFor="let role of roles" [value]="role" [selected]="employee.role.includes(role)">{{ role }}</option>
-        </app-select>
-      </div>
+    </div>
 
-      <app-button type="submit" [disabled]="loading" label="Save Changes"/>
-    </form>
-  </div>
+    <!-- New Role Dropdown -->
+    <div class="form-row text-left" *ngIf="isAdmin">
+      <app-select class="flex-1" label="Role" formControlName="role">
+        <option value="" disabled selected>Select Role</option>
+        <option *ngFor="let role of roles" [value]="role" [selected]="employee.role.includes(role)">{{ role }}</option>
+      </app-select>
+    </div>
+
+    <app-button type="submit" [disabled]="loading">Save Changes</app-button>
+  </form>
 </div>

@@ -31,6 +31,6 @@
       <input-text label="Reference Number" id="referenceNumber" type="text" [(ngModel)]="payment.referenceNumber"
                   name="referenceNumber"/>
     </div>
-    <app-button label="Submit Payment" type="submit" [disabled]="!paymentForm.form.valid"></app-button>
+    <app-button type="submit" [disabled]="!paymentForm.form.valid">Submit Payment</app-button>
   </form>
 </div>

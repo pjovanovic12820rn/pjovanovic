@@ -1,6 +1,6 @@
 <div class="select-container">
   <label *ngIf="label">{{ label }}</label>
-  <select (change)="onSelectChange($event)" [value]="value">
-    <ng-content></ng-content> <!-- Projected options -->
+  <select class="flex-1" (change)="onSelectChange($event)" [value]="value">
+    <ng-content></ng-content>
   </select>
 </div>

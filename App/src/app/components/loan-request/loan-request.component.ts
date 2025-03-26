@@ -8,7 +8,6 @@ import { LoanRequest, LoanType, EmploymentStatus, InterestRateType } from '../..
 import { Currency } from '../../models/currency.model';
 import { AccountService } from '../../services/account.service';
 import { AuthService } from '../../services/auth.service';
-import {SuccessComponent} from '../success/success.component';
 import {SelectComponent} from '../shared/select/select.component';
 import {InputTextComponent} from '../shared/input-text/input-text.component';
 import {ButtonComponent} from '../shared/button/button.component';
@@ -16,7 +15,7 @@ import {ButtonComponent} from '../shared/button/button.component';
 @Component({
   selector: 'app-loan-request',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SuccessComponent, SelectComponent, InputTextComponent, ButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, SelectComponent, InputTextComponent, ButtonComponent],
   templateUrl: './loan-request.component.html',
   styleUrls: ['./loan-request.component.css']
 })

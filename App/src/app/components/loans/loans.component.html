@@ -17,7 +17,7 @@
             <span>
                 <strong>{{ loan.loanNumber }}</strong> - {{ loan.amount }} {{ loan.currencyCode }}
             </span>
-      <app-button (click)="showLoanDetails(loan)" label="Details"></app-button>
+      <app-button (click)="showLoanDetails(loan)">Details</app-button>
     </div>
 
     <div *ngIf="loans.length === 0" class="no-loans-message">
@@ -43,5 +43,5 @@
   </div>
 
   <!-- New Loan Button -->
-  <app-button class="new-credit-btn" (click)="openNewCredit()" label="New Loan"></app-button>
+  <app-button class="new-credit-btn" (click)="openNewCredit()">New Loan</app-button>
 </div>

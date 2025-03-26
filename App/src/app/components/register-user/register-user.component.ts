@@ -6,7 +6,6 @@ import { ClientService } from '../../services/client.service';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
 import { User } from '../../models/user.model';
-import { AlertComponent } from '../shared/alert/alert.component';
 import {InputTextComponent} from '../shared/input-text/input-text.component';
 import {SelectComponent} from '../shared/select/select.component';
 import {ButtonComponent} from '../shared/button/button.component';
@@ -14,7 +13,7 @@ import {ButtonComponent} from '../shared/button/button.component';
 @Component({
   selector: 'app-register-user',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AlertComponent, InputTextComponent, SelectComponent, ButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, InputTextComponent, SelectComponent, ButtonComponent],
   templateUrl: './register-user.component.html',
   styleUrls: ['./register-user.component.css'],
 })
