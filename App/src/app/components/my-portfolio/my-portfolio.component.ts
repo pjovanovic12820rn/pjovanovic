@@ -7,6 +7,7 @@ import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {PortfolioService} from '../../services/portfolio.service';
 import {Securities} from '../../models/securities';
 import {ButtonComponent} from '../shared/button/button.component';
+import {ModalComponent} from '../shared/modal/modal.component';
 
 @Component({
   selector: 'app-my-portfolio',
@@ -15,9 +16,11 @@ import {ButtonComponent} from '../shared/button/button.component';
     NgIf,
     NgForOf,
     NgClass,
-    ButtonComponent
+    ButtonComponent,
+    ModalComponent
   ],
   templateUrl: './my-portfolio.component.html',
+  standalone: true,
   styleUrl: './my-portfolio.component.css'
 })
 export class MyPortfolioComponent implements OnInit {

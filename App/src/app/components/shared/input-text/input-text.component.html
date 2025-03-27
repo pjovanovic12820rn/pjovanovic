@@ -22,6 +22,10 @@
             [class.disabled]="disabledInput"
   ></textarea>
   <div *ngIf="showErrors" class="error-messages">
+    <div *ngFor="let error of getErrorKeys()"  class="error-message">
+<!--      {{error}} -->
+      {{ getMergedErrorMessages()[error] }}
+    </div>
     <div *ngFor="let error of errors" class="error-message">{{ error }}</div>
   </div>
 </div>

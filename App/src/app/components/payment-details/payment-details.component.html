@@ -1,5 +1,6 @@
 <div class="payments-container">
   <h2>Payments</h2>
+  <br/>
 
   <!-- Filters -->
   <div class="filter-container">
@@ -15,12 +16,12 @@
       <app-button (click)="applyFilters()">Apply Filters</app-button>
     </div>
 
-    <div *ngIf="showAdditionalFilters" class="additional-filters">
-      <input-text label="Min Amount" type="number" [(ngModel)]="minAmount"></input-text>
-      <input-text label="Max Amount" type="number" [(ngModel)]="maxAmount"></input-text>
-      <input-text label="Status" type="text" [(ngModel)]="paymentStatus"></input-text>
-      <input-text label="Account Number" type="text" [(ngModel)]="accountNumber"></input-text>
-      <input-text label="Card Number" type="text" [(ngModel)]="cardNumber"></input-text>
+    <div *ngIf="showAdditionalFilters" class="flex-col gap-1">
+      <input-text placeholder="Min Amount" label="Min Amount" type="number" [(ngModel)]="minAmount"></input-text>
+      <input-text placeholder="Max Amount" label="Max Amount" type="number" [(ngModel)]="maxAmount"></input-text>
+      <input-text placeholder="Status" label="Status" type="text" [(ngModel)]="paymentStatus"></input-text>
+      <input-text placeholder="Account Number" label="Account Number" type="text" [(ngModel)]="accountNumber"></input-text>
+      <input-text placeholder="Card Number" label="Card Number" type="text" [(ngModel)]="cardNumber"></input-text>
     </div>
   </div>
 

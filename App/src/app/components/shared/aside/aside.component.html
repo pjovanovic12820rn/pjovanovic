@@ -61,12 +61,15 @@
 </aside>
 
 <app-modal [title]="'Payment'" [isOpen]="isModalOpen" (closeModalEvent)="isModalOpen = false">
-  <div class="modal-content">
-    <div style="display: grid; gap: 0.5rem; margin-top: 1rem; grid-template-columns: repeat(2, 1fr)">
-      <button class="payment-btn" (click)="navigateTo('/new-payment')">New Payment</button>
-      <button class="payment-btn" (click)="navigateTo('/transfer')">Transfer Payment</button>
-      <button class="payment-btn" (click)="navigateTo('/recipients')">Payment Recipients</button>
-      <button class="payment-btn" (click)="navigateTo('/payment-details')">Payment Details</button>
+    <br>
+  <div class="modal-content flex-col gap-1">
+    <div class="flex gap-1">
+      <app-button class="flex-1 width-full" (click)="navigateTo('/new-payment')">New Payment</app-button>
+      <app-button class="flex-1 width-full" (click)="navigateTo('/transfer')">Transfer Payment</app-button>
+    </div>
+    <div class="flex gap-1">
+      <app-button class="flex-1 width-full" (click)="navigateTo('/recipients')">Payment Recipients</app-button>
+      <app-button class="flex-1 width-full" (click)="navigateTo('/payment-details')">Payment Details</app-button>
     </div>
   </div>
 </app-modal>
@@ -74,8 +77,8 @@
 <app-modal [title]="'New Account'" [isOpen]="isAccountModalOpen" (closeModalEvent)="this.isAccountModalOpen = false;">
   <div class="modal-content">
     <div class="new-account-options">
-      <button class="account-option" [routerLink]="['/create-current-account']" (click)="this.isAccountModalOpen = false;">Checking Account</button>
-      <button class="account-option" [routerLink]="['/create-foreign-currency-account']" (click)="this.isAccountModalOpen = false;">Foreign Currency Account</button>
+      <app-button [routerLink]="['/create-current-account']" (click)="this.isAccountModalOpen = false;">Checking Account</app-button>
+      <app-button [routerLink]="['/create-foreign-currency-account']" (click)="this.isAccountModalOpen = false;">Foreign Currency Account</app-button>
     </div>
   </div>
 </app-modal>

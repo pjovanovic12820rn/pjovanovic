@@ -1,16 +1,18 @@
 <div class="recipients-container">
+  <div class="flex justify-between" [class.mb-2]="isAdding">
   <h2>Payment Recipients</h2>
-
   <app-button (click)="toggleAddRecipient()">+ Add Recipient</app-button>
 
+  </div>
+
   <!-- Add Recipient Form -->
-  <div *ngIf="isAdding" class="add-recipient-form">
+  <div *ngIf="isAdding" class="add-recipient-form flex-col text-left gap-1">
     <h3>Add New Recipient</h3>
     <div class="input-group">
       <input-text [(ngModel)]="newRecipient.name" placeholder="Recipient Name"></input-text>
       <input-text [(ngModel)]="newRecipient.accountNumber" placeholder="Account Number"></input-text>
     </div>
-    <div class="btn-group">
+    <div class="flex width-fit margin-auto gap-1">
       <app-button (click)="addRecipient()">Confirm</app-button>
       <app-button (click)="toggleAddRecipient()" type="secondary">Cancel</app-button>
     </div>

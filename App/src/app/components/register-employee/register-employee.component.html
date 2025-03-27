@@ -3,63 +3,67 @@
   <br>
   <form *ngIf="isAdmin" [formGroup]="registerEmployeeForm" (ngSubmit)="onSubmit()">
     <div class="flex" style="width: 100%;text-align: left;gap: 1rem;">
-      <input-text formControlName="firstName" placeholder="First Name" label="First Name"
+      <input-text class="flex-1" formControlName="firstName" placeholder="First Name" label="First Name"
                   [validationRules]="[validations.required, validations.onlyLetters(), validations.minLengthWithoutSpaces(2)]"/>
-      <input-text formControlName="lastName" placeholder="Last Name" label="Last Name"
+      <input-text class="flex-1" formControlName="lastName" placeholder="Last Name" label="Last Name"
                   [validationRules]="[validations.required, validations.onlyLetters(), validations.minLengthWithoutSpaces(2)]"/>
     </div>
 
-    <div class="form-row">
-      <input-text formControlName="email" placeholder="Email" label="Email" type="email"
+      <input-text class="flex-1" formControlName="email" placeholder="Email" label="Email" type="email"
                   [validationRules]="[validations.required, validations.isEmail]"/>
-    </div>
-    <div class="form-row">
-      <input-text formControlName="jmbg" placeholder="JMBG" label="JMBG"
+      <input-text class="flex-1" formControlName="jmbg" placeholder="JMBG" label="JMBG"
                   [validationRules]="[validations.required, validations.isValidJMBG()]"/>
-    </div>
 
-    <div class="flex" style="width: 100%;text-align: left;gap: 1rem;">
-      <input-text formControlName="username" placeholder="Username" label="Username"
+    <div class="flex gap-1">
+      <input-text class="flex-1" formControlName="username" placeholder="Username" label="Username"
                   [validationRules]="[validations.required, validations.minLengthWithoutSpaces(3)]"/>
-      <input-text formControlName="phone" placeholder="Phone Number" label="Phone Number"
+      <input-text class="flex-1" formControlName="phone" placeholder="Phone Number" label="Phone Number"
                   [validationRules]="[validations.required, validations.isValidPhone()]"/>
     </div>
 
-    <div class="form-row">
       <input-text formControlName="address" placeholder="Address" label="Address"
                   [validationRules]="[validations.required, validations.minLengthWithoutSpaces(5)]"/>
-    </div>
 
-    <div class="flex" style="width: 100%;text-align: left;gap: 1rem;">
-      <input-text formControlName="position" placeholder="Position" label="Position"
+    <div class="flex gap-1">
+      <input-text class="flex-1" formControlName="position" placeholder="Position" label="Position"
                   [validationRules]="[validations.required, validations.onlyLetters(), validations.minLengthWithoutSpaces(3)]"/>
-      <input-text formControlName="department" placeholder="Department" label="Department"
+      <input-text class="flex-1" formControlName="department" placeholder="Department" label="Department"
                   [validationRules]="[validations.required, validations.minLengthWithoutSpaces(3)]"/>
     </div>
 
     <div class="flex" style="width: 100%;text-align: left;gap: 1rem;">
-      <app-select class="flex-1" label="Gender" formControlName="gender">
+      <div class="flex-1">
+      <label class="mb-05">Gender</label>
+      <select class="flex-1" formControlName="gender">
         <option value="" disabled selected>Select gender</option>
         <option value="M">Male</option>
         <option value="F">Female</option>
-      </app-select>
+      </select>
+      </div>
       <input-text class="flex-1" formControlName="birthDate" type="date" placeholder="Date of Birth"
                   label="Date of Birth"
                   [validationRules]="[validations.required, validations.pastDate()]"/>
-      <app-select class="flex-1" label="Active Status" formControlName="active">
+      <div class="flex-1">
+
+      <label class="mb-05">Active Status</label>
+      <select class="flex-1" formControlName="active">
         <option [value]="true">Active</option>
         <option [value]="false">Inactive</option>
-      </app-select>
+      </select>
+      </div>
     </div>
 
     <!-- New Role Dropdown -->
-    <div class="form-row">
-      <app-select label="Role" formControlName="role">
+    <div>
+      <label class="mb-05">Role</label>
+      <select formControlName="role">
         <option value="" disabled selected>Select Role</option>
         <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
-      </app-select>
+      </select>
     </div>
-
+<div class="flex gap-1 width-fit">
     <app-button type="submit">Register Employee</app-button>
+    <app-button type="back-button">Cancel</app-button>
+</div>
   </form>
 </div>

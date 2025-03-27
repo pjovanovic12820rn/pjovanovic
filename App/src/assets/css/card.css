@@ -1,19 +1,33 @@
 /* Global White Card */
 .card {
   background: white;
-  padding: 20px;
+  padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 100%;
+  width: 80vw;
+  max-width: 80vw;
   text-align: left;
   transition: box-shadow 0.3s ease-in-out;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
 /* Hover Effect */
 .card:hover {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
+
+.info-card {
+  background: #f8f8f8;
+  padding: 15px;
+  border-radius: 6px;
+}
+
+.info-card p {
+  margin: 5px 0;
+  font-size: 1rem;
+  color: #333;
+}
+
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
@@ -28,5 +42,17 @@
     padding: 12px;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+}
+
+/* 🔹 Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

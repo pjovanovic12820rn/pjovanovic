@@ -1,4 +1,4 @@
-<div class="container">
+<div class="card width-50 text-left flex-col gap-1">
   <h2>Loan Details</h2>
 
   <div *ngIf="loan">
@@ -18,7 +18,7 @@
       <span [ngClass]="getLoanStatusClass(loan.status)">{{ loan.status }}</span>
     </p>
 
-    <div class="button-container">
+    <div class="flex gap-1 margin-auto width-fit" [class.mb-1]="showInstallments">
       <app-button (click)="goBack()">Back</app-button>
       <app-button (click)="toggleInstallments()">{{showInstallments ? 'Hide Installments' : 'Show Installments'}}</app-button>
     </div>

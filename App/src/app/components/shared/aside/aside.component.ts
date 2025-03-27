@@ -4,11 +4,12 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { Subscription } from 'rxjs';
 import { ModalComponent } from '../modal/modal.component';
+import {ButtonComponent} from '../button/button.component';
 
 @Component({
   selector: 'app-aside',
   standalone: true,
-  imports: [NgClass, NgIf, ModalComponent, RouterLink],
+  imports: [NgClass, NgIf, ModalComponent, RouterLink, ButtonComponent],
   templateUrl: './aside.component.html',
   styleUrl: './aside.component.css'
 })

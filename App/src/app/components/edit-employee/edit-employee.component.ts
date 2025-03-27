@@ -8,13 +8,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AlertService } from '../../services/alert.service';
 import { InputTextComponent } from '../shared/input-text/input-text.component';
 import { validations } from '../../models/validation.model';
-import { SelectComponent } from '../shared/select/select.component';
 import { ButtonComponent } from '../shared/button/button.component';
 
 @Component({
   selector: 'app-edit-employee',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputTextComponent, SelectComponent, ButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, InputTextComponent, ButtonComponent],
   templateUrl: './edit-employee.component.html',
   styleUrls: ['./edit-employee.component.css']
 })

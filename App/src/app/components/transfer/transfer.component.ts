@@ -9,7 +9,6 @@ import {PaymentService} from '../../services/payment.service';
 import {TransferDto} from '../../models/transfer.model';
 import {InputTextComponent} from '../shared/input-text/input-text.component';
 import {ButtonComponent} from '../shared/button/button.component';
-import {SelectComponent} from '../shared/select/select.component';
 
 @Component({
   selector: 'app-transfer',
@@ -20,7 +19,6 @@ import {SelectComponent} from '../shared/select/select.component';
     NgForOf,
     InputTextComponent,
     ButtonComponent,
-    SelectComponent
   ],
   standalone: true,
   styleUrls: ['./transfer.component.css']

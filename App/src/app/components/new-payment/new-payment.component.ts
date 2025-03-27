@@ -7,7 +7,6 @@ import { AlertService } from '../../services/alert.service';
 import {AccountResponse} from '../../models/account-response.model';
 import {AccountService} from '../../services/account.service';
 import {NgForOf} from '@angular/common';
-import {SelectComponent} from '../shared/select/select.component';
 import {InputTextComponent} from '../shared/input-text/input-text.component';
 import {ButtonComponent} from '../shared/button/button.component';
 
@@ -15,7 +14,7 @@ import {ButtonComponent} from '../shared/button/button.component';
   selector: 'app-new-payment',
   templateUrl: './new-payment.component.html',
   standalone: true,
-  imports: [FormsModule, NgForOf, SelectComponent, InputTextComponent, ButtonComponent],
+  imports: [FormsModule, NgForOf, InputTextComponent, ButtonComponent],
   styleUrls: ['./new-payment.component.css']
 })
 export class NewPaymentComponent {

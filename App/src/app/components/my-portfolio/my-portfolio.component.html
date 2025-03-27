@@ -1,7 +1,7 @@
 <div class="portfolio-container">
   <h2>My Portfolio</h2>
 
-  <table class="securities-table" *ngIf="securities.length > 0">
+  <table *ngIf="securities.length > 0">
     <thead>
     <tr>
       <th>Type</th>
@@ -40,21 +40,26 @@
     <app-button class="info-button" (click)="openTaxModal()">Tax Info</app-button>
   </div>
 
-  <!-- Profit Info Modal -->
-  <div class="modal" *ngIf="isProfitModalOpen">
+  <app-modal [title]="'Profit Information'" [isOpen]="isProfitModalOpen" (closeModalEvent)="isProfitModalOpen = false">
     <div class="modal-content">
-      <h3>Profit Information</h3>
-      <p>Total Profit: <strong>{{ getTotalProfit().toFixed(2) }} USD</strong></p>
-      <app-button class="close-button" (click)="closeModals()">Close</app-button>
+      <div class="text-left">
+        <p>Total Profit: <strong>{{ getTotalProfit().toFixed(2) }} USD</strong></p>
+      </div>
+      <div class="width-fit">
+        <app-button class="close-button" (click)="closeModals()">Close</app-button>
+      </div>
     </div>
-  </div>
+  </app-modal>
 
   <!-- Tax Info Modal -->
-  <div class="modal" *ngIf="isTaxModalOpen">
+  <app-modal [title]="'Tax Information'" [isOpen]="isTaxModalOpen" (closeModalEvent)="isTaxModalOpen = false">
     <div class="modal-content">
-      <h3>Tax Information</h3>
-      <p>Total Tax Paid: <strong>{{ getTotalTax().toFixed(2) }} USD</strong></p>
-      <app-button class="close-button" (click)="closeModals()">Close</app-button>
+      <div class="text-left">
+        <p>Total Tax Paid: <strong>{{ getTotalTax().toFixed(2) }} USD</strong></p>
+      </div>
+      <div class="width-fit">
+        <app-button class="close-button" (click)="closeModals()">Close</app-button>
+      </div>
     </div>
-  </div>
+  </app-modal>
 </div>

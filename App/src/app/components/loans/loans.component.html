@@ -1,5 +1,9 @@
-<div class="client-loans-container">
-  <h2>Client Loans</h2>
+<div class="card margin-auto width-50 flex-col gap-1">
+
+  <div class="flex justify-between flex-1">
+    <h2>Client Loans</h2>
+    <app-button (click)="openNewCredit()">New Loan</app-button>
+  </div>
 
   <!-- Filter -->
   <div *ngIf="authService.isAdmin()">
@@ -11,37 +15,40 @@
     />
   </div>
 
-  <!-- List of Loans -->
-  <div class="credits-list">
-    <div class="credit-card" *ngFor="let loan of filteredLoans">
+  <div class="mb-1">
+    <!-- List of Loans -->
+    <div class="credits-list">
+      <div class="credit-card" *ngFor="let loan of filteredLoans">
             <span>
                 <strong>{{ loan.loanNumber }}</strong> - {{ loan.amount }} {{ loan.currencyCode }}
             </span>
-      <app-button (click)="showLoanDetails(loan)">Details</app-button>
-    </div>
+        <app-button (click)="showLoanDetails(loan)">Details</app-button>
+      </div>
 
-    <div *ngIf="loans.length === 0" class="no-loans-message">
-      No loans found for this client.
+      <div *ngIf="loans.length === 0" class="no-loans-message">
+        No loans found for this client.
+      </div>
     </div>
   </div>
 
   <!-- Loan Requests List -->
-  <h3>Loan Requests</h3>
-  <div class="credits-list">
-    <div class="credit-card" *ngFor="let request of filteredLoanRequests">
-            <span>
-                <strong>Request Type:</strong> {{ request.type }} <br>
-                <strong>Amount:</strong> {{ request.amount }} {{ request.currencyCode }} <br>
-                <strong>Status:</strong>
-                <span [ngClass]="getLoanStatusClass(request.status)">{{ request.status }}</span>
-            </span>
-    </div>
+  <div>
+    <h3>Loan Requests</h3>
+    <div class="credits-list">
+      <div class="credit-card" *ngFor="let request of filteredLoanRequests">
+              <span>
+                  <strong>Request Type:</strong> {{ request.type }} <br>
+                  <strong>Amount:</strong> {{ request.amount }} {{ request.currencyCode }} <br>
+                  <strong>Status:</strong>
+                  <span [ngClass]="getLoanStatusClass(request.status)">{{ request.status }}</span>
+              </span>
+      </div>
 
-    <div *ngIf="loanRequests.length === 0" class="no-loans-message">
-      No loan requests found.
+      <div *ngIf="loanRequests.length === 0" class="no-loans-message">
+        No loan requests found.
+      </div>
     </div>
   </div>
 
   <!-- New Loan Button -->
-  <app-button class="new-credit-btn" (click)="openNewCredit()">New Loan</app-button>
 </div>

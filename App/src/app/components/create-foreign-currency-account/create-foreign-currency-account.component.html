@@ -1,30 +1,34 @@
-<div class="container">
+<div class="card width-50">
   <h2>Create New {{ newAccount.accountType | titlecase }} Account</h2>
+  <br>
   <form #accountForm="ngForm" (ngSubmit)="onSubmit()">
 
-    <div class="row">
-      <div class="column">
-        <div class="form-group">
-          <!-- Clients -->
-          <app-select label="Client:" id="clientId" name="clientId" [(ngModel)]="newAccount.clientId"
-                      (change)="onClientChange()" required>
+    <div class="flex gap-1">
+      <div class="flex-col gap-1 width-50">
+        <!-- Clients -->
+        <div>
+          <label class="mb-05">Client:</label>
+          <select id="clientId" name="clientId" [(ngModel)]="newAccount.clientId"
+                  (change)="onClientChange()" required>
+            <option value="0" disabled>Client...</option>
             <option *ngFor="let user of users" [ngValue]="user.id">
               {{ user.firstName }} {{ user.lastName }} ({{ user.email }})
             </option>
-          </app-select>
+          </select>
+        </div>
+        <div>
           <app-button (click)="navigateToRegisterUser()" class="create-user-link">Create New User</app-button>
-
         </div>
 
 
         <!-- Monthly Fee -->
-        <div class="form-group monthly-fee-container" *ngIf="isCurrentAccount">
-          <input-text label="Monthly Fee:" id="monthlyFee" name="monthlyFee" [(ngModel)]="newAccount.monthlyFee"
-                      type="number"/>
-        </div>
+        <input-text *ngIf="isCurrentAccount" placeholder="Monthly Fee:" label="Monthly Fee:" id="monthlyFee"
+                    name="monthlyFee"
+                    [(ngModel)]="newAccount.monthlyFee"
+                    type="number"/>
 
         <!-- Employee info -->
-        <div class="employee-info">
+        <div class="info-card">
           <h3>Account Created By</h3>
 
           <div *ngIf="loggedInEmployee">
@@ -43,17 +47,18 @@
         </div>
       </div>
 
-      <div class="column">
-        <div class="form-group">
-          <!-- Account Owner Type -->
-          <app-select label="Account Owner Type:" id="accountOwnerType" name="accountOwnerType"
-                      [(ngModel)]="newAccount.accountOwnerType" (change)="onAccountOwnerTypeChange()">
+      <div class="flex-col gap-1 width-50">
+        <!-- Account Owner Type -->
+        <div>
+          <label class="mb-05">Account Owner Type:</label>
+          <select id="accountOwnerType" name="accountOwnerType"
+                  [(ngModel)]="newAccount.accountOwnerType" (change)="onAccountOwnerTypeChange()">
             <option value="PERSONAL">PERSONAL</option>
             <option value="COMPANY">COMPANY</option>
-          </app-select>
+          </select>
         </div>
         <!-- Company Dropdown (Conditional) -->
-        <div class="form-group" *ngIf="isCompanyAccount">
+        <div class="info-card flex-col gap-1" *ngIf="isCompanyAccount">
           <h3>Company Information</h3>
 
           <div *ngIf="!newAccount.clientId">
@@ -61,92 +66,91 @@
           </div>
 
           <div *ngIf="newAccount.clientId">
-            <div class="form-group">
-              <app-select label="Select Company:" [(ngModel)]="selectedCompanyId"
-                          name="selectedCompany"
-                          (change)="onCompanySelect()"
-                          [disabled]="loadingCompanies">
+            <div class="mb-1">
+              <label class="mb-05">Select Company:</label>
+              <select [(ngModel)]="selectedCompanyId"
+                      name="selectedCompany"
+                      (change)="onCompanySelect()"
+                      [disabled]="loadingCompanies">
                 <option [value]="null" disabled>Select a company</option>
                 <option [ngValue]="-1">Create New Company</option>
                 <option *ngFor="let company of companies" [ngValue]="company.id">
                   {{ company.name }} ({{ company.registrationNumber }})
                 </option>
-              </app-select>
+              </select>
               <div *ngIf="loadingCompanies" class="loading-message">Loading companies...</div>
             </div>
 
-            <div class="company-form" *ngIf="isNewCompany || selectedCompanyId">
-              <div class="form-group">
-                <input-text label="Company Name:" id="companyName" name="companyName"
-                            [(ngModel)]="companyInfo.name"
-                            type="text"
-                            [disabled]="!isNewCompany"/>
-              </div>
+            <div class="flex-col gap-1" *ngIf="isNewCompany || selectedCompanyId">
+              <input-text placeholder="Company Name:" label="Company Name:" id="companyName" name="companyName"
+                          [(ngModel)]="companyInfo.name"
+                          type="text"
+                          [disabled]="!isNewCompany"/>
 
-              <div class="form-group">
-                <input-text label="Registration Number:" id="registrationNumber" name="registrationNumber"
-                            [(ngModel)]="companyInfo.registrationNumber"
-                            type="text"
-                            [disabled]="!isNewCompany"/>
-              </div>
-
-              <div class="form-group">
-                <input-text label="Tax Number:" id="taxNumber" name="taxNumber"
-                            [(ngModel)]="companyInfo.taxNumber"
-                            type="text"
-                            [disabled]="!isNewCompany"/>
-              </div>
-
-              <div class="form-group">
-                <input-text label="Activity Code:" id="activityCode" name="activityCode"
-                            [(ngModel)]="companyInfo.activityCode"
-                            type="text"
-                            [disabled]="!isNewCompany"/>
-              </div>
-
-              <div class="form-group">
-                <input-text label="Majority Owner:" id="majorityOwner" name="majorityOwner"
-                            [value]="getClientName(newAccount.clientId)"
-                            type="text" [disabledInput]="true"/>
-              </div>
-
-              <div class="form-group">
-                <input-text label="Address:" id="address" name="address"
-                            [(ngModel)]="companyInfo.address"
-                            type="text"
-                            [disabled]="!isNewCompany"/>
-              </div>
+              <input-text placeholder="Registration Number:" label="Registration Number:" id="registrationNumber"
+                          name="registrationNumber"
+                          [(ngModel)]="companyInfo.registrationNumber"
+                          type="text"
+                          [disabled]="!isNewCompany"/>
 
 
-              <div class="form-group">
-                <app-select label="Authorized Personnel (Optional):" id="authorizedPersonnel" name="authorizedPersonnel"
-                            [(ngModel)]="selectedAuthorizedPersonnelId"
-                            (change)="onPersonnelSelect()">
+              <input-text placeholder="Tax Number:" label="Tax Number:" id="taxNumber" name="taxNumber"
+                          [(ngModel)]="companyInfo.taxNumber"
+                          type="text"
+                          [disabled]="!isNewCompany"/>
+
+              <input-text placeholder="Activity Code:" label="Activity Code:" id="activityCode" name="activityCode"
+                          [(ngModel)]="companyInfo.activityCode"
+                          type="text"
+                          [disabled]="!isNewCompany"/>
+
+              <input-text placeholder="Majority Owner:" label="Majority Owner:" id="majorityOwner" name="majorityOwner"
+                          [value]="getClientName(newAccount.clientId)"
+                          type="text" [disabledInput]="true"/>
+
+              <input-text placeholder="Address:" label="Address:" id="address" name="address"
+                          [(ngModel)]="companyInfo.address"
+                          type="text"
+                          [disabled]="!isNewCompany"/>
+
+              <div>
+                <label class="mb-05">Authorized Personnel (Optional):</label>
+                <select id="authorizedPersonnel" name="authorizedPersonnel"
+                        [(ngModel)]="selectedAuthorizedPersonnelId"
+                        (change)="onPersonnelSelect()">
                   <option [ngValue]="null">Select authorized personnel</option>
                   <option [ngValue]="-1">Create new authorized personnel</option>
                   <option *ngFor="let personnel of availablePersonnel" [ngValue]="personnel.id">
                     {{ personnel.firstName }} {{ personnel.lastName }}
                   </option>
-                </app-select>
+                </select>
               </div>
 
-              <div *ngIf="isNewPersonnel" class="flex-col text-left gap-1">
-                <h4>New Authorized Personnel Details</h4>
-                <input-text label="First Name:" id="firstName" name="firstName" [(ngModel)]="newPersonnel.firstName"
+              <div *ngIf="isNewPersonnel" class="flex-col text-left gap-1 mt-1">
+                <h3>New Authorized Personnel Details</h3>
+                <input-text placeholder="First Name:" label="First Name:" id="firstName" name="firstName"
+                            [(ngModel)]="newPersonnel.firstName"
                             required/>
-                <input-text label="Last Name:" id="lastName" name="lastName" [(ngModel)]="newPersonnel.lastName"
+                <input-text placeholder="Last Name:" label="Last Name:" id="lastName" name="lastName"
+                            [(ngModel)]="newPersonnel.lastName"
                             required/>
-                <input-text label="Date of Birth:" id="dateOfBirth" name="dateOfBirth" type="date"
+                <input-text placeholder="Date of Birth:" label="Date of Birth:" id="dateOfBirth" name="dateOfBirth"
+                            type="date"
                             [(ngModel)]="newPersonnel.dateOfBirth" required/>
-                <app-select label="Gender:" id="gender" name="gender" [(ngModel)]="newPersonnel.gender" required>
+                <div>
+                <label class="mb-05">Gender:</label>
+                <select id="gender" name="gender" [(ngModel)]="newPersonnel.gender" required>
+                  <option value="" disabled>Gender...</option>
                   <option value="M">Male</option>
                   <option value="F">Female</option>
-                </app-select>
-                <input-text label="Email:" id="email" name="email" type="email" [(ngModel)]="newPersonnel.email"
+                </select>
+                </div>
+                <input-text placeholder="Email:" label="Email:" id="email" name="email" type="email"
+                            [(ngModel)]="newPersonnel.email"
                             required/>
-                <input-text label="Phone Number:" id="phoneNumber" name="phoneNumber"
+                <input-text placeholder="Phone Number:" label="Phone Number:" id="phoneNumber" name="phoneNumber"
                             [(ngModel)]="newPersonnel.phoneNumber" required/>
-                <input-text label="Address:" id="personnelAddress" name="personnelAddress"
+                <input-text placeholder="Address:" label="Address:" id="personnelAddress" name="personnelAddress"
                             [(ngModel)]="newPersonnel.address" required/>
               </div>
             </div>
@@ -154,38 +158,40 @@
         </div>
 
         <div class="form-group">
-          <app-select label="Currency:" id="currency" name="currency" [(ngModel)]="newAccount.currency" required>
+          <label class="mb-05">Currency:</label>
+          <select id="currency" name="currency" [(ngModel)]="newAccount.currency" required>
             <option *ngFor="let currency of currencies" [value]="currency.code">
               {{ currency.name }} ({{ currency.code }})
             </option>
-          </app-select>
+          </select>
         </div>
 
-        <div class="form-group">
-          <input-text label="Daily Limit:" id="dailyLimit" name="dailyLimit" [(ngModel)]="newAccount.dailyLimit"
-                      type="number" required/>
+        <input-text label="Daily Limit:" id="dailyLimit" placeholder="Daily Limit" name="dailyLimit"
+                    [(ngModel)]="newAccount.dailyLimit"
+                    type="number" required/>
+
+        <input-text label="Monthly Limit:" placeholder="Monthly Limit:" id="monthlyLimit" name="monthlyLimit"
+                    [(ngModel)]="newAccount.monthlyLimit"
+                    type="number" required/>
+
+        <div class="flex justify-between cursor-pointer" (click)="toggleIsActive()">
+          <label class="cursor-pointer" (click)="toggleIsActive()">Is Active:</label>
+          <input id="isActive" name="isActive" type="checkbox" [checked]="newAccount.isActive === 'ACTIVE'"/>
         </div>
 
-        <div class="form-group">
-          <input-text label="Monthly Limit:" id="monthlyLimit" name="monthlyLimit" [(ngModel)]="newAccount.monthlyLimit"
-                      type="number" required/>
-        </div>
-
-        <div class="form-group checkbox-group">
-          <label>Is Active:</label>
-          <input id="isActive" name="isActive" type="checkbox" (change)="toggleIsActive()"
-                 [checked]="newAccount.isActive === 'ACTIVE'"/>
-        </div>
-
-        <div class="form-group checkbox-group">
-          <label>Create Card:</label>
+        <div class="flex justify-between cursor-pointer" (click)="toggleCreateCard()">
+          <label class="cursor-pointer" (click)="toggleCreateCard()">Create Card:</label>
           <input id="createCard" name="createCard" [(ngModel)]="newAccount.createCard" type="checkbox"/>
         </div>
       </div>
     </div>
+    <div class="flex gap-1 width-fit">
+
     <app-button type="submit" class="submit-btn" [disabled]="accountForm.invalid || !newAccount.clientId || !employeeId
                                             || !isCompanyFormValid()">Create Account
     </app-button>
+    <app-button type="back-button">Cancel</app-button>
+    </div>
 
   </form>
 </div>

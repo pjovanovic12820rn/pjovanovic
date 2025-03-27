@@ -10,14 +10,6 @@
   animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Purple Header */
-h2 {
-  color: #6A4BBC;
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
 /* Payment List */
 .payment-list {
   display: flex;

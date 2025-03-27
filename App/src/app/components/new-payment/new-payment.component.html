@@ -1,36 +1,27 @@
-<div class="payment-container">
+<div class="card width-fit margin-auto flex-col gap-1">
   <h2>New Payment</h2>
 
-  <form #paymentForm="ngForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <app-select label="Sender Account Number" id="senderAccountNumber" [(ngModel)]="payment.senderAccountNumber"
-                  name="senderAccountNumber" required>
-        <option value="" disabled>Select Sender Account</option>
-        <option *ngFor="let account of accounts" [value]="account.accountNumber">
-          {{ account.accountNumber }} ({{ account.owner.firstName }} {{ account.owner.lastName }})
-        </option>
-      </app-select>
-    </div>
-    <div class="form-group">
-      <input-text label="Receiver Account Number" id="receiverAccountNumber" type="text"
-                  [(ngModel)]="payment.receiverAccountNumber" name="receiverAccountNumber" required/>
-    </div>
-    <div class="form-group">
-      <input-text label="Amount" id="amount" type="number" [(ngModel)]="payment.amount" name="amount" required
-                  min="0.01"/>
-    </div>
-    <div class="form-group">
-      <input-text label="Payment Code" id="paymentCode" type="text" [(ngModel)]="payment.paymentCode" name="paymentCode"
-                  required/>
-    </div>
-    <div class="form-group">
-      <input-text label="Purpose of Payment" id="purposeOfPayment" type="text" [(ngModel)]="payment.purposeOfPayment"
-                  name="purposeOfPayment" required/>
-    </div>
-    <div class="form-group">
-      <input-text label="Reference Number" id="referenceNumber" type="text" [(ngModel)]="payment.referenceNumber"
-                  name="referenceNumber"/>
-    </div>
+  <form #paymentForm="ngForm" class="flex-col gap-1" (ngSubmit)="onSubmit()">
+    <label>Sender Account Nmber</label>
+    <select id="senderAccountNumber" [(ngModel)]="payment.senderAccountNumber"
+                name="senderAccountNumber" required>
+      <option value="" disabled>Select Sender Account</option>
+      <option *ngFor="let account of accounts" [value]="account.accountNumber">
+        {{ account.accountNumber }} ({{ account.owner.firstName }} {{ account.owner.lastName }})
+      </option>
+    </select>
+    <input-text label="Receiver Account Number" placeholder="Receiver Account Number" id="receiverAccountNumber" type="text"
+                [(ngModel)]="payment.receiverAccountNumber" name="receiverAccountNumber" required/>
+    <input-text label="Amount" placeholder="Amount" id="amount" type="number" [(ngModel)]="payment.amount" name="amount" required
+                min="0.01"/>
+    <input-text label="Payment Code" placeholder="Payment Code" id="paymentCode" type="text" [(ngModel)]="payment.paymentCode" name="paymentCode"
+                required/>
+    <input-text label="Purpose of Payment" placeholder="Payment Code" id="purposeOfPayment" type="text" [(ngModel)]="payment.purposeOfPayment"
+                name="purposeOfPayment" required/>
+    <input-text label="Reference Number" placeholder="Reference Number" id="referenceNumber" type="text" [(ngModel)]="payment.referenceNumber"
+                name="referenceNumber"/>
+    <div>
     <app-button type="submit" [disabled]="!paymentForm.form.valid">Submit Payment</app-button>
+    </div>
   </form>
 </div>

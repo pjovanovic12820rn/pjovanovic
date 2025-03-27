@@ -1,32 +1,41 @@
-<div class="edit-user-container">
+<div class="card width-50 margin-auto flex-col gap-1">
   <h2>Edit User</h2>
 
   <div *ngIf="loading" class="loading">Loading user...</div>
 
-  <form *ngIf="userForm" [formGroup]="userForm" (ngSubmit)="saveChanges()">
+  <form *ngIf="userForm" [formGroup]="userForm" class="flex-col gap-1" (ngSubmit)="saveChanges()">
+    <div class="flex gap-1">
 
-    <input-text formControlName="firstName" [disabled]="true" label="First Name" placeholder="First Name"/>
+      <input-text class="flex-1" formControlName="firstName" [disabledInput]="true" label="First Name"
+                  placeholder="First Name"/>
 
-    <input-text formControlName="lastName" label="Last Name" placeholder="Last Name"/>
-    <div class="field-error" *ngIf="hasError('lastName', 'required')">Required.</div>
-    <div class="field-error" *ngIf="hasError('lastName', 'minlength')">At least 2 characters.</div>
+      <input-text class="flex-1" formControlName="lastName" label="Last Name" placeholder="Last Name"
+                  [validationRules]="[validations.required, validations.minLength(2)]"
+      />
+    </div>
+    <div class="flex gap-1">
+      <input-text class="flex-1" formControlName="birthDate" [disabledInput]="true" type="date" label="Date of Birth"/>
 
-    <input-text formControlName="birthDate" [disabled]="true" type="date" label="Date of Birth"/>
+      <div class="flex-1">
 
-    <app-select label="Gender" formControlName="gender">
-      <option value="M">Male</option>
-      <option value="F">Female</option>
-    </app-select>
+      <label class="mb-05">Gender</label>
+      <select class="flex-1" formControlName="gender">
+        <option value="M">Male</option>
+        <option value="F">Female</option>
+      </select>
+      </div>
+    </div>
+    <input-text formControlName="email" [disabledInput]="true" type="email" label="Email"/>
 
-    <input-text formControlName="email" [disabled]="true" type="email" label="Email"/>
+    <input-text formControlName="phone" label="Phone Number" placeholder="Phone Number"
+                [validationRules]="[validations.required, validations.isValidPhone()]"/>
 
-    <input-text formControlName="phone" label="Phone Number" placeholder="Phone Number"/>
-    <div class="field-error" *ngIf="hasError('phone', 'required')">Required.</div>
-    <div class="field-error" *ngIf="hasError('phone', 'pattern')">Invalid phone format.</div>
+    <input-text formControlName="address" label="Address" placeholder="Address"
+                [validationRules]="[validations.required]"/>
 
-    <input-text formControlName="address" label="Address" placeholder="Address"/>
-    <div class="field-error" *ngIf="hasError('address', 'required')">Required.</div>
-
+    <div class="flex gap-1 width-fit">
     <app-button type="submit" [disabled]="loading">Save</app-button>
+    <app-button type="back-button">Cancel</app-button>
+    </div>
   </form>
 </div>

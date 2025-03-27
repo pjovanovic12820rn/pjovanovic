@@ -6,7 +6,6 @@ import { CardService, CreateCardDto } from '../../services/card.service'
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import {ButtonComponent} from '../shared/button/button.component';
-import {SelectComponent} from '../shared/select/select.component';
 import {InputTextComponent} from '../shared/input-text/input-text.component';
 
 @Component({
@@ -14,7 +13,7 @@ import {InputTextComponent} from '../shared/input-text/input-text.component';
   templateUrl: './create-card.component.html',
   styleUrls: ['./create-card.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonComponent, SelectComponent, InputTextComponent]
+  imports: [CommonModule, FormsModule, ButtonComponent, InputTextComponent]
 })
 export class CreateCardComponent implements OnInit {
   accountNumber: string = ''

@@ -38,12 +38,14 @@
       label="Amount"
       type="number"
     ></input-text>
-    <app-select label="From Currency" [(ngModel)]="fromCurrency" (change)="onFromCurrencyChange()">
+    <label>From Currency</label>
+    <select [(ngModel)]="fromCurrency" (change)="onFromCurrencyChange()">
       <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
-    </app-select>
-    <app-select label="To Currency" [(ngModel)]="toCurrency" (change)="onToCurrencyChange()">
+    </select>
+    <label>To Currency</label>
+    <select [(ngModel)]="toCurrency" (change)="onToCurrencyChange()">
       <option *ngFor="let currency of availableToCurrencies" [value]="currency">{{ currency }}</option>
-    </app-select>
+    </select>
 
     <h3>Equivalent: {{ convertedAmount }} {{ toCurrency }}</h3>
 

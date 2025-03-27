@@ -1,4 +1,4 @@
-<div class="pagination-container" *ngIf="pageSize > 1 && currentPage != 1">
+<div class="pagination-container" *ngIf="totalPages > 1">
   <button (click)="goToPage(1)" [disabled]="currentPage === 1">First</button>
   <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">Previous</button>
 
