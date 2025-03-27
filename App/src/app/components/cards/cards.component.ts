@@ -117,6 +117,7 @@ export class CardsComponent implements OnInit {
         });
       }
     }
+    window.location.reload();
   }
 
   deactivateCard(cardNumber: string): void {
