@@ -34,7 +34,8 @@ import { LoanDetailsComponent } from './components/loan-details/loan-details.com
 import { NewLoanRequestsComponent } from './components/new-loan-requests/new-loan-requests.component';
 import { OptionsDisplayComponent } from './components/option/option.component';
 import { OrderOverviewComponent } from './components/order-overview/order-overview.component';
-import {TaxCalculationComponent} from './components/tax-calculation/tax-calculation.component';
+import { TaxCalculationComponent } from './components/tax-calculation/tax-calculation.component';
+import { BankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
 
 export const routes: Routes = [
   // login
@@ -64,6 +65,7 @@ export const routes: Routes = [
   { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [authGuard, employeeOrAdminGuard] },
   { path: 'create-current-account', component: AccountCreationComponent, canActivate: [authGuard, employeeOrAdminGuard] },
   { path: 'account-management', component: AccountManagementComponent, canActivate: [authGuard] },
+  { path: 'bank-accounts', component: BankAccountsComponent, canActivate: [authGuard, adminGuard] },
 
   // payments
   { path: 'transfer', component: TransferComponent, canActivate: [authGuard] }, // nzm koji guard treba
