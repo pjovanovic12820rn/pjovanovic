@@ -1,6 +1,6 @@
 /* Default styles */
 .input-container {
-  flex: 1 1 auto;
+  flex: auto;
 }
 
 label {
@@ -11,7 +11,11 @@ label {
   color: #374151; /* Default text color (gray-700) */
 }
 
-input {
+input[type="date" i] {
+  padding: 0.5rem .625rem !important; /* p-2.5 */
+}
+
+input, textarea {
   background-color: #f9fafb; /* bg-gray-50 */
   border: 1px solid #d1d5db; /* border-gray-300 */
   color: #111827; /* text-gray-900 */
@@ -23,11 +27,11 @@ input {
   transition: border-color 0.2s, box-shadow 0.2s; /* Smooth transition for focus */
 }
 
-input.disabled {
+input.disabled, textarea.disabled {
   background-color: #E8E0EC;
 }
 
-input:focus {
+input:focus, textarea:focus {
   outline: none; /* Remove default outline */
   border-color: #510076; /* focus:border-blue-500 */
   box-shadow: 0 0 0 3px #8A54A3; /* focus:ring-blue-500 */
@@ -44,17 +48,17 @@ input:focus {
   color: #dc2626; /* text-red-700 */
 }
 
-.input-container.error input {
+.input-container.error input, .input-container.error textarea {
   background-color: #fef2f2; /* bg-red-50 */
   border-color: #ef4444; /* border-red-500 */
   color: #991b1b; /* text-red-900 */
 }
 
-.input-container.error input::placeholder {
+.input-container.error input::placeholder, .input-container.error textarea::placeholder {
   color: #b91c1c; /* placeholder-red-700 */
 }
 
-.input-container.error input:focus {
+.input-container.error input:focus, .input-container.error textarea:focus {
   border-color: #ef4444; /* focus:border-red-500 */
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.5); /* focus:ring-red-500 */
 }

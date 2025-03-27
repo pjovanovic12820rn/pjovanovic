@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "name": "Test Company",
+    "registrationNumber": "123456"
+  },
+  {
+    "id": 2,
+    "name": "Another Company",
+    "registrationNumber": "654321"
+  }
+]

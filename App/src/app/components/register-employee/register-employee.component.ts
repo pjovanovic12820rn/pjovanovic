@@ -7,13 +7,12 @@ import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
 import { validations } from '../../models/validation.model';
 import { InputTextComponent } from '../shared/input-text/input-text.component';
-import { SelectComponent } from '../shared/select/select.component';
 import { ButtonComponent } from '../shared/button/button.component';
 
 @Component({
   selector: 'app-register-employee',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputTextComponent, SelectComponent, ButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, InputTextComponent, ButtonComponent],
   templateUrl: './register-employee.component.html',
   styleUrls: ['./register-employee.component.css']
 })

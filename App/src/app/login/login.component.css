@@ -32,17 +32,9 @@
     }
 }
 
-/* Linkovi ispod login dugmeta */
-.login-links {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 12px;
-}
-
 /* Link */
 .login-links a {
-    color: #996FD6;
+    color: #6b21a8;
     text-decoration: none;
     font-size: 1rem;
     transition: color 0.3s ease-in-out;

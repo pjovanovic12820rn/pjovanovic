@@ -8,4 +8,8 @@ export interface Securities {
   lastModified: string;
   publicCounter: number;
 
+  settlementDate?: Date;
+  strikePrice?: number;
+  underlyingStockPrice?: number;
+  optionType?: string;
 }

@@ -5,12 +5,11 @@ import { ClientService } from '../../services/client.service';
 import { User } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
-import { AlertComponent } from '../shared/alert/alert.component';
 
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports: [CommonModule, AlertComponent],
+  imports: [CommonModule],
   templateUrl: './user-detail.component.html',
   styleUrls: ['./user-detail.component.css']
 })
