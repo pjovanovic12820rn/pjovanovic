@@ -43,3 +43,23 @@ export const employeeOrAdminGuard = () => {
 
   return router.parseUrl('/login');
 }
+
+export const clientOrActuaryGuard = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  if (authService.isAuthenticated() && (authService.isClient() || authService.isActuary())) {
+    return true;
+  }
+
+  return router.parseUrl('/login');
+}
+
+export const supervisorGuard = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  if (authService.isAuthenticated() && authService.isSupervisor()) {
+    return true;
+  }
+
+  return router.parseUrl('/login');
+}

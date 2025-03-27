@@ -10,17 +10,37 @@
     <p>{{ errorMessage }}</p>
   </div>
 
-  <!-- Date Picker -->
-  <div class="date-control">
-    <label for="datePicker">Select Expiration Date: </label>
-    <input
-      type="date"
-      id="datePicker"
-      [value]="selectedDate | date : 'yyyy-MM-dd'"
-      (change)="onDateSelected($event)"
-      [min]="minDate | date : 'yyyy-MM-dd'"
-      [max]="maxDate | date : 'yyyy-MM-dd'"
-    />
+  <!-- Controls Container -->
+  <div class="controls-container">
+    <!-- Date Picker -->
+    <div class="date-control">
+      <label for="datePicker">Select Expiration Date: </label>
+      <input
+        type="date"
+        id="datePicker"
+        [value]="selectedDate | date : 'yyyy-MM-dd'"
+        (change)="onDateSelected($event)"
+        [min]="minDate | date : 'yyyy-MM-dd'"
+        [max]="maxDate | date : 'yyyy-MM-dd'"
+      />
+    </div>
+
+    <!-- Strike Count Filter -->
+    <div class="strike-count-control">
+      <label for="strikeCountPicker">Number of Strikes: </label>
+      <input
+        type="number"
+        id="strikeCountPicker"
+        [(ngModel)]="maxVisibleStrikes"
+        min="1"
+        [max]="currentChain?.optionPairs?.length || 1"
+        [disabled]="!currentChain || currentChain.optionPairs.length === 0"
+        title="Show this many strikes closest to the stock price"
+      />
+      <span *ngIf="currentChain && currentChain.optionPairs.length > 0">
+        (1 to {{ currentChain.optionPairs.length }})
+      </span>
+    </div>
   </div>
 
 
@@ -201,6 +221,14 @@
           </ng-container>
         </tbody>
       </table>
+      <!-- Message if filtered strikes exceed available -->
+       <p *ngIf="currentChain && currentChain.optionPairs.length > 0 && maxVisibleStrikes > currentChain.optionPairs.length" class="info-message">
+         Showing all {{ currentChain.optionPairs.length }} available strikes.
+       </p>
+       <!-- Message if no pairs exist for the date -->
+       <p *ngIf="currentChain && currentChain.optionPairs.length === 0" class="info-message">
+         No option pairs found for this expiration date.
+       </p>
     </div>
   </div>
 

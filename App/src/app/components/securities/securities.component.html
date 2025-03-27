@@ -98,7 +98,16 @@
           </thead>
           <tbody>
             <tr *ngFor="let security of securities">
-              <td>{{ security.ticker }}</td>
+              <td>
+                <ng-container *ngIf="security.type === 'Stock'; else plainTicker">
+                  <a [routerLink]="['/options', security.id]" class="ticker-link">
+                    {{ security.ticker }}
+                  </a>
+                </ng-container>
+                <ng-template #plainTicker>
+                  <span>{{ security.ticker }}</span>
+                </ng-template>
+              </td>
               <td>{{ security.price }}</td>
               <td>{{ security.change }}</td>
               <td>{{ security.volume }}</td>

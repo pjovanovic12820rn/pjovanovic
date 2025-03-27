@@ -5,12 +5,12 @@ import { Security } from '../../models/security.model';
 import { FormsModule } from '@angular/forms';
 import { interval, Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-securities',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './securities.component.html',
   styleUrl: './securities.component.css'
 })
