@@ -58,7 +58,6 @@
 
   <app-modal [title]="'Tax Information'" [isOpen]="isTaxModalOpen" (closeModalEvent)="isTaxModalOpen = false">
     <div class="modal-content">
-      <h3>Tax Information</h3>
       <div *ngIf="loadingTaxData">
         <p>Loading tax data...</p>
       </div>
@@ -69,7 +68,7 @@
         <p>Tax Paid (Current Year): <strong>{{ taxPaidThisYear !== null ? (taxPaidThisYear | currency:'USD':'symbol':'1.2-2') : 'N/A' }}</strong></p>
         <p>Unpaid Tax (Current Month): <strong>{{ unpaidTaxThisMonth !== null ? (unpaidTaxThisMonth | currency:'USD':'symbol':'1.2-2') : 'N/A' }}</strong></p>
       </div>
-      <button class="close-button" (click)="closeModals()">Close</button>
+      <app-button class="close-button" (click)="closeModals()">Close</app-button>
     </div>
   </app-modal>
 </div>
