@@ -4,18 +4,10 @@
   padding: 1rem 1.5rem;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  text-align: center;
+  text-align: left;
   width: 500px;
   margin: auto;
   animation: fadeIn 0.5s ease-in-out;
-}
-
-/* 🔹 Heading */
-.register-container h2 {
-  color: #510076;
-  font-size: 24px;
-  margin-bottom: 1.5rem;
-  margin-top: 0;
 }
 
 /* 🔹 Form Styling */

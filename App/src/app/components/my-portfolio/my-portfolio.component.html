@@ -1,7 +1,7 @@
 <div class="portfolio-container">
   <h2>My Portfolio</h2>
 
-  <table class="securities-table" *ngIf="securities.length > 0">
+  <table *ngIf="securities.length > 0">
     <thead>
     <tr>
       <th>Type</th>
@@ -31,30 +31,32 @@
         </ng-container>
       </td>
       <td>
-        <button class="sell-button">Sell</button>
-        <button *ngIf="canExerciseOption(security)" class="exercise-button" (click)="exerciseOption(security)">
+        <app-button class="sell-button">Sell</app-button>
+        <app-button *ngIf="canExerciseOption(security)" class="exercise-button" (click)="exerciseOption(security)">
           Exercise
-        </button>
+        </app-button>
       </td>
     </tr>
     </tbody>
   </table>
 
-
-  <div>
-    <button class="info-button" (click)="openProfitModal()">Profit info</button>
-    <button class="info-button" (click)="openTaxModal()">Tax info</button>
+  <div class="portfolio-buttons">
+    <app-button class="info-button" (click)="openProfitModal()">Profit Info</app-button>
+    <app-button class="info-button" (click)="openTaxModal()">Tax Info</app-button>
   </div>
 
-  <div class="modal" *ngIf="isProfitModalOpen">
+  <app-modal [title]="'Profit Information'" [isOpen]="isProfitModalOpen" (closeModalEvent)="isProfitModalOpen = false">
     <div class="modal-content">
-      <h3>Profit Information</h3>
-      <p>Total Profit (Stocks): <strong>{{ getTotalProfit().toFixed(2) }} USD</strong></p>
-      <button class="close-button" (click)="closeModals()">Close</button>
+      <div class="text-left">
+        <p>Total Profit: <strong>{{ getTotalProfit().toFixed(2) }} USD</strong></p>
+      </div>
+      <div class="width-fit">
+        <app-button class="close-button" (click)="closeModals()">Close</app-button>
+      </div>
     </div>
-  </div>
+  </app-modal>
 
-  <div class="modal" *ngIf="isTaxModalOpen">
+  <app-modal [title]="'Tax Information'" [isOpen]="isTaxModalOpen" (closeModalEvent)="isTaxModalOpen = false">
     <div class="modal-content">
       <h3>Tax Information</h3>
       <div *ngIf="loadingTaxData">
@@ -69,5 +71,6 @@
       </div>
       <button class="close-button" (click)="closeModals()">Close</button>
     </div>
-  </div>
+  </app-modal>
 </div>
+

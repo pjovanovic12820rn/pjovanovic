@@ -1,8 +1,9 @@
-
-<div class="exchange-container">
+<div class="card exchange-container">
   <h2>Exchange Rates</h2>
+  <div class="flex-col text-left gap-1">
 
-  <table class="exchange-table">
+
+  <table>
     <thead>
     <tr>
       <th>Currency</th>
@@ -21,38 +22,33 @@
     </tbody>
   </table>
 
-  <label for="popupToggle" class="open-popup">Currency Conversion</label>
-</div>
-
-<!-- Popup for Exchange Calculation -->
-<input type="checkbox" id="popupToggle" class="popup-toggle">
-
-<div class="popup" id="exchangePopup">
-  <div class="popup-content">
-    <h3>Currency Conversion</h3>
-
-    <div class="form-group">
-      <label>Amount</label>
-      <input type="number" [(ngModel)]="exchangeAmount" (input)="exchangeRateCalculation()" placeholder="Enter amount" min="0">
-    </div>
-
-    <div class="form-group">
-      <label>From Currency</label>
-      <select [(ngModel)]="fromCurrency" (change)="onFromCurrencyChange()">
-        <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>To Currency</label>
-      <select [(ngModel)]="toCurrency" (change)="onToCurrencyChange()">
-        <option *ngFor="let currency of availableToCurrencies" [value]="currency">{{ currency }}</option>
-      </select>
-    </div>
-
-    <p class="result">Equivalent: {{ convertedAmount }} {{ toCurrency }}</p>
-
-    <label for="popupToggle" class="btn close" >Close</label>
+  <div>
+    <app-button (click)="isCurrencyConversionModalOpen = true">Currency Conversion</app-button>
+  </div>
   </div>
 </div>
 
+<app-modal [title]="'Currency Conversion'" [isOpen]="isCurrencyConversionModalOpen"
+           (closeModalEvent)="isCurrencyConversionModalOpen = false">
+  <div class="modal-content flex-col gap-1" style="margin-top: 1rem">
+    <input-text
+      [(ngModel)]="exchangeAmount"
+      (input)="exchangeRateCalculation()"
+      placeholder="Enter amount"
+      label="Amount"
+      type="number"
+    ></input-text>
+    <label>From Currency</label>
+    <select [(ngModel)]="fromCurrency" (change)="onFromCurrencyChange()">
+      <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
+    </select>
+    <label>To Currency</label>
+    <select [(ngModel)]="toCurrency" (change)="onToCurrencyChange()">
+      <option *ngFor="let currency of availableToCurrencies" [value]="currency">{{ currency }}</option>
+    </select>
+
+    <h3>Equivalent: {{ convertedAmount }} {{ toCurrency }}</h3>
+
+    <app-button (click)="isCurrencyConversionModalOpen = false">Close</app-button>
+  </div>
+</app-modal>

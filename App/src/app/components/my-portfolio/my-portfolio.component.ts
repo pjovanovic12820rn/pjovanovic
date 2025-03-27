@@ -6,6 +6,8 @@ import {FormsModule} from '@angular/forms';
 import {NgClass, NgForOf, NgIf, CurrencyPipe} from '@angular/common';
 import {PortfolioService} from '../../services/portfolio.service';
 import {Securities} from '../../models/securities';
+import {ButtonComponent} from '../shared/button/button.component';
+import {ModalComponent} from '../shared/modal/modal.component';
 import { of } from 'rxjs';
 import { delay, finalize } from 'rxjs/operators';
 
@@ -22,9 +24,12 @@ interface TaxSummary {
     NgIf,
     NgForOf,
     NgClass,
-    CurrencyPipe
+    CurrencyPipe,
+    ButtonComponent,
+    ModalComponent
   ],
   templateUrl: './my-portfolio.component.html',
+  standalone: true,
   styleUrl: './my-portfolio.component.css'
 })
 export class MyPortfolioComponent implements OnInit {

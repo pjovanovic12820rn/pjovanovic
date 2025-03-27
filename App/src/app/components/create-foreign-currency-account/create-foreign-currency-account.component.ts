@@ -17,12 +17,13 @@ import {AuthorizedPersonnelService} from '../../services/authorized-personnel.se
 import { CurrencyService } from '../../services/currency.service';
 import {CurrencyDto} from '../../models/currency-dto.model';
 import {CardService, CreateCardDto} from '../../services/card.service';
-
+import {ButtonComponent} from '../shared/button/button.component';
+import {InputTextComponent} from '../shared/input-text/input-text.component';
 
 @Component({
   selector: 'app-create-foreign-currency-account',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, ButtonComponent, InputTextComponent],
   templateUrl: './create-foreign-currency-account.component.html',
   styleUrl: './create-foreign-currency-account.component.css',
 })
@@ -185,6 +186,10 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
 
   toggleIsActive() {
     this.newAccount.isActive = this.newAccount.isActive === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+  }
+
+  toggleCreateCard() {
+    this.newAccount.createCard = !this.newAccount.createCard;
   }
 
   isCompanyFormValid(): boolean {

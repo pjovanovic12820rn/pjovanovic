@@ -1,3 +1,8 @@
-<button [type]="type" [disabled]="disabled" [class.disabled]="disabled" (click)="onClick.emit()">
-  {{ label }}
+<button
+  [class]="class"
+  [type]="type === 'back-button' ? 'button' : type"
+  [disabled]="disabled"
+  [class.disabled]="disabled"
+  (click)="type === 'back-button' ? goBack() : onClick.emit()">
+  <ng-content></ng-content>
 </button>
