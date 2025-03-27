@@ -3,24 +3,32 @@ import {AuthService} from '../../services/auth.service';
 import {AlertService} from '../../services/alert.service';
 import {Router} from '@angular/router';
 import {FormsModule} from '@angular/forms';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf, CurrencyPipe} from '@angular/common';
 import {PortfolioService} from '../../services/portfolio.service';
 import {Securities} from '../../models/securities';
 import {ButtonComponent} from '../shared/button/button.component';
 import {ModalComponent} from '../shared/modal/modal.component';
+import { of } from 'rxjs';
+import { delay, finalize } from 'rxjs/operators';
+
+interface TaxSummary {
+  taxPaidThisYear: number;
+  unpaidTaxThisMonth: number;
+}
 
 @Component({
   selector: 'app-my-portfolio',
+  standalone: true,
   imports: [
     FormsModule,
     NgIf,
     NgForOf,
     NgClass,
+    CurrencyPipe,
     ButtonComponent,
     ModalComponent
   ],
   templateUrl: './my-portfolio.component.html',
-  standalone: true,
   styleUrl: './my-portfolio.component.css'
 })
 export class MyPortfolioComponent implements OnInit {
@@ -33,17 +41,80 @@ export class MyPortfolioComponent implements OnInit {
   securities: Securities[] = [];
   isProfitModalOpen = false;
   isTaxModalOpen = false;
+  today: Date = new Date();
+
+  taxPaidThisYear: number | null = null;
+  unpaidTaxThisMonth: number | null = null;
+  loadingTaxData: boolean = false;
+  taxDataError: string | null = null;
 
   ngOnInit(): void {
     this.securities = this.portfolioService.getMySecurities();
+    this.today.setHours(0, 0, 0, 0);
+    this.loadTaxData();
   }
+
+  loadTaxData(): void {
+    this.loadingTaxData = true;
+    this.taxDataError = null;
+    this.taxPaidThisYear = null;
+    this.unpaidTaxThisMonth = null;
+
+    const mockTaxSummary: TaxSummary = {
+      taxPaidThisYear: this.getTotalProfit() * 0.15,
+      unpaidTaxThisMonth: 67.89
+    };
+    of(mockTaxSummary).pipe(
+      delay(2000),
+      finalize(() => this.loadingTaxData = false)
+    ).subscribe({
+      next: (summary) => {
+        this.taxPaidThisYear = summary.taxPaidThisYear;
+        this.unpaidTaxThisMonth = summary.unpaidTaxThisMonth;
+      },
+      error: (err) => {
+        console.error("Error loading tax data:", err);
+        this.taxDataError = "Failed to load tax information. Please try again later.";
+      }
+    });
+  }
+
+
+  isActuary(): boolean {
+    return this.authService.isActuary();
+  }
+
+  canExerciseOption(security: Securities): boolean {
+    if (!this.isActuary() || security.type !== 'Option' || !security.settlementDate || !security.strikePrice || !security.underlyingStockPrice || !security.optionType) {
+      return false;
+    }
+
+    const settlementDate = new Date(security.settlementDate);
+    settlementDate.setHours(0, 0, 0, 0);
+
+    if (settlementDate < this.today) {
+      return false;
+    }
+
+    if (security.optionType === 'Call') {
+      return security.underlyingStockPrice > security.strikePrice;
+    } else if (security.optionType === 'Put') {
+      return security.underlyingStockPrice < security.strikePrice;
+    }
+
+    return false;
+  }
+
+  exerciseOption(security: Securities): void {
+    console.log(`Attempting to exercise ${security.optionType} option for ${security.ticker} with strike ${security.strikePrice}`);
+    this.alertService.showAlert('info', `Exercise action triggered for ${security.ticker}.`);
+  }
+
 
   getTotalProfit(): number {
-    return this.securities.reduce((sum, security) => sum + security.profit, 0);
-  }
-
-  getTotalTax(): number {
-    return this.getTotalProfit() * 0.15; // taxes 15%
+    return this.securities
+      .filter(security => security.type === 'Stock')
+      .reduce((sum, security) => sum + security.profit, 0);
   }
 
   openProfitModal(): void {

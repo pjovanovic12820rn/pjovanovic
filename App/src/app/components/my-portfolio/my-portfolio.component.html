@@ -11,7 +11,7 @@
       <th>Profit</th>
       <th>Last Modified</th>
       <th>Public</th>
-      <th>Action</th>
+      <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -25,11 +25,16 @@
       </td>
       <td>{{ security.lastModified }}</td>
       <td class="public-cell">
-        <span>{{ security.publicCounter }}</span>
-        <button class="publish-button" (click)="publishSecurity(security)">Publish</button>
+        <ng-container *ngIf="security.type === 'Stock' || security.type === 'Future'">
+          <span>{{ security.publicCounter }}</span>
+          <button class="publish-button" (click)="publishSecurity(security)">Publish</button>
+        </ng-container>
       </td>
       <td>
         <app-button class="sell-button">Sell</app-button>
+        <app-button *ngIf="canExerciseOption(security)" class="exercise-button" (click)="exerciseOption(security)">
+          Exercise
+        </app-button>
       </td>
     </tr>
     </tbody>
@@ -51,15 +56,20 @@
     </div>
   </app-modal>
 
-  <!-- Tax Info Modal -->
   <app-modal [title]="'Tax Information'" [isOpen]="isTaxModalOpen" (closeModalEvent)="isTaxModalOpen = false">
     <div class="modal-content">
-      <div class="text-left">
-        <p>Total Tax Paid: <strong>{{ getTotalTax().toFixed(2) }} USD</strong></p>
+      <div *ngIf="loadingTaxData">
+        <p>Loading tax data...</p>
       </div>
-      <div class="width-fit">
-        <app-button class="close-button" (click)="closeModals()">Close</app-button>
+      <div *ngIf="taxDataError">
+        <p style="color: red;">{{ taxDataError }}</p>
       </div>
+      <div *ngIf="!loadingTaxData && !taxDataError">
+        <p>Tax Paid (Current Year): <strong>{{ taxPaidThisYear !== null ? (taxPaidThisYear | currency:'USD':'symbol':'1.2-2') : 'N/A' }}</strong></p>
+        <p>Unpaid Tax (Current Month): <strong>{{ unpaidTaxThisMonth !== null ? (unpaidTaxThisMonth | currency:'USD':'symbol':'1.2-2') : 'N/A' }}</strong></p>
+      </div>
+      <app-button class="close-button" (click)="closeModals()">Close</app-button>
     </div>
   </app-modal>
 </div>
+

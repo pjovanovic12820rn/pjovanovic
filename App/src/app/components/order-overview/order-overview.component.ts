@@ -15,7 +15,7 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class OrderOverviewComponent implements OnInit, OnDestroy {
   orders: Order[] = [];
-  filterStatus: string = 'All';
+  filterStatus: string = 'ALL';
   cancelQuantity: { [orderId: number]: number } = {};
   loading: boolean = false;
   errorMessage: string = '';
@@ -27,7 +27,7 @@ export class OrderOverviewComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    if (!this.authService.isAdmin()) {
+    if (!this.authService.isSupervisor()) {
       this.errorMessage = "Access denied. Only supervisors can access this portal.";
       return;
     }
