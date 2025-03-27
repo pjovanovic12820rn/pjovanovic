@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { authGuard, adminGuard, employeeGuard, employeeOrAdminGuard } from './guards/auth-guard.guard';
+import { authGuard, adminGuard, employeeOrAdminGuard } from './guards/auth-guard.guard';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { EmployeesComponent } from './components/employees/employees.component';
 import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
@@ -13,7 +13,6 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
 import { AccountCreationComponent } from './components/account-creation/account-creation.component';
 import { CreateForeignCurrencyAccountComponent } from './components/create-foreign-currency-account/create-foreign-currency-account.component';
 import { SecuritiesComponent } from './components/securities/securities.component';
-import { securitiesGuard } from './guards/securities.guard';
 import { MailComponent } from './components/mail/mail.component';
 import { CardsComponent } from './components/cards/cards.component';
 import { ClientPortalComponent } from './components/client-portal/client-portal.component';
@@ -35,7 +34,8 @@ import { LoanDetailsComponent } from './components/loan-details/loan-details.com
 import { NewLoanRequestsComponent } from './components/new-loan-requests/new-loan-requests.component';
 import { OptionsDisplayComponent } from './components/option/option.component';
 import { OrderOverviewComponent } from './components/order-overview/order-overview.component';
-import {TaxCalculationComponent} from './components/tax-calculation/tax-calculation.component';
+import { TaxCalculationComponent } from './components/tax-calculation/tax-calculation.component';
+import { BankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
 
 export const routes: Routes = [
   // login
@@ -65,6 +65,7 @@ export const routes: Routes = [
   { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [authGuard, employeeOrAdminGuard] },
   { path: 'create-current-account', component: AccountCreationComponent, canActivate: [authGuard, employeeOrAdminGuard] },
   { path: 'account-management', component: AccountManagementComponent, canActivate: [authGuard] },
+  { path: 'bank-accounts', component: BankAccountsComponent, canActivate: [authGuard, adminGuard] },
 
   // payments
   { path: 'transfer', component: TransferComponent, canActivate: [authGuard] }, // nzm koji guard treba

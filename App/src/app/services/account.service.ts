@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { NewBankAccount } from '../models/new-bank-account.model';
@@ -60,21 +60,19 @@ export class AccountService {
     });
   }
 
-  getAllAccounts(
-    page: number = 0,
-    size: number = 100
-  ): Observable<{ content: AccountResponse[]; totalElements: number }> {
-    let params = new HttpParams().set('page', page).set('size', size);
-    const headers = this.getAuthHeaders();
-
-    return this.http.get<{ content: AccountResponse[]; totalElements: number }>(
-      this.apiUrl,
+  getBankAccounts(page: number, size: number): Observable<{ content: AccountResponse[], totalElements: number }> {
+    return this.http.get<{ content: AccountResponse[], totalElements: number }>(
+      `${this.apiUrl}/bank`,
       {
-        headers,
-        params,
+        params: {
+          page: page.toString(),
+          size: size.toString()
+        },
+        headers: this.getAuthHeaders()
       }
     );
   }
+
 
   changeAccountName(accountNumber: string, newName: string): Observable<void> {
     const payload: ChangeAccountNameDto = { newName };

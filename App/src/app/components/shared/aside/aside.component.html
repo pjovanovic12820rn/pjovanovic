@@ -56,6 +56,14 @@
         </a>
       </li>
 
+      <!-- Bank Accounts -->
+      <li *ngIf="isAdmin">
+        <a class="sidebar-link" (click)="goToBankAccounts()">
+          <i class="ri-bank-line sidebar-icon"></i>
+          <span class="sidebar-text">Banks Accounts</span>
+        </a>
+      </li>
+
     </ul>
   </div>
 </aside>

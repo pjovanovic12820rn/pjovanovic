@@ -105,4 +105,8 @@ export class AsideComponent implements OnInit, OnDestroy {
   goToSecures() {
     this.navigateTo('/my-portfolio');
   }
+
+  goToBankAccounts() {
+    this.navigateTo('/bank-accounts');
+  }
 }
