@@ -29,7 +29,6 @@ interface TaxSummary {
     ModalComponent
   ],
   templateUrl: './my-portfolio.component.html',
-  standalone: true,
   styleUrl: './my-portfolio.component.css'
 })
 export class MyPortfolioComponent implements OnInit {
@@ -108,7 +107,7 @@ export class MyPortfolioComponent implements OnInit {
 
   exerciseOption(security: Securities): void {
     console.log(`Attempting to exercise ${security.optionType} option for ${security.ticker} with strike ${security.strikePrice}`);
-    this.alertService.showAlert('info', `Exercise action triggered for ${security.ticker}. Backend integration needed.`);
+    this.alertService.showAlert('info', `Exercise action triggered for ${security.ticker}.`);
   }
 
 
