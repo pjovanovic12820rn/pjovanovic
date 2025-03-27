@@ -58,7 +58,8 @@ export class PaymentDetailsComponent implements OnInit {
     ).subscribe({
       next: (response) => {
         // this.payments = response.content;
-        this.payments = response.content.filter(payment => !!payment.senderName);
+        // this.payments = response.content.filter(payment => !!payment.senderName); //Ovako je bilo bez prikazivanja trans
+        this.payments = response.content;
         this.filteredPayments = [...this.payments];
         this.totalItems = response.totalElements;
         this.updatePagedPayments();
