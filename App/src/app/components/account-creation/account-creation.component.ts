@@ -16,6 +16,8 @@ import {AuthorizedPersonnel, CreateAuthorizedPersonnel} from '../../models/autho
 import {AuthorizedPersonnelService} from '../../services/authorized-personnel.service';
 import {CardService, CreateCardDto} from '../../services/card.service';
 import {ModalComponent} from '../shared/modal/modal.component';
+import {ButtonComponent} from '../shared/button/button.component';
+import {InputTextComponent} from '../shared/input-text/input-text.component';
 // import {NgForOf, NgIf} from '@angular/common';
 
 @Component({
@@ -26,6 +28,8 @@ import {ModalComponent} from '../shared/modal/modal.component';
     FormsModule,
     CommonModule,
     ModalComponent,
+    ButtonComponent,
+    InputTextComponent,
     // NgForOf,
     // NgIf
   ],
@@ -183,6 +187,9 @@ export class AccountCreationComponent implements OnInit {
 
   toggleIsActive() {
     this.newAccount.isActive = this.newAccount.isActive === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+  }
+  toggleCreateCard() {
+    this.newAccount.createCard = !this.newAccount.createCard;
   }
 
   isCompanyFormValid(): boolean {

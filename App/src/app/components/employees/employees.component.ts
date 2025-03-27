@@ -6,13 +6,13 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AlertService } from '../../services/alert.service';
-import { AlertComponent } from '../shared/alert/alert.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
+import {ButtonComponent} from '../shared/button/button.component';
 
 @Component({
   selector: 'app-employees',
   standalone: true,
-  imports: [CommonModule, FormsModule, AlertComponent, PaginationComponent],
+  imports: [CommonModule, FormsModule, PaginationComponent, ButtonComponent],
   templateUrl: './employees.component.html',
   styleUrls: ['./employees.component.css']
 })

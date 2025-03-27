@@ -1,9 +1,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
   standalone: true,
+  imports: [
+    NgIf
+  ],
   styleUrls: ['./pagination.component.css']
 })
 export class PaginationComponent {

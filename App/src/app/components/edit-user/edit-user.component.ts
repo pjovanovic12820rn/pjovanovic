@@ -6,12 +6,14 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
-import {AlertComponent} from '../shared/alert/alert.component';
+import {InputTextComponent} from '../shared/input-text/input-text.component';
+import {ButtonComponent} from '../shared/button/button.component';
+import {validations} from '../../models/validation.model';
 
 @Component({
   selector: 'app-edit-user',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AlertComponent],
+  imports: [CommonModule, ReactiveFormsModule, InputTextComponent, ButtonComponent],
   templateUrl: './edit-user.component.html',
   styleUrls: ['./edit-user.component.css'],
 })
@@ -113,4 +115,6 @@ export class EditUserComponent implements OnInit {
     const control = this.userForm?.get(controlName);
     return !!(control && control.hasError(errorCode));
   }
+
+  protected readonly validations = validations;
 }

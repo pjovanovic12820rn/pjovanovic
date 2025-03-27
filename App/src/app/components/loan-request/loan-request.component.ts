@@ -7,13 +7,14 @@ import { AlertService } from '../../services/alert.service';
 import { LoanRequest, LoanType, EmploymentStatus, InterestRateType } from '../../models/loan-request.model';
 import { Currency } from '../../models/currency.model';
 import { AccountService } from '../../services/account.service';
-import { AlertComponent } from '../shared/alert/alert.component';
 import { AuthService } from '../../services/auth.service';
+import {InputTextComponent} from '../shared/input-text/input-text.component';
+import {ButtonComponent} from '../shared/button/button.component';
 
 @Component({
   selector: 'app-loan-request',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AlertComponent],
+  imports: [CommonModule, ReactiveFormsModule, InputTextComponent, ButtonComponent],
   templateUrl: './loan-request.component.html',
   styleUrls: ['./loan-request.component.css']
 })

@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { authGuard, adminGuard, employeeGuard, employeeOrAdminGuard } from './guards/auth-guard.guard';
+import { authGuard, adminGuard, employeeOrAdminGuard, clientOrActuaryGuard, supervisorGuard } from './guards/auth-guard.guard';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { EmployeesComponent } from './components/employees/employees.component';
 import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
@@ -13,7 +13,6 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
 import { AccountCreationComponent } from './components/account-creation/account-creation.component';
 import { CreateForeignCurrencyAccountComponent } from './components/create-foreign-currency-account/create-foreign-currency-account.component';
 import { SecuritiesComponent } from './components/securities/securities.component';
-import { securitiesGuard } from './guards/securities.guard';
 import { MailComponent } from './components/mail/mail.component';
 import { CardsComponent } from './components/cards/cards.component';
 import { ClientPortalComponent } from './components/client-portal/client-portal.component';
@@ -92,11 +91,11 @@ export const routes: Routes = [
   { path: 'success', component: SuccessComponent },
 
   // securities
-  { path: 'my-portfolio', component: MyPortfolioComponent, canActivate: [authGuard] },
-  { path: 'securities', component: SecuritiesComponent, canActivate: [authGuard] },
+  { path: 'my-portfolio', component: MyPortfolioComponent, canActivate: [authGuard, clientOrActuaryGuard] },
+  { path: 'securities', component: SecuritiesComponent, canActivate: [authGuard, clientOrActuaryGuard] },
   { path: 'tax-portal', component: TaxCalculationComponent, canActivate: [authGuard, employeeOrAdminGuard] }, // not sure if this is the right guard!
 
   //options
-  { path: 'options/:stockId', component: OptionsDisplayComponent, canActivate: [authGuard] },
-  { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard] }
+  { path: 'options/:stockId', component: OptionsDisplayComponent, canActivate: [authGuard, clientOrActuaryGuard] },
+  { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard, supervisorGuard] },
 ];

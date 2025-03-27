@@ -14,7 +14,7 @@ export class PortfolioService {
   private apiURL = "http://localhost:80.....";
 
 
-  securitiesList: Securities[] = [
+  private securitiesList: Securities[] = [
     {
       type: "Stock",
       ticker: "AAPL",
@@ -22,43 +22,89 @@ export class PortfolioService {
       price: 175.25,
       profit: 1200.50,
       lastModified: "2025-03-18",
-      publicCounter: 5
+      publicCounter: 5,
+      underlyingStockPrice: 175.25
     },
     {
       type: "Stock",
-      ticker: "TSLA",
-      amount: 20,
-      price: 220.75,
-      profit: -300.00,
-      lastModified: "2025-03-17",
-      publicCounter: 8
+      ticker: "MSFT",
+      amount: 30,
+      price: 420.50,
+      profit: -150.00,
+      lastModified: "2025-03-20",
+      publicCounter: 10,
+      underlyingStockPrice: 420.50
+    },
+    {
+      type: "Future",
+      ticker: "ESM25",
+      amount: 2,
+      price: 5100.75,
+      profit: 850.25,
+      lastModified: "2025-03-22",
+      publicCounter: 1,
+    },
+    {
+      type: "Option",
+      ticker: "AAPL",
+      optionType: "Call",
+      amount: 5, 
+      price: 8.50, 
+      profit: 250.00, 
+      lastModified: "2025-03-25",
+      publicCounter: 0,
+      strikePrice: 170.00,
+      settlementDate: new Date("2025-04-18"), 
+      underlyingStockPrice: 175.25
+    },
+    {
+      type: "Option",
+      ticker: "AAPL",
+      optionType: "Put",
+      amount: 3, 
+      price: 2.10,
+      profit: -50.00,
+      lastModified: "2025-03-26",
+      publicCounter: 0,
+      strikePrice: 170.00,
+      settlementDate: new Date("2025-04-18"), 
+      underlyingStockPrice: 175.25
+    },
+    {
+      type: "Option",
+      ticker: "MSFT",
+      optionType: "Put",
+      amount: 10, 
+      price: 15.00,
+      profit: 1100.00,
+      lastModified: "2025-03-10",
+      publicCounter: 0,
+      strikePrice: 430.00,
+      settlementDate: new Date("2025-04-25"), 
+      underlyingStockPrice: 420.50 
+    },
+    {
+      type: "Option",
+      ticker: "MSFT",
+      optionType: "Call",
+      amount: 2,
+      price: 5.50,
+      profit: 80.00,
+      lastModified: "2025-02-28",
+      publicCounter: 0,
+      strikePrice: 410.00,
+      settlementDate: new Date("2025-03-21"),
+      underlyingStockPrice: 420.50
     },
     {
       type: "ETF",
       ticker: "SPY",
       amount: 100,
-      price: 450.10,
+      price: 515.10,
       profit: 2500.00,
       lastModified: "2025-03-16",
-      publicCounter: 0
-    },
-    {
-      type: "Crypto",
-      ticker: "BTC",
-      amount: 2,
-      price: 68000.00,
-      profit: 15000.75,
-      lastModified: "2025-03-15",
-      publicCounter: 20
-    },
-    {
-      type: "Bond",
-      ticker: "US10Y",
-      amount: 30,
-      price: 98.50,
-      profit: 120.30,
-      lastModified: "2025-03-14",
-      publicCounter: 0
+      publicCounter: 0,
+      underlyingStockPrice: 515.10
     }
   ];
 

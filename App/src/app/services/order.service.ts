@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {Observable, take} from 'rxjs';
+import {map, Observable, take} from 'rxjs';
 import {Order, PageResponse} from '../models/order.model';
 import { AuthService } from './auth.service';
 
@@ -29,17 +29,20 @@ export class OrderService {
   //   return this.http.get<Order[]>(url, { headers: this.getAuthHeaders() });
   // }
   getOrders(status: string): Observable<PageResponse<Order>> {
-    let url = this.baseUrl;
-    const params: any = {};
-
-    if (status && status !== 'All') {
-      params.status = status;
-    }
-
-    return this.http.get<PageResponse<Order>>(url, {
-      headers: this.getAuthHeaders(),
-      params
-    }).pipe(take(1));
+    return this.http.get<PageResponse<Order>>(this.baseUrl, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      take(1),
+      map((response) => {
+        if (status && status !== 'ALL') {
+          return {
+            ...response,
+            content: response.content.filter(order => order.status === status)
+          };
+        }
+        return response;
+      })
+    );
   }
 
   approveOrder(orderId: number): Observable<any> {
