@@ -1,66 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Loans</title>
-  </head>
-  <body>
-    <div class="container">
-      <h2>Client Loans</h2>
+<div class="card margin-auto width-50 flex-col gap-1">
 
-      <!-- Filter -->
-      <div *ngIf="authService.isAdmin()">
-        <input
-          type="text"
-          class="filter"
-          placeholder="Filter loans..."
-          [(ngModel)]="filterText"
-        />
+  <div class="flex justify-between flex-1">
+    <h2>Client Loans</h2>
+    <app-button (click)="openNewCredit()">New Loan</app-button>
+  </div>
+
+  <!-- Filter -->
+  <div *ngIf="authService.isAdmin()">
+    <input-text
+      type="text"
+      class="filter"
+      placeholder="Filter loans..."
+      [(ngModel)]="filterText"
+    />
+  </div>
+
+  <div class="mb-1">
+    <!-- List of Loans -->
+    <div class="credits-list">
+      <div class="credit-card" *ngFor="let loan of filteredLoans">
+            <span>
+                <strong>{{ loan.loanNumber }}</strong> - {{ loan.amount }} {{ loan.currencyCode }}
+            </span>
+        <app-button (click)="showLoanDetails(loan)">Details</app-button>
       </div>
 
-      <!-- List of credits -->
-      <div class="credits-list">
-        <div class="credit-card" *ngFor="let loan of filteredLoans">
-          <span
-            ><strong>{{ loan.loanNumber }}</strong> - {{ loan.amount }}
-            {{ loan.currencyCode }}</span
-          >
-          <button class="details-btn" (click)="showLoanDetails(loan)">
-            Details
-          </button>
-        </div>
-
-        <div *ngIf="loans.length === 0" class="no-loans-message">
-          No loans found for this client.
-        </div>
+      <div *ngIf="loans.length === 0" class="no-loans-message">
+        No loans found for this client.
       </div>
-
-      <!-- Loan Requests List -->
-      <h3>Loan Requests</h3>
-      <div class="credits-list">
-        <div class="credit-card" *ngFor="let request of filteredLoanRequests">
-      <span>
-        <strong>Request Type:</strong> {{ request.type }} <br>
-        <strong>Amount:</strong> {{ request.amount }} {{ request.currencyCode }} <br>
-        <strong>Status:</strong> <span [ngClass]="getLoanStatusClass(request.status)">{{ request.status }}</span>
-      </span>
-        </div>
-
-        <div *ngIf="loanRequests.length === 0" class="no-loans-message">
-          No loan requests found.
-        </div>
-      </div>
-
-      <!-- New Credit Button -->
-      <button class="new-credit-btn" (click)="openNewCredit()">
-        New Loan
-      </button>
     </div>
+  </div>
 
-<!--    <button class="details-btn" (click)="showLoanDetails(loan)">-->
-<!--      Details-->
-<!--    </button>-->
+  <!-- Loan Requests List -->
+  <div>
+    <h3>Loan Requests</h3>
+    <div class="credits-list">
+      <div class="credit-card" *ngFor="let request of filteredLoanRequests">
+              <span>
+                  <strong>Request Type:</strong> {{ request.type }} <br>
+                  <strong>Amount:</strong> {{ request.amount }} {{ request.currencyCode }} <br>
+                  <strong>Status:</strong>
+                  <span [ngClass]="getLoanStatusClass(request.status)">{{ request.status }}</span>
+              </span>
+      </div>
 
-  </body>
-</html>
+      <div *ngIf="loanRequests.length === 0" class="no-loans-message">
+        No loan requests found.
+      </div>
+    </div>
+  </div>
+
+  <!-- New Loan Button -->
+</div>

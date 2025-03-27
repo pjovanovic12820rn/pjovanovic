@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {ModalComponent} from '../shared/modal/modal.component';
+import {ButtonComponent} from '../shared/button/button.component';
 
 export interface ChangeAccountNameDto {
   newName: string;
@@ -18,7 +19,7 @@ export interface ChangeAccountLimitDto {
 
 @Component({
   selector: 'app-account-management',
-  imports: [CommonModule, FormsModule, ModalComponent, RouterLink],
+  imports: [CommonModule, FormsModule, ModalComponent, RouterLink, ButtonComponent],
   standalone: true,
   templateUrl: './account-management.component.html',
   styleUrl: './account-management.component.css',

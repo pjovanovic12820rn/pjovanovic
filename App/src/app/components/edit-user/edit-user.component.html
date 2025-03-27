@@ -1,55 +1,41 @@
-<div class="edit-user-container">
+<div class="card width-50 margin-auto flex-col gap-1">
   <h2>Edit User</h2>
-
-  <app-alert></app-alert>
 
   <div *ngIf="loading" class="loading">Loading user...</div>
 
-  <form *ngIf="userForm" [formGroup]="userForm" (ngSubmit)="saveChanges()">
+  <form *ngIf="userForm" [formGroup]="userForm" class="flex-col gap-1" (ngSubmit)="saveChanges()">
+    <div class="flex gap-1">
 
-    <div class="form-group">
-      <label>First Name</label>
-      <input type="text" formControlName="firstName" readonly />
+      <input-text class="flex-1" formControlName="firstName" [disabledInput]="true" label="First Name"
+                  placeholder="First Name"/>
+
+      <input-text class="flex-1" formControlName="lastName" label="Last Name" placeholder="Last Name"
+                  [validationRules]="[validations.required, validations.minLength(2)]"
+      />
     </div>
+    <div class="flex gap-1">
+      <input-text class="flex-1" formControlName="birthDate" [disabledInput]="true" type="date" label="Date of Birth"/>
 
-    <div class="form-group">
-      <label>Last Name</label>
-      <input type="text" formControlName="lastName" />
-      <div class="field-error" *ngIf="hasError('lastName', 'required')">Required.</div>
-      <div class="field-error" *ngIf="hasError('lastName', 'minlength')">At least 2 characters.</div>
-    </div>
+      <div class="flex-1">
 
-    <div class="form-group">
-      <label for="birthDate">Date of Birth</label>
-      <input id="birthDate" type="date" formControlName="birthDate" readonly>
-    </div>
-
-    <div class="form-group">
-      <label for="gender">Gender</label>
-      <select id="gender" formControlName="gender">
+      <label class="mb-05">Gender</label>
+      <select class="flex-1" formControlName="gender">
         <option value="M">Male</option>
         <option value="F">Female</option>
       </select>
+      </div>
     </div>
+    <input-text formControlName="email" [disabledInput]="true" type="email" label="Email"/>
 
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input id="email" type="email" formControlName="email" readonly>
+    <input-text formControlName="phone" label="Phone Number" placeholder="Phone Number"
+                [validationRules]="[validations.required, validations.isValidPhone()]"/>
+
+    <input-text formControlName="address" label="Address" placeholder="Address"
+                [validationRules]="[validations.required]"/>
+
+    <div class="flex gap-1 width-fit">
+    <app-button type="submit" [disabled]="loading">Save</app-button>
+    <app-button type="back-button">Cancel</app-button>
     </div>
-
-    <div class="form-group">
-      <label for="phone">Phone Number</label>
-      <input id="phone" formControlName="phone">
-      <div class="field-error" *ngIf="hasError('phone', 'required')">Required.</div>
-      <div class="field-error" *ngIf="hasError('phone', 'pattern')">Invalid phone format.</div>
-    </div>
-
-    <div class="form-group">
-      <label for="address">Address</label>
-      <input id="address" formControlName="address">
-      <div class="field-error" *ngIf="hasError('address', 'required')">Required.</div>
-    </div>
-
-    <button type="submit" [disabled]="loading">Save</button>
   </form>
 </div>

@@ -3,10 +3,11 @@ import { LoanRequestService } from '../../services/loan-request.service';
 import { Loan } from '../../models/loan-dto.model';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import {LoanRequest} from '../../models/loan-request.model';
+import {ButtonComponent} from '../shared/button/button.component';
 
 @Component({
   selector: 'app-new-loan-requests',
-  imports: [ NgForOf, NgIf, NgClass],
+  imports: [NgForOf, NgIf, NgClass, ButtonComponent],
   standalone: true,
   templateUrl: './new-loan-requests.component.html',
   styleUrl: './new-loan-requests.component.css'

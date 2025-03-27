@@ -1,37 +1,28 @@
 <div class="payments-container">
   <h2>Payments</h2>
-
-  <app-alert></app-alert>
+  <br/>
 
   <!-- Filters -->
   <div class="filter-container">
-    <label for="startDate">Start Date</label>
-    <input type="date" id="startDate" [(ngModel)]="startDate">
+    <input-text label="Start Date" type="date" [(ngModel)]="startDate"></input-text>
+    <input-text label="End Date" type="date" [(ngModel)]="endDate"></input-text>
 
-    <label for="endDate">End Date</label>
-    <input type="date" id="endDate" [(ngModel)]="endDate">
+    <div class="filter-buttons">
+      <app-button
+        (click)="toggleFilters()">
+        {{ showAdditionalFilters ? 'Hide Filters' : 'Show More Filters' }}
+      </app-button>
 
-    <button (click)="toggleFilters()" class="toggle-filters-btn">
-      {{ showAdditionalFilters ? 'Hide Filters' : 'Show More Filters' }}
-    </button>
-
-    <div *ngIf="showAdditionalFilters" class="additional-filters">
-      <label for="minAmount">Min Amount</label>
-      <input type="number" id="minAmount" [(ngModel)]="minAmount">
-
-      <label for="maxAmount">Max Amount</label>
-      <input type="number" id="maxAmount" [(ngModel)]="maxAmount">
-
-      <label for="paymentStatus">Status</label>
-      <input type="text" id="paymentStatus" [(ngModel)]="paymentStatus">
-
-      <label for="accountNumber">Account Number</label>
-      <input type="text" id="accountNumber" [(ngModel)]="accountNumber">
-
-      <label for="cardNumber">Card Number</label>
-      <input type="text" id="cardNumber" [(ngModel)]="cardNumber">
+      <app-button (click)="applyFilters()">Apply Filters</app-button>
     </div>
-    <button (click)="applyFilters()">Apply Filters</button>
+
+    <div *ngIf="showAdditionalFilters" class="flex-col gap-1">
+      <input-text placeholder="Min Amount" label="Min Amount" type="number" [(ngModel)]="minAmount"></input-text>
+      <input-text placeholder="Max Amount" label="Max Amount" type="number" [(ngModel)]="maxAmount"></input-text>
+      <input-text placeholder="Status" label="Status" type="text" [(ngModel)]="paymentStatus"></input-text>
+      <input-text placeholder="Account Number" label="Account Number" type="text" [(ngModel)]="accountNumber"></input-text>
+      <input-text placeholder="Card Number" label="Card Number" type="text" [(ngModel)]="cardNumber"></input-text>
+    </div>
   </div>
 
   <!-- Payment List -->
@@ -44,10 +35,6 @@
       <p class="amount"><strong>Amount:</strong> {{ payment.amount }}</p>
       <p><strong>Date:</strong> {{ payment.date | date }}</p>
       <p><strong>Status:</strong> {{ payment.status }}</p>
-
-<!--      <div class="payment-actions">-->
-<!--        <button class="view-details-btn" (click)="viewPaymentDetails(payment.id)">View Details</button>-->
-<!--      </div>-->
     </div>
   </div>
 

@@ -1,0 +1,32 @@
+
+/* Dropdown List */
+.dropdown-list {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin: 0;
+}
+
+.dropdown-list a {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: #374151;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-list a:hover {
+  background-color: #510076;
+  color: white;
+}
+.dropdown-list a:hover i {
+  color: white;
+}
+
+/* Icons */
+.dropdown-list i {
+  font-size: 1.2rem;
+  color: #6b7280;
+  margin-right: 0.5rem;
+}

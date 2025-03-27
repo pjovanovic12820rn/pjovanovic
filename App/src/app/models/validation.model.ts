@@ -55,7 +55,7 @@ export const validations = {
     validate: (value: string) => {
       if (!value) return true;
       const trimmedValue = value.trim();
-      return /^[A-Za-z\s]+$/.test(trimmedValue);
+      return /^[\p{L}\s]+$/u.test(trimmedValue);
     },
     message: 'Only letters and spaces are allowed.',
   }) as Validation,

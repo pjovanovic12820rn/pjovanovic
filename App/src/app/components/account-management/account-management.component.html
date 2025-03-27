@@ -1,10 +1,7 @@
-<div class="card">
-  <div class="flex justify-between">
-    <h2>Account Management</h2>
-  </div>
+<div class="card" style="width: 70vw; padding: 2rem">
+  <h1>Account Management</h1>
 
-  <section class="account-list">
-    <h3>Accounts</h3>
+<!--    <h2>Accounts</h2>-->
     <table>
       <tr>
         <th>Account Number</th>
@@ -19,17 +16,21 @@
         <td>{{ account.ownershipType }}</td>
         <td>{{ account.accountCategory }}</td>
         <td>
-          <button class="details-btn" (click)="viewCards(account.accountNumber)">View Cards</button>
-          <button *ngIf="isClient()" class="details-btn" (click)="openNameModal(account.accountNumber, account.name)">Edit Name</button>
-          <button *ngIf="isClient()" class="details-btn" (click)="openLimitModal(account.accountNumber, account.dailyLimit)">Edit Limit</button>
+          <div class="flex gap-1 ">
+
+          <app-button (onClick)="viewCards(account.accountNumber)">View Cards</app-button>
+          <app-button *ngIf="isClient()" (click)="openNameModal(account.accountNumber, account.name)">Edit Name</app-button>
+          <app-button *ngIf="isClient()" (click)="openLimitModal(account.accountNumber, account.dailyLimit)">Edit Limit</app-button>
+          </div>
         </td>
       </tr>
       <tr *ngIf="accounts.length === 0">
         <td colspan="5" class="no-data">No accounts found</td>
       </tr>
     </table>
-  </section>
-  <button *ngIf="isAdmin()" class="details-btn" (click)="openAccountModal()">New Account</button>
+  <br>
+  <app-button *ngIf="isAdmin()" class="details-btn" (click)="openAccountModal()">New Account</app-button>
+
 </div>
 
 <div class="modal" *ngIf="isNameModalOpen">
@@ -52,9 +53,10 @@
 
 <app-modal [title]="'New Account'" [isOpen]="isAccountModalOpen" (closeModalEvent)="closeAccountModal()">
   <div class="modal-content">
-    <div class="new-account-options">
-      <button class="account-option" [routerLink]="['/create-current-account']" (click)="closeAccountModal()">Checking Account</button>
-      <button class="account-option" [routerLink]="['/create-foreign-currency-account']" (click)="closeAccountModal()">Foreign Currency Account</button>
+      <br/>
+    <div class="flex gap-1">
+      <app-button [routerLink]="['/create-current-account']" (click)="closeAccountModal()">Checking Account</app-button>
+      <app-button [routerLink]="['/create-foreign-currency-account']" (click)="closeAccountModal()">Foreign Currency Account</app-button>
     </div>
   </div>
 </app-modal>
