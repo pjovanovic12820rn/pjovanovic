@@ -2,8 +2,28 @@
 <div class="card margin-auto flex-col gap-1" style="width: 60vw">
   <h2>Transfer</h2>
 
-  <div class="flex-col gap-1">
-    <!-- Prvi red: Sa računa + Na račun -->
+  <!-- Prvi red: Sa računa + Na račun -->
+  <div class="form-row">
+    <div class="input-group">
+      <label for="from-account">From Account</label>
+      <select id="from-account" [(ngModel)]="selectedFromAccountNumber" class="dropdown">
+        <option *ngFor="let account of accounts" [value]="account.accountNumber">
+          {{ account.clientId }} - {{ account.accountNumber }}
+        </option>
+      </select>
+      <p class="balance" *ngIf="selectedFromAccount">Available: {{ selectedFromAccount.availableBalance }} {{selectedFromAccount.currencyCode}}</p>
+    </div>
+
+    <div class="input-group">
+      <label for="to-account">To Account</label>
+      <select id="to-account" [(ngModel)]="selectedToAccountNumber" class="dropdown">
+        <option *ngFor="let account of accounts" [value]="account.accountNumber">
+          {{ account.clientId }} - {{ account.accountNumber }}
+        </option>
+      </select>
+      <p class="balance" *ngIf="selectedToAccount">Available: {{ selectedToAccount.availableBalance }} {{selectedToAccount.currencyCode}}</p>
+
+<!-- Djordjev css fix   <div class="flex-col gap-1">
     <div class="flex gap-1">
       <div class="flex-1">
         <label>From Account</label>
@@ -25,12 +45,11 @@
       </div>
     </div>
 
-    <!-- Drugi red: Iznos -->
     <div class="form-row">
       <div class="input-group full-width">
         <label for="amount">Amount</label>
         <input-text id="amount" type="number" placeholder="Enter amount" [(ngModel)]="transferAmount"></input-text>
-      </div>
+      </div> -->
     </div>
   </div>
 

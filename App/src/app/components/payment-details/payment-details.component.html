@@ -29,10 +29,10 @@
   <div id="payments-list" class="payment-list">
     <div *ngFor="let payment of pagedPayments;" class="payment-card">
       <span>
-        <strong>{{ payment.senderName }}</strong>
+        <strong>{{ payment.senderName ?? 'Transfer between my accounts' }}</strong>
         <span *ngIf="payment.cardNumber"> ({{ payment.cardNumber }})</span>
       </span>
-      <p class="amount"><strong>Amount:</strong> {{ payment.amount }}</p>
+      <p class="amount"><strong>Amount:</strong> {{ payment.amount }} {{ payment.senderCurrencyCode }}</p>
       <p><strong>Date:</strong> {{ payment.date | date }}</p>
       <p><strong>Status:</strong> {{ payment.status }}</p>
     </div>

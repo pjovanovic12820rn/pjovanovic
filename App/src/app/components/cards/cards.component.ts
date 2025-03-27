@@ -26,6 +26,7 @@ interface Account {
   availableBalance: number;
   reservedFunds: number;
   balance: number;
+  currencyCode: string;
   companyDetails?: {
     companyName: string;
     registrationNumber: string;
