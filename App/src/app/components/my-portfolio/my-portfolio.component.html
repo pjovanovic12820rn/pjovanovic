@@ -31,7 +31,7 @@
         </ng-container>
       </td>
       <td>
-        <app-button class="sell-button">Sell</app-button>
+        <app-button class="sell-button" (click)="openSellOrderModal(security)" [disabled]="security.amount <= 0">Sell</app-button>
         <app-button *ngIf="canExerciseOption(security)" class="exercise-button" (click)="exerciseOption(security)">
           Exercise
         </app-button>
@@ -73,3 +73,13 @@
   </app-modal>
 </div>
 
+<app-order-creation-modal
+  [isOpen]="isOrderModalOpen"
+  [direction]="orderDirection"
+  [securityTicker]="selectedSecurityForOrder?.ticker || ''"
+  [securityPrice]="currentSecurityPrice"
+  [contractSize]="currentContractSize"
+  [listingId]="currentListingId"
+  (closeModalEvent)="closeOrderModal()"
+  (createOrderEvent)="handleOrderCreation($event)">
+</app-order-creation-modal>

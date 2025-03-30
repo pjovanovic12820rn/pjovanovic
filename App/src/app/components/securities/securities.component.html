@@ -115,7 +115,7 @@
               <td *ngIf="selectedSecurityType === 'Future' || selectedSecurityType === 'All'">{{ security.settlementDate }}</td>
               <td class="actions-column">
                 <button class="action-button refresh-button" (click)="refreshSecurity(security)">Refresh</button>
-                <button class="action-button buy-button" (click)="viewOptions(security.id)">Details</button>
+                <button class="action-button buy-button" (click)="openBuyOrderModal(security)">Buy</button>
               </td>
             </tr>
           </tbody>
@@ -124,3 +124,14 @@
     </div>
   </div>
 </div>
+
+<app-order-creation-modal
+  [isOpen]="isOrderModalOpen"
+  [direction]="orderDirection"
+  [securityTicker]="selectedSecurityForOrder?.ticker || ''"
+  [securityPrice]="currentSecurityPrice"
+  [contractSize]="currentContractSize"
+  [listingId]="currentListingId"
+  (closeModalEvent)="closeOrderModal()"
+  (createOrderEvent)="handleOrderCreation($event)">
+</app-order-creation-modal>

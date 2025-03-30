@@ -10,6 +10,7 @@ import {ButtonComponent} from '../shared/button/button.component';
 import {ModalComponent} from '../shared/modal/modal.component';
 import { of } from 'rxjs';
 import { delay, finalize } from 'rxjs/operators';
+import { OrderCreationModalComponent } from '../shared/order-creation-modal/order-creation-modal.component'; // Import the modal component
 
 interface TaxSummary {
   taxPaidThisYear: number;
@@ -26,7 +27,8 @@ interface TaxSummary {
     NgClass,
     CurrencyPipe,
     ButtonComponent,
-    ModalComponent
+    ModalComponent,
+    OrderCreationModalComponent
   ],
   templateUrl: './my-portfolio.component.html',
   styleUrl: './my-portfolio.component.css'
@@ -47,6 +49,10 @@ export class MyPortfolioComponent implements OnInit {
   unpaidTaxThisMonth: number | null = null;
   loadingTaxData: boolean = false;
   taxDataError: string | null = null;
+
+  isOrderModalOpen = false;
+  selectedSecurityForOrder: Securities | null = null;
+  orderDirection: 'BUY' | 'SELL' = 'BUY';
 
   ngOnInit(): void {
     this.securities = this.portfolioService.getMySecurities();
@@ -110,6 +116,25 @@ export class MyPortfolioComponent implements OnInit {
     this.alertService.showAlert('info', `Exercise action triggered for ${security.ticker}.`);
   }
 
+  openSellOrderModal(security: Securities): void {
+    if (security.amount <= 0) {
+      this.alertService.showAlert('warning', `No amount available to sell for ${security.ticker}.`);
+      return;
+    }
+    this.selectedSecurityForOrder = security;
+    this.orderDirection = 'SELL';
+    this.isOrderModalOpen = true;
+  }
+
+  closeOrderModal(): void {
+    this.isOrderModalOpen = false;
+    this.selectedSecurityForOrder = null;
+  }
+
+  handleOrderCreation(orderDetails: any): void {
+    console.log('Order creation requested from MyPortfolioComponent:', orderDetails, 'for security:', this.selectedSecurityForOrder);
+    this.closeOrderModal();
+  }
 
   getTotalProfit(): number {
     return this.securities
@@ -133,5 +158,18 @@ export class MyPortfolioComponent implements OnInit {
   publishSecurity(security: Securities): void {
     security.publicCounter += 1;
   }
+
+  get currentSecurityPrice(): number {
+    return this.selectedSecurityForOrder?.price ?? 0;
+  }
+
+   get currentContractSize(): number {
+     return 1;
+  }
+  
+  get currentListingId(): number | null {
+    return this.selectedSecurityForOrder?.id ?? null;
+}
+
 
 }

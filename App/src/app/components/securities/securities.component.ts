@@ -6,11 +6,17 @@ import { FormsModule } from '@angular/forms';
 import { interval, Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
+import { OrderCreationModalComponent } from '../shared/order-creation-modal/order-creation-modal.component'; // Import the modal component
 
 @Component({
   selector: 'app-securities',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    OrderCreationModalComponent
+  ],
   templateUrl: './securities.component.html',
   styleUrl: './securities.component.css'
 })
@@ -33,6 +39,10 @@ export class SecuritiesComponent implements OnInit, OnDestroy {
   settlementDateFilter: string = '';
   private refreshIntervalSubscription?: Subscription;
 
+  isOrderModalOpen = false;
+  selectedSecurityForOrder: Security | null = null;
+  orderDirection: 'BUY' | 'SELL' = 'BUY';
+
 
   ngOnInit(): void {
     this.loadSecurities();
@@ -44,6 +54,15 @@ export class SecuritiesComponent implements OnInit, OnDestroy {
   }
   viewOptions(securityId: number): void {
     this.router.navigate(['/options', securityId]);
+  }
+
+  closeOrderModal(): void {
+    this.isOrderModalOpen = false;
+    this.selectedSecurityForOrder = null;
+  }
+
+  handleOrderCreation(orderDetails: any): void {
+    this.closeOrderModal();
   }
 
   refreshSecurity(securityToRefresh: Security): void {
@@ -210,4 +229,22 @@ export class SecuritiesComponent implements OnInit, OnDestroy {
       this.refreshIntervalSubscription.unsubscribe();
     }
   }
+
+  openBuyOrderModal(security: Security): void {
+    this.selectedSecurityForOrder = security;
+    this.orderDirection = 'BUY';
+    this.isOrderModalOpen = true;
+  }
+
+  get currentSecurityPrice(): number {
+    return this.selectedSecurityForOrder?.price ?? 0;
+  }
+
+  get currentContractSize(): number {
+     return 1; // Bekend problem
+  }
+
+  get currentListingId(): number | null {
+    return this.selectedSecurityForOrder?.id ?? null;
+}
 }

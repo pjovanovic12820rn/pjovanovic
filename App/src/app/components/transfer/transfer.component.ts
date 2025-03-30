@@ -17,7 +17,6 @@ import {ButtonComponent} from '../shared/button/button.component';
     FormsModule,
     NgIf,
     NgForOf,
-    InputTextComponent,
     ButtonComponent,
   ],
   standalone: true,

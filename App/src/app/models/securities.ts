@@ -1,5 +1,5 @@
 export interface Securities {
-
+  id: number;
   type: string;
   ticker: string;
   amount: number;
