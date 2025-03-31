@@ -1,24 +1,26 @@
 export interface Order {
   id: number;
   agent: string;
-  orderType: string;
   asset: string;
+  orderType: string;
   quantity: number;
   contractSize: number;
-  pricePerUnit: number;
+  pricePerUnit: number | null;
   direction: 'BUY' | 'SELL';
-  remainingPortions: number;
-  status: 'Pending' | 'Approved' | 'Declined' | 'Done';
-  isTimeLimited: boolean;
+  status: string;
+  approvedBy: string | null;
+  isDone: boolean;          
+  lastModification: string; 
   orderDate: string;
+  remainingPortions: number;
+  afterHours: boolean;      
+  isTimeLimited: boolean;
 }
 
 export interface PageResponse<T> {
   content: T[];
-  pageable: any;
-  totalPages: number;
   totalElements: number;
-  last: boolean;
+  totalPages: number;
   size: number;
   number: number;
 }

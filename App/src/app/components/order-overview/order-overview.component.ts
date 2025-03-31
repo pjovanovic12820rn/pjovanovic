@@ -2,9 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
 import { Order, PageResponse } from '../../models/order.model';
+import { OrderDto } from '../../models/order.dto';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-order-overview',
@@ -39,9 +41,36 @@ export class OrderOverviewComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
 
     this.orderService.getOrders(this.filterStatus)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (page) => {
+      .pipe(
+        takeUntil(this.destroy$),
+        map((pageDto: PageResponse<OrderDto>): PageResponse<Order> => {
+          const transformedContent = pageDto.content.map((dto: OrderDto): Order => {
+            return {
+              id: dto.id,
+              agent: dto.agent,
+              asset: dto.asset,
+              orderType: dto.orderType,
+              quantity: dto.quantity,
+              contractSize: dto.contractSize,
+              pricePerUnit: dto.pricePerUnit ?? 0,
+              direction: dto.direction,
+              status: dto.status,
+              approvedBy: dto.approvedBy,
+              isDone: dto.isDone,        
+              lastModification: dto.lastModification,
+              orderDate: dto.orderDate,
+              remainingPortions: dto.remainingPortions,
+              afterHours: dto.afterHours,
+              isTimeLimited: dto.isTimeLimited
+            };
+          });
+          return {
+            ...pageDto,
+            content: transformedContent
+          };
+        })
+      ).subscribe({
+        next: (page: PageResponse<Order>) => {
           this.orders = page.content;
           this.loading = false;
         },
@@ -65,6 +94,16 @@ export class OrderOverviewComponent implements OnInit, OnDestroy {
         error: (err) => this.handleError('approving order', err)
       });
   }
+
+  declineOrder(order: Order): void { // Added implementation
+      this.orderService.declineOrder(order.id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: () => this.handleSuccess(`Order ${order.id} declined`),
+          error: (err) => this.handleError('declining order', err)
+        });
+    }
+
 
   cancelOrder(order: Order): void {
     const quantity = this.cancelQuantity[order.id] || 0;
@@ -96,10 +135,6 @@ export class OrderOverviewComponent implements OnInit, OnDestroy {
     if (!order.isTimeLimited) return false;
     const orderDate = new Date(order.orderDate).getTime();
     return Date.now() > orderDate;
-  }
-
-  declineOrder(order: Order) {
-
   }
 
   ngOnDestroy(): void {

@@ -16,6 +16,7 @@ export class PortfolioService {
 
   private securitiesList: Securities[] = [
     {
+      id: 1,
       type: "Stock",
       ticker: "AAPL",
       amount: 50,
@@ -26,6 +27,7 @@ export class PortfolioService {
       underlyingStockPrice: 175.25
     },
     {
+      id: 2,
       type: "Stock",
       ticker: "MSFT",
       amount: 30,
@@ -36,6 +38,7 @@ export class PortfolioService {
       underlyingStockPrice: 420.50
     },
     {
+      id: 3,
       type: "Future",
       ticker: "ESM25",
       amount: 2,
@@ -45,6 +48,7 @@ export class PortfolioService {
       publicCounter: 1,
     },
     {
+      id: 4,
       type: "Option",
       ticker: "AAPL",
       optionType: "Call",
@@ -58,6 +62,7 @@ export class PortfolioService {
       underlyingStockPrice: 175.25
     },
     {
+      id: 5,
       type: "Option",
       ticker: "AAPL",
       optionType: "Put",
@@ -71,6 +76,7 @@ export class PortfolioService {
       underlyingStockPrice: 175.25
     },
     {
+      id: 6,
       type: "Option",
       ticker: "MSFT",
       optionType: "Put",
@@ -84,6 +90,7 @@ export class PortfolioService {
       underlyingStockPrice: 420.50 
     },
     {
+      id: 7,
       type: "Option",
       ticker: "MSFT",
       optionType: "Call",
@@ -97,6 +104,7 @@ export class PortfolioService {
       underlyingStockPrice: 420.50
     },
     {
+      id: 8,
       type: "ETF",
       ticker: "SPY",
       amount: 100,
