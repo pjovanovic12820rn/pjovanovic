@@ -22,7 +22,7 @@
         </option>
       </select>
       <p class="balance" *ngIf="selectedToAccount">Available: {{ selectedToAccount.availableBalance }} {{selectedToAccount.currencyCode}}</p>
-
+    </div>
 <!-- Djordjev css fix   <div class="flex-col gap-1">
     <div class="flex gap-1">
       <div class="flex-1">
@@ -43,13 +43,14 @@
         </select>
         <p class="balance" *ngIf="selectedToAccount">Available: {{ selectedToAccount.availableBalance }} RSD</p>
       </div>
-    </div>
+      </div>
+    </div> -->
 
     <div class="form-row">
       <div class="input-group full-width">
         <label for="amount">Amount</label>
         <input-text id="amount" type="number" placeholder="Enter amount" [(ngModel)]="transferAmount"></input-text>
-      </div> -->
+      </div>
     </div>
   </div>
 

@@ -1,10 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ActuaryService } from '../../services/actuary.service';
+import {FormsModule} from '@angular/forms';
+import {JsonPipe, NgForOf, NgIf} from '@angular/common';
 
 
 @Component({
   selector: 'app-actuary-management',
   templateUrl: './actuary-management.component.html',
+  standalone: true,
+  imports: [
+    FormsModule,
+    JsonPipe,
+    NgForOf,
+    NgIf
+  ],
   styleUrls: ['./actuary-management.component.css']
 })
 export class ActuaryManagementComponent implements OnInit {

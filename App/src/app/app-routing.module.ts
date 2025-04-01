@@ -100,9 +100,9 @@ export const routes: Routes = [
 
   //options
   { path: 'options/:stockId', component: OptionsDisplayComponent, canActivate: [authGuard, clientOrActuaryGuard] },
-  { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard, supervisorGuard] },
+  { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard, clientOrActuaryGuard] }, // treba supervisor gard, ovako ce biti dok se ne doda u beku
 
   //Actuary
-  { path: 'actuaries', component: ActuaryManagementComponent, canActivate: [authGuard, supervisorGuard] }
+  { path: 'actuaries', component: ActuaryManagementComponent, canActivate: [authGuard, clientOrActuaryGuard] } // treba supervisor gard, ovako ce biti dok se ne doda u beku
 
 ];
