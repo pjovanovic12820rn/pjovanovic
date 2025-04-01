@@ -1,8 +1,8 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {AuthService} from './auth.service';
-import {Securities} from '../models/securities';
-import {SecuritiesTransaction} from '../models/securities-transaction';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AuthService } from './auth.service';
+import { Securities } from '../models/securities';
+import { SecuritiesTransaction } from '../models/securities-transaction';
 
 @Injectable({
   providedIn: 'root'
@@ -52,13 +52,13 @@ export class PortfolioService {
       type: "Option",
       ticker: "AAPL",
       optionType: "Call",
-      amount: 5, 
-      price: 8.50, 
-      profit: 250.00, 
+      amount: 5,
+      price: 8.50,
+      profit: 250.00,
       lastModified: "2025-03-25",
       publicCounter: 0,
       strikePrice: 170.00,
-      settlementDate: new Date("2025-04-18"), 
+      settlementDate: new Date("2025-04-18"),
       underlyingStockPrice: 175.25
     },
     {
@@ -66,13 +66,13 @@ export class PortfolioService {
       type: "Option",
       ticker: "AAPL",
       optionType: "Put",
-      amount: 3, 
+      amount: 3,
       price: 2.10,
       profit: -50.00,
       lastModified: "2025-03-26",
       publicCounter: 0,
       strikePrice: 170.00,
-      settlementDate: new Date("2025-04-18"), 
+      settlementDate: new Date("2025-04-18"),
       underlyingStockPrice: 175.25
     },
     {
@@ -80,14 +80,14 @@ export class PortfolioService {
       type: "Option",
       ticker: "MSFT",
       optionType: "Put",
-      amount: 10, 
+      amount: 10,
       price: 15.00,
       profit: 1100.00,
       lastModified: "2025-03-10",
       publicCounter: 0,
       strikePrice: 430.00,
-      settlementDate: new Date("2025-04-25"), 
-      underlyingStockPrice: 420.50 
+      settlementDate: new Date("2025-04-25"),
+      underlyingStockPrice: 420.50
     },
     {
       id: 7,

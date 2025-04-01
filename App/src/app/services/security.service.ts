@@ -1,5 +1,5 @@
-import { Injectable, inject } from '@angular/core';
-import { Observable, of, map } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
 import { Security } from '../models/security.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from './auth.service';
@@ -51,7 +51,7 @@ export class SecurityService {
       securityType = 'Forex';
     }
 
-    let security: Security = {
+    return {
       id: listing.id,
       ticker: listing.ticker,
       price: listing.price,
@@ -62,7 +62,5 @@ export class SecurityService {
       type: securityType,
       settlementDate: listing.settlementDate
     };
-
-    return security;
   }
 }

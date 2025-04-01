@@ -6,7 +6,7 @@ import { PaymentOverviewDto } from '../models/payment-overview-dto';
 import { PaymentDetailsDto } from '../models/payment-details-dto';
 import { CreatePaymentDto } from '../models/create-payment-dto';
 import { AuthService } from './auth.service';
-import {TransferDto} from '../models/transfer.model';
+import { TransferDto } from '../models/transfer.model';
 
 @Injectable({
   providedIn: 'root',

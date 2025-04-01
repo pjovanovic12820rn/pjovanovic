@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
-import {InputTextComponent} from '../components/shared/input-text/input-text.component';
-import {ButtonComponent} from '../components/shared/button/button.component';
-import {validations} from '../models/validation.model';
+import { InputTextComponent } from '../components/shared/input-text/input-text.component';
+import { ButtonComponent } from '../components/shared/button/button.component';
+import { validations } from '../models/validation.model';
 import { AlertService } from '../services/alert.service';
 
 @Component({
@@ -47,7 +47,6 @@ export class LoginComponent implements OnInit {
         this.authService.saveToken(response.token);
         this.alertService.showAlert('success', 'Login successful!');
         const userId = this.authService.getUserId();
-        const permissions = this.authService.getUserPermissions();
 
         if (this.loginType === 'employee') {
           if (this.authService.isAdmin()) {

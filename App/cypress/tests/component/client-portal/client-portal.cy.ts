@@ -1,7 +1,7 @@
 import {ActivatedRoute, Router} from '@angular/router';
 import { mount } from 'cypress/angular';
 import {BehaviorSubject, Observable, of} from 'rxjs';
-import {ClientPortalComponent} from '../../../../src/app/components/client-portal/client-portal.component';
+import {ClientPortalComponent} from '../../../../src/app/components/client/client-portal/client-portal.component';
 import {ClientService} from '../../../../src/app/services/client.service';
 import {AuthService} from '../../../../src/app/services/auth.service';
 import {AlertService} from '../../../../src/app/services/alert.service';

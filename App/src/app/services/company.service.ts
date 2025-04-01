@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {delay, Observable, of} from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Company, CreateCompany } from '../models/company.model';
 
@@ -26,11 +26,6 @@ export class CompanyService {
     });
   }
 
-  getCompanyById(id: number): Observable<Company> {
-    return this.http.get<Company>(`${this.apiUrl}/${id}`, {
-      headers: this.getAuthHeaders()
-    });
-  }
   getCompaniesByClientId(clientId: number): Observable<Company[]> {
     return this.http.get<Company[]>(`${this.apiUrl}/owned-by/${clientId}`, {
       headers: this.getAuthHeaders()
