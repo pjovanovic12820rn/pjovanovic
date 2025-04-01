@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import {map, Observable, take} from 'rxjs';
-import {Order, PageResponse} from '../models/order.model';
+import { Observable } from 'rxjs';
+import { PageResponse } from '../models/order.model';
 import { AuthService } from './auth.service';
 import { CreateOrderDto } from '../models/create-order.dto';
 import { OrderDto } from '../models/order.dto';
@@ -15,9 +15,8 @@ export class OrderService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  // Metoda koja vraća potrebne HTTP zaglavlja sa JWT tokenom
   private getAuthHeaders(): HttpHeaders {
-    const token = this.authService.getToken(); // pretpostavljamo da AuthService ima metodu getToken()
+    const token = this.authService.getToken();
 
     if (!token) {
       throw new Error('Authorization token is missing');
@@ -28,13 +27,6 @@ export class OrderService {
     });
   }
 
-  // getOrders(status: string): Observable<Order[]> {
-  //   let url = this.baseUrl;
-  //   if (status && status !== 'All') {
-  //     url += `?status=${status}`;
-  //   }
-  //   return this.http.get<Order[]>(url, { headers: this.getAuthHeaders() });
-  // }
   getOrders(status: string, page: number = 0, size: number = 10): Observable<PageResponse<OrderDto>> {
     let params = new HttpParams()
       .set('page', page.toString())

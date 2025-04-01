@@ -1,3 +1,4 @@
+// TODO duplicate
 export interface Order {
   id: number;
   agent: string;
@@ -9,11 +10,11 @@ export interface Order {
   direction: 'BUY' | 'SELL';
   status: string;
   approvedBy: string | null;
-  isDone: boolean;          
-  lastModification: string; 
+  isDone: boolean;
+  lastModification: string;
   orderDate: string;
   remainingPortions: number;
-  afterHours: boolean;      
+  afterHours: boolean;
   isTimeLimited: boolean;
 }
 

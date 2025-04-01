@@ -1,10 +1,10 @@
-import {EditUserComponent} from '../../../../src/app/components/edit-user/edit-user.component';
+import {EditUserComponent} from '../../../../src/app/components/client/edit-user/edit-user.component';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {provideHttpClient} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 import {MockActivatedRoute, MockAuthServiceAdmin} from '../../../support/mock';
 import {AuthService} from '../../../../src/app/services/auth.service';
-import {RegisterUserComponent} from '../../../../src/app/components/register-user/register-user.component';
+import {RegisterUserComponent} from '../../../../src/app/components/client/register-user/register-user.component';
 
 const formatDate = (date?: Date) => {
   if (!date) return '';

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {CurrencyDto} from '../models/currency-dto.model';
+import { CurrencyDto } from '../models/currency-dto.model';
 
 @Injectable({
   providedIn: 'root'

@@ -22,11 +22,6 @@ export class LoanRequestService {
     });
   }
 
-  // submitLoanRequest(request: LoanRequest): Observable<LoanRequest> {
-  //   return this.http.post<LoanRequest>(this.apiUrl, request, {
-  //     headers: this.getAuthHeaders(),
-  //   });
-  // }
   submitLoanRequest(request: LoanRequest): Observable<string> {
     return this.http.post(this.apiUrl, request, {
       headers: this.getAuthHeaders(),

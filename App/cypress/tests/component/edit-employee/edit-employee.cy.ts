@@ -1,4 +1,4 @@
-import {EditEmployeeComponent} from '../../../../src/app/components/edit-employee/edit-employee.component';
+import {EditEmployeeComponent} from '../../../../src/app/components/employee/edit-employee/edit-employee.component';
 import {provideHttpClient} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 import {MockActivatedRoute, MockAuthServiceAdmin, MockAuthServiceEmployee} from '../../../support/mock';

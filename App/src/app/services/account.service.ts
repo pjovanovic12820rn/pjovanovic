@@ -7,7 +7,7 @@ import { AccountResponse } from '../models/account-response.model';
 import {
   ChangeAccountLimitDto,
   ChangeAccountNameDto
-} from '../components/account-management/account-management.component';
+} from '../components/account/account-management/account-management.component';
 
 @Injectable({
   providedIn: 'root',

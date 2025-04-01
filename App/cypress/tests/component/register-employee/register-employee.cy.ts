@@ -1,10 +1,10 @@
-import {EditEmployeeComponent} from '../../../../src/app/components/edit-employee/edit-employee.component';
+import {EditEmployeeComponent} from '../../../../src/app/components/employee/edit-employee/edit-employee.component';
 import {provideHttpClient} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 import {MockActivatedRoute, MockAuthServiceAdmin, MockAuthServiceEmployee} from '../../../support/mock';
 import {AuthService} from '../../../../src/app/services/auth.service';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {RegisterEmployeeComponent} from '../../../../src/app/components/register-employee/register-employee.component';
+import {RegisterEmployeeComponent} from '../../../../src/app/components/employee/register-employee/register-employee.component';
 
 describe('Edit Employee Form', () => {
   let mockEmployee ={

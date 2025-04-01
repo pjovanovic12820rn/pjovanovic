@@ -1,4 +1,4 @@
-import {EditUserComponent} from '../../../../src/app/components/edit-user/edit-user.component';
+import {EditUserComponent} from '../../../../src/app/components/client/edit-user/edit-user.component';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {provideHttpClient} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';

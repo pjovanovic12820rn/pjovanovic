@@ -3,7 +3,7 @@ import { User } from '../models/user.model';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from './auth.service';
-import {Employee} from '../models/employee.model';
+import { Employee } from '../models/employee.model';
 
 @Injectable({
   providedIn: 'root',
