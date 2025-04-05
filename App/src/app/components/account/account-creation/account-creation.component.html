@@ -115,21 +115,21 @@
           <div class="info-card flex-col gap-1" *ngIf="isNewCompany || selectedCompanyId">
             <input-text id="companyName" name="companyName" [(ngModel)]="companyInfo.name" placeholder="Company Name"
                         label="Company Name"
-                        [disabled]="!isNewCompany"/>
+                        [disabledInput]="!isNewCompany"/>
             <input-text id="registrationNumber" name="registrationNumber" [(ngModel)]="companyInfo.registrationNumber"
-                        placeholder="Registration Number" label="Registration Number" [disabled]="!isNewCompany"/>
+                        placeholder="Registration Number" label="Registration Number" [disabledInput]="!isNewCompany"/>
             <input-text id="taxNumber" name="taxNumber" [(ngModel)]="companyInfo.taxNumber" placeholder="Tax Number"
                         label="Tax Number"
-                        [disabled]="!isNewCompany"/>
+                        [disabledInput]="!isNewCompany"/>
             <input-text id="activityCode" name="activityCode" [(ngModel)]="companyInfo.activityCode"
                         placeholder="Activity Code" label="Activity Code"
-                        [disabled]="!isNewCompany"/>
+                        [disabledInput]="!isNewCompany"/>
             <input-text id="address" name="address" [(ngModel)]="companyInfo.address" placeholder="Address"
                         label="Address"
-                        [disabled]="!isNewCompany"/>
-            <input-text id="majorityOwner" name="majorityOwner" [value]="getClientName(newAccount.clientId)"
-                        [(ngModel)]="companyInfo.majorityOwner" placeholder="Majority Owner" label="Majority Owner"
-                        [disabled]="true"/>
+                        [disabledInput]="!isNewCompany"/>
+            <input-text placeholder="Majority Owner:" label="Majority Owner:" id="majorityOwner" name="majorityOwner"
+                        [value]="getClientName(newAccount.clientId)"
+                        type="text" [disabledInput]="true"/>
           </div>
 
           <label>Currency</label>

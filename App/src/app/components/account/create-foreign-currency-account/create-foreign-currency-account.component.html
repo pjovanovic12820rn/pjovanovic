@@ -85,24 +85,24 @@
               <input-text placeholder="Company Name:" label="Company Name:" id="companyName" name="companyName"
                           [(ngModel)]="companyInfo.name"
                           type="text"
-                          [disabled]="!isNewCompany"/>
+                          [disabledInput]="!isNewCompany"/>
 
               <input-text placeholder="Registration Number:" label="Registration Number:" id="registrationNumber"
                           name="registrationNumber"
                           [(ngModel)]="companyInfo.registrationNumber"
                           type="text"
-                          [disabled]="!isNewCompany"/>
+                          [disabledInput]="!isNewCompany"/>
 
 
               <input-text placeholder="Tax Number:" label="Tax Number:" id="taxNumber" name="taxNumber"
                           [(ngModel)]="companyInfo.taxNumber"
                           type="text"
-                          [disabled]="!isNewCompany"/>
+                          [disabledInput]="!isNewCompany"/>
 
               <input-text placeholder="Activity Code:" label="Activity Code:" id="activityCode" name="activityCode"
                           [(ngModel)]="companyInfo.activityCode"
                           type="text"
-                          [disabled]="!isNewCompany"/>
+                          [disabledInput]="!isNewCompany"/>
 
               <input-text placeholder="Majority Owner:" label="Majority Owner:" id="majorityOwner" name="majorityOwner"
                           [value]="getClientName(newAccount.clientId)"
