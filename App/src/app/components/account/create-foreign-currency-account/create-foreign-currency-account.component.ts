@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { ClientService } from '../../../services/client.service';
 import { AuthService } from '../../../services/auth.service';
 import { AccountService } from '../../../services/account.service';
 import { User } from '../../../models/user.model';
 import { NewBankAccount } from '../../../models/new-bank-account.model';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from '../../../services/employee.service';
 import { Employee } from '../../../models/employee.model';
@@ -14,35 +13,45 @@ import { CompanyService } from '../../../services/company.service';
 import { Company, CreateCompany } from '../../../models/company.model';
 import { AuthorizedPersonnel, CreateAuthorizedPersonnel } from '../../../models/authorized-personnel.model';
 import { AuthorizedPersonnelService } from '../../../services/authorized-personnel.service';
-import { CurrencyService } from '../../../services/currency.service';
 import { CurrencyDto } from '../../../models/currency-dto.model';
+import { CurrencyService } from '../../../services/currency.service';
 import { CardService, CreateCardDto } from '../../../services/card.service';
-import { ButtonComponent } from '../../shared/button/button.component';
-import { InputTextComponent } from '../../shared/input-text/input-text.component';
+import {NgForOf, NgIf, TitleCasePipe} from '@angular/common';
+import {ButtonComponent} from '../../shared/button/button.component';
+import {InputTextComponent} from '../../shared/input-text/input-text.component';
+import {ModalComponent} from '../../shared/modal/modal.component';
 
 @Component({
   selector: 'app-create-foreign-currency-account',
-  standalone: true,
-  imports: [FormsModule, CommonModule, ButtonComponent, InputTextComponent],
   templateUrl: './create-foreign-currency-account.component.html',
-  styleUrl: './create-foreign-currency-account.component.css',
+  styleUrls: ['./create-foreign-currency-account.component.css'],
+  standalone: true,
+  imports: [
+    TitleCasePipe,
+    ReactiveFormsModule,
+    NgForOf,
+    ButtonComponent,
+    InputTextComponent,
+    NgIf,
+    ModalComponent
+  ]
 })
 export class CreateForeignCurrencyAccountComponent implements OnInit {
   loggedInEmployee: Employee | null = null;
   users: User[] = [];
-  companyInfo = {
-    name: '',
-    registrationNumber: '',
-    taxNumber: '',
-    activityCode: '',
-    address: '',
-    majorityOwner: ''
-  };
+  currencies: CurrencyDto[] = [];
+  companies: Company[] = [];
+  availablePersonnel: AuthorizedPersonnel[] = [];
 
   isCurrentAccount = true;
   isCompanyAccount = false;
+  isNewCompany = false;
+  isNewPersonnel = false;
+  loadingCompanies = false;
   employeeId: number | null = null;
   isCurrAdmin: boolean = false;
+
+  showCardModal: boolean = false;
 
   newAccount: NewBankAccount = {
     currency: 'EUR',
@@ -60,19 +69,16 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     monthlyFee: 0,
     name: ''
   };
-  //za kompaniju novo
-  companies: Company[] = [];
-  selectedCompanyId: number | null = null;
-  isNewCompany = false;
-  loadingCompanies = false;
 
-  currencies: CurrencyDto[] = [];
+  companyInfo = {
+    name: '',
+    registrationNumber: '',
+    taxNumber: '',
+    activityCode: '',
+    address: '',
+    majorityOwner: ''
+  };
 
-  //za onog dodatnog
-  selectedAuthorizedPersonnelId: number | null = null;
-  availablePersonnel: AuthorizedPersonnel[] = [];
-
-  showCardModal: boolean = false;
   newCard: CreateCardDto = {
     accountNumber: '',
     name: '',
@@ -81,20 +87,15 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     cardLimit: 0
   };
 
-  //za personelu takodje
-  isNewPersonnel = false;
-  newPersonnel: CreateAuthorizedPersonnel = {
-    firstName: '',
-    lastName: '',
-    dateOfBirth: '',
-    gender: '',
-    email: '',
-    phoneNumber: '',
-    address: '',
-    companyId: 0
-  };
+  accountForm!: FormGroup;
+  cardForm!: FormGroup;
+  newPersonnelForm!: FormGroup;
+
+  selectedCompanyId: number | null = null;
+  selectedAuthorizedPersonnelId: number | null = null;
 
   constructor(
+    private fb: FormBuilder,
     private userService: ClientService,
     private authService: AuthService,
     private accountService: AccountService,
@@ -109,23 +110,60 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.accountForm = this.fb.group({
+      clientId: [this.newAccount.clientId, Validators.required],
+      accountType: [{ value: this.newAccount.accountType, disabled: true }],
+      monthlyFee: [this.newAccount.monthlyFee],
+      accountOwnerType: [this.newAccount.accountOwnerType, Validators.required],
+      selectedCompany: [this.selectedCompanyId],
+      companyName: [this.companyInfo.name],
+      registrationNumber: [this.companyInfo.registrationNumber],
+      taxNumber: [this.companyInfo.taxNumber],
+      activityCode: [this.companyInfo.activityCode],
+      companyAddress: [this.companyInfo.address],
+      selectedAuthorizedPersonnel: [this.selectedAuthorizedPersonnelId],
+      currency: [this.newAccount.currency, Validators.required], //, disabled: true
+      dailyLimit: [this.newAccount.dailyLimit, Validators.required],
+      monthlyLimit: [this.newAccount.monthlyLimit, Validators.required],
+      isActive: [this.newAccount.isActive],
+      createCard: [this.newAccount.createCard]
+    });
+
+    // card modal
+    this.cardForm = this.fb.group({
+      type: [this.newCard.type, Validators.required],
+      issuer: [this.newCard.issuer, Validators.required],
+      name: [this.newCard.name, Validators.required],
+      cardLimit: [this.newCard.cardLimit, Validators.required]
+    });
+
+    // new auth p
+    this.newPersonnelForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
+      gender: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phoneNumber: ['', Validators.required],
+      address: ['', Validators.required]
+    });
+
     const isAdmin = this.authService.isAdmin();
     const isEmployee = this.authService.isEmployee();
     this.isCurrAdmin = isAdmin;
-    this.currencies = this.currencyService.getCurrencies();
-
     if (!(isAdmin || isEmployee)) {
       alert("Access denied. Only employees and admins can create accounts.");
       this.router.navigate(['/']);
       return;
     }
-
+    this.isCompanyAccount = this.newAccount.accountOwnerType === 'COMPANY';
+    this.currencies = this.currencyService.getCurrencies();
     this.loadUsers();
-    // this.loadAvailablePersonnel();
+
     this.employeeId = this.authService.getUserId();
     if (this.employeeId) {
       this.newAccount.employeeId = this.employeeId;
-      if (!this.isCurrAdmin) {
+      if (!this.authService.isAdmin()) {
         this.employeeService.getEmployeeSelf().subscribe(
           (employee) => {
             this.loggedInEmployee = employee;
@@ -135,18 +173,17 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
           }
         );
       }
-
-
     }
+
     this.route.queryParams.subscribe(params => {
       const userId = params['userId'];
       if (userId) {
-        this.newAccount.clientId = +userId; // preselect
-        if (this.isCompanyAccount) this.loadCompaniesForClient(); //preload i za kompanije ako treba
+        this.accountForm.patchValue({ clientId: +userId });
+        if (this.isCompanyAccount) {
+          this.loadCompaniesForClient();
+        }
       }
     });
-    // this.loadUsers();
-    // this.onAccountTypeChange();
   }
 
   navigateToRegisterUser() {
@@ -172,192 +209,170 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
   }
 
   onAccountOwnerTypeChange() {
-    this.isCompanyAccount = this.newAccount.accountOwnerType === 'COMPANY';
-    if (this.isCompanyAccount && this.newAccount.clientId) {
+    this.isCompanyAccount = this.accountForm.get('accountOwnerType')?.value === 'COMPANY';
+    if (this.isCompanyAccount && this.accountForm.get('clientId')?.value) {
       this.loadCompaniesForClient();
     }
     if (!this.isCompanyAccount) {
-      this.newAccount.companyId = undefined;
+      this.accountForm.patchValue({ selectedCompany: null });
       this.selectedCompanyId = null;
       this.isNewCompany = false;
     }
   }
 
   toggleIsActive() {
-    this.newAccount.isActive = this.newAccount.isActive === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+    const current = this.accountForm.get('isActive')?.value;
+    this.accountForm.get('isActive')?.setValue(current === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE');
   }
 
   toggleCreateCard() {
-    this.newAccount.createCard = !this.newAccount.createCard;
+    const current = this.accountForm.get('createCard')?.value;
+    this.accountForm.get('createCard')?.setValue(!current);
   }
 
   isCompanyFormValid(): boolean {
     if (!this.isCompanyAccount) return true;
 
-    // Existing company val
-    if (!this.isNewCompany && !this.selectedCompanyId) return false;
+    if (!this.isNewCompany && !this.accountForm.get('selectedCompany')?.value) return false;
 
-    // New company val
     if (this.isNewCompany) {
-      const companyValid = this.companyInfo.name.trim() !== '' &&
-        this.companyInfo.registrationNumber.trim() !== '' &&
-        this.companyInfo.taxNumber.trim() !== '' &&
-        this.companyInfo.activityCode.trim() !== '' &&
-        this.companyInfo.address.trim() !== '';
-
-      if (!companyValid) return false;
+      const { companyName, registrationNumber, taxNumber, activityCode, companyAddress } = this.accountForm.getRawValue();
+      if (
+        !companyName.trim() ||
+        !registrationNumber.trim() ||
+        !taxNumber.trim() ||
+        !activityCode.trim() ||
+        !companyAddress.trim()
+      ) {
+        return false;
+      }
     }
 
-    // New personnel val
     if (this.isNewPersonnel) {
-      const personnelValid = this.newPersonnel.firstName.trim() !== '' &&
-        this.newPersonnel.lastName.trim() !== '' &&
-        this.newPersonnel.dateOfBirth !== '' &&
-        this.newPersonnel.gender !== '' &&
-        this.newPersonnel.email.trim() !== '' &&
-        this.newPersonnel.phoneNumber.trim() !== '' &&
-        this.newPersonnel.address.trim() !== '';
-
-      if (!personnelValid) return false;
+      if (this.newPersonnelForm.invalid) {
+        return false;
+      }
     }
-
     return true;
   }
 
-  //novo za kompanije
-
   onClientChange() {
-    if (this.newAccount.clientId && this.isCompanyAccount) {
+    if (this.accountForm.get('clientId')?.value && this.isCompanyAccount) {
       this.loadCompaniesForClient();
     }
   }
 
   private loadCompaniesForClient() {
     this.loadingCompanies = true;
-    this.companyService.getCompaniesByClientId(this.newAccount.clientId!).subscribe({
+    this.accountForm.get('selectedCompany')?.disable();
+
+    const clientId = this.accountForm.get('clientId')?.value;
+    this.companyService.getCompaniesByClientId(clientId).subscribe({
       next: (companies) => {
         this.companies = companies;
         this.loadingCompanies = false;
+        this.accountForm.get('selectedCompany')?.enable();
       },
       error: (error) => {
         console.error('Error loading companies:', error);
         this.loadingCompanies = false;
+        this.accountForm.get('selectedCompany')?.enable();
       }
     });
   }
 
   onCompanySelect() {
-    if (this.selectedCompanyId === -1) { // Create new company selektovano
-      // alert("dakle jes -1, sto onda nisu slobodna polja");
+    const selected = +this.accountForm.get('selectedCompany')?.value;
+    this.selectedCompanyId = selected;
+    if (selected === -1) { // create new company selektovano
       this.isNewCompany = true;
       this.resetCompanyForm();
       this.availablePersonnel = [];
     } else {
-      // alert("ne registruje da je isto?");
       this.isNewCompany = false;
-      const selectedCompany = this.companies.find(c => c.id === Number(this.selectedCompanyId));
+      const selectedCompany = this.companies.find(c => c.id === selected);
       if (selectedCompany) {
         this.populateCompanyForm(selectedCompany);
         this.loadAvailablePersonnel(selectedCompany.id);
       } else {
-        // alert("NITI OVDE");
         this.resetCompanyForm();
         this.availablePersonnel = [];
       }
     }
     this.isNewPersonnel = false;
-    this.selectedAuthorizedPersonnelId = null;
+    this.accountForm.patchValue({ selectedAuthorizedPersonnel: null });
   }
 
   onPersonnelSelect() {
-    this.isNewPersonnel = this.selectedAuthorizedPersonnelId === -1;
+    const selected = +this.accountForm.get('selectedAuthorizedPersonnel')?.value;
+    this.selectedAuthorizedPersonnelId = selected;
+    this.isNewPersonnel = selected === -1;
     if (!this.isNewPersonnel) {
-      this.newPersonnel = {
-        firstName: '',
-        lastName: '',
-        dateOfBirth: '',
-        gender: '',
-        email: '',
-        phoneNumber: '',
-        address: '',
-        companyId: 0
-      };
+      this.newPersonnelForm.reset();
     }
   }
 
   private populateCompanyForm(company: Company) {
-    this.companyInfo = {
-      name: company.name,
+    this.accountForm.patchValue({
+      companyName: company.name,
       registrationNumber: company.registrationNumber,
       taxNumber: company.taxId,
       activityCode: company.activityCode,
-      address: company.address,
-      majorityOwner: this.newAccount.clientId.toString()
-    };
+      companyAddress: company.address
+    });
   }
 
   private resetCompanyForm() {
-    this.companyInfo = {
-      name: '',
+    this.accountForm.patchValue({
+      companyName: '',
       registrationNumber: '',
       taxNumber: '',
       activityCode: '',
-      address: '',
-      majorityOwner: ''
-    };
+      companyAddress: ''
+    });
   }
 
-  private formatDate(date: Date): string {
-    const isoString = new Date(date).toISOString();
-    return isoString.split('T')[0];
-  }
-
-  getClientName(clientId: number): string {
-    const client = this.users.find(u => u.id === clientId);
+  getClientName(clientId: number | string): string {
+    const id = typeof clientId === 'string' ? parseInt(clientId, 10) : clientId;
+    const client = this.users.find(u => u.id === id);
     return client ? `${client.firstName} ${client.lastName}` : 'Unknown';
   }
 
   async onSubmit() {
-    //nov
     try {
       let companyId: number | undefined;
       let authorizedPersonId: number | undefined;
+      const formValue = this.accountForm.getRawValue();
 
       if (this.isCompanyAccount) {
-        // create if new
         if (this.isNewCompany) {
           const createCompanyDto: CreateCompany = {
-            name: this.companyInfo.name,
-            registrationNumber: this.companyInfo.registrationNumber,
-            taxId: this.companyInfo.taxNumber,
-            activityCode: this.companyInfo.activityCode,
-            address: this.companyInfo.address,
-            majorityOwner: this.newAccount.clientId
+            name: formValue.companyName,
+            registrationNumber: formValue.registrationNumber,
+            taxId: formValue.taxNumber,
+            activityCode: formValue.activityCode,
+            address: formValue.companyAddress,
+            majorityOwner: formValue.clientId
           };
-          //za err hendl
           try {
             const newCompany = await this.companyService.createCompany(createCompanyDto).toPromise();
             if (newCompany && 'id' in newCompany) {
               companyId = newCompany.id;
             }
           } catch (error: any) {
-
-            const errorMessage = error?.error?.message || 'Failed to create company (try different tax number or registration number';
+            const errorMessage = error?.error?.message || 'Failed to create company (try different tax number or registration number)';
             this.alertService.showAlert('error', errorMessage);
             return;
           }
-
         } else {
-          companyId = this.selectedCompanyId || undefined;
+          companyId = formValue.selectedCompany || undefined;
         }
-        //todo za personelu
 
         if (this.isNewPersonnel && companyId) {
           const createPersonnelDto: CreateAuthorizedPersonnel = {
-            ...this.newPersonnel,
+            ...this.newPersonnelForm.value,
             companyId: companyId
           };
-
           try {
             const createdPersonnel = await this.authorizedPersonnelService.createAuthorizedPersonnel(createPersonnelDto).toPromise();
             if (createdPersonnel && 'id' in createdPersonnel) {
@@ -368,23 +383,25 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
             this.alertService.showAlert('error', errorMessage);
             return;
           }
-        } else if (this.selectedAuthorizedPersonnelId) {
-          authorizedPersonId = this.selectedAuthorizedPersonnelId;
+        } else if (formValue.selectedAuthorizedPersonnel) {
+          authorizedPersonId = formValue.selectedAuthorizedPersonnel;
         }
       }
 
-      this.newAccount.companyId = companyId;
-      this.newAccount.authorizedPersonId = authorizedPersonId;
-      // alert(this.newAccount.authorizedPersonId);
+      this.newAccount = {
+        ...this.newAccount,
+        ...formValue,
+        companyId: companyId,
+        authorizedPersonId: authorizedPersonId
+      };
 
       this.accountService.createForeignAccount(this.newAccount).subscribe({
         next: (createdAccount) => {
-          if (this.newAccount.createCard) {
+          if (this.accountForm.get('createCard')?.value) {
             this.newCard.accountNumber = createdAccount.accountNumber;
             this.showCardModal = true;
           } else {
             this.alertService.showAlert('success', 'Account created successfully!');
-            // this.router.navigate(['/client-portal']);
             this.router.navigate(['/success'], {
               state: {
                 title: 'Account Created!',
@@ -400,10 +417,32 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
           this.alertService.showAlert('error', 'Failed to create account');
         }
       });
-
     } catch (error) {
       console.error('Error creating company:', error);
       this.alertService.showAlert('error', 'Failed to create company');
     }
+  }
+  submitCardForm(): void {
+    const request = this.authService.isClient()
+      ? this.cardService.requestCard(this.cardForm.getRawValue())
+      : this.cardService.createCard(this.cardForm.getRawValue());
+
+    request.subscribe({
+      next: () => {
+        this.showCardModal = false;
+        this.router.navigate(['/success'], {
+          state: {
+            title: 'Card Created!',
+            message: 'The card has been successfully created.',
+            buttonName: 'Go to Account',
+            continuePath: `/account/${this.newCard.accountNumber}`
+          }
+        });
+      },
+      error: (err) => {
+        this.alertService.showAlert('error', 'Failed to create card.');
+        console.error(err);
+      }
+    });
   }
 }
