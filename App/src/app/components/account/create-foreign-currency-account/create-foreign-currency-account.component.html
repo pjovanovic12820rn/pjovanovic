@@ -25,7 +25,7 @@
         <input-text *ngIf="isCurrentAccount" placeholder="Monthly Fee:" label="Monthly Fee:" id="monthlyFee"
                     formControlName="monthlyFee" type="number"
                     [formControlComp]="accountForm.controls['monthlyFee']"
-                    [errorMessages]="{ required: 'Monthly fee is required.' }"
+                    [errorMessages]="{ pattern: 'Must be a valid number (decimal allowed).' }"
         >
         </input-text>
 
@@ -80,19 +80,31 @@
 
             <div class="flex-col gap-1" *ngIf="isNewCompany || accountForm.get('selectedCompany')?.value">
               <input-text placeholder="Company Name:" label="Company Name:" id="companyName"
-                          formControlName="companyName" type="text" [disabledInput]="!isNewCompany">
+                          formControlName="companyName" type="text" [disabledInput]="!isNewCompany"
+                          [formControlComp]="accountForm.controls['companyName']"
+                          [errorMessages]="{ required: 'Company name is required.', minlength: 'Minimum length is 3.' }"
+              >
               </input-text>
 
               <input-text placeholder="Registration Number:" label="Registration Number:" id="registrationNumber"
-                          formControlName="registrationNumber" type="text" [disabledInput]="!isNewCompany">
+                          formControlName="registrationNumber" type="text" [disabledInput]="!isNewCompany"
+                          [formControlComp]="accountForm.controls['registrationNumber']"
+                          [errorMessages]="{ required: 'Registration number is required.', minlength: 'Minimum length is 3.' }"
+              >
               </input-text>
 
               <input-text placeholder="Tax Number:" label="Tax Number:" id="taxNumber"
-                          formControlName="taxNumber" type="text" [disabledInput]="!isNewCompany">
+                          formControlName="taxNumber" type="text" [disabledInput]="!isNewCompany"
+                          [formControlComp]="accountForm.controls['taxNumber']"
+                          [errorMessages]="{ required: 'Tax number is required.', minlength: 'Minimum length is 3.' }"
+              >
               </input-text>
 
               <input-text placeholder="Activity Code:" label="Activity Code:" id="activityCode"
-                          formControlName="activityCode" type="text" [disabledInput]="!isNewCompany">
+                          formControlName="activityCode" type="text" [disabledInput]="!isNewCompany"
+                          [formControlComp]="accountForm.controls['activityCode']"
+                          [errorMessages]="{ required: 'Activity code is required.', invalidActivityCode: 'Invalid activity code. :('  }"
+              >
               </input-text>
 
               <input-text placeholder="Majority Owner:" label="Majority Owner:" id="majorityOwner"
@@ -100,7 +112,10 @@
               </input-text>
 
               <input-text placeholder="Address:" label="Address:" id="address"
-                          formControlName="companyAddress" type="text" [disabledInput]="!isNewCompany">
+                          formControlName="companyAddress" type="text" [disabledInput]="!isNewCompany"
+                          [formControlComp]="accountForm.controls['companyAddress']"
+                          [errorMessages]="{ required: 'Address is required.', minlength: 'Minimum length is 5.' }"
+              >
               </input-text>
 
               <div>
@@ -117,13 +132,22 @@
               <div *ngIf="isNewPersonnel" class="flex-col text-left gap-1 mt-1" [formGroup]="newPersonnelForm">
                 <h3>New Authorized Personnel Details</h3>
                 <input-text placeholder="First Name:" label="First Name:" id="firstName"
-                            formControlName="firstName" required>
+                            formControlName="firstName" required
+                            [formControlComp]="newPersonnelForm.controls['firstName']"
+                            [errorMessages]="{ required: 'First name is required.', onlyLetters: 'Only letters allowed.' }"
+                >
                 </input-text>
                 <input-text placeholder="Last Name:" label="Last Name:" id="lastName"
-                            formControlName="lastName" required>
+                            formControlName="lastName" required
+                            [formControlComp]="newPersonnelForm.controls['lastName']"
+                            [errorMessages]="{ required: 'Last name is required.', onlyLetters: 'Only letters allowed.' }"
+                >
                 </input-text>
                 <input-text placeholder="Date of Birth:" label="Date of Birth:" id="dateOfBirth" type="date"
-                            formControlName="dateOfBirth" required>
+                            formControlName="dateOfBirth" required
+                            [formControlComp]="newPersonnelForm.controls['dateOfBirth']"
+                            [errorMessages]="{ required: 'Birth date is required.', invalidDate: 'Must be in the past.' }"
+                >
                 </input-text>
                 <div>
                   <label class="mb-05">Gender:</label>
@@ -134,13 +158,22 @@
                   </select>
                 </div>
                 <input-text placeholder="Email:" label="Email:" id="email" type="email"
-                            formControlName="email" required>
+                            formControlName="email" required
+                            [formControlComp]="newPersonnelForm.controls['email']"
+                            [errorMessages]="{ required: 'Email is required.', email: 'Invalid email address.' }"
+                >
                 </input-text>
                 <input-text placeholder="Phone Number:" label="Phone Number:" id="phoneNumber"
-                            formControlName="phoneNumber" required>
+                            formControlName="phoneNumber" required
+                            [formControlComp]="newPersonnelForm.controls['phoneNumber']"
+                            [errorMessages]="{ required: 'Phone number is required.', pattern: 'Invalid phone number.' }"
+                >
                 </input-text>
                 <input-text placeholder="Address:" label="Address:" id="personnelAddress"
-                            formControlName="address" required>
+                            formControlName="address" required
+                            [formControlComp]="newPersonnelForm.controls['address']"
+                            [errorMessages]="{ required: 'Address is required.', minlength: 'Minimum length is 5.' }"
+                >
                 </input-text>
               </div>
             </div>
@@ -157,11 +190,15 @@
         </div>
 
         <input-text label="Daily Limit:" id="dailyLimit" placeholder="Daily Limit" formControlName="dailyLimit"
-                    type="number" required>
+                    type="number" required
+                    [formControlComp]="accountForm.controls['dailyLimit']"
+                    [errorMessages]="{ pattern: 'Must be a valid number (decimal allowed).' }">
         </input-text>
 
         <input-text label="Monthly Limit:" placeholder="Monthly Limit:" id="monthlyLimit" formControlName="monthlyLimit"
-                    type="number" required>
+                    type="number" required
+                    [formControlComp]="accountForm.controls['monthlyLimit']"
+                    [errorMessages]="{ pattern: 'Must be a valid number (decimal allowed).' }">
         </input-text>
 
         <div class="flex justify-between cursor-pointer" (click)="toggleIsActive()">

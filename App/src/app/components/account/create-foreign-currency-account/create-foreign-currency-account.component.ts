@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators
+} from '@angular/forms';
 import { ClientService } from '../../../services/client.service';
 import { AuthService } from '../../../services/auth.service';
 import { AccountService } from '../../../services/account.service';
@@ -53,6 +60,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
 
   showCardModal: boolean = false;
 
+
   newAccount: NewBankAccount = {
     currency: 'EUR',
     clientId: 0,
@@ -93,6 +101,13 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
 
   selectedCompanyId: number | null = null;
   selectedAuthorizedPersonnelId: number | null = null;
+  private allowedActivityCodes: string[] = [
+    "10.01", "62.01", "5.1", "62.09", "56.1", "86.1", "90.02",
+    "1.11", "1.13", "13.1", "24.1", "24.2", "41.1", "41.2", "42.11",
+    "42.12", "42.13", "42.21", "42.22", "7.1", "7.21", "8.11", "8.92",
+    "47.11", "53.1", "53.2", "85.1", "85.2", "86.21", "86.22", "86.9",
+    "84.12", "90.01", "90.04", "93.11", "93.13", "93.19", "26.11", "27.12", "29.1"
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -113,18 +128,18 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     this.accountForm = this.fb.group({
       clientId: [this.newAccount.clientId, Validators.required],
       accountType: [{ value: this.newAccount.accountType, disabled: true }],
-      monthlyFee: [this.newAccount.monthlyFee],
+      monthlyFee: [this.newAccount.monthlyFee, Validators.pattern(/^\d+(\.\d+)?$/)],
       accountOwnerType: [this.newAccount.accountOwnerType, Validators.required],
       selectedCompany: [this.selectedCompanyId],
-      companyName: [this.companyInfo.name],
-      registrationNumber: [this.companyInfo.registrationNumber],
-      taxNumber: [this.companyInfo.taxNumber],
-      activityCode: [this.companyInfo.activityCode],
-      companyAddress: [this.companyInfo.address],
+      companyName: [this.companyInfo.name, Validators.minLength(3)],
+      registrationNumber: [this.companyInfo.registrationNumber, Validators.minLength(3)],
+      taxNumber: [this.companyInfo.taxNumber, Validators.minLength(3)],
+      activityCode: [this.companyInfo.activityCode, [this.activityCodeValidator.bind(this)]],
+      companyAddress: [this.companyInfo.address, Validators.minLength(5)],
       selectedAuthorizedPersonnel: [this.selectedAuthorizedPersonnelId],
       currency: [this.newAccount.currency, Validators.required], //, disabled: true
-      dailyLimit: [this.newAccount.dailyLimit, Validators.required],
-      monthlyLimit: [this.newAccount.monthlyLimit, Validators.required],
+      dailyLimit: [this.newAccount.dailyLimit, Validators.pattern(/^\d+(\.\d+)?$/)],
+      monthlyLimit: [this.newAccount.monthlyLimit, Validators.pattern(/^\d+(\.\d+)?$/)],
       isActive: [this.newAccount.isActive],
       createCard: [this.newAccount.createCard]
     });
@@ -139,13 +154,13 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
 
     // new auth p
     this.newPersonnelForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      dateOfBirth: ['', Validators.required],
-      gender: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', Validators.required],
-      address: ['', Validators.required]
+      firstName: ['', [Validators.minLength(2)]],
+      lastName: ['', [Validators.minLength(2)]],
+      dateOfBirth: ['', [this.pastDateValidator]],
+      gender: [''],
+      email: ['', [Validators.email]],
+      phoneNumber: ['', [Validators.pattern(/^0?[1-9][0-9]{6,14}$/)]],
+      address: ['', [Validators.minLength(5)]]
     });
 
     const isAdmin = this.authService.isAdmin();
@@ -212,11 +227,63 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     this.isCompanyAccount = this.accountForm.get('accountOwnerType')?.value === 'COMPANY';
     if (this.isCompanyAccount && this.accountForm.get('clientId')?.value) {
       this.loadCompaniesForClient();
+      // da sve to bude required
+      this.accountForm.get('companyName')?.setValidators([Validators.required, Validators.minLength(3)]);
+      this.accountForm.get('registrationNumber')?.setValidators([Validators.required, Validators.minLength(3)]);
+      this.accountForm.get('taxNumber')?.setValidators([Validators.required, Validators.minLength(3)]);
+      this.accountForm.get('activityCode')?.setValidators([Validators.required, this.activityCodeValidator.bind(this)]);
+      this.accountForm.get('companyAddress')?.setValidators([Validators.required, Validators.minLength(5)]);
+
+      // da apdejtuje validnost
+      this.accountForm.get('companyName')?.updateValueAndValidity();
+      this.accountForm.get('registrationNumber')?.updateValueAndValidity();
+      this.accountForm.get('taxNumber')?.updateValueAndValidity();
+      this.accountForm.get('activityCode')?.updateValueAndValidity();
+      this.accountForm.get('companyAddress')?.updateValueAndValidity();
     }
     if (!this.isCompanyAccount) {
       this.accountForm.patchValue({ selectedCompany: null });
       this.selectedCompanyId = null;
       this.isNewCompany = false;
+
+      // vrni sve ovo ni na sta :)
+      this.accountForm.get('companyName')?.clearValidators();
+      this.accountForm.get('registrationNumber')?.clearValidators();
+      this.accountForm.get('taxNumber')?.clearValidators();
+      this.accountForm.get('activityCode')?.clearValidators();
+      this.accountForm.get('companyAddress')?.clearValidators();
+
+      this.accountForm.get('companyName')?.setValue('');
+      this.accountForm.get('registrationNumber')?.setValue('');
+      this.accountForm.get('taxNumber')?.setValue('');
+      this.accountForm.get('activityCode')?.setValue('');
+      this.accountForm.get('companyAddress')?.setValue('');
+
+      this.accountForm.get('companyName')?.updateValueAndValidity();
+      this.accountForm.get('registrationNumber')?.updateValueAndValidity();
+      this.accountForm.get('taxNumber')?.updateValueAndValidity();
+      this.accountForm.get('activityCode')?.updateValueAndValidity();
+      this.accountForm.get('companyAddress')?.updateValueAndValidity();
+
+      //vrati i novu personelu ako je postojalo nesto tu
+      this.newPersonnelForm.get('firstName')?.clearValidators();
+      this.newPersonnelForm.get('lastName')?.clearValidators();
+      this.newPersonnelForm.get('dateOfBirth')?.clearValidators();
+      this.newPersonnelForm.get('gender')?.clearValidators();
+      this.newPersonnelForm.get('email')?.clearValidators();
+      this.newPersonnelForm.get('phoneNumber')?.clearValidators();
+      this.newPersonnelForm.get('address')?.clearValidators();
+
+      this.newPersonnelForm.patchValue({
+        firstName: '',
+        lastName: '',
+        dateOfBirth: '',
+        gender: '',
+        email: '',
+        phoneNumber: '',
+        address: ''
+      });
+      this.newPersonnelForm.updateValueAndValidity();
     }
   }
 
@@ -310,6 +377,45 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     if (!this.isNewPersonnel) {
       this.newPersonnelForm.reset();
     }
+
+    if (this.isNewPersonnel) {
+      // isto i ovde prevrt
+      this.newPersonnelForm.get('firstName')?.setValidators([Validators.required]);
+      this.newPersonnelForm.get('lastName')?.setValidators([Validators.required]);
+      this.newPersonnelForm.get('dateOfBirth')?.setValidators([Validators.required, this.pastDateValidator]);
+      this.newPersonnelForm.get('gender')?.setValidators([Validators.required]);
+      this.newPersonnelForm.get('email')?.setValidators([Validators.required, Validators.email]);
+      this.newPersonnelForm.get('phoneNumber')?.setValidators([Validators.required, Validators.pattern(/^0?[1-9][0-9]{6,14}$/)]);
+      this.newPersonnelForm.get('address')?.setValidators([Validators.required, Validators.minLength(5)]);
+
+      this.newPersonnelForm.get('firstName')?.updateValueAndValidity();
+      this.newPersonnelForm.get('lastName')?.updateValueAndValidity();
+      this.newPersonnelForm.get('dateOfBirth')?.updateValueAndValidity();
+      this.newPersonnelForm.get('gender')?.updateValueAndValidity();
+      this.newPersonnelForm.get('email')?.updateValueAndValidity();
+      this.newPersonnelForm.get('phoneNumber')?.updateValueAndValidity();
+      this.newPersonnelForm.get('address')?.updateValueAndValidity();
+    } else {
+      this.newPersonnelForm.get('firstName')?.clearValidators();
+      this.newPersonnelForm.get('lastName')?.clearValidators();
+      this.newPersonnelForm.get('dateOfBirth')?.clearValidators();
+      this.newPersonnelForm.get('gender')?.clearValidators();
+      this.newPersonnelForm.get('email')?.clearValidators();
+      this.newPersonnelForm.get('phoneNumber')?.clearValidators();
+      this.newPersonnelForm.get('address')?.clearValidators();
+
+      this.newPersonnelForm.patchValue({
+        firstName: '',
+        lastName: '',
+        dateOfBirth: '',
+        gender: '',
+        email: '',
+        phoneNumber: '',
+        address: ''
+      });
+      this.newPersonnelForm.updateValueAndValidity();
+    }
+
   }
 
   private populateCompanyForm(company: Company) {
@@ -445,4 +551,23 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       }
     });
   }
+
+  activityCodeValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) {
+      return null; // da required validator hendla empty values
+    }
+    return this.allowedActivityCodes.includes(control.value)
+      ? null
+      : { invalidActivityCode: true };
+  }
+
+  pastDateValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) {
+      return null; // req val da hvata empty val
+    }
+    const today = new Date();
+    const inputDate = new Date(control.value);
+    return inputDate < today ? null : { invalidDate: 'Birthdate must be in the past' };
+  }
+
 }
