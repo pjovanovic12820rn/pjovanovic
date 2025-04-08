@@ -1,0 +1,46 @@
+<div class="payments-container">
+  <h2>Payments</h2>
+  <br/>
+
+  <!-- Filters -->
+  <div class="filter-container">
+    <input-text label="Start Date" type="date" [(ngModel)]="startDate"></input-text>
+    <input-text label="End Date" type="date" [(ngModel)]="endDate"></input-text>
+
+    <div class="filter-buttons">
+      <app-button
+        (click)="toggleFilters()">
+        {{ showAdditionalFilters ? 'Hide Filters' : 'Show More Filters' }}
+      </app-button>
+
+      <app-button (click)="applyFilters()">Apply Filters</app-button>
+    </div>
+
+    <div *ngIf="showAdditionalFilters" class="flex-col gap-1">
+      <input-text placeholder="Min Amount" label="Min Amount" type="number" [(ngModel)]="minAmount"></input-text>
+      <input-text placeholder="Max Amount" label="Max Amount" type="number" [(ngModel)]="maxAmount"></input-text>
+      <input-text placeholder="Status" label="Status" type="text" [(ngModel)]="paymentStatus"></input-text>
+      <input-text placeholder="Account Number" label="Account Number" type="text" [(ngModel)]="accountNumber"></input-text>
+      <input-text placeholder="Card Number" label="Card Number" type="text" [(ngModel)]="cardNumber"></input-text>
+    </div>
+  </div>
+
+  <!-- Payment List -->
+  <div id="payments-list" class="payment-list">
+    <div *ngFor="let payment of pagedPayments;" class="payment-card">
+      <span>
+        <strong>{{ payment.senderName }}</strong>
+        <span *ngIf="payment.cardNumber"> ({{ payment.cardNumber }})</span>
+      </span>
+      <p class="amount"><strong>Amount:</strong> {{ payment.amount }} {{ payment.senderCurrencyCode }}</p>
+      <p><strong>Date:</strong> {{ payment.date | date }}</p>
+      <p><strong>Status:</strong> {{ payment.status }}</p>
+    </div>
+  </div>
+
+  <app-pagination
+    [totalItems]="totalItems"
+    [pageSize]="pageSize"
+    (pageChanged)="onPageChanged($event)">
+  </app-pagination>
+</div>

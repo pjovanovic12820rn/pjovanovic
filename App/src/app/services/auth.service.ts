@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
@@ -94,6 +94,18 @@ export class AuthService {
 
   isClient(): boolean {
     return this.getUserPermissions().includes('CLIENT');
+  }
+
+  isAgent(): boolean {
+    return this.getUserPermissions().includes('AGENT');
+  }
+
+  isSupervisor(): boolean {
+    return this.getUserPermissions().includes('SUPERVISOR');
+  }
+
+  isActuary(): boolean {
+    return this.isAgent() || this.isSupervisor();
   }
 
   requestPasswordReset(email: string): Observable<void> {

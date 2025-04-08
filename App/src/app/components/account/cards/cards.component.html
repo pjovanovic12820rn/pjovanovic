@@ -1,0 +1,75 @@
+<section class="account-details">
+  <div style="justify-content: space-between; display: flex">
+    <div>
+      <h3>Account Details</h3>
+      <p><strong>Owner:</strong> {{ account?.accountOwner }}</p>
+      <p><strong>Account name:</strong> {{ account?.name }}</p>
+      <p><strong>Account type:</strong> {{ account?.accountType }}</p>
+      <p><strong>Account Number:</strong> {{ account?.accountNumber }}</p>
+      <p><strong>Balance:</strong> {{ account?.availableBalance }} {{ account?.currencyCode }}</p>
+
+      <div *ngIf="account?.companyDetails as companyDetails">
+        <div *ngIf="companyDetails.authorizedPerson as authPerson">
+          <p><strong>Authorized Person:</strong>
+            {{ authPerson.firstName }} {{ authPerson.lastName }}
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="flex-col gap-1">
+
+      <div>
+        <app-button class="width-full" (onClick)="openModal()">Payment</app-button>
+      </div>
+      <div>
+        <app-button class="width-full" (click)="newCardReq()" [routerLink]="['/account', accountNumber, 'create-card']">
+          Create New Card
+        </app-button>
+      </div>
+    </div>
+  </div>
+
+  <h3>Associated Cards</h3>
+  <table>
+    <tr>
+      <th>Card Number</th>
+      <th>Status</th>
+      <th>Owner</th>
+      <th>Actions</th>
+    </tr>
+    <tr *ngFor="let card of cards">
+      <td>{{ maskCardNumber(card.cardNumber) }}</td>
+      <td [ngClass]="getCardStatusClass(card.status)">{{ card.status }}</td>
+      <td>{{ card.owner.firstName }} {{ card.owner.lastName }}</td>
+      <td class="width-fit">
+        <!--        <app-button label="New Payment" (onClick)="makePayment(card.cardNumber)"></app-button>-->
+        <!-- ✅ Dynamic Block/Unblock Button -->
+        <div class="flex gap-1 justify-center">
+          <app-button class="width-full"
+            (click)="blockCard(card.cardNumber, card.status)">{{ card.status === 'BLOCKED' ? 'Unblock Card' : 'Block Card' }}
+          </app-button>
+
+          <!-- ✅ Show "Deactivate" Only for Admins -->
+          <app-button class="width-full"
+                      (click)="deactivateCard(card.cardNumber)" *ngIf="authService.isAdmin()"
+                      [disabled]="card.status === 'DEACTIVATED'">Deactivate Card
+          </app-button>
+        </div>
+
+      </td>
+    </tr>
+  </table>
+
+  <app-modal [title]="'Payment'" [isOpen]="isModalOpen" (closeModalEvent)="closeModal()">
+    <div class="modal-content">
+      <div style="display: grid; gap: 0.5rem; margin-top: 1rem; grid-template-columns: repeat(2, 1fr)">
+        <app-button class="width-full" [routerLink]="['/new-payment']">New Payment</app-button>
+        <app-button class="width-full" [routerLink]="['/transfer']">Transfer Payment</app-button>
+        <app-button class="width-full" [routerLink]="['/recipients']">Payment Recipients</app-button>
+        <app-button class="width-full" [routerLink]="['/payment-details']">Payment Details</app-button>
+      </div>
+    </div>
+  </app-modal>
+</section>

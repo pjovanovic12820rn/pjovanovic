@@ -3,14 +3,15 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { SuccessComponent } from '../success/success.component';
+import { SuccessComponent } from '../shared/success/success.component';
 import { AlertService } from '../../services/alert.service';
-import {AlertComponent} from '../shared/alert/alert.component';
+import {InputTextComponent} from '../shared/input-text/input-text.component';
+import {ButtonComponent} from '../shared/button/button.component';
 
 @Component({
   selector: 'app-password-reset',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, SuccessComponent, AlertComponent],
+  imports: [ReactiveFormsModule, CommonModule, SuccessComponent, InputTextComponent, ButtonComponent],
   templateUrl: './password-reset.component.html',
   styleUrls: ['./password-reset.component.css']
 })

@@ -1,0 +1,69 @@
+/* 🔹 Main Container */
+.edit-container {
+  margin: auto;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  text-align: left;
+  width: 500px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* 🔹 Form Styling */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* 🔹 Admin Toggle Section */
+.admin-toggle {
+  margin-top: 20px;
+  padding: 10px;
+  background: #F4F0FA;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.admin-toggle label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.admin-toggle button {
+  background: #6A4BBC; /* Changed to purple */
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.admin-toggle button:hover {
+  background: #8E79D2; /* Slightly lighter purple */
+}
+
+/* 🔹 Error Message */
+.error-message {
+  color: #D32F2F;
+  background: #FFEBEE;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* 🔹 Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

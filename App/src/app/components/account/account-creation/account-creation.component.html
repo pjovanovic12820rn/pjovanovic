@@ -1,0 +1,196 @@
+<div class="card width-50 flex-col gap-1">
+  <h2>Create New {{ newAccount.accountType | titlecase }} Account</h2>
+  <form #accountForm="ngForm" (ngSubmit)="onSubmit()">
+
+    <div class="flex-col gap-1">
+      <div class="flex gap-1">
+        <div class="flex-col gap-1 width-50">
+          <!-- Clients -->
+          <label>Client:</label>
+          <select id="clientId" name="clientId" [(ngModel)]="newAccount.clientId"
+                      (change)="onClientChange()"
+                      required>
+            <option value="0" disabled>Client...</option>
+            <option *ngFor="let user of users" [ngValue]="user.id">
+              {{ user.firstName }} {{ user.lastName }} ({{ user.email }})
+            </option>
+          </select>
+          <div>
+            <app-button (click)="navigateToRegisterUser()" class="create-user-link">
+              Create New User
+            </app-button>
+          </div>
+
+          <label>Account Type:</label>
+          <select id="accountType" name="accountType" [(ngModel)]="newAccount.accountType"
+                      disabled>
+            <option value="CURRENT">CURRENT</option>
+          </select>
+
+          <!-- Monthly Fee -->
+          <input-text *ngIf="isCurrentAccount" label="Monthly Fee:" placeholder="Monthly Fee" id="monthlyFee"
+                      name="monthlyFee" [(ngModel)]="newAccount.monthlyFee" type="number"/>
+
+          <!-- Employee info -->
+          <div class="info-card">
+            <h3>Account Created By</h3>
+            <div *ngIf="loggedInEmployee">
+              <p><strong>Name:</strong> {{ loggedInEmployee.firstName }} {{ loggedInEmployee.lastName }}</p>
+              <p><strong>Position:</strong> {{ loggedInEmployee.position }}</p>
+            </div>
+            <div *ngIf="!loggedInEmployee">
+              <div *ngIf="isCurrAdmin">
+                <p>Admin creating account...</p>
+              </div>
+              <div *ngIf="!isCurrAdmin">
+                <p>Loading employee details...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex-col gap-1 width-50">
+          <label>Account Owner Type:</label>
+          <select id="accountOwnerType" name="accountOwnerType"
+                      [(ngModel)]="newAccount.accountOwnerType" (change)="onAccountOwnerTypeChange()">
+            <option value="PERSONAL">PERSONAL</option>
+            <option value="COMPANY">COMPANY</option>
+          </select>
+
+          <!-- Company Dropdown (Conditional) -->
+
+          <div class="flex-col info-card" *ngIf="isCompanyAccount">
+            <h3>Company Information</h3>
+
+            <p *ngIf="!newAccount.clientId" class="info-message">Please select a client first to manage companies.</p>
+            <br *ngIf="newAccount.clientId"/>
+
+            <div *ngIf="newAccount.clientId" class="flex-col gap-1">
+
+              <label>Select Company:</label>
+              <select [(ngModel)]="selectedCompanyId"
+                          name="selectedCompany"
+                          (change)="onCompanySelect()"
+                          [disabled]="loadingCompanies">
+                <option [value]="null" disabled>Select a company</option>
+                <option [ngValue]="-1">Create New Company</option>
+                <option *ngFor="let company of companies" [ngValue]="company.id">
+                  {{ company.name }} ({{ company.registrationNumber }})
+                </option>
+              </select>
+              <div *ngIf="loadingCompanies" class="loading-message">Loading companies...</div>
+              <label>Authorized Personnel (Optional):</label>
+              <select id="authorizedPersonnel" name="authorizedPersonnel"
+                          [(ngModel)]="selectedAuthorizedPersonnelId"
+                          (change)="onPersonnelSelect()">
+                <option [ngValue]="null">Select authorized personnel</option>
+                <option [ngValue]="-1">Create new authorized personnel</option>
+                <option *ngFor="let personnel of availablePersonnel" [ngValue]="personnel.id">
+                  {{ personnel.firstName }} {{ personnel.lastName }}
+                </option>
+              </select>
+            </div>
+
+            <div *ngIf="isNewPersonnel" class="flex-col gap-1 mt-1">
+              <h3>New Authorized Personnel Details</h3>
+              <input-text label="First Name" placeholder="First Name" id="firstName" name="firstName" [(ngModel)]="newPersonnel.firstName"
+                          required/>
+              <input-text label="Last Name" placeholder="Last Name" id="lastName" name="lastName" [(ngModel)]="newPersonnel.lastName" required/>
+              <input-text label="Date of Birth:" placeholder="Date of Birth:" id="dateOfBirth" name="dateOfBirth" type="date"
+                          [(ngModel)]="newPersonnel.dateOfBirth" required/>
+              <label>Gender:</label>
+              <select id="gender" name="gender" [(ngModel)]="newPersonnel.gender" required>
+                <option value="" disabled>Gender...</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+              <input-text label="Email" placeholder="Email" id="email" name="email" type="email" [(ngModel)]="newPersonnel.email"
+                          required/>
+              <input-text label="Phone Number" placeholder="Phone Number" id="phoneNumber" name="phoneNumber"
+                          [(ngModel)]="newPersonnel.phoneNumber" required/>
+              <input-text label="Address" placeholder="Address" id="personnelAddress" name="personnelAddress"
+                          [(ngModel)]="newPersonnel.address" required/>
+            </div>
+          </div>
+
+          <div class="info-card flex-col gap-1" *ngIf="isNewCompany || selectedCompanyId">
+            <input-text id="companyName" name="companyName" [(ngModel)]="companyInfo.name" placeholder="Company Name"
+                        label="Company Name"
+                        [disabled]="!isNewCompany"/>
+            <input-text id="registrationNumber" name="registrationNumber" [(ngModel)]="companyInfo.registrationNumber"
+                        placeholder="Registration Number" label="Registration Number" [disabled]="!isNewCompany"/>
+            <input-text id="taxNumber" name="taxNumber" [(ngModel)]="companyInfo.taxNumber" placeholder="Tax Number"
+                        label="Tax Number"
+                        [disabled]="!isNewCompany"/>
+            <input-text id="activityCode" name="activityCode" [(ngModel)]="companyInfo.activityCode"
+                        placeholder="Activity Code" label="Activity Code"
+                        [disabled]="!isNewCompany"/>
+            <input-text id="address" name="address" [(ngModel)]="companyInfo.address" placeholder="Address"
+                        label="Address"
+                        [disabled]="!isNewCompany"/>
+            <input-text id="majorityOwner" name="majorityOwner" [value]="getClientName(newAccount.clientId)"
+                        [(ngModel)]="companyInfo.majorityOwner" placeholder="Majority Owner" label="Majority Owner"
+                        [disabled]="true"/>
+          </div>
+
+          <label>Currency</label>
+          <select id="currency" name="currency" [(ngModel)]="newAccount.currency" disabled>
+            <option value="RSD">RSD</option>
+          </select>
+
+          <input-text id="name" name="name" [(ngModel)]="newAccount.name" placeholder="Account Name:"
+                      label="Account Name:" required/>
+          <input-text id="dailyLimit" name="dailyLimit" [(ngModel)]="newAccount.dailyLimit" type="number"
+                      placeholder="Daily Limit" label="Daily Limit" required/>
+          <input-text id="monthlyLimit" name="monthlyLimit" [(ngModel)]="newAccount.monthlyLimit" type="number"
+                      placeholder="Monthly Limit" label="Monthly Limit" required/>
+
+          <div class="flex justify-between" style="cursor: pointer" (click)="toggleIsActive()">
+            <label for="isActive" style="cursor: pointer" (click)="toggleIsActive()">Is Active:</label>
+            <input id="isActive" name="isActive" type="checkbox"
+                   [checked]="newAccount.isActive === 'ACTIVE'"/>
+          </div>
+
+          <div class="flex justify-between" style="cursor: pointer" (click)="toggleCreateCard()">
+            <label for="createCard" style="cursor: pointer" (click)="toggleCreateCard()">Create Card:</label>
+            <input id="createCard" name="createCard" [(ngModel)]="newAccount.createCard" type="checkbox"/>
+          </div>
+        </div>
+      </div>
+
+      <app-button type="submit"
+                  [disabled]="accountForm.invalid || !newAccount.clientId || !employeeId || !isCompanyFormValid()"
+                  class="submit-btn">Create Account
+      </app-button>
+    </div>
+  </form>
+</div>
+
+<app-modal [title]="'Create Card'" [isOpen]="showCardModal" (closeModalEvent)="showCardModal = false">
+  <div class="modal-content">
+    <br/>
+    <form #cardForm="ngForm" (ngSubmit)="submitCardForm()" class="flex-col gap-1">
+      <div>
+        <label class="mb-05">Card Type</label>
+        <select [(ngModel)]="newCard.type" name="type" required>
+          <option value="DEBIT">DEBIT</option>
+          <option value="CREDIT">CREDIT</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="mb-05">Issuer</label>
+        <select [(ngModel)]="newCard.issuer" name="issuer" required>
+          <option value="VISA">VISA</option>
+          <option value="MASTER">MASTER</option>
+        </select>
+      </div>
+
+        <input-text label="Card Name" type="text" [(ngModel)]="newCard.name" name="name" required/>
+
+        <input-text label="Card Limit" type="number" [(ngModel)]="newCard.cardLimit" name="cardLimit" required/>
+
+      <app-button type="submit" [disabled]="cardForm.invalid">Create Card</app-button>
+    </form>
+  </div>
+</app-modal>
+

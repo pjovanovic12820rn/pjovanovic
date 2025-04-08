@@ -1,65 +1,153 @@
-.alert-container {
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  padding: 0.75rem 1rem; /* Manji desni padding */
-  min-width: 250px;
-  max-width: 350px;
-  border-radius: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  font-size: 0.875rem;
+/* Base Alert Styles */
+.alert {
+  /* Remove transform from base styles */
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-in-out;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  border: 1px solid;
+  border-radius: 0.5rem;
 }
 
-.alert-container span {
+
+.alert-content {
   flex: 1;
 }
 
-.close-btn {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 3px;
-  font-size: 1rem;
-  width: 24px;
-  height: 24px;
-  display: flex;
+/* Alert Icons */
+.alert svg:not(.close-button svg) {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.75rem;
+}
+
+/* Close Button */
+.close-button {
+  margin-left: auto;
+  background-color: transparent;
+  color: currentColor;
+  border-radius: 0.5rem;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-left: 1rem;
+  height: 1.5rem;
+  width: 1.5rem;
   cursor: pointer;
-  color: inherit;
+  border: none;
+  outline: none;
+  transition: all 0.2s ease;
+  opacity: 0.7;
 }
 
-.close-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+.close-button:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
-.alert.success {
-  background-color: #4CAF50;
-  color: white;
+.close-button:focus {
+  box-shadow: 0 0 0 2px currentColor;
+  outline: none;
 }
 
-.alert.error {
-  background-color: #f44336;
-  color: white;
+.close-button svg {
+  width: 0.75rem;
+  height: 0.75rem;
 }
 
-.alert.warning {
-  background-color: #ff9800;
-  color: white;
+/* Alert Variants */
+.alert-info {
+  color: #1e40af;
+  border-color: #93c5fd;
+  background-color: #eff6ff;
 }
 
-.alert.info {
-  background-color: #2196F3;
-  color: white;
+.alert-error {
+  color: #991b1b;
+  border-color: #fca5a5;
+  background-color: #fef2f2;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+.alert-success {
+  color: #166534;
+  border-color: #86efac;
+  background-color: #f0fdf4;
+}
+
+.alert-warning {
+  color: #854d0e;
+  border-color: #fcd34d;
+  background-color: #fefce8;
+}
+
+.alert-default {
+  color: #1f2937;
+  border-color: #d1d5db;
+  background-color: #f9fafb;
+}
+
+/* Dark Mode */
+.dark .alert-info {
+  color: #60a5fa;
+  border-color: #1e40af;
+  background-color: #1f2937;
+}
+
+.dark .alert-error {
+  color: #f87171;
+  border-color: #991b1b;
+  background-color: #1f2937;
+}
+
+.dark .alert-success {
+  color: #4ade80;
+  border-color: #166534;
+  background-color: #1f2937;
+}
+
+.dark .alert-warning {
+  color: #facc15;
+  border-color: #854d0e;
+  background-color: #1f2937;
+}
+
+.dark .alert-default {
+  color: #d1d5db;
+  border-color: #4b5563;
+  background-color: #1f2937;
+}
+
+.dark .close-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Animation */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.font-medium {
+  font-weight: 500;
 }

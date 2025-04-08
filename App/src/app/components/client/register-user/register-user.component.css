@@ -1,0 +1,62 @@
+/* General Styling */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #F5F5F5; /* Light gray */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 30px;
+}
+
+/* Container */
+.register-container {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  width: 500px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Heading */
+.register-container h2 {
+  color: #6A4BBC; /* Purple */
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Form Layout */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Form Group */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+/* Error Messages */
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

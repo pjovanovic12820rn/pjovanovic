@@ -1,0 +1,42 @@
+<div class="bank-accounts-container">
+  <h2>Bank Accounts</h2>
+
+  <div *ngIf="loading">Loading bank accounts...</div>
+
+  <table *ngIf="!loading && accounts.length > 0">
+    <thead>
+    <tr>
+      <th>Account Number</th>
+      <th>Account Name</th>
+      <th>Type</th>
+      <th>Currency</th>
+      <th>Status</th>
+      <th>Balance</th>
+      <th>Available</th>
+      <th>Created</th>
+      <th>Expires</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let acc of accounts">
+      <td>{{ acc.accountNumber }}</td>
+      <td>{{ acc.name }}</td>
+      <td>{{ acc.ownershipType }}</td>
+      <td>{{ acc.currencyCode }}</td>
+      <td>{{ acc.status }}</td>
+      <td>{{ acc.balance | number: '1.2-2' }}</td>
+      <td>{{ acc.availableBalance | number: '1.2-2' }}</td>
+      <td>{{ formatDate(acc.creationDate) }}</td>
+      <td>{{ formatDate(acc.expirationDate) }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && accounts.length === 0" class="no-data">No accounts found.</div>
+
+  <div class="pagination" *ngIf="totalItems > pageSize">
+    <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 0">Previous</button>
+    <span>Page {{ currentPage + 1 }}</span>
+    <button (click)="onPageChange(currentPage + 1)" [disabled]="(currentPage + 1) * pageSize >= totalItems">Next</button>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+.portfolio-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 25px;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+/* Portfolio Table */
+.securities-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.securities-table th,
+.securities-table td {
+  border: 1px solid #C2B4E2;
+  padding: 12px;
+  text-align: left;
+}
+
+.securities-table th {
+  background: #6A4BBC;
+  color: white;
+}
+
+/* Profit Positive/Negative */
+.positive {
+  color: #4CAF50; /* Green */
+}
+
+.negative {
+  color: #E74C3C; /* Red */
+}
+
+/* Public Cell & Publish Button */
+.public-cell {
+  position: relative;
+  text-align: center;
+}
+
+.publish-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #6A4BBC;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 12px;
+  display: none;
+}
+
+.public-cell:hover .publish-button {
+  display: inline-block;
+}
+
+.publish-button:hover {
+  background: #8E79D2;
+}
+
+/* Portfolio Buttons */
+.portfolio-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.exercise-button, .sell-button {
+  margin: 0 5px;
+}

@@ -1,0 +1,62 @@
+<div class="card" style="width: 70vw; padding: 2rem">
+  <h1>Account Management</h1>
+
+<!--    <h2>Accounts</h2>-->
+    <table>
+      <tr>
+        <th>Account Number</th>
+        <th>Owner</th>
+        <th>Type</th>
+        <th>Category</th>
+        <th>Actions</th>
+      </tr>
+      <tr *ngFor="let account of filteredAccounts">
+        <td>{{ account.accountNumber }}</td>
+        <td>{{ account.owner.firstName }} {{ account.owner.lastName }}</td>
+        <td>{{ account.ownershipType }}</td>
+        <td>{{ account.accountCategory }}</td>
+        <td>
+          <div class="flex gap-1 ">
+
+          <app-button (onClick)="viewCards(account.accountNumber)">View Cards</app-button>
+          <app-button *ngIf="isClient()" (click)="openNameModal(account.accountNumber, account.name)">Edit Name</app-button>
+          <app-button *ngIf="isClient()" (click)="openLimitModal(account.accountNumber, account.dailyLimit)">Edit Limit</app-button>
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="accounts.length === 0">
+        <td colspan="5" class="no-data">No accounts found</td>
+      </tr>
+    </table>
+  <br>
+  <app-button *ngIf="isAdmin()" class="details-btn" (click)="openAccountModal()">New Account</app-button>
+
+</div>
+
+<div class="modal" *ngIf="isNameModalOpen">
+  <div class="modal-content">
+    <h3>Change Account Name</h3>
+    <input type="text" [(ngModel)]="newAccountName" placeholder="Enter new account name" />
+    <button (click)="changeAccountName()">Save</button>
+    <button (click)="closeNameModal()">Cancel</button>
+  </div>
+</div>
+
+<div class="modal" *ngIf="isLimitModalOpen">
+  <div class="modal-content">
+    <h3>Request Account Limit Change</h3>
+    <input type="number" [(ngModel)]="newAccountLimit" placeholder="Enter new account limit" />
+    <button (click)="changeAccountLimit()">Request</button>
+    <button (click)="closeLimitModal()">Cancel</button>
+  </div>
+</div>
+
+<app-modal [title]="'New Account'" [isOpen]="isAccountModalOpen" (closeModalEvent)="closeAccountModal()">
+  <div class="modal-content">
+      <br/>
+    <div class="flex gap-1">
+      <app-button [routerLink]="['/create-current-account']" (click)="closeAccountModal()">Checking Account</app-button>
+      <app-button [routerLink]="['/create-foreign-currency-account']" (click)="closeAccountModal()">Foreign Currency Account</app-button>
+    </div>
+  </div>
+</app-modal>

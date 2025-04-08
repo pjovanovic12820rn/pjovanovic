@@ -1,0 +1,34 @@
+<div class="card width-70 flex-col gap-1">
+  <h2>Loan requests</h2>
+
+  <div class="flex gap-1 flex-wrap">
+
+    <div class="card flex-col gap-1" style="min-width: fit-content; width: 20vw" *ngFor="let request of loanRequests">
+      <div class="flex-col gap-1">
+        <div class="flex justify-between flex-1">
+          <strong>Request Type:</strong> {{ request.type }}
+        </div>
+        <div class="flex justify-between flex-1">
+          <strong>Amount:</strong> {{ request.amount }} {{ request.currencyCode }} <br>
+        </div>
+        <div class="flex justify-between flex-1">
+          <strong>Status:</strong>
+          <span [ngClass]="getLoanStatusClass(request.status)">
+            {{ request.status }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Show buttons only if status is PENDING -->
+      <div *ngIf="request.status === 'PENDING'" class="flex gap-1">
+        <app-button (click)="approveLoan(request.id)">Approve</app-button>
+        <app-button (click)="rejectLoan(request.id)">Reject</app-button>
+      </div>
+
+      <div *ngIf="loanRequests.length === 0" class="no-loans-message">
+        No loan requests found.
+      </div>
+    </div>
+
+  </div>
+</div>

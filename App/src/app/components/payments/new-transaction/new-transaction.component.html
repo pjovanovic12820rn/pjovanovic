@@ -1,0 +1,46 @@
+<div class="new-transaction-container">
+  <h2>New Transaction</h2>
+  <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
+
+    <input-text
+      label="From Account (Card)"
+      formControlName="senderAccountNumber"
+      [disabled]="true">
+    </input-text>
+
+    <input-text
+      label="To Account"
+      formControlName="receiverAccountNumber"
+      placeholder="e.g. 265000000123456">
+    </input-text>
+
+    <input-text
+      label="Amount"
+      formControlName="amount"
+      type="number"
+      step="0.01">
+    </input-text>
+
+    <input-text
+      label="Payment Code"
+      formControlName="paymentCode">
+    </input-text>
+
+    <input-text
+      label="Purpose of Payment"
+      formControlName="purposeOfPayment">
+    </input-text>
+
+    <input-text
+      label="Reference Number"
+      formControlName="referenceNumber">
+    </input-text>
+
+    <app-button
+      type="submit"
+      label="Create Transaction"
+      [disabled]="transactionForm.invalid || isSubmitting">
+    </app-button>
+
+  </form>
+</div>

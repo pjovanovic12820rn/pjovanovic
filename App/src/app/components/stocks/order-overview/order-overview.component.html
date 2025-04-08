@@ -1,0 +1,95 @@
+<div class="order-overview">
+  <h2>Order Overview</h2>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div class="filter-section">
+    <label for="statusFilter">Filter by Status:</label>
+    <select
+      id="statusFilter"
+      [(ngModel)]="filterStatus"
+      (change)="onFilterChange()"
+      [disabled]="loading"
+    >
+      <option value="ALL">All</option>
+      <option value="PENDING">Pending</option>
+      <option value="APPROVED">Approved</option>
+      <option value="DECLINED">Declined</option>
+      <option value="DONE">Done</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="loading-indicator">
+    Loading orders...
+  </div>
+
+  <table *ngIf="!loading && orders.length > 0">
+    <thead>
+    <tr>
+      <th>Agent</th>
+      <th>Order Type</th>
+      <th>Asset</th>
+      <th>Quantity</th>
+      <th>Contract Size</th>
+      <th>Price per Unit</th>
+      <th>Direction</th>
+      <th>Remaining Portions</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let order of orders">
+      <td>{{ order.agent }}</td>
+      <td>{{ order.orderType }}</td>
+      <td>{{ order.asset }}</td>
+      <td>{{ order.quantity | number }}</td>
+      <td>{{ order.contractSize | number }}</td>
+      <td>{{ order.pricePerUnit | currency }}</td>
+      <td>{{ order.direction }}</td>
+      <td>{{ order.remainingPortions | number }}</td>
+      <td>{{ order.status }}</td>
+      <td>
+        <ng-container *ngIf="order.status === 'Pending'">
+          <button
+            *ngIf="!isOrderExpired(order)"
+            (click)="approveOrder(order)"
+            [disabled]="loading"
+          >
+            Approve
+          </button>
+          <button
+            (click)="declineOrder(order)"
+            [disabled]="loading"
+          >
+            Decline
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="order.status !== 'Done' && order.remainingPortions > 0">
+          <input
+            type="number"
+            min="1"
+            [max]="order.remainingPortions"
+            [(ngModel)]="cancelQuantity[order.id]"
+            placeholder="Qty"
+            [disabled]="loading"
+          />
+          <button
+            (click)="cancelOrder(order)"
+            [disabled]="loading || !cancelQuantity[order.id]"
+          >
+            Cancel
+          </button>
+        </ng-container>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && orders.length === 0" class="empty-state">
+    No orders found matching the selected criteria.
+  </div>
+</div>

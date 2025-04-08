@@ -1,0 +1,49 @@
+.client-loans-container {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  width: 600px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Filter */
+.filter {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+/* Loans List */
+.credits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Loan & Request Cards */
+.credit-card {
+  background: #F5F3FB;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* No Loans Message */
+.no-loans-message {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  font-weight: 600;
+  padding: 10px;
+}
+
+/* New Loan Button */
+.new-credit-btn {
+  margin-top: 20px;
+  width: 100%;
+}

@@ -1,0 +1,29 @@
+.account-details {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 70vw;
+}
+
+/* Ispravka preklapanja dugmadi */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* Statusi */
+.status-active {
+  color: #228B22;
+  font-weight: 600;
+}
+
+.status-blocked {
+  color: #DC143C;
+  font-weight: 600;
+}
+
+.status-deactivated {
+  color: gray;
+  font-weight: 600;
+}

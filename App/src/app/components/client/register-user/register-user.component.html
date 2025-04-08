@@ -1,0 +1,84 @@
+<div class="card width-50 margin-auto flex-col gap-1">
+  <h2>Register New User</h2>
+
+  <form *ngIf="registerUserForm" class="flex-col gap-1" [formGroup]="registerUserForm" (ngSubmit)="onSubmit()">
+    <div class="flex gap-1">
+
+      <input-text label="First Name" placeholder="First Name" class="flex-1" id="firstName" formControlName="firstName"
+                  [formControlComp]="registerUserForm.controls['firstName']"
+                  required
+      />
+      <input-text label="Last Name" placeholder="Last Name" class="flex-1" id="lastName" formControlName="lastName"
+                  [formControlComp]="registerUserForm.controls['lastName']"
+                  required
+      />
+    </div>
+
+    <input-text label="Username" id="username" placeholder="Username" formControlName="username" required
+                [formControlComp]="registerUserForm.controls['username']"
+    />
+
+    <div class="flex gap-1">
+      <input-text class="flex-1" label="Birth Date" id="birthDate" type="date" formControlName="birthDate" required
+                  [formControlComp]="registerUserForm.controls['birthDate']"
+                  [errorMessages]="{invalidDate: 'Must be in the past.'}"
+      />
+    <div class="flex-1">
+
+      <label class="mb-05">Gender:</label>
+      <select class="flex-1" id="gender" formControlName="gender">
+        <option value="" disabled>Gender...</option>
+        <option value="M">Male</option>
+        <option value="F">Female</option>
+      </select>
+      <div class="error"
+           *ngIf="(registerUserForm.get('gender')?.touched || registerUserForm.get('gender')?.dirty) && hasError('gender', 'required')">
+        Required.
+      </div>
+    </div>
+    </div>
+
+    <input-text label="Email" placeholder="Email" id="email" type="email" formControlName="email" required
+                [formControlComp]="registerUserForm.controls['email']"
+    />
+
+    <div class="form-group">
+      <input-text label="Phone" placeholder="Phone" id="phone" formControlName="phone" required
+                  [formControlComp]="registerUserForm.controls['phone']"
+                  [errorMessages]="{ pattern: 'Invalid phone number.' }"
+      ></input-text>
+    </div>
+
+    <input-text label="Address" placeholder="Address" id="address" formControlName="address" required
+                [formControlComp]="registerUserForm.controls['address']"
+                [errorMessages]="{ minlength: 'Minimum length is 5.'}"
+    />
+
+    <div class="form-group">
+      <input-text label="JMBG" placeholder="JMBG" id="jmbg" formControlName="jmbg"
+                  [formControlComp]="registerUserForm.controls['jmbg']"
+                  [errorMessages]="{ pattern: 'Must be 13 digits.' }"
+                  required/>
+    </div>
+
+    <div class="form-group">
+      <input-text label="Password" placeholder="*********" id="password" type="password" formControlName="password"
+                  [formControlComp]="registerUserForm.controls['password']"
+                  [errorMessages]="{ minlength: 'Minimum length is 8.'}"
+                  required
+      />
+    </div>
+
+    <label>Role</label>
+    <select id="role" formControlName="role" required>
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+    </select>
+
+    <div class="flex gap-1">
+
+    <app-button type="submit" [disabled]="registerUserForm.invalid || loading">Register</app-button>
+    <app-button type="back-button">Cancel</app-button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,139 @@
+/* Container */
+.recipients-container {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  width: 500px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Add Recipient Form */
+.add-recipient-form, .edit-recipient-form {
+  background: #F5F3FB;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/* Input Fields */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #C2B4E2;
+  border-radius: 6px;
+  outline: none;
+  font-size: 1rem;
+}
+
+.input-group input:focus {
+  border-color: #6A4BBC;
+  box-shadow: 0 0 8px rgba(106, 75, 188, 0.3);
+}
+
+/* Buttons Group (Spacing) */
+.btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+/* Recipient Card */
+.recipient-card {
+  background: #F5F3FB;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Recipient Content */
+.recipient-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Recipient Info */
+.recipient-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.recipient-name {
+  font-weight: bold;
+}
+
+.recipient-account {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Edit/Delete Button Group */
+.button-group {
+  display: flex;
+  gap: 15px;
+}
+
+/* Delete Confirmation Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.confirmation-modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.confirmation-modal h3 {
+  color: #6A4BBC;
+  margin-bottom: 1rem;
+}
+
+.confirmation-modal p {
+  margin-bottom: 1.5rem;
+  color: #666;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

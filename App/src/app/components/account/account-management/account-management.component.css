@@ -1,0 +1,38 @@
+
+/* Akcije za kartice */
+.action-btn {
+  padding: 8px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.block {
+  background: red;
+  color: white;
+}
+
+.block:hover {
+  background: darkred;
+}
+
+.unblock {
+  background: orange;
+  color: white;
+}
+
+.unblock:hover {
+  background: darkorange;
+}
+
+.deactivate {
+  background: gray;
+  color: white;
+}
+
+.deactivate:hover {
+  background: darkgray;
+}

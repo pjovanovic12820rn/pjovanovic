@@ -1,0 +1,72 @@
+<div class="employees-container">
+  <div class="flex justify-between" style="margin-bottom: 2rem">
+
+    <h1 style="margin-bottom: 0">Employees</h1>
+    <app-button *ngIf="isAdmin; else unauthorized" (click)="register()"
+                class="register-btn">
+      Register new employee
+    </app-button>
+  </div>
+
+  <div *ngIf="isAdmin; else unauthorized">
+
+    <!-- Employee List -->
+    <div id="employees-list" class="employee-list">
+      <div *ngFor="let employee of pagedEmployees;" class="employee-card">
+        <span>
+          <strong>{{ employee.firstName }} {{ employee.lastName }}</strong> ({{ employee.email }})
+        </span>
+        <p class="role"><strong>Role:</strong> {{ employee.position }}</p>
+        <p><strong>Phone:</strong> {{ employee.phone }}</p>
+        <p>
+          <strong>Status:</strong>
+          <span [ngClass]="employee.active ? 'status-active' : 'status-inactive'">
+            {{ employee.active ? 'Active' : 'Inactive' }}
+          </span>
+        </p>
+
+        <div class="employee-actions">
+          <app-button class="view-details-btn" (click)="viewEmployeeDetails(employee.id)">View Details</app-button>
+
+          <ng-container *ngIf="employee.id !== currentUserId">
+            <app-button class="delete-btn" (click)="openDeleteModal(employee)">Delete</app-button>
+
+            <!-- ✅ Corrected Toggle Activation Button -->
+            <app-button class="toggle-status-btn"
+                        (click)="deactivateEmployee(employee.id, employee.active)"
+                        [ngClass]="employee.active ? 'deactivate-btn' : 'activate-btn'">
+              {{employee.active ? 'Deactivate' : 'Activate'}}
+            </app-button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <app-pagination
+      [totalItems]="filteredEmployees.length"
+      [pageSize]="pageSize"
+      (pageChanged)="onPageChanged($event)">
+    </app-pagination>
+  </div>
+
+  <ng-template #unauthorized>
+    <p>You are not authorized to view the employee list.</p>
+  </ng-template>
+
+  <div class="modal-overlay" *ngIf="showDeleteModal">
+    <div class="modal">
+      <h3>Confirm Deletion</h3>
+      <p>
+        Are you sure you want to delete
+        <strong>{{ selectedEmployee?.firstName }} {{ selectedEmployee?.lastName }}</strong>
+        ({{ selectedEmployee?.position }})?
+      </p>
+
+      <div class="modal-actions">
+        <app-button (click)="closeDeleteModal()" class="cancel-btn">Cancel</app-button>
+        <app-button (click)="confirmDelete()" class="confirm-btn">Delete</app-button>
+      </div>
+    </div>
+  </div>
+</div>

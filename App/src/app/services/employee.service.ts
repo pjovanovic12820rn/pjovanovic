@@ -38,10 +38,6 @@ export class EmployeeService {
     return this.http.get<Employee>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 
-  getEmployeeSelf(): Observable<Employee> {
-    return this.http.get<Employee>(`${this.apiUrl}/me`, { headers: this.getAuthHeaders() });
-  }
-
   registerEmployee(employee: Employee): Observable<Employee> {
     return this.http.post<Employee>(this.apiUrl, employee, { headers: this.getAuthHeaders() });
   }
@@ -61,7 +57,17 @@ export class EmployeeService {
     return this.http.patch<void>(url, null, { headers: this.getAuthHeaders() });
   }
 
+  activateEmployee(id: number): Observable<void> {
+    const url = `${this.apiUrl}/${id}/activate`; // Construct URL with ID
+    return this.http.patch<void>(url, null, { headers: this.getAuthHeaders() });
+  }
+
   setEmployeeRole(employeeId: number, role: string): Observable<void> {
     return this.http.patch<void>(`${this.apiUrl}/${employeeId}/set-role`, { role }, { headers: this.getAuthHeaders() });
+  }
+
+  // client
+  getEmployeeSelf(): Observable<Employee> {
+    return this.http.get<Employee>(`${this.apiUrl}/me`, { headers: this.getAuthHeaders() });
   }
 }

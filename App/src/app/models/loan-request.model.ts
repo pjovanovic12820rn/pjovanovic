@@ -1,8 +1,10 @@
 export type LoanType = 'CASH' | 'MORTGAGE' | 'CAR' | 'REFINANCING' | 'STUDENT';
 export type EmploymentStatus = 'PERMANENT' | 'TEMPORARY' | 'UNEMPLOYED';
 export type LoanRequestStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+export type InterestRateType = 'FIXED' | 'CURRENT';
 
 export interface LoanRequest {
+  id: number;
   type: LoanType;
   amount: number;
   purpose: string;
@@ -14,4 +16,5 @@ export interface LoanRequest {
   accountNumber: string;
   currencyCode: string;
   status?: LoanRequestStatus;
+  interestRateType: InterestRateType;
 }
