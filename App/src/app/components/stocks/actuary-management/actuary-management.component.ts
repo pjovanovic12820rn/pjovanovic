@@ -49,7 +49,7 @@ export class ActuaryManagementComponent implements OnInit {
       size
     ).subscribe({
       next: (res) => {
-        console.log("prosao zahtev")
+        console.log(`prosao zahtev: ${res.content}`)
         this.loading = false;
         this.agents = res.content || [];
         this.totalElements = res.totalElements || 0;

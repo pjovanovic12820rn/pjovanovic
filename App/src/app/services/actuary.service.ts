@@ -31,19 +31,30 @@ export class ActuaryService {
     page: number,
     size: number
   ): Observable<any> {
-    let params = new HttpParams()
-      .set('email', email || '')
-      .set('firstName', firstName || '')
-      .set('lastName', lastName || '')
-      .set('position', position || '')
-      .set('page', page)
-      .set('size', size);
+    let params = new HttpParams();
+
+    if (email) {
+      params = params.set('email', email);
+    }
+    if (firstName) {
+      params = params.set('firstName', firstName);
+    }
+    if (lastName) {
+      params = params.set('lastName', lastName);
+    }
+    if (position) {
+      params = params.set('position', position);
+    }
+
+    params = params.set('page', page.toString());
+    params = params.set('size', size.toString());
 
     return this.http.get<any>(this.baseUrl, {
       headers: this.getAuthHeaders(),
       params
     });
   }
+
 
   updateAgentLimit(agentId: number, newLimit: number): Observable<any> {
     return this.http.put<any>(
