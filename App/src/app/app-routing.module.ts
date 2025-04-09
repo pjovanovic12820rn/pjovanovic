@@ -41,6 +41,8 @@ import { TaxCalculationComponent } from './components/tax-calculation/tax-calcul
 import { BankAccountsComponent} from './components/account/bank-accounts/bank-accounts.component';
 import { ActuaryManagementComponent } from './components/stocks/actuary-management/actuary-management.component';
 import {supervisorGuard} from './guards/supervisor-guard.guard';
+import { OtcOffersListComponent } from './components/stocks/otc-offers-list/otc-offers-list.component';
+import { employeeGuard } from './guards/employee-guard.guard';
 
 export const routes: Routes = [
   // login
@@ -107,6 +109,9 @@ export const routes: Routes = [
   { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard, supervisorGuard] }, // treba supervisor gard, ovako ce biti dok se ne doda u beku
 
   //Actuary
-  { path: 'actuaries', component: ActuaryManagementComponent, canActivate: [authGuard, supervisorGuard] } // treba supervisor gard, ovako ce biti dok se ne doda u beku
+  { path: 'actuaries', component: ActuaryManagementComponent, canActivate: [authGuard, supervisorGuard] }, // treba supervisor gard, ovako ce biti dok se ne doda u beku
+
+  //otc
+  { path: 'otc-offers', component: OtcOffersListComponent, canActivate: [authGuard, clientOrActuaryGuard] }
 
 ];
