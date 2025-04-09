@@ -33,16 +33,16 @@
         <td>{{ onePortfolio.inTheMoney }}</td>
         <td>{{ onePortfolio.used }}</td>
         <td>
-<!--        <app-button class="sell-button" (click)="makeSecurityPublic(onePortfolio)">-->
           <app-button class="sell-button" (onClick)="publishFlag(onePortfolio)">
           Make Public
         </app-button>
       </td>
 
-        <td><app-button class="sell-button" (onClick)="orderModalFlag()">Sell</app-button> </td>
+        <td><app-button class="sell-button" (onClick)="orderModalFlag(onePortfolio)">Sell</app-button> </td>
       </tr>
     </tbody>
   </table>
+  <h4> </h4>
 
   <div class="portfolio-buttons">
     <app-button class="info-button" (onClick)="profitFlag()">Profit Info</app-button>
@@ -67,6 +67,7 @@
         <p>Unpaid Tax (Current Month): <strong>{{ taxes?.unpaidForThisMonth }}</strong></p>
 
       </div>
+      <h4></h4>
       <div class="width-fit">
          <app-button class="close-button" (click)="taxFlag()">Close</app-button>
       </div>
@@ -88,6 +89,7 @@
           type="number"
         ></input-text>
       </div>
+      <h4></h4>
       <div class="width-fit">
         <app-button class="close-button" (click)="publishFlagClose()">Close</app-button>
         <app-button class="close-button" (click)="makeSecurityPublicServiceCall(publishID)">Confirm</app-button>
@@ -95,17 +97,55 @@
     </div>
   </app-modal>
 
+  <app-modal [title]="'Sell security'"  [isOpen]="isOrderModalOpen" (closeModalEvent)="isOrderModalOpen = false">
+    <div class="modal-content">
+      <div class="text-center">
+        <p>Listing ID: <strong> {{ securityForSell?.id }}</strong></p>
+        <p>Security name: <strong> {{ securityForSell?.securityName }}</strong></p>
+        <p>Average price: <strong> {{ securityForSell?.averagePrice }}</strong></p>
+        <p>Available amount: <strong> {{ securityForSell?.amount }}</strong></p>
 
-  <app-order-creation-modal>
-<!--    [direction]="orderDirection"-->
-<!--    [securityTicker]="selectedSecurityForOrder?.ticker || ''"-->
-<!--    [securityPrice]="currentSecurityPrice"-->
-<!--    [contractSize]="currentContractSize"-->
-<!--    [listingId]="currentListingId"-->
-<!--    (closeModalEvent)="closeOrderModal()"-->
-<!--    (createOrderEvent)="handleOrderCreation($event)"-->
+        <input-text
+          [(ngModel)]="amountToSell"
+          placeholder="Enter amount"
+          label="Amount"
+          type="number"
+        ></input-text>
+        <input-text
+          [(ngModel)]="LimitPrice"
+          placeholder="Enter limit price"
+          label="Limit"
+          type="number"
+        ></input-text>
+        <input-text
+          [(ngModel)]="StopPrice"
+          placeholder="Enter stop price"
+          label="Stop"
+          type="number"
+        ></input-text>
 
-  </app-order-creation-modal>
+        <label for="accountSelect">Choose account:</label>
+        <select
+          id="accountSelect"
+          class="form-control"
+          [(ngModel)]="selectedAccountNumber"
+        >
+          <option [value]="''" disabled selected>-- Select an account --</option>
+          <option *ngFor="let acc of myAccounts" [value]="acc.accountNumber">
+            {{ acc.accountNumber }}
+          </option>
+        </select>
+
+      </div>
+      <h4></h4>
+      <div class="width-fit">
+        <app-button class="close-button" (click)="orderModalFlagClose()">Close</app-button>
+
+        <app-button class="close-button" (click)="sellListing()">Confirm</app-button>
+      </div>
+    </div>
+  </app-modal>
+
 
 </div>
 
