@@ -1,21 +1,16 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {AuthService} from '../../../services/auth.service';
-import {AlertService} from '../../../services/alert.service';
+import {AuthService} from '../../services/auth.service';
+import {AlertService} from '../../services/alert.service';
 import {Router} from '@angular/router';
 import {FormsModule} from '@angular/forms';
-import {NgClass, NgForOf, NgIf, CurrencyPipe} from '@angular/common';
-import {PortfolioService} from '../../../services/portfolio.service';
-import {Securities} from '../../../models/securities';
-import {ButtonComponent} from '../../shared/button/button.component';
-import {ModalComponent} from '../../shared/modal/modal.component';
-import { of } from 'rxjs';
-import { delay, finalize } from 'rxjs/operators';
-import { OrderCreationModalComponent } from '../../shared/order-creation-modal/order-creation-modal.component'; // Import the modal component
+import { NgForOf, NgIf} from '@angular/common';
+import {PortfolioService} from '../../services/portfolio.service';
+import {ButtonComponent} from '../shared/button/button.component';
+import {ModalComponent} from '../shared/modal/modal.component';
+import {MyPortfolio} from "../../models/my-portfolio";
+import {MyTax} from '../../models/my-tax';
+import {InputTextComponent} from '../shared/input-text/input-text.component';
 
-interface TaxSummary {
-  taxPaidThisYear: number;
-  unpaidTaxThisMonth: number;
-}
 
 @Component({
   selector: 'app-my-portfolio',
@@ -24,152 +19,123 @@ interface TaxSummary {
     FormsModule,
     NgIf,
     NgForOf,
-    NgClass,
-    CurrencyPipe,
     ButtonComponent,
     ModalComponent,
-    OrderCreationModalComponent
+    InputTextComponent
   ],
   templateUrl: './my-portfolio.component.html',
   styleUrl: './my-portfolio.component.css'
 })
 export class MyPortfolioComponent implements OnInit {
 
-  private authService = inject(AuthService);
   private alertService = inject(AlertService);
+  private authService= inject(AuthService);
   private router = inject(Router);
   private portfolioService = inject(PortfolioService);
 
-  securities: Securities[] = [];
   isProfitModalOpen = false;
   isTaxModalOpen = false;
-  today: Date = new Date();
-
-  taxPaidThisYear: number | null = null;
-  unpaidTaxThisMonth: number | null = null;
-  loadingTaxData: boolean = false;
-  taxDataError: string | null = null;
-
+  isPublishModalOpen = false;
   isOrderModalOpen = false;
-  selectedSecurityForOrder: Securities | null = null;
-  orderDirection: 'BUY' | 'SELL' = 'BUY';
+
+  publishAmount: number = 0;
+  publishID: number = 0;
+  myUser: number | null = 0;
+
+  toBePublished: MyPortfolio | undefined;
+
+  portfolio: MyPortfolio[] = [];
+  taxes: MyTax | undefined;
 
   ngOnInit(): void {
-    this.securities = this.portfolioService.getMySecurities();
-    this.today.setHours(0, 0, 0, 0);
-    this.loadTaxData();
+    this.loadPortfolio();
+    this.myUser = this.authService.getUserId();
   }
 
-  loadTaxData(): void {
-    this.loadingTaxData = true;
-    this.taxDataError = null;
-    this.taxPaidThisYear = null;
-    this.unpaidTaxThisMonth = null;
-
-    const mockTaxSummary: TaxSummary = {
-      taxPaidThisYear: this.getTotalProfit() * 0.15,
-      unpaidTaxThisMonth: 67.89
-    };
-    of(mockTaxSummary).pipe(
-      delay(2000),
-      finalize(() => this.loadingTaxData = false)
-    ).subscribe({
-      next: (summary) => {
-        this.taxPaidThisYear = summary.taxPaidThisYear;
-        this.unpaidTaxThisMonth = summary.unpaidTaxThisMonth;
+  loadPortfolio() {
+    this.portfolioService.getPortfolio().subscribe({
+      next: (data) => {
+        this.portfolio = data;
       },
       error: (err) => {
-        console.error("Error loading tax data:", err);
-        this.taxDataError = "Failed to load tax information. Please try again later.";
+        console.error('Failed to load portfolio data for this user! ', err);
+        this.alertService.showAlert("error","Failed to load portfolio data for this user!");
+      }
+    });
+  }
+  orderModalFlag(){
+    this.isOrderModalOpen = !this.isOrderModalOpen;
+  }
+
+  profitFlag(){
+    this.isProfitModalOpen = !this.isProfitModalOpen;
+  }
+  taxFlag(){
+    this.isTaxModalOpen = !this.isTaxModalOpen;
+    if(this.isTaxModalOpen){
+      this.getMyTax();
+    }
+  }
+  publishFlag(security: MyPortfolio){
+    this.isPublishModalOpen = !this.isPublishModalOpen;
+    this.toBePublished = security;
+    this.publishID = security.id;
+
+  }
+  publishFlagClose(){
+    this.isPublishModalOpen = !this.isPublishModalOpen;
+    this.publishID = 0;
+    this.publishAmount = 0;
+  }
+
+  getMyTax(){
+    this.portfolioService.getMyTaxes().subscribe({
+      next: (data) => {
+
+        this.taxes = data
+      },
+      error: () => {
+        this.alertService.showAlert('error', 'Failed to load your taxes!');
       }
     });
   }
 
 
-  isActuary(): boolean {
-    return this.authService.isActuary();
-  }
+  makeSecurityPublicServiceCall(entryId: number) {
 
-  canExerciseOption(security: Securities): boolean {
-    if (!this.isActuary() || security.type !== 'Option' || !security.settlementDate || !security.strikePrice || !security.underlyingStockPrice || !security.optionType) {
-      return false;
+    if(this.toBePublished?.amount != undefined && this.toBePublished?.amount > this.publishAmount && this.publishAmount>0) {
+
+
+      this.portfolioService.setPublicAmount(entryId, this.publishAmount).subscribe({
+        next: () => {
+          this.alertService.showAlert('success', 'Successfully made public!');
+          this.loadPortfolio();
+        },
+        error: () => {
+          this.alertService.showAlert('error', 'Failed to set public amount!');
+        }
+      });
+
+    }else{
+      this.alertService.showAlert('error', 'Publish not possible, chosen amount is bigger the available amount!');
     }
 
-    const settlementDate = new Date(security.settlementDate);
-    settlementDate.setHours(0, 0, 0, 0);
+    this.isPublishModalOpen = false;
+    this.publishID = 0;
+    this.publishAmount = 0;
 
-    if (settlementDate < this.today) {
-      return false;
+  }
+
+  getTotalProfit(): number{
+
+    let profit = 0;
+
+    for (let portfolioItem of this.portfolio) {
+      profit += portfolioItem.profit;
     }
 
-    if (security.optionType === 'Call') {
-      return security.underlyingStockPrice > security.strikePrice;
-    } else if (security.optionType === 'Put') {
-      return security.underlyingStockPrice < security.strikePrice;
-    }
-
-    return false;
+    return profit;
   }
-
-  exerciseOption(security: Securities): void {
-    console.log(`Attempting to exercise ${security.optionType} option for ${security.ticker} with strike ${security.strikePrice}`);
-    this.alertService.showAlert('info', `Exercise action triggered for ${security.ticker}.`);
-  }
-
-  openSellOrderModal(security: Securities): void {
-    if (security.amount <= 0) {
-      this.alertService.showAlert('warning', `No amount available to sell for ${security.ticker}.`);
-      return;
-    }
-    this.selectedSecurityForOrder = security;
-    this.orderDirection = 'SELL';
-    this.isOrderModalOpen = true;
-  }
-
-  closeOrderModal(): void {
-    this.isOrderModalOpen = false;
-    this.selectedSecurityForOrder = null;
-  }
-
-  handleOrderCreation(orderDetails: any): void {
-    console.log('Order creation requested from MyPortfolioComponent:', orderDetails, 'for security:', this.selectedSecurityForOrder);
-    this.closeOrderModal();
-  }
-
-  getTotalProfit(): number {
-    return this.securities
-      .filter(security => security.type === 'Stock')
-      .reduce((sum, security) => sum + security.profit, 0);
-  }
-
-  openProfitModal(): void {
-    this.isProfitModalOpen = true;
-  }
-
-  openTaxModal(): void {
-    this.isTaxModalOpen = true;
-  }
-
-  closeModals(): void {
-    this.isProfitModalOpen = false;
-    this.isTaxModalOpen = false;
-  }
-
-  publishSecurity(security: Securities): void {
-    security.publicCounter += 1;
-  }
-
-  get currentSecurityPrice(): number {
-    return this.selectedSecurityForOrder?.price ?? 0;
-  }
-
-   get currentContractSize(): number {
-     return 1;
-  }
-
-  get currentListingId(): number | null {
-    return this.selectedSecurityForOrder?.id ?? null;
-}
 
 
 }
