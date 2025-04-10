@@ -87,6 +87,10 @@ export class MyPortfolioComponent implements OnInit {
   }
   orderModalFlagClose(){
     this.isOrderModalOpen = !this.isOrderModalOpen;
+    this.amountToSell = 0;
+    this.LimitPrice = 0;
+    this.StopPrice = 0;
+    this.myAccounts = [];
   }
 
   profitFlag(){
@@ -126,18 +130,26 @@ export class MyPortfolioComponent implements OnInit {
 
     if(this.selectedAccountNumber == null || this.amountToSell <= 0 || this.LimitPrice <=0 || this.StopPrice <=0 || ( this.securityForSell?.amount != null && this.amountToSell > this.securityForSell?.amount)){
       this.alertService.showAlert('error', 'Your selection was not correct, make sure there is enough chosen amount!');
+      this.amountToSell = 0;
+      this.LimitPrice = 0;
+      this.StopPrice = 0;
     }
     else{
-
-      this.orderService.makeOrder(4,this.amountToSell,1,this.selectedAccountNumber).subscribe({
+      // zakucano na 17 jer nemamo info o listingID jos uvek
+      this.orderService.makeOrder(17,this.amountToSell,1,this.selectedAccountNumber,"SELL","MARKET").subscribe({
         next: () => {
-          this.alertService.showAlert('success', 'Successfully ordered!');
+          this.alertService.showAlert('success', 'Successfully placed order to sell security!');
+          this.amountToSell = 0;
+          this.LimitPrice = 0;
+          this.StopPrice = 0;
+          this.myAccounts = [];
+          this.loadPortfolio();
+          this.getMyTax();
         },
         error: () => {
-          this.alertService.showAlert('error', 'Failed to make order for selling Security!');
+          this.alertService.showAlert('error', 'Failed to make order for selling Security, please try again!');
         }
       });
-      this.alertService.showAlert('success', 'Great, you just sold you security!');
     }
     this.orderModalFlagClose();
   }
@@ -188,7 +200,7 @@ export class MyPortfolioComponent implements OnInit {
 
     return profit;
   }
-  // OVo je ono sto je postojalo pre!
+  // OVo je ono sto je postojalo pre, nije bilo povezano sa bekom!
 
   // isOrderModalOpen = false;
   // selectedSecurityForOrder: Securities | null = null;

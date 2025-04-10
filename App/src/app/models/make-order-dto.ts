@@ -3,7 +3,7 @@ export interface MakeOrderDto {
   orderType: string;
   quantity: number;
   contractSize: number;
-  orderDirections: string;
+  orderDirection: string;
   accountNumber: string;
 }
 

@@ -50,17 +50,17 @@ export class OrderService {
   }
   // znaci trebala bi metoda da bude kao sto je ovo zakomentarisano 90% , ovo je Milan dodao radi sell-a iz portfolia!
   // makeOrder(listingId: number, orderType: OrderType, quantity: number, contractSize: number, orderDirections: OrderDirection, accountNumber: string,){
-  makeOrder(listingId: number, quantity: number, contractSize: number, accountNumber: string): Observable<any>{
+  makeOrder(listingId: number, quantity: number, contractSize: number, accountNumber: string,action: string,orderTypeStr: string): Observable<any>{
     const orderBody : MakeOrderDto = {
       listingId: listingId,
-      orderType: "MARKET",
+      orderType: orderTypeStr,
       quantity: quantity,// zakucano za sad ne znam koje je pravilo!
       contractSize: contractSize,
-      orderDirections: "SELL", // ovo je okej da bude zakucano!
+      orderDirection: action, // ovo je okej da bude zakucano!
       accountNumber: accountNumber
     };
 
-    console.log(orderBody.listingId + orderBody.orderType + orderBody.quantity + orderBody.contractSize + orderBody.orderDirections + orderBody.accountNumber + "result was this");
+    console.log(orderBody.listingId + orderBody.orderType + orderBody.quantity + orderBody.contractSize + orderBody.orderDirection + orderBody.accountNumber + "result was this");
 
     return this.http.post<void>(this.baseUrl, orderBody, { headers: this.getAuthHeaders() });
 
