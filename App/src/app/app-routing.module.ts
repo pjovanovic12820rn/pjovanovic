@@ -40,6 +40,7 @@ import { OrderOverviewComponent } from './components/stocks/order-overview/order
 import { TaxCalculationComponent } from './components/tax-calculation/tax-calculation.component';
 import { BankAccountsComponent} from './components/account/bank-accounts/bank-accounts.component';
 import { ActuaryManagementComponent } from './components/stocks/actuary-management/actuary-management.component';
+import { SettledContractsComponent } from './components/stocks/settled-contracts/settled-contracts.component';
 import {supervisorGuard} from './guards/supervisor-guard.guard';
 import { OtcOffersListComponent } from './components/stocks/otc-offers-list/otc-offers-list.component';
 import { employeeGuard } from './guards/employee-guard.guard';
@@ -107,6 +108,7 @@ export const routes: Routes = [
   //options
   { path: 'options/:stockId', component: OptionsDisplayComponent, canActivate: [authGuard, clientOrActuaryGuard] }, // samo aktuar tj. agent
   { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard, supervisorGuard] }, // treba supervisor gard, ovako ce biti dok se ne doda u beku
+  { path: 'settled-contracts', component: SettledContractsComponent, canActivate: [authGuard, employeeOrAdminGuard] },
 
   //Actuary
   { path: 'actuaries', component: ActuaryManagementComponent, canActivate: [authGuard, supervisorGuard] }, // treba supervisor gard, ovako ce biti dok se ne doda u beku
