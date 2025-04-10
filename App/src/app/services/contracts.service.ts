@@ -1,20 +1,31 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SettledContractDto } from '../models/settled-contract-dto';
+
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContractsService {
+  private apiUrl = 'http://localhost:8080/api/contracts';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  }
 
   getSettledContracts(): Observable<SettledContractDto[]> {
-    return this.http.get<SettledContractDto[]>('/api/contracts/settled');
+    return this.http.get<SettledContractDto[]>(`${this.apiUrl}/settled`, { headers: this.getAuthHeaders() });
   }
 
   exerciseContract(contractId: number): Observable<void> {
-    return this.http.put<void>(`/api/contracts/${contractId}/exercise`, {});
+    return this.http.put<void>(`${this.apiUrl}/${contractId}/exercise`, {}, { headers: this.getAuthHeaders() });
   }
 }
