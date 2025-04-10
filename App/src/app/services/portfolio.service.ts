@@ -1,120 +1,56 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthService } from './auth.service';
-import { Securities } from '../models/securities';
-import { SecuritiesTransaction } from '../models/securities-transaction';
+import {inject, Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {AuthService} from './auth.service';
+import {Securities} from '../models/securities';
+import {SecuritiesTransaction} from '../models/securities-transaction';
+import {Observable} from "rxjs";
+import {MyPortfolio} from "../models/my-portfolio";
+import {MyTax} from "../models/my-tax";
+import {SetPublishModel} from '../models/set-publish-model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PortfolioService {
 
-  private http = inject(HttpClient);
-  private authService = inject(AuthService);
-  private apiURL = "http://localhost:80.....";
+    private http = inject(HttpClient);
+    private authService = inject(AuthService);
+    private apiURL = "http://localhost:8083/api/portfolio";
 
 
-  private securitiesList: Securities[] = [
-    {
-      id: 1,
-      type: "Stock",
-      ticker: "AAPL",
-      amount: 50,
-      price: 175.25,
-      profit: 1200.50,
-      lastModified: "2025-03-18",
-      publicCounter: 5,
-      underlyingStockPrice: 175.25
-    },
-    {
-      id: 2,
-      type: "Stock",
-      ticker: "MSFT",
-      amount: 30,
-      price: 420.50,
-      profit: -150.00,
-      lastModified: "2025-03-20",
-      publicCounter: 10,
-      underlyingStockPrice: 420.50
-    },
-    {
-      id: 3,
-      type: "Future",
-      ticker: "ESM25",
-      amount: 2,
-      price: 5100.75,
-      profit: 850.25,
-      lastModified: "2025-03-22",
-      publicCounter: 1,
-    },
-    {
-      id: 4,
-      type: "Option",
-      ticker: "AAPL",
-      optionType: "Call",
-      amount: 5,
-      price: 8.50,
-      profit: 250.00,
-      lastModified: "2025-03-25",
-      publicCounter: 0,
-      strikePrice: 170.00,
-      settlementDate: new Date("2025-04-18"),
-      underlyingStockPrice: 175.25
-    },
-    {
-      id: 5,
-      type: "Option",
-      ticker: "AAPL",
-      optionType: "Put",
-      amount: 3,
-      price: 2.10,
-      profit: -50.00,
-      lastModified: "2025-03-26",
-      publicCounter: 0,
-      strikePrice: 170.00,
-      settlementDate: new Date("2025-04-18"),
-      underlyingStockPrice: 175.25
-    },
-    {
-      id: 6,
-      type: "Option",
-      ticker: "MSFT",
-      optionType: "Put",
-      amount: 10,
-      price: 15.00,
-      profit: 1100.00,
-      lastModified: "2025-03-10",
-      publicCounter: 0,
-      strikePrice: 430.00,
-      settlementDate: new Date("2025-04-25"),
-      underlyingStockPrice: 420.50
-    },
-    {
-      id: 7,
-      type: "Option",
-      ticker: "MSFT",
-      optionType: "Call",
-      amount: 2,
-      price: 5.50,
-      profit: 80.00,
-      lastModified: "2025-02-28",
-      publicCounter: 0,
-      strikePrice: 410.00,
-      settlementDate: new Date("2025-03-21"),
-      underlyingStockPrice: 420.50
-    },
-    {
-      id: 8,
-      type: "ETF",
-      ticker: "SPY",
-      amount: 100,
-      price: 515.10,
-      profit: 2500.00,
-      lastModified: "2025-03-16",
-      publicCounter: 0,
-      underlyingStockPrice: 515.10
+
+    private getAuthHeaders(): HttpHeaders {
+        const token = this.authService.getToken();
+        return new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        });
     }
-  ];
+
+    getPortfolio(): Observable<MyPortfolio[]>{
+        return this.http.get<MyPortfolio[]>(this.apiURL,{headers: this.getAuthHeaders()})
+    }
+
+
+// only stock could be set PUBLIC
+  setPublicAmount(portfolioEntryId: number, publicAmount: number): Observable<any> {
+    const body: SetPublishModel = {
+      portfolioEntryId,
+      publicAmount
+    };
+
+    return this.http.put<void>(
+      `${this.apiURL}/public-amount`,
+      body,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  getMyTaxes(): Observable<MyTax>{
+        return this.http.get<MyTax>(`${this.apiURL}/tax`, { headers: this.getAuthHeaders() });
+    }
+
+
 
 
 
@@ -136,26 +72,10 @@ export class PortfolioService {
   ];
 
 
-  private getAuthHeaders(): HttpHeaders {
-    const token = this.authService.getToken();
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
-  }
-
-  getMySecurities(){
-    return this.securitiesList;
-  }
-
-
   getAllSecuritiesTransactions(){
     return this.securitiesTransactions;
   }
 
-  makeStockPublic(){
-    return null;
-  }
 
 
 
