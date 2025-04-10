@@ -100,7 +100,7 @@
   <app-modal [title]="'Sell security'"  [isOpen]="isOrderModalOpen" (closeModalEvent)="isOrderModalOpen = false">
     <div class="modal-content">
       <div class="text-center">
-        <p>Listing ID: <strong> {{ securityForSell?.id }}</strong></p>
+        <p>Listing ID: <strong> {{ securityForSell?.listingId }}</strong></p>
         <p>Security name: <strong> {{ securityForSell?.securityName }}</strong></p>
         <p>Average price: <strong> {{ securityForSell?.averagePrice }}</strong></p>
         <p>Available amount: <strong> {{ securityForSell?.amount }}</strong></p>

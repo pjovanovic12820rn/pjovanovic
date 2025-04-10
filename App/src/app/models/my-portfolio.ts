@@ -3,6 +3,7 @@
 export interface MyPortfolio {
 
   id: number;
+  listingId: number;
   securityName: string;  // listing name
   ticker: string;  // listing ticker
   Type: string; // STOCK OPTION ..

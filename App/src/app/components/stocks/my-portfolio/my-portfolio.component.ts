@@ -63,7 +63,6 @@ export class MyPortfolioComponent implements OnInit {
 
 
   ngOnInit(): void {
-
     this.loadPortfolio();
     this.myUser = this.authService.getUserId();
     this.getMyAccounts();
@@ -128,28 +127,33 @@ export class MyPortfolioComponent implements OnInit {
 
   sellListing(){
 
-    if(this.selectedAccountNumber == null || this.amountToSell <= 0 || this.LimitPrice <=0 || this.StopPrice <=0 || ( this.securityForSell?.amount != null && this.amountToSell > this.securityForSell?.amount)){
+    if(this.selectedAccountNumber == null || this.amountToSell <= 0 || this.LimitPrice <=0 || this.StopPrice <=0  || ( this.securityForSell?.amount != null && this.amountToSell > this.securityForSell?.amount)){
       this.alertService.showAlert('error', 'Your selection was not correct, make sure there is enough chosen amount!');
       this.amountToSell = 0;
       this.LimitPrice = 0;
       this.StopPrice = 0;
     }
     else{
-      // zakucano na 17 jer nemamo info o listingID jos uvek
-      this.orderService.makeOrder(17,this.amountToSell,1,this.selectedAccountNumber,"SELL","MARKET").subscribe({
-        next: () => {
-          this.alertService.showAlert('success', 'Successfully placed order to sell security!');
-          this.amountToSell = 0;
-          this.LimitPrice = 0;
-          this.StopPrice = 0;
-          this.myAccounts = [];
-          this.loadPortfolio();
-          this.getMyTax();
-        },
-        error: () => {
-          this.alertService.showAlert('error', 'Failed to make order for selling Security, please try again!');
-        }
-      });
+
+      if(this.securityForSell?.listingId != null){
+        this.orderService.makeOrder(this.securityForSell?.listingId,this.amountToSell,1,this.selectedAccountNumber,"SELL","MARKET").subscribe({
+          next: () => {
+            this.alertService.showAlert('success', 'Successfully placed order to sell security!');
+            this.amountToSell = 0;
+            this.LimitPrice = 0;
+            this.StopPrice = 0;
+            this.myAccounts = [];
+            this.loadPortfolio();
+            this.getMyTax();
+          },
+          error: () => {
+            this.alertService.showAlert('error', 'Failed to make order for selling Security, please try again!');
+          }
+        });
+      }else{
+        this.alertService.showAlert('error', 'Failed to make order for selling Security, please try again!');
+      }
+
     }
     this.orderModalFlagClose();
   }
