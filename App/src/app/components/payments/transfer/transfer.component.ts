@@ -1,14 +1,14 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AccountService } from '../../../services/account.service';
 import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {Router} from '@angular/router';
-import {AlertService} from '../../../services/alert.service';
-import {AccountResponse} from '../../../models/account-response.model';
-import {PaymentService} from '../../../services/payment.service';
-import {TransferDto} from '../../../models/transfer.model';
-import {InputTextComponent} from '../../shared/input-text/input-text.component';
-import {ButtonComponent} from '../../shared/button/button.component';
+import { Router} from '@angular/router';
+import { AlertService} from '../../../services/alert.service';
+import { AccountResponse} from '../../../models/account-response.model';
+import { PaymentService} from '../../../services/payment.service';
+import { TransferDto} from '../../../models/transfer.model';
+import { InputTextComponent} from '../../shared/input-text/input-text.component';
+import { ButtonComponent} from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-transfer',
@@ -18,6 +18,7 @@ import {ButtonComponent} from '../../shared/button/button.component';
     NgIf,
     NgForOf,
     ButtonComponent,
+    InputTextComponent,
   ],
   standalone: true,
   styleUrls: ['./transfer.component.css']

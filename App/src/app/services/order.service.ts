@@ -44,15 +44,20 @@ export class OrderService {
 
   createOrder(orderData: CreateOrderDto): Observable<OrderDto> {
     const headers = this.getAuthHeaders().set('Content-Type', 'application/json');
+
     const payload: any = {
-        ...orderData,
-        limitValue: orderData.limitValue !== undefined && orderData.limitValue !== null ? orderData.limitValue : null,
-        stopValue: orderData.stopValue !== undefined && orderData.stopValue !== null ? orderData.stopValue : null
+      ...orderData,
+      limitPrice: orderData.limitValue !== undefined && orderData.limitValue !== null ? orderData.limitValue : null,
+      stopPrice: orderData.stopValue !== undefined && orderData.stopValue !== null ? orderData.stopValue : null
     };
 
+    // Remove frontend-specific fields
+    delete payload.limitValue;
+    delete payload.stopValue;
 
     return this.http.post<OrderDto>(`${this.baseUrl}`, payload, { headers });
   }
+
 
   approveOrder(orderId: number): Observable<any> {
     return this.http.put(`${this.baseUrl}/${orderId}/approve`, {}, { headers: this.getAuthHeaders() });

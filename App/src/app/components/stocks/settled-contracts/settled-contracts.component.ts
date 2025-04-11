@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
-import { NgForOf } from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { InputTextComponent } from '../../shared/input-text/input-text.component';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { AlertService } from '../../../services/alert.service';
 import { ContractsService } from '../../../services/contracts.service';
@@ -13,9 +12,9 @@ import { SettledContractDto } from '../../../models/settled-contract-dto';
   templateUrl: './settled-contracts.component.html',
   styleUrls: ['./settled-contracts.component.css'],
   standalone: true,
-  imports: [FormsModule, NgForOf, InputTextComponent, ButtonComponent],
+  imports: [FormsModule, NgForOf, ButtonComponent, NgIf],
 })
-export class SettledContractsComponent {
+export class SettledContractsComponent implements OnInit{
   contracts: SettledContractDto[] = [];
   loading = false;
 

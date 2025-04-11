@@ -3,11 +3,15 @@ import { ActuariesService } from '../../../services/actuaries.service';
 import { AuthService } from '../../../services/auth.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-bank-profit',
   templateUrl: './bank-profit.component.html',
   styleUrls: ['./bank-profit.component.css'],
+  imports: [
+    NgIf
+  ],
   standalone: true
 })
 export class BankProfitComponent implements OnInit, OnDestroy {

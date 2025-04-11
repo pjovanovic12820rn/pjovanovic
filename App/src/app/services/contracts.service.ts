@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class ContractsService {
-  private apiUrl = 'http://localhost:8080/api/contracts';
+  private apiUrl = 'http://localhost:8083/api/otc/options';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -22,7 +22,7 @@ export class ContractsService {
   }
 
   getSettledContracts(): Observable<SettledContractDto[]> {
-    return this.http.get<SettledContractDto[]>(`${this.apiUrl}/settled`, { headers: this.getAuthHeaders() });
+    return this.http.get<SettledContractDto[]>(`${this.apiUrl}`, { headers: this.getAuthHeaders() });
   }
 
   exerciseContract(contractId: number): Observable<void> {

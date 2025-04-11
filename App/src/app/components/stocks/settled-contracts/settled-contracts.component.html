@@ -1,12 +1,12 @@
 <div class="card width-fit margin-auto flex-col gap-1">
-    <h2>Sklopljeni Ugovori</h2>
-  
+    <h2>Contracts</h2>
+
     <div *ngIf="loading">Loading settled contracts...</div>
-  
+
     <div *ngIf="!loading && contracts.length === 0">
       <p>No settled contracts found.</p>
     </div>
-  
+
     <div *ngIf="!loading && contracts.length > 0">
       <table class="table">
         <thead>
@@ -26,11 +26,14 @@
           <tr *ngFor="let contract of contracts">
             <td>{{ contract.stockName }}</td>
             <td>{{ contract.amount }}</td>
-            <td>{{ contract.strikePrice | currency:'USD':'symbol':'1.0-2' }}</td>
-            <td>{{ contract.premium | currency:'USD':'symbol':'1.0-2' }}</td>
+            <td>{{ contract.strikePrice }}</td>
+            <td>{{ contract.premium }}</td>
+<!--            <td>{{ contract.strikePrice | currency:'USD':'symbol':'1.0-2' }}</td>-->
+<!--            <td>{{ contract.premium | currency:'USD':'symbol':'1.0-2' }}</td>-->
             <td>{{ contract.settlementDate }}</td>
             <td>{{ contract.sellerInfo }}</td>
-            <td>{{ contract.profit | currency:'USD':'symbol':'1.0-2' }}</td>
+            <td>{{ contract.profit }}</td>
+<!--            <td>{{ contract.profit | currency:'USD':'symbol':'1.0-2' }}</td>-->
             <td>{{ contract.status }}</td>
             <td>
               <app-button
@@ -45,4 +48,3 @@
       </table>
     </div>
   </div>
-  
