@@ -49,7 +49,7 @@
     </div>
 
     <!-- Account Selection -->
-    <div class="form-group" *ngIf="direction === 'BUY'">
+    <div class="form-group">
       <label for="account">Source Account:</label>
       <select id="account" name="account" [(ngModel)]="selectedAccountId" class="form-select" required [disabled]="isLoadingAccounts">
           <option [ngValue]="null" disabled>{{ isLoadingAccounts ? 'Loading accounts...' : 'Select Account' }}</option>

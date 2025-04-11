@@ -52,9 +52,9 @@
       <td>{{ order.remainingPortions | number }}</td>
       <td>{{ order.status }}</td>
       <td>
-        <ng-container *ngIf="order.status === 'Pending'">
+        <ng-container *ngIf="order.status === 'PENDING'">
+          <!--            *ngIf="!isOrderExpired(order)" bilo u buttonu -->
           <button
-            *ngIf="!isOrderExpired(order)"
             (click)="approveOrder(order)"
             [disabled]="loading"
           >
@@ -65,23 +65,6 @@
             [disabled]="loading"
           >
             Decline
-          </button>
-        </ng-container>
-
-        <ng-container *ngIf="order.status !== 'Done' && order.remainingPortions > 0">
-          <input
-            type="number"
-            min="1"
-            [max]="order.remainingPortions"
-            [(ngModel)]="cancelQuantity[order.id]"
-            placeholder="Qty"
-            [disabled]="loading"
-          />
-          <button
-            (click)="cancelOrder(order)"
-            [disabled]="loading || !cancelQuantity[order.id]"
-          >
-            Cancel
           </button>
         </ng-container>
       </td>

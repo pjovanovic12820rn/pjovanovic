@@ -3,6 +3,7 @@ import { authGuard } from './guards/auth-guard.guard';
 import { clientOrActuaryGuard } from './guards/client-or-actuary-guard.guard';
 import { employeeOrAdminGuard } from './guards/employee-or-admin-guard.guard';
 import { adminGuard } from './guards/admin-guard.guard';
+import { supervisorGuard } from './guards/supervisor-guard.guard';
 import { LoginComponent } from './login/login.component';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { EmployeesComponent } from './components/employee/employees/employees.component';
@@ -41,10 +42,8 @@ import { TaxCalculationComponent } from './components/tax-calculation/tax-calcul
 import { BankAccountsComponent} from './components/account/bank-accounts/bank-accounts.component';
 import { ActuaryManagementComponent } from './components/stocks/actuary-management/actuary-management.component';
 import { SettledContractsComponent } from './components/stocks/settled-contracts/settled-contracts.component';
-import {supervisorGuard} from './guards/supervisor-guard.guard';
 import { OtcOffersListComponent } from './components/stocks/otc-offers-list/otc-offers-list.component';
-import { employeeGuard } from './guards/employee-guard.guard';
-import {BankProfitComponent} from './components/stocks/bank-profit/bank-profit.component';
+import { BankProfitComponent } from './components/stocks/bank-profit/bank-profit.component';
 
 export const routes: Routes = [
   // login
