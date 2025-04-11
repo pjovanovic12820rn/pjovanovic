@@ -32,7 +32,7 @@ export class PortfolioService {
     }
 
 
-// only stock could be set PUBLIC
+  // only stock could be set PUBLIC
   setPublicAmount(portfolioEntryId: number, publicAmount: number): Observable<any> {
     const body: SetPublishModel = {
       portfolioEntryId,

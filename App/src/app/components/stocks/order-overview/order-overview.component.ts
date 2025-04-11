@@ -18,7 +18,6 @@ import { takeUntil, map } from 'rxjs/operators';
 export class OrderOverviewComponent implements OnInit, OnDestroy {
   orders: Order[] = [];
   filterStatus: string = 'ALL';
-  cancelQuantity: { [orderId: number]: number } = {};
   loading: boolean = false;
   errorMessage: string = '';
   private destroy$ = new Subject<void>();
@@ -104,23 +103,6 @@ export class OrderOverviewComponent implements OnInit, OnDestroy {
         });
     }
 
-
-  cancelOrder(order: Order): void {
-    const quantity = this.cancelQuantity[order.id] || 0;
-
-    if (quantity < 1 || quantity > order.remainingPortions) {
-      this.errorMessage = `Quantity must be between 1 and ${order.remainingPortions}`;
-      return;
-    }
-
-    this.orderService.cancelOrder(order.id, quantity)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => this.handleSuccess(`Order ${order.id} cancelled for quantity: ${quantity}`),
-        error: (err) => this.handleError('cancelling order', err)
-      });
-  }
-
   private handleSuccess(message: string): void {
     alert(message);
     this.loadOrders();
@@ -131,11 +113,11 @@ export class OrderOverviewComponent implements OnInit, OnDestroy {
     this.errorMessage = `Error ${action}. Please try again.`;
   }
 
-  isOrderExpired(order: Order): boolean {
-    if (!order.isTimeLimited) return false;
-    const orderDate = new Date(order.orderDate).getTime();
-    return Date.now() > orderDate;
-  }
+  // isOrderExpired(order: Order): boolean {
+  //   if (!order.isTimeLimited) return false;
+  //   const orderDate = new Date(order.orderDate).getTime();
+  //   return Date.now() > orderDate;
+  // }
 
   ngOnDestroy(): void {
     this.destroy$.next();

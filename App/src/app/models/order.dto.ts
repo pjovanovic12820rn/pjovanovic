@@ -7,7 +7,7 @@ export interface OrderDto {
     contractSize: number;
     pricePerUnit: number | null;
     direction: 'BUY' | 'SELL';
-    status: string;
+    status: 'PENDING' | 'APPROVED' | 'DENIED' | 'DONE';
     approvedBy: string | null;
     isDone: boolean;
     lastModification: string;
