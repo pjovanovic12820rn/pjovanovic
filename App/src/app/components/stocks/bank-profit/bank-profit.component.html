@@ -4,15 +4,16 @@
   <div *ngIf="errorMessage" class="error-message">
     {{ errorMessage }}
   </div>
-  
+
   <div *ngIf="loading">
     Loading bank profit...
   </div>
-  
+
   <div *ngIf="!loading && bankProfit !== null">
-    <p>{{ bankProfit | number:'1.2-2' }} RSD</p>
+    <p>{{ bankProfit }} RSD</p>
+<!--    <p>{{ bankProfit | number:'1.2-2' }} RSD</p>-->
   </div>
-  
+
   <div *ngIf="!loading && bankProfit === null && !errorMessage">
     <p>No data available.</p>
   </div>

@@ -8,6 +8,7 @@ export interface CreateOrderDto {
   allOrNone: boolean;
   margin: boolean;
   orderDirection: 'BUY' | 'SELL'; // <--- RENAME THIS FIELD
+  // direction?
   contractSize: number;
   accountNumber: string;
 }

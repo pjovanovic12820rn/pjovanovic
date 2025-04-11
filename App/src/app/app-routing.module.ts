@@ -44,6 +44,7 @@ import { SettledContractsComponent } from './components/stocks/settled-contracts
 import {supervisorGuard} from './guards/supervisor-guard.guard';
 import { OtcOffersListComponent } from './components/stocks/otc-offers-list/otc-offers-list.component';
 import { employeeGuard } from './guards/employee-guard.guard';
+import {BankProfitComponent} from './components/stocks/bank-profit/bank-profit.component';
 
 export const routes: Routes = [
   // login
@@ -100,20 +101,22 @@ export const routes: Routes = [
   //success
   { path: 'success', component: SuccessComponent },
 
+  // actuaries
+  { path: 'actuaries', component: ActuaryManagementComponent, canActivate: [authGuard, supervisorGuard] }, // treba supervisor gard, ovako ce biti dok se ne doda u beku
+
   // securities
   { path: 'my-portfolio', component: MyPortfolioComponent, canActivate: [authGuard] },
   { path: 'securities', component: SecuritiesComponent, canActivate: [authGuard, clientOrActuaryGuard] },
   { path: 'tax-portal', component: TaxCalculationComponent, canActivate: [authGuard, supervisorGuard] }, // not sure if this is the right guard!
 
-  //options
+  // options
   { path: 'options/:stockId', component: OptionsDisplayComponent, canActivate: [authGuard, clientOrActuaryGuard] }, // samo aktuar tj. agent
   { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard, supervisorGuard] }, // treba supervisor gard, ovako ce biti dok se ne doda u beku
-  { path: 'settled-contracts', component: SettledContractsComponent, canActivate: [authGuard, employeeOrAdminGuard] },
+  { path: 'settled-contracts', component: SettledContractsComponent, canActivate: [authGuard] },
 
-  //Actuary
-  { path: 'actuaries', component: ActuaryManagementComponent, canActivate: [authGuard, supervisorGuard] }, // treba supervisor gard, ovako ce biti dok se ne doda u beku
+  // otc
+  { path: 'otc-offers', component: OtcOffersListComponent, canActivate: [authGuard, clientOrActuaryGuard] },
 
-  //otc
-  { path: 'otc-offers', component: OtcOffersListComponent, canActivate: [authGuard, clientOrActuaryGuard] }
-
+  // bank profit
+  { path: 'bank-profit', component: BankProfitComponent, canActivate: [authGuard] }
 ];
