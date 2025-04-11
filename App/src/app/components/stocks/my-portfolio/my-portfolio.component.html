@@ -1,85 +1,151 @@
 <div class="portfolio-container">
   <h2>My Portfolio</h2>
 
-  <table *ngIf="securities.length > 0">
+  <table *ngIf="portfolio.length > 0">
     <thead>
     <tr>
-      <th>Type</th>
+      <th>ID</th>
+      <th>Security Name</th>
       <th>Ticker</th>
+      <th>Type</th>
       <th>Amount</th>
-      <th>Price</th>
+      <th>Average Price</th>
       <th>Profit</th>
       <th>Last Modified</th>
-      <th>Public</th>
-      <th>Actions</th>
+      <th>Public Amount</th>
+      <th>In the money</th>
+      <th>Used</th>
+      <th>Publish</th>
+      <th>Sell Security</th>
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let security of securities">
-      <td>{{ security.type }}</td>
-      <td>{{ security.ticker }}</td>
-      <td>{{ security.amount }}</td>
-      <td>{{ security.price }}</td>
-      <td [ngClass]="{'positive': security.profit >= 0, 'negative': security.profit < 0}">
-        {{ security.profit }}
-      </td>
-      <td>{{ security.lastModified }}</td>
-      <td class="public-cell">
-        <ng-container *ngIf="security.type === 'Stock' || security.type === 'Future'">
-          <span>{{ security.publicCounter }}</span>
-          <button class="publish-button" (click)="publishSecurity(security)">Publish</button>
-        </ng-container>
-      </td>
-      <td>
-        <app-button class="sell-button" (click)="openSellOrderModal(security)" [disabled]="security.amount <= 0">Sell</app-button>
-        <app-button *ngIf="canExerciseOption(security)" class="exercise-button" (click)="exerciseOption(security)">
-          Exercise
+      <tr *ngFor="let onePortfolio of portfolio">
+        <td>{{ onePortfolio.id }}</td>
+        <td>{{ onePortfolio.securityName }}</td>
+        <td>{{ onePortfolio.ticker }}</td>
+        <td>{{ onePortfolio.Type }}</td>
+        <td>{{ onePortfolio.amount }}</td>
+        <td>{{ onePortfolio.averagePrice }}</td>
+        <td>{{ onePortfolio.profit }}</td>
+        <td>{{ onePortfolio.lastModified }}</td>
+        <td>{{ onePortfolio.publicAmount }}</td>
+        <td>{{ onePortfolio.inTheMoney }}</td>
+        <td>{{ onePortfolio.used }}</td>
+        <td>
+          <app-button class="sell-button" (onClick)="publishFlag(onePortfolio)">
+          Make Public
         </app-button>
       </td>
-    </tr>
+
+        <td><app-button class="sell-button" (onClick)="orderModalFlag(onePortfolio)">Sell</app-button> </td>
+      </tr>
     </tbody>
   </table>
+  <h4> </h4>
 
   <div class="portfolio-buttons">
-    <app-button class="info-button" (click)="openProfitModal()">Profit Info</app-button>
-    <app-button class="info-button" (click)="openTaxModal()">Tax Info</app-button>
+    <app-button class="info-button" (onClick)="profitFlag()">Profit Info</app-button>
+    <app-button class="info-button" (onClick)="taxFlag()">Tax Info</app-button>
   </div>
 
-  <app-modal [title]="'Profit Information'" [isOpen]="isProfitModalOpen" (closeModalEvent)="isProfitModalOpen = false">
+  <app-modal [title]="'Profit Information'"  [isOpen]="isProfitModalOpen" (closeModalEvent)="isProfitModalOpen = false">
     <div class="modal-content">
       <div class="text-left">
-        <p>Total Profit: <strong>{{ getTotalProfit().toFixed(2) }} USD</strong></p>
+        <p>Total Profit: <strong>{{ getTotalProfit().toFixed(2) }}</strong></p>
       </div>
       <div class="width-fit">
-        <app-button class="close-button" (click)="closeModals()">Close</app-button>
+        <app-button class="close-button" (click)="profitFlag()">Close</app-button>
       </div>
     </div>
   </app-modal>
 
-  <app-modal [title]="'Tax Information'" [isOpen]="isTaxModalOpen" (closeModalEvent)="isTaxModalOpen = false">
+  <app-modal [title]="'Tax Information'"  [isOpen]="isTaxModalOpen" (closeModalEvent)="isTaxModalOpen = false">
     <div class="modal-content">
-      <div *ngIf="loadingTaxData">
-        <p>Loading tax data...</p>
+      <div class="text-left">
+        <p>Tax Paid (Current Year): <strong> {{ taxes?.paidForThisYear}}</strong></p> <!--Converting it to RSD --->
+        <p>Unpaid Tax (Current Month): <strong>{{ taxes?.unpaidForThisMonth }}</strong></p>
+
       </div>
-      <div *ngIf="taxDataError">
-        <p style="color: red;">{{ taxDataError }}</p>
+      <h4></h4>
+      <div class="width-fit">
+         <app-button class="close-button" (click)="taxFlag()">Close</app-button>
       </div>
-      <div *ngIf="!loadingTaxData && !taxDataError">
-        <p>Tax Paid (Current Year): <strong>{{ taxPaidThisYear !== null ? (taxPaidThisYear | currency:'USD':'symbol':'1.2-2') : 'N/A' }}</strong></p>
-        <p>Unpaid Tax (Current Month): <strong>{{ unpaidTaxThisMonth !== null ? (unpaidTaxThisMonth | currency:'USD':'symbol':'1.2-2') : 'N/A' }}</strong></p>
-      </div>
-      <app-button class="close-button" (click)="closeModals()">Close</app-button>
     </div>
   </app-modal>
+
+
+  <app-modal [title]="'Make your security Public'"  [isOpen]="isPublishModalOpen" (closeModalEvent)="isPublishModalOpen = false">
+    <div class="modal-content">
+      <div class="text-center">
+        <p>Security ID: <strong> {{ toBePublished?.id }}</strong></p>
+        <p>Security name: <strong> {{ toBePublished?.securityName }}</strong></p>
+        <p>Available amount: <strong> {{ toBePublished?.amount }}</strong></p>
+
+        <input-text
+          [(ngModel)]="publishAmount"
+          placeholder="Enter amount"
+          label="Amount"
+          type="number"
+        ></input-text>
+      </div>
+      <h4></h4>
+      <div class="width-fit">
+        <app-button class="close-button" (click)="publishFlagClose()">Close</app-button>
+        <app-button class="close-button" (click)="makeSecurityPublicServiceCall(publishID)">Confirm</app-button>
+      </div>
+    </div>
+  </app-modal>
+
+  <app-modal [title]="'Sell security'"  [isOpen]="isOrderModalOpen" (closeModalEvent)="isOrderModalOpen = false">
+    <div class="modal-content">
+      <div class="text-center">
+        <p>Listing ID: <strong> {{ securityForSell?.listingId }}</strong></p>
+        <p>Security name: <strong> {{ securityForSell?.securityName }}</strong></p>
+        <p>Average price: <strong> {{ securityForSell?.averagePrice }}</strong></p>
+        <p>Available amount: <strong> {{ securityForSell?.amount }}</strong></p>
+
+        <input-text
+          [(ngModel)]="amountToSell"
+          placeholder="Enter amount"
+          label="Amount"
+          type="number"
+        ></input-text>
+        <input-text
+          [(ngModel)]="LimitPrice"
+          placeholder="Enter limit price"
+          label="Limit"
+          type="number"
+        ></input-text>
+        <input-text
+          [(ngModel)]="StopPrice"
+          placeholder="Enter stop price"
+          label="Stop"
+          type="number"
+        ></input-text>
+
+        <label for="accountSelect">Choose account:</label>
+        <select
+          id="accountSelect"
+          class="form-control"
+          [(ngModel)]="selectedAccountNumber"
+        >
+          <option [value]="''" disabled selected>-- Select an account --</option>
+          <option *ngFor="let acc of myAccounts" [value]="acc.accountNumber">
+            {{ acc.accountNumber }}
+          </option>
+        </select>
+
+      </div>
+      <h4></h4>
+      <div class="width-fit">
+        <app-button class="close-button" (click)="orderModalFlagClose()">Close</app-button>
+
+        <app-button class="close-button" (click)="sellListing()">Confirm</app-button>
+      </div>
+    </div>
+  </app-modal>
+
+
 </div>
 
-<app-order-creation-modal
-  [isOpen]="isOrderModalOpen"
-  [direction]="orderDirection"
-  [securityTicker]="selectedSecurityForOrder?.ticker || ''"
-  [securityPrice]="currentSecurityPrice"
-  [contractSize]="currentContractSize"
-  [listingId]="currentListingId"
-  (closeModalEvent)="closeOrderModal()"
-  (createOrderEvent)="handleOrderCreation($event)">
-</app-order-creation-modal>

@@ -1,0 +1,37 @@
+<div class="card">
+    <h2>Portal za Aktuare (Agents)</h2>
+    
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+    
+    <div *ngIf="loading">
+      Loading actuaries data...
+    </div>
+    
+    <div *ngIf="!loading && agents.length === 0">
+      <p>No actuaries agents found.</p>
+    </div>
+    
+    <div *ngIf="!loading && agents.length > 0">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Ime</th>
+            <th>Prezime</th>
+            <th>Profit (RSD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let agent of agents">
+            <td>{{ agent.userId }}</td>
+            <td>{{ agent.firstName }}</td>
+            <td>{{ agent.lastName }}</td>
+            <td>{{ agent.totalProfitRsd | number:'1.2-2' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

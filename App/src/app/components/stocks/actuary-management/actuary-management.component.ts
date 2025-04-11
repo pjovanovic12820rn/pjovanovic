@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActuaryService } from '../../../services/actuary.service';
 import {FormsModule} from '@angular/forms';
-import {JsonPipe, NgForOf, NgIf} from '@angular/common';
+import {JsonPipe, NgForOf, NgIf, NgClass} from '@angular/common';
 
 
 @Component({
@@ -12,12 +12,15 @@ import {JsonPipe, NgForOf, NgIf} from '@angular/common';
     FormsModule,
     JsonPipe,
     NgForOf,
-    NgIf
+    NgIf,
+    NgClass
   ],
   styleUrls: ['./actuary-management.component.css']
 })
 export class ActuaryManagementComponent implements OnInit {
   agents: any[] = [];
+  agentLimits: { [key: number]: number } = {};
+  agentApproval: { [key: number]: boolean } = {};
   searchEmail = '';
   searchFirstName = '';
   searchLastName = '';
@@ -49,11 +52,21 @@ export class ActuaryManagementComponent implements OnInit {
       size
     ).subscribe({
       next: (res) => {
-        console.log("prosao zahtev")
+        console.log(`prosao zahtev: ${res.content}`)
         this.loading = false;
         this.agents = res.content || [];
         this.totalElements = res.totalElements || 0;
         this.currentPage = page;
+        this.agents.forEach(agent => {
+          this.actuaryService.getAgentLimit(agent.id).subscribe({
+            next: (limitData) => {
+              this.agentLimits[agent.id] = limitData.limitAmount || 0;
+            },
+            error: (err) => {
+              console.error(`Error fetching limit for agent ${agent.id}`, err);
+            }
+          });
+        });
       },
       error: (err) => {
         this.loading = false;
@@ -96,6 +109,21 @@ export class ActuaryManagementComponent implements OnInit {
       error: (err) => {
         console.error('Error resetting limit', err);
         alert('Error resetting limit');
+      }
+    });
+  }
+
+  toggleApproval(agentId: number): void {
+    const currentApproval = this.agentApproval[agentId] || false;
+    const newApproval = !currentApproval;
+  
+    this.actuaryService.setApprovalValue(agentId, newApproval).subscribe({
+      next: () => {
+        this.agentApproval[agentId] = newApproval;
+      },
+      error: (err) => {
+        console.error('Error toggling approval', err);
+        alert('Error toggling approval');
       }
     });
   }
