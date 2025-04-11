@@ -1,24 +1,53 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 
 export interface TaxData {
+  id: number;
+  firstName: string;
+  lastName: string;
+  role: string;
+  paidTaxThisYear: number;
+  unpaidTaxThisMonth: number;
   totalTax: number;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TaxService {
-  private baseUrl = 'http://localhost:8080/api';
+  private baseUrl = 'http://localhost:8083/api/tax';
+  private authService = inject(AuthService);
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+  }
 
   constructor(private http: HttpClient) {}
 
-  getTaxData(userId: number): Observable<TaxData> {
-    return this.http.get<TaxData>(`${this.baseUrl}/portfolio/tax/${userId}`);
+  getTaxData(
+    name: string = '',
+    surname: string = '',
+    role: string = ''
+  ): Observable<TaxData[]> {
+    const params = new HttpParams()
+      .set('name', name)
+      .set('surname', surname)
+      .set('role', role);
+    const headers = this.getAuthHeaders();
+
+    return this.http.get<TaxData[]>(`${this.baseUrl}`, { headers, params });
   }
 
-  calculateTax(taxCalculation: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/payment/tax`, taxCalculation);
+  calculateTax(): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.post(`${this.baseUrl}/process`, {}, {
+      headers,
+    });
   }
 }

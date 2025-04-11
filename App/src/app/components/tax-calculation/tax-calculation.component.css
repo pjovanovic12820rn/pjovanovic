@@ -36,7 +36,7 @@ h2 {
   margin-top: 20px;
   padding: 10px;
   background-color: #f8f9fa;
-  border: 1px solid #ddd;
+  border: 1px solid #271111;
   border-radius: 5px;
   text-align: right;
   font-weight: bold;
@@ -57,7 +57,7 @@ h2 {
 }
 
 .calculate-tax-btn {
-  background-color: #d8b3ff; /* Svetlo ljubičasta */
+  background-color: #934cde; /* Svetlo ljubičasta */
   color: white;
   border: none;
   padding: 8px 15px;
@@ -196,11 +196,11 @@ h2 {
 }
 
 .securities-table th {
-  background-color: #f4f4f4;
+  background-color: #bc00e7;
 }
 
 .securities-table button {
-  color: #a855f7;
+  color: #450f78;
   border: none;
   padding: 8px 12px;
   cursor: pointer;
