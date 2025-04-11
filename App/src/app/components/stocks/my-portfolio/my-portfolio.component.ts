@@ -1,20 +1,17 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {AuthService} from '../../services/auth.service';
-import {AlertService} from '../../services/alert.service';
-import {Router} from '@angular/router';
-import {FormsModule} from '@angular/forms';
-import { NgForOf, NgIf} from '@angular/common';
-import {PortfolioService} from '../../services/portfolio.service';
-import {ButtonComponent} from '../shared/button/button.component';
-import {ModalComponent} from '../shared/modal/modal.component';
-import {MyPortfolio} from "../../models/my-portfolio";
-import {MyTax} from '../../models/my-tax';
-import {InputTextComponent} from '../shared/input-text/input-text.component';
-import {AccountResponse} from '../../models/account-response.model';
-import {AccountService} from '../../services/account.service';
-import {OrderService} from '../../services/order.service';
-
-
+import { Component, inject, OnInit } from '@angular/core';
+import { AuthService } from '../../../services/auth.service';
+import { AlertService } from '../../../services/alert.service';
+import { FormsModule } from '@angular/forms';
+import { NgForOf, NgIf } from '@angular/common';
+import { PortfolioService } from '../../../services/portfolio.service';
+import { MyPortfolio} from '../../../models/my-portfolio';
+import { MyTax } from '../../../models/my-tax';
+import { AccountResponse } from '../../../models/account-response.model';
+import { AccountService } from '../../../services/account.service';
+import { ButtonComponent } from '../../shared/button/button.component';
+import { ModalComponent } from '../../shared/modal/modal.component';
+import { InputTextComponent } from '../../shared/input-text/input-text.component';
+import { OrderCreationModalComponent } from '../../shared/order-creation-modal/order-creation-modal.component';
 
 @Component({
   selector: 'app-my-portfolio',
@@ -23,6 +20,10 @@ import {OrderService} from '../../services/order.service';
     FormsModule,
     NgIf,
     NgForOf,
+    OrderCreationModalComponent,
+    ButtonComponent,
+    ModalComponent,
+    InputTextComponent,
     ButtonComponent,
     ModalComponent,
     InputTextComponent
@@ -35,8 +36,6 @@ export class MyPortfolioComponent implements OnInit {
   private alertService = inject(AlertService);
   private authService= inject(AuthService);
   private accountService= inject(AccountService);
-  private orderService = inject(OrderService);
-  private router = inject(Router);
   private portfolioService = inject(PortfolioService);
 
   isProfitModalOpen = false;
@@ -45,13 +44,9 @@ export class MyPortfolioComponent implements OnInit {
   isOrderModalOpen = false;
 
   publishAmount: number = 0;
-  amountToSell: number = 0;
-  LimitPrice: number = 0;
-  StopPrice: number = 0;
 
   publishID: number = 0;
   myUser: number | null = 0;
-  selectedAccountNumber: string | null = null;
 
   toBePublished: MyPortfolio | undefined;
   securityForSell: MyPortfolio | undefined;
@@ -69,6 +64,28 @@ export class MyPortfolioComponent implements OnInit {
 
   }
 
+// Opens the order modal for selling a security
+  openSellOrderModal(security: MyPortfolio): void {
+    if (security.amount <= 0) {
+      this.alertService.showAlert('warning', `No amount available to sell for ${security.securityName}.`);
+      return;
+    }
+
+    this.securityForSell = security;
+    this.isOrderModalOpen = true;
+  }
+
+  closeOrderModal(): void {
+    this.isOrderModalOpen = false;
+    this.securityForSell = undefined;
+  }
+
+  handleOrderCreation(): void {
+    this.closeOrderModal();
+    this.loadPortfolio();
+    this.getMyTax();
+  }
+
   loadPortfolio() {
     this.portfolioService.getPortfolio().subscribe({
       next: (data) => {
@@ -79,17 +96,6 @@ export class MyPortfolioComponent implements OnInit {
         this.alertService.showAlert("error","Failed to load portfolio data for this user!");
       }
     });
-  }
-  orderModalFlag(securitySell: MyPortfolio){
-    this.isOrderModalOpen = !this.isOrderModalOpen;
-    this.securityForSell = securitySell;
-  }
-  orderModalFlagClose(){
-    this.isOrderModalOpen = !this.isOrderModalOpen;
-    this.amountToSell = 0;
-    this.LimitPrice = 0;
-    this.StopPrice = 0;
-    this.myAccounts = [];
   }
 
   profitFlag(){
@@ -123,39 +129,6 @@ export class MyPortfolioComponent implements OnInit {
         this.alertService.showAlert('error', 'Failed to load your taxes!');
       }
     });
-  }
-
-  sellListing(){
-
-    if(this.selectedAccountNumber == null || this.amountToSell <= 0 || this.LimitPrice <=0 || this.StopPrice <=0  || ( this.securityForSell?.amount != null && this.amountToSell > this.securityForSell?.amount)){
-      this.alertService.showAlert('error', 'Your selection was not correct, make sure there is enough chosen amount!');
-      this.amountToSell = 0;
-      this.LimitPrice = 0;
-      this.StopPrice = 0;
-    }
-    else{
-
-      if(this.securityForSell?.listingId != null){
-        this.orderService.makeOrder(this.securityForSell?.listingId,this.amountToSell,1,this.selectedAccountNumber,"SELL","MARKET").subscribe({
-          next: () => {
-            this.alertService.showAlert('success', 'Successfully placed order to sell security!');
-            this.amountToSell = 0;
-            this.LimitPrice = 0;
-            this.StopPrice = 0;
-            this.myAccounts = [];
-            this.loadPortfolio();
-            this.getMyTax();
-          },
-          error: () => {
-            this.alertService.showAlert('error', 'Failed to make order for selling Security, please try again!');
-          }
-        });
-      }else{
-        this.alertService.showAlert('error', 'Failed to make order for selling Security, please try again!');
-      }
-
-    }
-    this.orderModalFlagClose();
   }
 
   getMyAccounts() {
@@ -204,40 +177,5 @@ export class MyPortfolioComponent implements OnInit {
 
     return profit;
   }
-  // OVo je ono sto je postojalo pre, nije bilo povezano sa bekom!
-
-  // isOrderModalOpen = false;
-  // selectedSecurityForOrder: Securities | null = null;
-  // orderDirection: 'BUY' | 'SELL' = 'BUY';
-  //
-  //
-  // openSellOrderModal(security: Securities): void {
-  //   if (security.amount <= 0) {
-  //     this.alertService.showAlert('warning', `No amount available to sell for ${security.ticker}.`);
-  //     return;
-  //   }
-  //   this.selectedSecurityForOrder = security;
-  //   this.orderDirection = 'SELL';
-  //   this.isOrderModalOpen = true;
-  // }
-  //
-  // closeOrderModal(): void {
-  //   this.isOrderModalOpen = false;
-  //   this.selectedSecurityForOrder = null;
-  // }
-  //
-  // handleOrderCreation(orderDetails: any): void {
-  //   console.log('Order creation requested from MyPortfolioComponent:', orderDetails, 'for security:', this.selectedSecurityForOrder);
-  //   this.closeOrderModal();
-  // }
-  //
-  // get currentSecurityPrice(): number {
-  //   return this.selectedSecurityForOrder?.price ?? 0;
-  // }
-  //
-  // get currentContractSize(): number {
-  //   return 1;
-  // }
-
 
 }

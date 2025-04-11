@@ -3,7 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {map, Observable, take} from 'rxjs';
 import {Order, PageResponse} from '../models/order.model';
 import { AuthService } from './auth.service';
-import {MakeOrderDto} from '../models/make-order-dto';
+import {CreateOrderDto} from '../models/create-order.dto';
+import {OrderDto} from '../models/order.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -23,15 +24,6 @@ export class OrderService {
     });
   }
 
-
-
-  // getOrders(status: string): Observable<Order[]> {
-  //   let url = this.baseUrl;
-  //   if (status && status !== 'All') {
-  //     url += `?status=${status}`;
-  //   }
-  //   return this.http.get<Order[]>(url, { headers: this.getAuthHeaders() });
-  // }
   getOrders(status: string): Observable<PageResponse<Order>> {
     return this.http.get<PageResponse<Order>>(this.baseUrl, {
       headers: this.getAuthHeaders()
@@ -58,29 +50,21 @@ export class OrderService {
       stopPrice: orderData.stopValue !== undefined && orderData.stopValue !== null ? orderData.stopValue : null
     };
 
-    // Remove frontend-specific fields
     delete payload.limitValue;
     delete payload.stopValue;
 
+    return this.http.post<OrderDto>(`${this.baseUrl}`, payload, { headers });
   }
 
-
   approveOrder(orderId: number): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${orderId}/approve`, {}, { headers: this.getAuthHeaders() });
+    return this.http.post(`${this.baseUrl}/approve/${orderId}`, {}, { headers: this.getAuthHeaders() });
   }
 
   declineOrder(orderId: number): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${orderId}/decline`, {}, { headers: this.getAuthHeaders() });
+    return this.http.post(`${this.baseUrl}/decline/${orderId}`, {}, { headers: this.getAuthHeaders() });
   }
 
   cancelOrder(orderId: number, cancelQuantity: number): Observable<any> {
     return this.http.put(`${this.baseUrl}/${orderId}/cancel`, { cancelQuantity }, { headers: this.getAuthHeaders() });
   }
-}
-enum OrderType{
-  MARKET, LIMIT, STOP, STOP_LIMIT
-}
-
-enum OrderDirection{
-  BUY, SELL
 }

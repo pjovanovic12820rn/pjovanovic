@@ -240,11 +240,12 @@ export class SecuritiesComponent implements OnInit, OnDestroy {
     return this.selectedSecurityForOrder?.price ?? 0;
   }
 
+  // todo
   get currentContractSize(): number {
      return 1; // Bekend problem
   }
 
   get currentListingId(): number | null {
     return this.selectedSecurityForOrder?.id ?? null;
-}
+  }
 }
