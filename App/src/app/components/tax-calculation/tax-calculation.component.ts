@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DatePipe, DecimalPipe, NgForOf, NgIf } from '@angular/common';
 import { PortfolioService } from '../../services/portfolio.service';
-import { TaxService } from '../../services/tax.service';
+import { TaxData, TaxService } from '../../services/tax.service';
 import { SecuritiesTransaction } from '../../models/securities-transaction';
 
 @Component({
@@ -37,6 +37,7 @@ export class TaxCalculationComponent implements OnInit {
   filterLastname: string = '';
   taxValue: number = 0;
   currentDate: Date = new Date();
+  userTax: TaxData[] = [];
 
   selectedPeriod: string = '';
   periods = [
@@ -48,28 +49,21 @@ export class TaxCalculationComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    // Load securities transactions from portfolio service
+    this.taxService.getTaxData().subscribe(
+      (taxData) => {
+        this.userTax = taxData;
+      },
+      (error) => {
+        this.alertService.showAlert('error', 'Failed to fetch tax data. Please try again later.');
+      }
+    );
+
     this.securitiesTransactions = this.portfolioService.getAllSecuritiesTransactions();
     this.filteredTransactions = this.securitiesTransactions;
     this.unpaidTaxes = this.securitiesTransactions.filter(transaction =>
       transaction.paidFlag.includes("No")
     );
     this.calculateTotalTax();
-
-    // Fetch tax data from the backend using TaxService
-    const userId = this.authService.getUserId();
-    if (userId !== null) {
-      this.taxService.getTaxData(userId).subscribe(
-        (taxData) => {
-          this.taxValue = taxData.totalTax;
-        },
-        (error) => {
-          this.alertService.showAlert('error', 'Failed to fetch tax data. Please try again later.');
-        }
-      );
-    } else {
-      this.alertService.showAlert('error', 'User not logged in.');
-    }
   }
 
   filterTransactions(): void {
@@ -83,6 +77,7 @@ export class TaxCalculationComponent implements OnInit {
     );
     this.calculateTotalTax();
   }
+
 
   calculateTotalTax(): void {
     this.taxValue = this.unpaidTaxes.reduce((acc, transaction) => acc + transaction.tax, 0);
@@ -104,21 +99,15 @@ export class TaxCalculationComponent implements OnInit {
   }
 
   calculateTax(): void {
-    // Prepare DTO for tax calculation
-    const taxCalculationDto = {
-      userId: this.authService.getUserId(),
-      totalTax: this.taxValue,
-      transactions: this.unpaidTaxes
-    };
-
-    // Call the TaxService to perform tax calculation
-    this.taxService.calculateTax(taxCalculationDto).subscribe(
-      (response) => {
+    this.taxService.calculateTax().subscribe({
+      next: () => {
         this.alertService.showAlert('success', 'Tax calculation executed successfully.');
       },
-      (error) => {
+      error: () => {
         this.alertService.showAlert('error', 'An error occurred during tax calculation. Please try again later.');
-      }
-    );
+      },
+    });
   }
 }
+
+

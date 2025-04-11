@@ -24,36 +24,21 @@
   <table class="securities-table" *ngIf="filteredTransactions.length > 0">
     <thead>
     <tr>
-      <th>Client Code</th>
-      <th>Role</th>
       <th>Name</th>
       <th>Lastname</th>
-      <th>Account Number</th>
-      <th>Transaction Code</th>
-      <th>Transaction Date</th>
-      <th>Security</th>
-      <th>Price paid</th>
-      <th>Price sold</th>
-      <th>Tax price</th>
-      <th>Is paid</th>
-      <th>Date of payment</th>
+      <th>role</th>
+      <th>Unpaid Tax this month</th>
+      <th>Paid tax this year</th>
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let transaction of unpaidTaxes">
-      <td>{{ transaction.clientId }}</td>
-      <td>{{ transaction.role }}</td>
-      <td>{{ transaction.name }}</td>
-      <td >{{ transaction.lastname }}</td>
-      <td>{{ transaction.accountNumber }}</td>
-      <td>{{ transaction.transaction }}</td>
-      <td>{{ transaction.transactionDate }}</td>
-      <td>{{ transaction.securitiesType }}</td>
-      <td>{{ transaction.paidPrice }}</td>
-      <td>{{ transaction.soldPrice}}</td>
-      <td>{{ transaction.tax   }}</td>
-      <td>{{ transaction.paidFlag }}</td>
-      <td>{{ transaction.date }}</td>
+    <tr *ngFor="let user of userTax">
+      <td >{{ user.firstName }}</td>
+      <td>{{ user.lastName   }}</td>
+      <td>{{ user.role }}</td>
+      <td>{{ user.unpaidTaxThisMonth  }}</td>
+      <td>{{ user.paidTaxThisYear }}</td>
+      
     </tr>
     </tbody>
   </table>
