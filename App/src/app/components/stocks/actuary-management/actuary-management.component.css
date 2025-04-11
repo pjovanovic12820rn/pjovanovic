@@ -15,7 +15,17 @@
   .table-responsive {
     margin-top: 1rem;
   }
+
+  .btn-approved {
+    background-color: green;
+    color: white;
+  }
   
+  .btn-not-approved {
+    background-color: red;
+    color: white;
+  }
+
   .agents-table th,
   .agents-table td {
     vertical-align: middle;
