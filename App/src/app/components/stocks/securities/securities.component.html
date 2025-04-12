@@ -1,16 +1,16 @@
 <div class="securities-container">
   <div class="header">
     <div class="search-bar">
-      <input type="text" placeholder="Q Actions Futures Forex pairs" [(ngModel)]="searchTerm" (input)="onSearch()">
+      <input type="text" placeholder="Search Ticker..." [(ngModel)]="searchTerm" (input)="onSearch()">
     </div>
     <button class="sort-button" (click)="onSort()">
       SORT BY:
-      <span *ngIf="sortBy === 'price'">Price</span>
-      <span *ngIf="sortBy === 'volume'">Volume</span>
-      <span *ngIf="sortBy === 'maintenanceMargin'">Margin</span>
-      <span *ngIf="!sortBy">None</span>
-      <span *ngIf="sortOrder === 'asc'">▲</span>
-      <span *ngIf="sortOrder === 'desc'">▼</span>
+      @if (sortBy === 'price') { <span>Price</span> }
+      @if (sortBy === 'volume') { <span>Volume</span> }
+      @if (sortBy === 'maintenanceMargin') { <span>Margin</span> }
+      @if (!sortBy) { <span>None</span> }
+      @if (sortOrder === 'asc') { <span>▲</span> }
+      @if (sortOrder === 'desc') { <span>▼</span> }
     </button>
   </div>
 
@@ -72,55 +72,74 @@
         </div>
       </div>
 
-      <div class="filter-group" *ngIf="selectedSecurityType === 'Future' || selectedSecurityType === 'All'">
-        <label>Settlement Date:</label>
-        <div>
-          <input type="text" placeholder="YYYY-MM-DD" [(ngModel)]="settlementDateFilter" (input)="onFilterChange()">
+      @if (selectedSecurityType === 'Future' || selectedSecurityType === 'All') {
+        <div class="filter-group">
+          <label>Settlement Date:</label>
+          <div>
+            <input type="text" placeholder="YYYY-MM-DD" [(ngModel)]="settlementDateFilter" (input)="onFilterChange()">
+          </div>
         </div>
-      </div>
+      }
 
     </div>
 
     <div class="grid-area">
       <h3>Securities Grid</h3>
-      <div class="securities-table-container">
-        <table class="securities-table">
-          <thead>
-            <tr>
-              <th>Ticker</th>
-              <th>Price</th>
-              <th>Change</th>
-              <th>Volume</th>
-              <th>Initial Margin Cost</th>
-              <th *ngIf="selectedSecurityType === 'Future' || selectedSecurityType === 'All'">Settlement Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let security of securities">
-              <td>
-                <ng-container *ngIf="security.type === 'Stock'; else plainTicker">
-                  <a [routerLink]="['/options', security.id]" class="ticker-link">
-                    {{ security.ticker }}
-                  </a>
-                </ng-container>
-                <ng-template #plainTicker>
-                  <span>{{ security.ticker }}</span>
-                </ng-template>
-              </td>
-              <td>{{ security.price }}</td>
-              <td>{{ security.change }}</td>
-              <td>{{ security.volume }}</td>
-              <td>{{ security.initialMarginCost }}</td>
-              <td *ngIf="selectedSecurityType === 'Future' || selectedSecurityType === 'All'">{{ security.settlementDate }}</td>
-              <td class="actions-column">
-                <button class="action-button refresh-button" (click)="refreshSecurity(security)">Refresh</button>
-                <button class="action-button buy-button" (click)="openBuyOrderModal(security)">Buy</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+       @if (isLoading && securities.length === 0) {
+         <p>Loading securities...</p>
+       } @else if (!isLoading && securities.length === 0) {
+         <p>No securities match the current filters.</p>
+       } @else {
+        <button class="action-button refresh-all-button" (click)="refreshAllSecurities()" [disabled]="isLoading">
+          {{ isLoading ? 'Refreshing...' : 'Refresh All' }}
+        </button>
+
+         <div class="securities-table-container">
+           <table class="securities-table">
+             <thead>
+               <tr>
+                 <th>Ticker</th>
+                 <th>Price</th>
+                 <th>Change</th>
+                 <th>Volume</th>
+                 <th>Initial Margin Cost</th>
+                 @if (selectedSecurityType === 'Future' || selectedSecurityType === 'All') {
+                   <th>Settlement Date</th>
+                 }
+                 <th>Actions</th>
+               </tr>
+             </thead>
+             <tbody>
+               @for (security of securities; track security.id) {
+                 <tr>
+                   <td>
+                     @if (security.type === 'Stock') {
+                       <a [routerLink]="['/stock-details', security.id]" class="ticker-link">
+                         {{ security.ticker }}
+                       </a>
+                     } @else {
+                       <span>{{ security.ticker }}</span>
+                     }
+                   </td>
+                   <td>{{ security.price | number:'1.2-4' }}</td>
+                   <td>{{ security.change | number:'1.2-2' }}%</td>
+                   <td>{{ security.volume | number }}</td>
+                   <td>{{ security.initialMarginCost | number:'1.2-2' }}</td>
+
+                   @if (selectedSecurityType === 'Future' || selectedSecurityType === 'All') {
+                     <td>{{ security.type === 'Future' ? security.settlementDate : 'N/A' }}</td>
+                   }
+                   <td class="actions-column">
+                     @if (security.type === 'Stock' || security.type === 'Future') {
+                       <button class="action-button buy-button" (click)="openBuyOrderModal(security)">Buy</button>
+                     }
+                   </td>
+                 </tr>
+               }
+             </tbody>
+           </table>
+         </div>
+       }
     </div>
   </div>
 </div>
