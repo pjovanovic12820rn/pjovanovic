@@ -16,6 +16,7 @@ export interface Order {
   remainingPortions: number;
   afterHours: boolean;
   isTimeLimited: boolean;
+  accountNumber: string;
 }
 
 export interface PageResponse<T> {
