@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SecurityService } from '../../../services/security.service';
 import { Security } from '../../../models/security.model';
 import { FormsModule } from '@angular/forms';
-import { interval, Subscription } from 'rxjs';
 import { AuthService } from '../../../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
-import { OrderCreationModalComponent } from '../../shared/order-creation-modal/order-creation-modal.component'; // Import the modal component
+import { OrderCreationModalComponent } from '../../shared/order-creation-modal/order-creation-modal.component';
+import { AlertService } from '../../../services/alert.service';
 
 @Component({
   selector: 'app-securities',
@@ -20,13 +20,13 @@ import { OrderCreationModalComponent } from '../../shared/order-creation-modal/o
   templateUrl: './securities.component.html',
   styleUrl: './securities.component.css'
 })
-export class SecuritiesComponent implements OnInit, OnDestroy {
+export class SecuritiesComponent implements OnInit {
   private securityService = inject(SecurityService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private alertService = inject(AlertService);
   private allSecurities: Security[] = [];
   securities: Security[] = [];
-  filteredSecurities: Security[] = [];
   searchTerm: string = '';
   selectedSecurityType: 'All' | 'Stock' | 'Future' | 'Forex' = 'All';
   sortOrder: 'asc' | 'desc' | null = null;
@@ -37,24 +37,18 @@ export class SecuritiesComponent implements OnInit, OnDestroy {
   marginRange: { min: number | null, max: number | null } = { min: null, max: null };
   exchangePrefix: string = '';
   settlementDateFilter: string = '';
-  private refreshIntervalSubscription?: Subscription;
+
 
   isOrderModalOpen = false;
   selectedSecurityForOrder: Security | null = null;
   orderDirection: 'BUY' | 'SELL' = 'BUY';
 
+  isLoading = false;
 
   ngOnInit(): void {
     this.loadSecurities();
-    this.setupDataRefreshInterval();
   }
 
-  ngOnDestroy(): void {
-    this.clearDataRefreshInterval();
-  }
-  viewOptions(securityId: number): void {
-    this.router.navigate(['/options', securityId]);
-  }
 
   closeOrderModal(): void {
     this.isOrderModalOpen = false;
@@ -65,32 +59,51 @@ export class SecuritiesComponent implements OnInit, OnDestroy {
     this.closeOrderModal();
   }
 
-  refreshSecurity(securityToRefresh: Security): void {
-    this.securityService.getSecurityById(securityToRefresh.id).subscribe(updatedSecurity => {
-      this.allSecurities = this.allSecurities.map(sec => {
-        if (updatedSecurity && sec.id === updatedSecurity.id) {
-          return updatedSecurity;
+  refreshAllSecurities(): void {
+    this.isLoading = true;
+    this.securityService.getSecurities().subscribe({
+        next: securities => {
+            this.allSecurities = securities;
+            this.applyFiltersAndSort();
+            this.isLoading = false;
+            this.alertService.showAlert('success', 'Securities list refreshed.');
+        },
+        error: err => {
+            console.error("Error refreshing securities:", err);
+            this.alertService.showAlert('error', 'Failed to refresh securities list.');
+            this.isLoading = false;
         }
-        return sec;
-      }).filter((sec): sec is Security => sec !== undefined);
-      this.filterSecurities();
     });
   }
 
   private loadSecurities(): void {
-    this.securityService.getSecurities().subscribe(securities => {
-      this.allSecurities = securities;
-      this.filterSecurities();
+    this.isLoading = true;
+    this.securityService.getSecurities().subscribe({
+        next: securities => {
+            this.allSecurities = securities;
+            this.applyFiltersAndSort();
+            this.isLoading = false;
+        },
+        error: err => {
+            console.error("Error loading securities:", err);
+            this.alertService.showAlert('error', 'Failed to load securities list.');
+            this.isLoading = false;
+        }
     });
   }
 
-  onSearch(): void {
+  private applyFiltersAndSort(): void {
     this.filterSecurities();
+    this.sortSecurities();
+  }
+
+  onSearch(): void {
+    this.applyFiltersAndSort();
   }
 
   onSelectSecurityType(type: 'All' | 'Stock' | 'Future' | 'Forex'): void {
     this.selectedSecurityType = type;
-    this.filterSecurities();
+    this.applyFiltersAndSort();
   }
 
   onSort(): void {
@@ -124,54 +137,48 @@ export class SecuritiesComponent implements OnInit, OnDestroy {
   }
 
   onRangeFilterChange(): void {
-    this.filterSecurities();
+    this.applyFiltersAndSort();
   }
 
   onFilterChange(): void {
-    this.filterSecurities();
+    this.applyFiltersAndSort();
   }
 
   private sortSecurities(): void {
     if (this.sortBy && this.sortOrder) {
-      this.filteredSecurities.sort((a, b) => {
+      this.securities.sort((a, b) => {
         let valueA, valueB;
 
-        if (this.sortBy === 'price') {
-          valueA = a.price;
-          valueB = b.price;
-        } else if (this.sortBy === 'volume') {
-          valueA = a.volume;
-          valueB = b.volume;
-        } else if (this.sortBy === 'maintenanceMargin') {
-          valueA = a.maintenanceMargin;
-          valueB = b.maintenanceMargin;
-        } else {
-          return 0;
+        switch (this.sortBy) {
+          case 'price':
+            valueA = a.price;
+            valueB = b.price;
+            break;
+          case 'volume':
+            valueA = a.volume;
+            valueB = b.volume;
+            break;
+          case 'maintenanceMargin':
+            valueA = a.maintenanceMargin;
+            valueB = b.maintenanceMargin;
+            break;
+          default:
+            return 0;
         }
 
-        if (this.sortOrder === 'asc') {
-          return valueA - valueB;
-        } else {
-          return valueB - valueA;
-        }
+        valueA = valueA ?? 0;
+        valueB = valueB ?? 0;
+        return this.sortOrder === 'asc' ? valueA - valueB : valueB - valueA;
       });
-      this.securities = [...this.filteredSecurities];
-    } else {
-      this.filterSecurities();
     }
   }
 
   private filterSecurities(): void {
     let tempFilteredSecurities = [...this.allSecurities];
 
-    if (this.authService.isClient()) {
-      tempFilteredSecurities = tempFilteredSecurities.filter(security => security.type === 'Stock');
-    } else {
-      if (this.selectedSecurityType !== 'All') {
-        tempFilteredSecurities = tempFilteredSecurities.filter(security => security.type === this.selectedSecurityType);
-      }
+    if (this.selectedSecurityType !== 'All') {
+      tempFilteredSecurities = tempFilteredSecurities.filter(security => security.type === this.selectedSecurityType);
     }
-
 
     const term = this.searchTerm.toLowerCase();
     if (term) {
@@ -192,42 +199,24 @@ export class SecuritiesComponent implements OnInit, OnDestroy {
       );
     }
 
-    if (this.settlementDateFilter && (this.selectedSecurityType === 'Future' || this.selectedSecurityType === 'All')) {
-      tempFilteredSecurities = tempFilteredSecurities.filter(security => {
-        if (security.type === 'Future') {
-          return security.settlementDate === this.settlementDateFilter;
-        } else {
-          return false;
-        }
-      });
+    if (this.settlementDateFilter) {
+        tempFilteredSecurities = tempFilteredSecurities.filter(security => {
+            if (security.type === 'Future') {
+                return security.settlementDate?.includes(this.settlementDateFilter) ?? false;
+            }
+            return true;
+        });
     }
 
-    this.filteredSecurities = tempFilteredSecurities;
-    this.securities = [...this.filteredSecurities];
-
-    if (this.sortBy) {
-      this.sortSecurities();
-    }
+    this.securities = tempFilteredSecurities;  
   }
-
-  private checkRange(value: number, range: { min: number | null, max: number | null }): boolean {
+  private checkRange(value: number | undefined | null, range: { min: number | null, max: number | null }): boolean {
+    if (value === null || value === undefined) return true;
     const min = range.min;
     const max = range.max;
     if (min != null && value < min) return false;
     if (max != null && value > max) return false;
     return true;
-  }
-
-  private setupDataRefreshInterval(): void {
-    this.refreshIntervalSubscription = interval(30000).subscribe(() => {
-      this.loadSecurities();
-    });
-  }
-
-  private clearDataRefreshInterval(): void {
-    if (this.refreshIntervalSubscription) {
-      this.refreshIntervalSubscription.unsubscribe();
-    }
   }
 
   openBuyOrderModal(security: Security): void {
@@ -240,9 +229,8 @@ export class SecuritiesComponent implements OnInit, OnDestroy {
     return this.selectedSecurityForOrder?.price ?? 0;
   }
 
-  // todo
   get currentContractSize(): number {
-     return 1; // Bekend problem
+     return 1;
   }
 
   get currentListingId(): number | null {

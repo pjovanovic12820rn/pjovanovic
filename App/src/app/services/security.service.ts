@@ -3,6 +3,7 @@ import { map, Observable } from 'rxjs';
 import { Security } from '../models/security.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { ListingDetailsDto } from '../models/listing-details.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,12 @@ export class SecurityService {
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.authService.getToken();
+    if (!token) {
+      console.error("Authentication token is missing.");
+      return new HttpHeaders({
+        'Content-Type': 'application/json'
+      });
+    }
     return new HttpHeaders({
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json'
@@ -41,24 +48,37 @@ export class SecurityService {
     );
   }
 
+  getListingDetails(id: number): Observable<ListingDetailsDto> {
+    const headers = this.getAuthHeaders();
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.get<ListingDetailsDto>(url, { headers });
+  }
+
   private mapListingToSecurity(listing: any): Security {
-    let securityType: 'Stock' | 'Future' | 'Forex' = 'Stock';
-    if (listing.listingType === 'STOCK') {
-      securityType = 'Stock';
-    } else if (listing.listingType === 'FUTURES') {
-      securityType = 'Future';
-    } else if (listing.listingType === 'FOREX') {
-      securityType = 'Forex';
+    let securityType: 'Stock' | 'Future' | 'Forex';
+    switch (listing.listingType) {
+      case 'STOCK':
+        securityType = 'Stock';
+        break;
+      case 'FUTURES':
+        securityType = 'Future';
+        break;
+      case 'FOREX':
+        securityType = 'Forex';
+        break;
+      default:
+        console.warn(`Unknown listing type encountered: ${listing.listingType}`);
+        securityType = 'Stock';
     }
 
     return {
       id: listing.id,
       ticker: listing.ticker,
-      price: listing.price,
-      change: listing.change,
-      volume: listing.volume,
-      initialMarginCost: listing.initialMarginCost,
-      maintenanceMargin: listing.initialMarginCost / 1.1,
+      price: listing.price ?? listing.currentPrice ?? 0,
+      change: listing.change ?? 0,
+      volume: listing.volume ?? 0,
+      initialMarginCost: listing.initialMarginCost ?? 0,
+      maintenanceMargin: listing.initialMarginCost ? listing.initialMarginCost / 1.1 : 0,
       type: securityType,
       settlementDate: listing.settlementDate
     };

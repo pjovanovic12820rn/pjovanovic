@@ -1,0 +1,48 @@
+<div class="stock-details-container">
+    <h2>Stock Details</h2>
+  
+    @if (isLoading()) {
+      <p class="loading-message">Loading details...</p>
+    } @else {
+      @if (errorMessage(); as errorMsg) {
+        <p class="error-message">Error: {{ errorMsg }}</p>
+      } @else {
+        @if (listingDetails(); as details) {
+          <div class="details-header">
+            <h3>{{ details.name }} ({{ details.ticker }})</h3>
+            <p>Current Price: {{ details.currentPrice | number:'1.2-4' }}</p>
+            <p>Exchange: {{ details.exchangeMic }}</p>
+            @if (details.listingType === ListingType.FUTURES) {
+              <p>Contract Size: {{ details.contractSize }} {{ details.contractUnit }}</p>
+            }
+          </div>
+  
+          <hr>
+  
+          <div class="option-dates-section">
+            <h4>Option Settlement Dates</h4>
+            @if (details.listingType === ListingType.STOCK && details.optionSettlementDates && details.optionSettlementDates.length > 0) {
+              <ul>
+                @for (date of details.optionSettlementDates; track date) {
+                  <li>
+                    @if (stockId(); as id) {
+                      <a [routerLink]="['/stock-details', id, 'options', date]">
+                        {{ date | date:'longDate' }}
+                      </a>
+                    } @else {
+                      <span>{{ date | date:'longDate' }} (Error: Missing ID for link)</span>
+                    }
+                  </li>
+                }
+              </ul>
+            } @else {
+              <p>No option settlement dates available for this listing.</p>
+            }
+          </div>
+  
+        } @else {
+          <p>No details available for this listing.</p>
+        }
+      }
+    }
+  </div>

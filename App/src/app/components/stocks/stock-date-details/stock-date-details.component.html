@@ -1,0 +1,73 @@
+<div class="stock-date-details-container">
+  <h2>
+    Options for {{ stockTicker() || 'Stock' }}
+    @if(selectedDate(); as date) {
+      - Expiration: {{ date | date:'longDate' }}
+    }
+  </h2>
+
+  @if (isLoading()) {
+    <p class="loading-message">Loading options...</p>
+  } @else {
+
+    @if (errorMessage(); as errorMsg) {
+      <p class="error-message">Error: {{ errorMsg }}</p>
+    } @else {
+
+      @if (options(); as opts) {
+        @if (opts.length > 0) {
+          <div class="options-table-container">
+            <table class="options-table">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Strike Price</th>
+                  <th>Implied Volatility</th>
+                  <th>Open Interest</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (option of opts; track option.id ?? $index) {
+                  <tr>
+                    <td>
+                      <span [ngClass]="{
+                        'tag-call': option.optionType === 'CALL',
+                        'tag-put': option.optionType === 'PUT'
+                      }">
+                        {{ option.optionType }}
+                      </span>
+                    </td>
+                    <td>{{ option.strikePrice | number:'1.2-2' }}</td>
+                    <td>{{ (option.impliedVolatility || 0) * 100 | number:'1.1-2' }}%</td>
+                    <td>{{ option.openInterest | number }}</td>
+                    <td class="actions-column">
+                      <app-button class="action-button buy-button" (click)="openBuyOptionModal(option)">
+                        Buy
+                      </app-button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <p>No options found for this stock and expiration date.</p>
+        }
+      } @else {
+        <p>No options data available.</p>
+      }
+    }
+  }
+</div>
+
+<app-order-creation-modal
+  [isOpen]="isOrderModalOpen()"
+  [direction]="'BUY'"
+  [securityTicker]="modalSecurityTicker"
+  [securityPrice]="modalSecurityPrice"
+  [contractSize]="modalContractSize"
+  [listingId]="modalListingId"
+  (closeModalEvent)="closeOrderModal()"
+  (createOrderEvent)="handleOrderCreation($event)">
+</app-order-creation-modal>
