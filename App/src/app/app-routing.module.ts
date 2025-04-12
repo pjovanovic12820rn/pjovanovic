@@ -4,6 +4,7 @@ import { clientOrActuaryGuard } from './guards/client-or-actuary-guard.guard';
 import { employeeOrAdminGuard } from './guards/employee-or-admin-guard.guard';
 import { adminGuard } from './guards/admin-guard.guard';
 import { supervisorGuard } from './guards/supervisor-guard.guard';
+import { actuaryGuard } from './guards/actuary-guard.guard';
 import { LoginComponent } from './login/login.component';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { EmployeesComponent } from './components/employee/employees/employees.component';
@@ -36,7 +37,6 @@ import { LoansComponent} from './components/loan/loans/loans.component';
 import { MyPortfolioComponent } from './components/stocks/my-portfolio/my-portfolio.component';
 import { LoanDetailsComponent} from './components/loan/loan-details/loan-details.component';
 import { NewLoanRequestsComponent} from './components/loan/new-loan-requests/new-loan-requests.component';
-import { OptionsDisplayComponent } from './components/stocks/option/option.component';
 import { OrderOverviewComponent } from './components/stocks/order-overview/order-overview.component';
 import { TaxCalculationComponent } from './components/tax-calculation/tax-calculation.component';
 import { BankAccountsComponent} from './components/account/bank-accounts/bank-accounts.component';
@@ -44,6 +44,8 @@ import { ActuaryManagementComponent } from './components/stocks/actuary-manageme
 import { SettledContractsComponent } from './components/stocks/settled-contracts/settled-contracts.component';
 import { OtcOffersListComponent } from './components/stocks/otc-offers-list/otc-offers-list.component';
 import { BankProfitComponent } from './components/stocks/bank-profit/bank-profit.component';
+import { StockDetailsComponent } from './components/stocks/stock-details/stock-details.component';
+import { StockDateDetailsComponent } from './components/stocks/stock-date-details/stock-date-details.component';
 
 export const routes: Routes = [
   // login
@@ -101,15 +103,16 @@ export const routes: Routes = [
   { path: 'success', component: SuccessComponent },
 
   // actuaries
-  { path: 'actuaries', component: ActuaryManagementComponent, canActivate: [authGuard, supervisorGuard] }, // treba supervisor gard, ovako ce biti dok se ne doda u beku
+  { path: 'actuaries', component: ActuaryManagementComponent, canActivate: [authGuard, supervisorGuard] },
 
-  // securities
+  // securities & stocks
   { path: 'my-portfolio', component: MyPortfolioComponent, canActivate: [authGuard] },
   { path: 'securities', component: SecuritiesComponent, canActivate: [authGuard, clientOrActuaryGuard] },
-  { path: 'tax-portal', component: TaxCalculationComponent, canActivate: [authGuard, supervisorGuard] }, // not sure if this is the right guard!
+  { path: 'tax-portal', component: TaxCalculationComponent, canActivate: [authGuard, supervisorGuard] },
+  { path: 'stock-details/:id', component: StockDetailsComponent, canActivate: [authGuard, actuaryGuard] },
+  { path: 'stock-details/:id/options/:date', component: StockDateDetailsComponent, canActivate: [authGuard, actuaryGuard] },
 
   // options
-  { path: 'options/:stockId', component: OptionsDisplayComponent, canActivate: [authGuard, clientOrActuaryGuard] }, // samo aktuar tj. agent
   { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard, supervisorGuard] }, // treba supervisor gard, ovako ce biti dok se ne doda u beku
   { path: 'settled-contracts', component: SettledContractsComponent, canActivate: [authGuard] },
 

@@ -2,14 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import {
-  Option,
-  OptionType,
-  Stock,
-  Exchange,
-  OptionChain,
-  OptionPair,
-} from '../models/option.model';
+import { Option } from '../models/option.model';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -22,6 +15,12 @@ export class OptionService {
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.authService.getToken();
+    if (!token) {
+      console.error("Authentication token is missing.");
+      return new HttpHeaders({
+        'Content-Type': 'application/json'
+      });
+    }
     return new HttpHeaders({
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -30,14 +29,15 @@ export class OptionService {
 
   getStockOptionsByDate(stockId: number, date: Date): Observable<Option[]> {
     const formattedDate = this.formatDateToYYYYMMDD(date);
+    const url = `${this.apiUrl}/${stockId}/options/${formattedDate}`;
     return this.http
-      .get<Option[]>(`${this.apiUrl}/${stockId}/options/${formattedDate}`, {
+      .get<Option[]>(url, {
         headers: this.getAuthHeaders(),
       })
       .pipe(
         catchError((error) => {
           console.error(
-            `Error fetching options for date ${formattedDate}:`,
+            `Error fetching options for stock ${stockId} and date ${formattedDate}:`,
             error
           );
           return of([]);
