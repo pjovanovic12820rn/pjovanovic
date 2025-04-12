@@ -5,16 +5,33 @@
     {{ errorMessage }}
   </div>
 
-  <div *ngIf="loading">
-    Loading bank profit...
+  <div *ngIf="loading">Loading bank profit...</div>
+
+  <div *ngIf="!loading && userTaxes.length > 0 !== null">
+    <p>{{ userTaxes.length > 0 }} RSD</p>
+    <!--    <p>{{ bankProfit | number:'1.2-2' }} RSD</p>-->
   </div>
 
-  <div *ngIf="!loading && bankProfit !== null">
-    <p>{{ bankProfit }} RSD</p>
-<!--    <p>{{ bankProfit | number:'1.2-2' }} RSD</p>-->
-  </div>
+  <table class="securities-table" *ngIf="userTaxes.length > 0">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Lastname</th>
+        <th>Profit</th>
+        <th>Role/th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of userTaxes">
+        <td>{{ user.firstName }}</td>
+        <td>{{ user.lastName }}</td>
+        <td>{{ user.profit }}</td>
+        <td>{{ user.role }}</td>
+      </tr>
+    </tbody>
+  </table>
 
-  <div *ngIf="!loading && bankProfit === null && !errorMessage">
+  <div *ngIf="!loading && userTaxes.length == 0 && !errorMessage">
     <p>No data available.</p>
   </div>
 </div>
