@@ -1,7 +1,7 @@
 // TODO duplicate
 export interface Order {
   id: number;
-  agent: string;
+  clientName: string;
   asset: string;
   orderType: string;
   quantity: number;

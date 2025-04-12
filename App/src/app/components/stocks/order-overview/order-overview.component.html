@@ -26,7 +26,7 @@
   <table *ngIf="!loading && orders.length > 0">
     <thead>
       <tr>
-        <th>Agent</th>
+        <th>Client Name</th>
         <th>Order Type</th>
         <th>Asset</th>
         <th>Quantity</th>
@@ -40,7 +40,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let order of orders">
-        <td>{{ order.agent }}</td>
+        <td>{{ order.clientName }}</td>
         <td>{{ order.orderType }}</td>
         <td>{{ order.asset }}</td>
         <td>{{ order.quantity | number }}</td>

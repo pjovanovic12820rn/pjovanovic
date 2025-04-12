@@ -1,6 +1,6 @@
 export interface OrderDto {
   id: number;
-  agent: string;
+  clientName: string;
   asset: string;
   orderType: string;
   quantity: number;

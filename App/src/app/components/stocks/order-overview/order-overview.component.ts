@@ -49,7 +49,7 @@ export class OrderOverviewComponent implements OnInit, OnDestroy {
             (dto: OrderDto): Order => {
               return {
                 id: dto.id,
-                agent: dto.agent,
+                clientName: dto.clientName,
                 asset: dto.asset,
                 orderType: dto.orderType,
                 quantity: dto.quantity,
