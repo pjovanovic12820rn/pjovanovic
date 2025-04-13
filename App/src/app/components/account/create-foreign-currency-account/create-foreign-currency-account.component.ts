@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  AbstractControl,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
+  Validators,
   ValidationErrors,
-  Validators
+  AbstractControl,
+  FormControl
 } from '@angular/forms';
 import { ClientService } from '../../../services/client.service';
 import { AuthService } from '../../../services/auth.service';
@@ -27,6 +28,8 @@ import {NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {ButtonComponent} from '../../shared/button/button.component';
 import {InputTextComponent} from '../../shared/input-text/input-text.component';
 import {ModalComponent} from '../../shared/modal/modal.component';
+import {AutocompleteTextComponent} from '../../shared/autocomplete-text/autocomplete-text.component';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-create-foreign-currency-account',
@@ -40,7 +43,8 @@ import {ModalComponent} from '../../shared/modal/modal.component';
     ButtonComponent,
     InputTextComponent,
     NgIf,
-    ModalComponent
+    ModalComponent,
+    AutocompleteTextComponent,
   ]
 })
 export class CreateForeignCurrencyAccountComponent implements OnInit {
@@ -101,13 +105,26 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
 
   selectedCompanyId: number | null = null;
   selectedAuthorizedPersonnelId: number | null = null;
-  private allowedActivityCodes: string[] = [
+  public allowedActivityCodes: string[] = [
     "10.01", "62.01", "5.1", "62.09", "56.1", "86.1", "90.02",
     "1.11", "1.13", "13.1", "24.1", "24.2", "41.1", "41.2", "42.11",
     "42.12", "42.13", "42.21", "42.22", "7.1", "7.21", "8.11", "8.92",
     "47.11", "53.1", "53.2", "85.1", "85.2", "86.21", "86.22", "86.9",
     "84.12", "90.01", "90.04", "93.11", "93.13", "93.19", "26.11", "27.12", "29.1"
   ];
+
+  filteredActivityCodes$!: Observable<string[]>;
+  get activityCodeControl(): FormControl<string> {
+    return this.accountForm.get('activityCode') as FormControl<string>;
+  }
+
+  get activityCodeOptions(): { code: string }[] {
+    return this.allowedActivityCodes.map(code => ({ code }));
+  }
+  get activityCodeShowErrors(): boolean {
+    const control = this.accountForm.get('activityCode');
+    return !!control && control.invalid && (control.dirty); //control.touched ||
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -134,7 +151,10 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       companyName: [this.companyInfo.name, Validators.minLength(3)],
       registrationNumber: [this.companyInfo.registrationNumber, Validators.minLength(3)],
       taxNumber: [this.companyInfo.taxNumber, Validators.minLength(3)],
-      activityCode: [this.companyInfo.activityCode, [this.activityCodeValidator.bind(this)]],
+      activityCode: [
+        this.companyInfo.activityCode,
+        [Validators.required, this.activityCodeValidator.bind(this)]
+      ],
       companyAddress: [this.companyInfo.address, Validators.minLength(5)],
       selectedAuthorizedPersonnel: [this.selectedAuthorizedPersonnelId],
       currency: [this.newAccount.currency, Validators.required], //, disabled: true
@@ -570,4 +590,17 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     return inputDate < today ? null : { invalidDate: 'Birthdate must be in the past' };
   }
 
+  getActivityCodeErrors(): string[] {
+    const errors = [];
+    const control = this.accountForm.get('activityCode');
+
+    if (control?.hasError('required')) {
+      errors.push('Activity code is required.');
+    }
+    if (control?.hasError('invalidActivityCode')) {
+      errors.push('Invalid activity code.');
+    }
+
+    return errors;
+  }
 }

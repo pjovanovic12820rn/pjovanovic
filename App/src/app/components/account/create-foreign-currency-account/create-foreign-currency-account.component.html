@@ -100,12 +100,17 @@
               >
               </input-text>
 
-              <input-text placeholder="Activity Code:" label="Activity Code:" id="activityCode"
-                          formControlName="activityCode" type="text" [disabledInput]="!isNewCompany"
-                          [formControlComp]="accountForm.controls['activityCode']"
-                          [errorMessages]="{ required: 'Activity code is required.', invalidActivityCode: 'Invalid activity code. :('  }"
-              >
-              </input-text>
+              <autocomplete-text
+                label="Activity Code"
+                placeholder="Activity Code"
+                [options]="activityCodeOptions"
+                filterKey="code"
+                formControlName="activityCode"
+                [disabled]="!isNewCompany"
+                [formControlComp]="activityCodeControl"
+                [errors]="getActivityCodeErrors()"
+                [showErrors]="activityCodeShowErrors"
+              ></autocomplete-text>
 
               <input-text placeholder="Majority Owner:" label="Majority Owner:" id="majorityOwner"
                           [value]="getClientName(accountForm.get('clientId')?.value)" type="text" [disabledInput]="true">

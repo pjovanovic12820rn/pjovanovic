@@ -151,12 +151,17 @@
                         [errorMessages]="{ required: 'Tax number is required.', minlength: 'Minimum length is 3.' }"
             >
             </input-text>
-            <input-text id="activityCode" formControlName="activityCode" placeholder="Activity Code"
-                        label="Activity Code" [disabledInput]="!isNewCompany"
-                        [formControlComp]="accountForm.controls['activityCode']"
-                        [errorMessages]="{ required: 'Activity code is required.', invalidActivityCode: 'Invalid activity code. :('  }"
-            >
-            </input-text>
+            <autocomplete-text
+              label="Activity Code"
+              placeholder="Activity Code"
+              [options]="activityCodeOptions"
+              filterKey="code"
+              formControlName="activityCode"
+              [disabled]="!isNewCompany"
+              [formControlComp]="activityCodeControl"
+              [errors]="getActivityCodeErrors()"
+              [showErrors]="activityCodeShowErrors"
+            ></autocomplete-text>
             <input-text id="companyAddress" formControlName="companyAddress" placeholder="Address"
                         label="Address" [disabledInput]="!isNewCompany"
                         [formControlComp]="accountForm.controls['companyAddress']"
