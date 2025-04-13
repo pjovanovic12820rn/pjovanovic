@@ -3,12 +3,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ActuaryAgentDto } from '../models/actuary-agent.dto';
 import { AuthService } from './auth.service';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ActuariesService {
-  private baseUrl = 'http://localhost:8080/api/admin/actuaries';
+  private baseUrl = `${environment.userUrl}/api/actuaries`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

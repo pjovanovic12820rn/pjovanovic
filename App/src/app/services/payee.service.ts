@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Payee } from '../models/payee.model';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,8 @@ import { Payee } from '../models/payee.model';
 export class PayeeService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
-  private apiURL = "http://localhost:8082/api/payees/client";
-  private apiURL2 = "http://localhost:8082/api/payees";
+  private apiURL = `${environment.bankUrl}/api/payees/client`;
+  private apiURL2 = `${environment.bankUrl}/api/payees`;
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.authService.getToken();

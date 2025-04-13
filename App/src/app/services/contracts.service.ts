@@ -4,12 +4,13 @@ import { Observable } from 'rxjs';
 import { SettledContractDto } from '../models/settled-contract-dto';
 
 import { AuthService } from './auth.service';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContractsService {
-  private apiUrl = 'http://localhost:8083/api/otc/options';
+  private apiUrl = `${environment.stockUrl}/api/otc/options`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

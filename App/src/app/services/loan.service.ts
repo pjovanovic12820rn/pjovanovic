@@ -4,12 +4,13 @@ import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Loan } from '../models/loan-dto.model';
 import { Installment } from '../models/installment-model';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoanService {
-  private apiUrl = 'http://localhost:8082/api/loans';
+  private apiUrl = `${environment.bankUrl}/api/loans`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

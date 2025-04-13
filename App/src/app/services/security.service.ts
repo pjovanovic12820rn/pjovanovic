@@ -4,12 +4,13 @@ import { Security } from '../models/security.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { ListingDetailsDto } from '../models/listing-details.dto';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SecurityService {
-  private apiUrl = 'http://localhost:8083/api/listings';
+  private apiUrl = `${environment.stockUrl}/api/listings`;
   private authService = inject(AuthService);
 
   constructor(private http: HttpClient) { }

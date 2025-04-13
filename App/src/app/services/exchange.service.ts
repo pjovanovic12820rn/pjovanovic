@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { Exchange } from '../models/exchange';
 import { Observable } from 'rxjs';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class ExchangeService {
 
   private http = inject(HttpClient);
   private authService = inject(AuthService);
-  private apiUrl = "http://localhost:8082/api/exchange-rates";
+  private apiUrl = `${environment.bankUrl}/api/exchange-rates`;
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.authService.getToken();
