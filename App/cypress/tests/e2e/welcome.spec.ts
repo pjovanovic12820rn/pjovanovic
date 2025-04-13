@@ -1,6 +1,5 @@
 describe('Welcome Page Test', () => {
   beforeEach(function() {
-    this.skip();
     cy.visit('/'); // Visit the home page before each test
   });
 

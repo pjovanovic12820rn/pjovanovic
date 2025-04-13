@@ -3,8 +3,8 @@
 
 export const environment = {
   production: true,
-  userUrl: 'http://localhost:8080',
-  emailUrl: 'http://localhost:8081',
-  bankUrl: 'http://localhost:8082',
-  stockUrl: 'http://localhost:8083',
+  userUrl: 'https://banka-3.si.raf.edu.rs/user-service',
+  emailUrl: 'https://',
+  bankUrl: 'https://banka-3.si.raf.edu.rs/bank-service',
+  stockUrl: 'https://banka-3.si.raf.edu.rs/stock-service',
 };

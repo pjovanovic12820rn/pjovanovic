@@ -1,31 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="Mocha Tests" time="24.959" tests="10" failures="0" skipped="2">
-  <testsuite name="Root Suite" timestamp="2025-04-13T07:35:25" tests="0" file="cypress\tests\e2e\checking_account.spec.ts" time="0.000" failures="0">
+<testsuites name="Mocha Tests" time="0.964" tests="3" failures="0">
+  <testsuite name="Root Suite" timestamp="2025-04-13T14:32:52" tests="0" file="cypress\tests\e2e\welcome.spec.ts" time="0.000" failures="0">
   </testsuite>
-  <testsuite name="Create Current Account Component" timestamp="2025-04-13T07:35:25" tests="1" time="0.000" failures="0">
-    <testcase name="Create Current Account Component should load the form with required fields" time="1.718" classname="should load the form with required fields">
+  <testsuite name="Welcome Page Test" timestamp="2025-04-13T14:32:52" tests="3" time="0.961" failures="0">
+    <testcase name="Welcome Page Test should have Employee Login and Client Login buttons" time="0.519" classname="should have Employee Login and Client Login buttons">
     </testcase>
-  </testsuite>
-  <testsuite name="Personal Account Creation" timestamp="2025-04-13T07:35:27" tests="3" time="7.832" failures="0">
-    <testcase name="Create Current Account Component Personal Account Creation should enable submit button when required fields are filled" time="2.511" classname="should enable submit button when required fields are filled">
+    <testcase name="Welcome Page Test should navigate to /employee/login when Employee Login is clicked" time="0.222" classname="should navigate to /employee/login when Employee Login is clicked">
     </testcase>
-    <testcase name="Create Current Account Component Personal Account Creation should successfully create a personal account" time="2.565" classname="should successfully create a personal account">
-    </testcase>
-    <testcase name="Create Current Account Component Personal Account Creation should open card modal when createCard is checked" time="2.657" classname="should open card modal when createCard is checked">
-    </testcase>
-  </testsuite>
-  <testsuite name="Company Account Creation" timestamp="2025-04-13T07:35:35" tests="3" time="0.000" failures="0">
-    <testcase name="Create Current Account Component Company Account Creation should show company selection fields" time="1.718" classname="should show company selection fields">
-    </testcase>
-    <testcase name="Create Current Account Component Company Account Creation should enable new company fields when &quot;Create New Company&quot; is selected" time="1.834" classname="should enable new company fields when &quot;Create New Company&quot; is selected">
-    </testcase>
-    <testcase name="Create Current Account Component Company Account Creation should create new company and account" time="4.322" classname="should create new company and account">
-    </testcase>
-  </testsuite>
-  <testsuite name="existing company" timestamp="2025-04-13T07:35:43" tests="2" time="4.207" failures="0">
-  </testsuite>
-  <testsuite name="Card Creation Modal" timestamp="2025-04-13T07:35:47" tests="1" time="3.210" failures="0">
-    <testcase name="Create Current Account Component Card Creation Modal should create card when form is valid" time="3.173" classname="should create card when form is valid">
+    <testcase name="Welcome Page Test should navigate to /client/login when Client Login is clicked" time="0.168" classname="should navigate to /client/login when Client Login is clicked">
     </testcase>
   </testsuite>
 </testsuites>
