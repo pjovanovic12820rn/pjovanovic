@@ -137,7 +137,7 @@ export class CardsComponent implements OnInit {
 
   newCardReq(){
     if(this.authService.isClient()){
-      if(this.cards.length >= 2){
+      if(this.cards.length >= 3){
         this.alertService.showAlert('error', 'Client cant have more than 2 cards');
         return;
       }

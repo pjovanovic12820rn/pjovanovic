@@ -16,7 +16,9 @@
     <label>Issuer</label>
     <select formControlName="issuer">
       <option value="VISA">VISA</option>
-      <option value="MASTER">MASTER</option>
+      <option value="MASTERCARD">MASTERCARD</option>
+      <option value="DINA">DINA</option>
+      <option value="AMERICAN_EXPRESS">AMERICAN_EXPRESS</option>
     </select>
     <div *ngIf="cardForm.get('issuer')?.invalid && (cardForm.get('issuer')?.dirty || cardForm.get('issuer')?.touched)"
          class="error-message">
@@ -24,20 +26,26 @@
     </div>
 
     <!-- Card Name -->
-    <input-text label="Card Name" formControlName="name"></input-text>
-    <div *ngIf="cardForm.get('name')?.invalid && (cardForm.get('name')?.dirty || cardForm.get('name')?.touched)"
-         class="error-message">
-      <div *ngIf="cardForm.get('name')?.errors?.['required']">Name is required</div>
-      <div *ngIf="cardForm.get('name')?.errors?.['minlength']">Minimum 2 characters</div>
-    </div>
+    <input-text label="Card Name"
+                formControlName="name"
+                [formControlComp]="cardForm.controls['name']"
+                [errorMessages]="{
+                  required: 'Name is required',
+                  minlength: 'Minimum 2 characters'
+                }"
+    ></input-text>
 
     <!-- Card Limit -->
-    <input-text label="Card Limit" type="number" formControlName="cardLimit"></input-text>
-    <div *ngIf="cardForm.get('cardLimit')?.invalid && (cardForm.get('cardLimit')?.dirty || cardForm.get('cardLimit')?.touched)"
-         class="error-message">
-      <div *ngIf="cardForm.get('cardLimit')?.errors?.['required']">Limit is required</div>
-      <div *ngIf="cardForm.get('cardLimit')?.errors?.['min']">Must be at least 1</div>
-    </div>
+    <input-text label="Card Limit"
+                type="number"
+                formControlName="cardLimit"
+                [formControlComp]="cardForm.controls['cardLimit']"
+                [errorMessages]="{
+                  required: 'Limit is required',
+                  min: 'Must be at least 1'
+                }"
+    ></input-text>
+
 
     <app-button type="submit" [disabled]="cardForm.invalid">Create</app-button>
   </form>

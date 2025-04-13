@@ -151,10 +151,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       companyName: [this.companyInfo.name, Validators.minLength(3)],
       registrationNumber: [this.companyInfo.registrationNumber, Validators.minLength(3)],
       taxNumber: [this.companyInfo.taxNumber, Validators.minLength(3)],
-      activityCode: [
-        this.companyInfo.activityCode,
-        [Validators.required, this.activityCodeValidator.bind(this)]
-      ],
+      activityCode: [this.companyInfo.activityCode],
       companyAddress: [this.companyInfo.address, Validators.minLength(5)],
       selectedAuthorizedPersonnel: [this.selectedAuthorizedPersonnelId],
       currency: [this.newAccount.currency, Validators.required], //, disabled: true

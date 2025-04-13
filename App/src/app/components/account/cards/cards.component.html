@@ -23,10 +23,10 @@
       <div>
         <app-button class="width-full" (onClick)="openModal()" *ngIf="isEmployee">Payment</app-button>
       </div>
-      <div *ngIf="cardsLoaded">
+      <div *ngIf="cardsLoaded && (authService.isEmployee() || authService.isClient())">
         <app-button class="width-full"
                     (click)="newCardReq()"
-                    *ngIf="authService.isClient() && cards.length <= 2"
+                    *ngIf="cards.length <= 2"
                     [routerLink]="['/account', accountNumber, 'create-card']">
           Create New Card
         </app-button>

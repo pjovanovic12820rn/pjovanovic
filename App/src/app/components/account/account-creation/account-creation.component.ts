@@ -109,7 +109,7 @@ export class AccountCreationComponent implements OnInit {
     "84.12", "90.01", "90.04", "93.11", "93.13", "93.19", "26.11", "27.12", "29.1"
   ];
 
-  filteredActivityCodes$!: Observable<string[]>;
+  // filteredActivityCodes$!: Observable<string[]>;
   get activityCodeControl(): FormControl<string> {
     return this.accountForm.get('activityCode') as FormControl<string>;
   }
@@ -147,10 +147,7 @@ export class AccountCreationComponent implements OnInit {
       companyName: [this.companyInfo.name, Validators.minLength(3)],
       registrationNumber: [this.companyInfo.registrationNumber, Validators.minLength(3)],
       taxNumber: [this.companyInfo.taxNumber, Validators.minLength(3)],
-      activityCode: [
-        this.companyInfo.activityCode,
-        [Validators.required, this.activityCodeValidator.bind(this)]
-      ],
+      activityCode: [this.companyInfo.activityCode], //[Validators.required, this.activityCodeValidator.bind(this)]
       companyAddress: [this.companyInfo.address, Validators.minLength(5)],
 
       name: [this.newAccount.name, Validators.required],
