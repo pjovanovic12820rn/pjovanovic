@@ -2,7 +2,7 @@
 # to što se traži.
 # \"presubmits\" su CI jobovi, odnosno jobovi koji su pokreću za svaki
 # Pull Request i za svaki novi commit u okviru Pull Request-a.
-presubmits:
+postsubmits:
   # PROMENITI PRI KOPIRANJU
   # Name treba da bude u formatu \"pull-<naziv-repozitorijuma>-<naziv-servisa>-test\", npr.
   # pull-banka-1-backend-user-service-test ili pull-banka-2-backend-berza-service-test
