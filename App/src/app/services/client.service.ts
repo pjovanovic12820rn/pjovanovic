@@ -3,12 +3,13 @@ import { User } from '../models/user.model';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ClientService {
-  private apiUrl = 'http://localhost:8080/api/admin/clients';
+  private apiUrl = `${environment.userUrl}/api/admin/clients`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

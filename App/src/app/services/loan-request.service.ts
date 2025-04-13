@@ -5,12 +5,13 @@ import { LoanRequest, LoanRequestStatus } from '../models/loan-request.model';
 import { AuthService } from './auth.service';
 import { Currency } from '../models/currency.model';
 import {Loan} from '../models/loan-dto.model';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoanRequestService {
-  private apiUrl = 'http://localhost:8082/api/loan-requests';
+  private apiUrl = `${environment.bankUrl}/api/loan-requests`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

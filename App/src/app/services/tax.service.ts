@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import {environment} from '../environments/environment';
 
 export interface TaxData {
   id: number;
@@ -17,7 +18,7 @@ export interface TaxData {
   providedIn: 'root',
 })
 export class TaxService {
-  private baseUrl = 'http://localhost:8083/api/tax';
+  private baseUrl = `${environment.stockUrl}/api/tax`;
   private authService = inject(AuthService);
 
   private getAuthHeaders(): HttpHeaders {
