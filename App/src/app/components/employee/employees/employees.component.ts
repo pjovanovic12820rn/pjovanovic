@@ -143,6 +143,9 @@ export class EmployeesComponent implements OnInit {
   }
 
   viewEmployeeDetails(id: number): void {
-    this.router.navigate(['/employees', id]);
+    if(id === this.currentUserId)
+      this.router.navigate(['/employee', id]);
+    else
+      this.router.navigate(['/employees', id]);
   }
 }

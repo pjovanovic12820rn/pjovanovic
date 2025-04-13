@@ -63,7 +63,6 @@ export class OrderOverviewComponent implements OnInit, OnDestroy {
                 orderDate: dto.orderDate,
                 remainingPortions: dto.remainingPortions,
                 afterHours: dto.afterHours,
-                isTimeLimited: dto.isTimeLimited,
                 accountNumber: dto.accountNumber,
               };
             }

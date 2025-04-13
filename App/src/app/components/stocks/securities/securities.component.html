@@ -113,13 +113,11 @@
                @for (security of securities; track security.id) {
                  <tr>
                    <td>
-                     @if (security.type === 'Stock') {
+
                        <a [routerLink]="['/stock-details', security.id]" class="ticker-link">
                          {{ security.ticker }}
                        </a>
-                     } @else {
-                       <span>{{ security.ticker }}</span>
-                     }
+
                    </td>
                    <td>{{ security.price | number:'1.2-4' }}</td>
                    <td>{{ security.change | number:'1.2-2' }}%</td>

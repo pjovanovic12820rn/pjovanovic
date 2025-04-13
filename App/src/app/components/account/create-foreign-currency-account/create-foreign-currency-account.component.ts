@@ -140,6 +140,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       currency: [this.newAccount.currency, Validators.required], //, disabled: true
       dailyLimit: [this.newAccount.dailyLimit, Validators.pattern(/^\d+(\.\d+)?$/)],
       monthlyLimit: [this.newAccount.monthlyLimit, Validators.pattern(/^\d+(\.\d+)?$/)],
+      initialBalance: [this.newAccount.initialBalance, Validators.pattern(/^\d+(\.\d+)?$/)],
       isActive: [this.newAccount.isActive],
       createCard: [this.newAccount.createCard]
     });

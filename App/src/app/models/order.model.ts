@@ -1,4 +1,4 @@
-// TODO duplicate
+// TODO duplicate DODATI PROKLETI LISTING MRS NOSITE SER SVI VISE CITAJTE POROKLETI DTO SA BEKA MRSSSSSSSSSSSSSSSS
 export interface Order {
   id: number;
   clientName: string;
@@ -15,7 +15,6 @@ export interface Order {
   orderDate: string;
   remainingPortions: number;
   afterHours: boolean;
-  isTimeLimited: boolean;
   accountNumber: string;
 }
 

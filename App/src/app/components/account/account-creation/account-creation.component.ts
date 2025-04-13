@@ -129,6 +129,7 @@ export class AccountCreationComponent implements OnInit {
       name: [this.newAccount.name, Validators.required],
       dailyLimit: [this.newAccount.dailyLimit, Validators.pattern(/^\d+(\.\d+)?$/)],
       monthlyLimit: [this.newAccount.monthlyLimit, Validators.pattern(/^\d+(\.\d+)?$/)],
+      initialBalance: [this.newAccount.initialBalance, Validators.pattern(/^\d+(\.\d+)?$/)],
       currency: [{ value: this.newAccount.currency, disabled: true }],
       isActive: [this.newAccount.isActive],
       createCard: [this.newAccount.createCard]

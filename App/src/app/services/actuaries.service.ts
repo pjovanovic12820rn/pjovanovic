@@ -9,7 +9,7 @@ import {environment} from '../environments/environment';
   providedIn: 'root',
 })
 export class ActuariesService {
-  private baseUrl = `${environment.userUrl}/api/actuaries`;
+  private baseUrl = `${environment.userUrl}/api/admin/actuaries`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -21,14 +21,8 @@ export class ActuariesService {
     });
   }
 
-  getActuariesAgents(): Observable<ActuaryAgentDto[]> {
-    return this.http.get<ActuaryAgentDto[]>(`${this.baseUrl}/agents`, {
-      headers: this.getAuthHeaders(),
-    });
-  }
-
   getBankProfit(): Observable<UserTaxInfo[]> {
-    return this.http.get<UserTaxInfo[]>(`${this.baseUrl}/all`, {
+    return this.http.get<UserTaxInfo[]>(`${this.baseUrl}`, {
       headers: this.getAuthHeaders(),
     });
   }
