@@ -7,8 +7,8 @@ RUN npm ci
 
 COPY App/. .
 
-RUN npx ng build --configuration production
-# Production stage
+RUN npx ng build --configuration development
+# Production stagepodman compose --file ./docker-compose.test.yml up --build front-app
 FROM nginx:alpine
 
 COPY --from=build /front-app/dist/app/browser /usr/share/nginx/html
