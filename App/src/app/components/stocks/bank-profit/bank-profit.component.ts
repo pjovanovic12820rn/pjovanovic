@@ -37,7 +37,6 @@ export class BankProfitComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
     this.actuariesService
       .getBankProfit()
-      .pipe(takeUntil(this.destroy$))
       .subscribe(
         (profit) => {
           this.userTaxes = profit;

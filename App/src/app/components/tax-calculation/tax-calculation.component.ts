@@ -23,10 +23,7 @@ import { SecuritiesTransaction } from '../../models/securities-transaction';
 })
 export class TaxCalculationComponent implements OnInit {
 
-  private authService = inject(AuthService);
   private alertService = inject(AlertService);
-  private router = inject(Router);
-  private portfolioService = inject(PortfolioService);
   private taxService = inject(TaxService);
 
   securitiesTransactions: SecuritiesTransaction[] = [];
@@ -38,15 +35,7 @@ export class TaxCalculationComponent implements OnInit {
   taxValue: number = 0;
   currentDate: Date = new Date();
   userTax: TaxData[] = [];
-
-  selectedPeriod: string = '';
-  periods = [
-    { label: 'Januar 2025', start: new Date(2025, 0, 1), end: new Date(2025, 0, 31) },
-    { label: 'FebruarY 2025', start: new Date(2025, 1, 1), end: new Date(2025, 1, 28) },
-    { label: 'March 2025', start: new Date(2025, 2, 1), end: new Date(2025, 2, 31) },
-    { label: 'April 2025', start: new Date(2025, 3, 1), end: new Date(2025, 3, 30) },
-    { label: 'May 2025', start: new Date(2025, 4, 1), end: new Date(2025, 4, 31) }
-  ];
+  filteredTax: TaxData[] = [];
 
   ngOnInit(): void {
     this.taxService.getTaxData().subscribe(
@@ -58,7 +47,6 @@ export class TaxCalculationComponent implements OnInit {
       }
     );
 
-    this.securitiesTransactions = this.portfolioService.getAllSecuritiesTransactions();
     this.filteredTransactions = this.securitiesTransactions;
     this.unpaidTaxes = this.securitiesTransactions.filter(transaction =>
       transaction.paidFlag.includes("No")
@@ -78,24 +66,8 @@ export class TaxCalculationComponent implements OnInit {
     this.calculateTotalTax();
   }
 
-
   calculateTotalTax(): void {
     this.taxValue = this.unpaidTaxes.reduce((acc, transaction) => acc + transaction.tax, 0);
-  }
-
-  filterByPeriod(): void {
-    if (!this.selectedPeriod) {
-      this.unpaidTaxes = this.filteredTransactions;
-      return;
-    }
-    const selected = this.periods.find(period => period.label === this.selectedPeriod);
-    if (selected) {
-      this.unpaidTaxes = this.filteredTransactions.filter(transaction => {
-        const transactionDate = new Date(transaction.transactionDate);
-        return transactionDate >= selected.start && transactionDate <= selected.end;
-      });
-      this.calculateTotalTax();
-    }
   }
 
   calculateTax(): void {

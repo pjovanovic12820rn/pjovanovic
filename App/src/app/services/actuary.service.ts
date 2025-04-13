@@ -50,7 +50,7 @@ export class ActuaryService {
     params = params.set('page', page.toString());
     params = params.set('size', size.toString());
 
-    return this.http.get<any>(this.baseUrl, {
+    return this.http.get<any>(`${this.baseUrl}/agents`, {
       headers: this.getAuthHeaders(),
       params
     });

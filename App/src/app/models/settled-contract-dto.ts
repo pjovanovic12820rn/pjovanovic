@@ -1,13 +1,13 @@
 export interface SettledContractDto {
     id: number;
-    stockName: string;
+    stockSymbol: string;
     amount: number;
     strikePrice: number;
-    premium: number;   
+    currentPrice: number;
+    premium: number;
     settlementDate: string;
-    sellerInfo: string; 
-    profit: number;    
-    status: 'ACTIVE' | 'EXPIRED' | 'EXECUTED';
-    isOption?: boolean;
-  }
-  
+    sellerInfo: string;
+    profit: number;
+    status: 'VALID' | 'EXPIRED';
+    used: boolean;
+}

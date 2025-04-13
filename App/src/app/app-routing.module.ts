@@ -117,7 +117,7 @@ export const routes: Routes = [
   { path: 'settled-contracts', component: SettledContractsComponent, canActivate: [authGuard] },
 
   // otc
-  { path: 'otc-offers', component: OtcOffersListComponent, canActivate: [authGuard, clientOrActuaryGuard] },
+  { path: 'otc', component: OtcOffersListComponent, canActivate: [authGuard, clientOrActuaryGuard] },
 
   // bank profit
   { path: 'bank-profit', component: BankProfitComponent, canActivate: [authGuard] }
