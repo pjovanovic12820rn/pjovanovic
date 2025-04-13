@@ -1,5 +1,4 @@
 describe('Login Forms have necessary fields', function()  {
-    return
     const checkLoginForm = (url: string) => {
     cy.visit(url);
 
@@ -29,7 +28,6 @@ describe('Login Forms have necessary fields', function()  {
 });
 
 describe('Employee login test', () => {
-  return
   beforeEach(() => { cy.visit('/login/employee'); });
 
   it('if entered petar.p and pp it should display error messages', () => {
@@ -50,7 +48,6 @@ describe('Employee login test', () => {
   });
 });
 describe('Client login test', () => {
-  return
   beforeEach(() => { cy.visit('/login/client'); });
 
   it('if entered marko.m and mm it should display error messages', () => {
