@@ -7,6 +7,8 @@ RUN npm ci
 
 COPY App/. .
 
+RUN npm run build-env
+RUN npm run prebuild
 RUN npx ng build --configuration production
 # Production stage
 FROM nginx:alpine

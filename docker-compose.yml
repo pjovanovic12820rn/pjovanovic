@@ -2,7 +2,7 @@ services:
   front-app:
     build:
       context: .
-      dockerfile: DockerFileTest
+      dockerfile: Dockerfile
     ports:
       - "4200:80"
   main_db:
