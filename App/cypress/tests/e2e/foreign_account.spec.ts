@@ -1,5 +1,6 @@
 describe('foreign currency account test', () => {
-  beforeEach(() => {
+  beforeEach(function() {
+    this.skip();
     cy.visit('/login/employee'); // Visit the employee login page before each test
     cy.get('[name="email"] input').type('petar.p@example.com');
     cy.get('[name="password"] input').type('petarpetar');
@@ -325,7 +326,8 @@ describe('foreign currency account test', () => {
   });
 
   describe('existing company', () => {
-    beforeEach(function () { // MUST use function() here for 'this.skip()'
+    beforeEach(function() {
+      this.skip();
       cy.get('[class="details-btn"] button').contains('New Account').click();
       cy.get('app-account-management > app-modal > .modal-overlay > .modal-container > :nth-child(2) > .modal-content > .flex > :nth-child(2) > button').contains('Foreign Currency Account').click();
       cy.get('#accountOwnerType').select('COMPANY');

@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:8080/api/auth';
+  private baseUrl = 'http://user-service:8080/api/auth';
   private authStatusSubject = new BehaviorSubject<boolean>(this.isAuthenticated()); // Tracks authentication status
 
   authStatus$ = this.authStatusSubject.asObservable(); // Observable for components to subscribe
