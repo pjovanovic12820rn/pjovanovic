@@ -13,7 +13,7 @@ import { takeUntil, map } from 'rxjs/operators';
   templateUrl: './order-overview.component.html',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  styleUrls: ['./order-overview.component.css']
+  styleUrls: ['./order-overview.component.css'],
 })
 export class OrderOverviewComponent implements OnInit, OnDestroy {
   orders: Order[] = [];
@@ -29,7 +29,8 @@ export class OrderOverviewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (!this.authService.isSupervisor() && !this.authService.isAdmin()) {
-      this.errorMessage = "Access denied. Only supervisors can access this portal.";
+      this.errorMessage =
+        'Access denied. Only supervisors can access this portal.';
       return;
     }
     this.loadOrders();
@@ -39,37 +40,43 @@ export class OrderOverviewComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.errorMessage = '';
 
-    this.orderService.getOrders(this.filterStatus)
+    this.orderService
+      .getOrders(this.filterStatus)
       .pipe(
         takeUntil(this.destroy$),
         map((pageDto: PageResponse<OrderDto>): PageResponse<Order> => {
-          const transformedContent = pageDto.content.map((dto: OrderDto): Order => {
-            return {
-              id: dto.id,
-              agent: dto.agent,
-              asset: dto.asset,
-              orderType: dto.orderType,
-              quantity: dto.quantity,
-              contractSize: dto.contractSize,
-              pricePerUnit: dto.pricePerUnit ?? 0,
-              direction: dto.direction,
-              status: dto.status,
-              approvedBy: dto.approvedBy,
-              isDone: dto.isDone,
-              lastModification: dto.lastModification,
-              orderDate: dto.orderDate,
-              remainingPortions: dto.remainingPortions,
-              afterHours: dto.afterHours,
-              isTimeLimited: dto.isTimeLimited
-            };
-          });
+          const transformedContent = pageDto.content.map(
+            (dto: OrderDto): Order => {
+              return {
+                id: dto.id,
+                clientName: dto.clientName,
+                asset: dto.asset,
+                orderType: dto.orderType,
+                quantity: dto.quantity,
+                contractSize: dto.contractSize,
+                pricePerUnit: dto.pricePerUnit ?? 0,
+                direction: dto.direction,
+                status: dto.status,
+                approvedBy: dto.approvedBy,
+                isDone: dto.isDone,
+                lastModification: dto.lastModification,
+                orderDate: dto.orderDate,
+                remainingPortions: dto.remainingPortions,
+                afterHours: dto.afterHours,
+                isTimeLimited: dto.isTimeLimited,
+                accountNumber: dto.accountNumber,
+              };
+            }
+          );
           return {
             ...pageDto,
-            content: transformedContent
+            content: transformedContent,
           };
         })
-      ).subscribe({
+      )
+      .subscribe({
         next: (page: PageResponse<Order>) => {
+          console.log('orders', page);
           this.orders = page.content;
           this.loading = false;
         },
@@ -77,7 +84,7 @@ export class OrderOverviewComponent implements OnInit, OnDestroy {
           console.error('Error fetching orders', err);
           this.errorMessage = 'Failed to load orders. Please try again later.';
           this.loading = false;
-        }
+        },
       });
   }
 
@@ -86,22 +93,25 @@ export class OrderOverviewComponent implements OnInit, OnDestroy {
   }
 
   approveOrder(order: Order): void {
-    this.orderService.approveOrder(order.id)
+    this.orderService
+      .approveOrder(order.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => this.handleSuccess(`Order ${order.id} approved`),
-        error: (err) => this.handleError('approving order', err)
+        error: (err) => this.handleError('approving order', err),
       });
   }
 
-  declineOrder(order: Order): void { // Added implementation
-      this.orderService.declineOrder(order.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: () => this.handleSuccess(`Order ${order.id} declined`),
-          error: (err) => this.handleError('declining order', err)
-        });
-    }
+  declineOrder(order: Order): void {
+    // Added implementation
+    this.orderService
+      .declineOrder(order.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => this.handleSuccess(`Order ${order.id} declined`),
+        error: (err) => this.handleError('declining order', err),
+      });
+  }
 
   private handleSuccess(message: string): void {
     alert(message);

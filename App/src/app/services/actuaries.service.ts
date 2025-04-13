@@ -6,10 +6,9 @@ import { AuthService } from './auth.service';
 import {environment} from '../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ActuariesService {
-
   private baseUrl = `${environment.userUrl}/api/actuaries`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
@@ -18,15 +17,27 @@ export class ActuariesService {
     const token = this.authService.getToken();
     return new HttpHeaders({
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
   }
 
   getActuariesAgents(): Observable<ActuaryAgentDto[]> {
-    return this.http.get<ActuaryAgentDto[]>(`${this.baseUrl}/agents`, { headers: this.getAuthHeaders() });
+    return this.http.get<ActuaryAgentDto[]>(`${this.baseUrl}/agents`, {
+      headers: this.getAuthHeaders(),
+    });
   }
 
-  getBankProfit(): Observable<number> {
-    return this.http.get<number>(`${this.baseUrl}`, { headers: this.getAuthHeaders() });
+  getBankProfit(): Observable<UserTaxInfo[]> {
+    return this.http.get<UserTaxInfo[]>(`${this.baseUrl}/all`, {
+      headers: this.getAuthHeaders(),
+    });
   }
+}
+
+interface UserTaxInfo {
+  id: number;
+  firstName: string;
+  lastName: string;
+  role: string;
+  profit: number;
 }

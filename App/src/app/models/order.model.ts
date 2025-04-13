@@ -1,7 +1,7 @@
 // TODO duplicate
 export interface Order {
   id: number;
-  agent: string;
+  clientName: string;
   asset: string;
   orderType: string;
   quantity: number;
@@ -16,6 +16,7 @@ export interface Order {
   remainingPortions: number;
   afterHours: boolean;
   isTimeLimited: boolean;
+  accountNumber: string;
 }
 
 export interface PageResponse<T> {
