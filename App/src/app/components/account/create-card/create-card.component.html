@@ -1,18 +1,44 @@
 <div class="card width-fit margin-auto flex-col gap-1">
   <h2>Create New Card</h2>
-  <form #createCardForm="ngForm" class="flex-col gap-1" (ngSubmit)="onSubmit()">
+  <form [formGroup]="cardForm" class="flex-col gap-1" (ngSubmit)="onSubmit()">
+    <!-- Card Type -->
     <label>Card Type</label>
-    <select [(ngModel)]="newCard.type" name="type" required>
+    <select formControlName="type">
       <option value="DEBIT">DEBIT</option>
       <option value="CREDIT">CREDIT</option>
     </select>
+    <div *ngIf="cardForm.get('type')?.invalid && (cardForm.get('type')?.dirty || cardForm.get('type')?.touched)"
+         class="error-message">
+      Card type is required
+    </div>
+
+    <!-- Issuer -->
     <label>Issuer</label>
-    <select [(ngModel)]="newCard.issuer" name="issuer" required>
-      <option value="MASTER">MASTER</option>
+    <select formControlName="issuer">
       <option value="VISA">VISA</option>
+      <option value="MASTER">MASTER</option>
     </select>
-    <input-text label="Card Name" [(ngModel)]="newCard.name" name="name" required/>
-    <input-text label="Card Limit" type="number" [(ngModel)]="newCard.cardLimit" name="cardLimit" required/>
-    <app-button type="submit" [disabled]="createCardForm.invalid">Create</app-button>
+    <div *ngIf="cardForm.get('issuer')?.invalid && (cardForm.get('issuer')?.dirty || cardForm.get('issuer')?.touched)"
+         class="error-message">
+      Issuer is required
+    </div>
+
+    <!-- Card Name -->
+    <input-text label="Card Name" formControlName="name"></input-text>
+    <div *ngIf="cardForm.get('name')?.invalid && (cardForm.get('name')?.dirty || cardForm.get('name')?.touched)"
+         class="error-message">
+      <div *ngIf="cardForm.get('name')?.errors?.['required']">Name is required</div>
+      <div *ngIf="cardForm.get('name')?.errors?.['minlength']">Minimum 2 characters</div>
+    </div>
+
+    <!-- Card Limit -->
+    <input-text label="Card Limit" type="number" formControlName="cardLimit"></input-text>
+    <div *ngIf="cardForm.get('cardLimit')?.invalid && (cardForm.get('cardLimit')?.dirty || cardForm.get('cardLimit')?.touched)"
+         class="error-message">
+      <div *ngIf="cardForm.get('cardLimit')?.errors?.['required']">Limit is required</div>
+      <div *ngIf="cardForm.get('cardLimit')?.errors?.['min']">Must be at least 1</div>
+    </div>
+
+    <app-button type="submit" [disabled]="cardForm.invalid">Create</app-button>
   </form>
 </div>

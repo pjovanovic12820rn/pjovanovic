@@ -228,7 +228,7 @@
   </form>
 </div>
 
-<app-modal [title]="'Create Card'" [isOpen]="showCardModal" (closeModalEvent)="showCardModal = false">
+<app-modal [title]="'Create Card'" [isOpen]="showCardModal" (closeModalEvent)="onCloseModal()">
   <div class="modal-content">
     <br/>
     <form [formGroup]="cardForm" (ngSubmit)="submitCardForm()" class="flex-col gap-1">

@@ -169,7 +169,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       type: [this.newCard.type, Validators.required],
       issuer: [this.newCard.issuer, Validators.required],
       name: [this.newCard.name, Validators.required],
-      cardLimit: [this.newCard.cardLimit, Validators.required]
+      cardLimit: [this.newCard.cardLimit, [Validators.required,Validators.min(1)]],
     });
 
     // new auth p
@@ -486,6 +486,7 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
               companyId = newCompany.id;
             }
           } catch (error: any) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             const errorMessage = error?.error?.message || 'Failed to create company (try different tax number or registration number)';
             this.alertService.showAlert('error', errorMessage);
             return;
@@ -549,25 +550,32 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     }
   }
   submitCardForm(): void {
+
+    const payload = {
+      ...this.cardForm.getRawValue(),
+      accountNumber: this.newCard.accountNumber
+    };
+
     const request = this.authService.isClient()
-      ? this.cardService.requestCard(this.cardForm.getRawValue())
-      : this.cardService.createCard(this.cardForm.getRawValue());
+      ? this.cardService.requestCard(payload)
+      : this.cardService.createCard(payload);
 
     request.subscribe({
       next: () => {
         this.showCardModal = false;
         this.router.navigate(['/success'], {
           state: {
-            title: 'Card Created!',
-            message: 'The card has been successfully created.',
-            buttonName: 'Go to Account',
-            continuePath: `/account/${this.newCard.accountNumber}`
+            title: 'Account and Card Created!',
+            message: 'The account and the card has been successfully created.',
+            buttonName: 'Go to Client Portal',
+            continuePath: '/client-portal'
           }
         });
       },
       error: (err) => {
         this.alertService.showAlert('error', 'Failed to create card.');
         console.error(err);
+        this.router.navigate(['/client-portal']);
       }
     });
   }
@@ -602,5 +610,11 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     }
 
     return errors;
+  }
+
+  onCloseModal(): void {
+    this.showCardModal = false;
+    this.router.navigate(['/client-portal']);
+    this.alertService.showAlert('info', 'Card creation canceled.');
   }
 }
