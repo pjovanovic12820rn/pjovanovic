@@ -4,12 +4,13 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Option } from '../models/option.model';
 import { AuthService } from './auth.service';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OptionService {
-  private apiUrl = 'http://localhost:8083/api/listings';
+  private apiUrl = `${environment.stockUrl}/api/listings`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'http://user-service:8080/api/auth';
+  private baseUrl = `${environment.userUrl}/api/auth`;
   private authStatusSubject = new BehaviorSubject<boolean>(this.isAuthenticated()); // Tracks authentication status
 
   authStatus$ = this.authStatusSubject.asObservable(); // Observable for components to subscribe

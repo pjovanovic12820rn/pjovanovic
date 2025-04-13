@@ -1,3 +1,5 @@
+import {environment} from "../../../src/app/environments/environment";
+
 describe('Stocks Component', () => {
   beforeEach(function() {
     this.skip();
@@ -5,7 +7,7 @@ describe('Stocks Component', () => {
     cy.get('.sidebar-link').contains('My Portfolio').click();
     cy.url().should('include', '/my-portfolio');
     cy.get('table tbody tr').should('have.length.greaterThan', 0);
-    cy.intercept('POST', 'http://localhost:8083/api/orders').as('submitOrder');
+    cy.intercept('POST', `${environment.stockUrl}/api/orders`).as('submitOrder');
   });
   it('verifies portfolio table details', () => {
     cy.get('table thead tr').within(() => {

@@ -7,6 +7,7 @@ import { CreateOtcOfferDto } from '../models/create-otc-offer.dto';
 import { OtcOfferDto } from '../models/otc-offer.dto';
 import { PublicStockDto } from '../models/public-stock.dto';
 import { AuthService } from './auth.service';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,8 @@ export class OtcService {
 
   private http = inject(HttpClient);
   private authService = inject(AuthService);
-  private otcBaseUrl = 'http://localhost:8083/api/otc';
-  private portfolioBaseUrl = 'http://localhost:8083/api/portfolio';
+  private otcBaseUrl = `${environment.stockUrl}/api/otc`;
+  private portfolioBaseUrl = `${environment.stockUrl}/api/portfolio`;
 
   constructor() { }
 

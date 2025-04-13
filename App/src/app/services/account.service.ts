@@ -8,6 +8,7 @@ import {
   ChangeAccountLimitDto,
   ChangeAccountNameDto
 } from '../components/account/account-management/account-management.component';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ import {
 export class AccountService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
-  private apiUrl = 'http://localhost:8082/api/account';
+  private apiUrl = `${environment.bankUrl}/api/account`;
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.authService.getToken();

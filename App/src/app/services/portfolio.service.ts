@@ -7,6 +7,7 @@ import {Observable} from "rxjs";
 import {MyPortfolio} from "../models/my-portfolio";
 import {MyTax} from "../models/my-tax";
 import {SetPublishModel} from '../models/set-publish-model';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class PortfolioService {
 
     private http = inject(HttpClient);
     private authService = inject(AuthService);
-    private apiURL = "http://localhost:8083/api/portfolio";
+    private apiURL = `${environment.stockUrl}/api/portfolio`;
 
 
 
