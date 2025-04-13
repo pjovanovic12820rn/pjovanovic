@@ -43,6 +43,10 @@ export class SettledContractsComponent implements OnInit{
   }
 
   onExercise(contract: SettledContractDto): void {
+
+    console.log(contract.id)
+    console.log(contract)
+
     if (contract.status !== 'VALID') {
       this.alertService.showAlert('error', 'This contract cannot be exercised.');
       return;

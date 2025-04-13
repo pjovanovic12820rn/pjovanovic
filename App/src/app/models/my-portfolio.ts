@@ -1,5 +1,3 @@
-
-
 export interface MyPortfolio {
 
   id: number;
@@ -17,4 +15,6 @@ export interface MyPortfolio {
 
 }
 
-
+export interface UseListing {
+  portfolioEntryId: number
+}
