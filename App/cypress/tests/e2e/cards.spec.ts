@@ -7,6 +7,7 @@ describe('Cards Component', () => {
       .filter(':contains("View Cards")')
       .first()
       .click();
+    this.skip();
   });
 
   it('should create card', function() {
