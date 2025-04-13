@@ -9,7 +9,7 @@ dotenv.config({
 });
 
 // Path to your Angular environment file
-const targetPath = path.resolve(__dirname, '../environments/environment.ts');
+const targetPath = path.resolve(__dirname, '../app/environments/environment.ts');
 
 // Build the file content based on .env.local variables
 const fileContent = `
