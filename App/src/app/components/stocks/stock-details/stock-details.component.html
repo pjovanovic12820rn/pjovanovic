@@ -1,49 +1,47 @@
 <div class="stock-details-container">
-    <h2>Stock Details</h2>
+  <h2>Stock Details</h2>
 
-    @if (isLoading()) {
-      <p class="loading-message">Loading details...</p>
-    } @else {
-      @if (errorMessage(); as errorMsg) {
-        <p class="error-message">Error: {{ errorMsg }}</p>
-      } @else {
-        @if (listingDetails(); as details) {
-          <div class="details-header">
-            <h3>{{ details.name }} ({{ details.ticker }})</h3>
-            <p>Current Price: {{ details.currentPrice | number:'1.2-4' }}</p>
-            <p>Exchange: {{ details.exchangeMic }}</p>
-            <p>Listing type: {{ details.listingType }}</p>
-            @if (details.listingType === ListingType.FUTURES) {
-              <p>Contract Size: {{ details.contractSize }} {{ details.contractUnit }}</p>
-            }
-          </div>
+  <p *ngIf="isLoading()" class="loading-message">Loading details...</p>
 
-          <hr>
+  <p *ngIf="!isLoading() && errorMessage()" class="error-message">
+    Error: {{ errorMessage() }}
+  </p>
+  <ng-container *ngIf="!isLoading() && !errorMessage() && listingDetails() as details">
+    <div class="details-header">
+      <h3>{{ details.name }} ({{ details.ticker }})</h3>
+      <p>Current Price: {{ details.currentPrice | number:'1.2-4' }}</p>
+      <p>Exchange: {{ details.exchangeMic }}</p>
+      <p>Listing type: {{ details.listingType }}</p>
 
-          <div class="option-dates-section">
-            <h4>Option Settlement Dates</h4>
-            @if (details.listingType === ListingType.STOCK && details.optionSettlementDates && details.optionSettlementDates.length > 0) {
-              <ul>
-                @for (date of details.optionSettlementDates; track date) {
-                  <li>
-                    @if (stockId(); as id) {
-                      <a [routerLink]="['/stock-details', id, 'options', date]">
-                        {{ date | date:'longDate' }}
-                      </a>
-                    } @else {
-                      <span>{{ date | date:'longDate' }} (Error: Missing ID for link)</span>
-                    }
-                  </li>
-                }
-              </ul>
-            } @else {
-              <p>No option settlement dates available for this listing.</p>
-            }
-          </div>
+      <canvas #stockChart></canvas>
 
-        } @else {
-          <p>No details available for this listing.</p>
-        }
-      }
-    }
-  </div>
+      <hr>
+
+      <div class="option-dates-section">
+        <h4>Option Settlement Dates</h4>
+        <ng-container *ngIf="
+          details.listingType === ListingType.STOCK &&
+          details.optionSettlementDates &&
+          details.optionSettlementDates.length > 0;
+          else noOptions
+        ">
+          <ul>
+            <li *ngFor="let date of details.optionSettlementDates">
+              <ng-container *ngIf="stockId() as id; else missingId">
+                <a [routerLink]="['/stock-details', id, 'options', date]">
+                  {{ date | date:'longDate' }}
+                </a>
+              </ng-container>
+              <ng-template #missingId>
+                <span>{{ date | date:'longDate' }} (Error: Missing ID for link)</span>
+              </ng-template>
+            </li>
+          </ul>
+        </ng-container>
+        <ng-template #noOptions>
+          <p>No option settlement dates available for this listing.</p>
+        </ng-template>
+      </div>
+    </div>
+  </ng-container>
+</div>

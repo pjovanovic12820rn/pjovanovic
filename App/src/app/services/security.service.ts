@@ -55,6 +55,10 @@ export class SecurityService {
     return this.http.get<ListingDetailsDto>(url, { headers });
   }
 
+  getStockHistory(ticker: string) {
+    return this.http.get<any[]>(`/api/securities/${ticker}/history`);
+  }
+
   private mapListingToSecurity(listing: any): Security {
     let securityType: 'Stock' | 'Future' | 'Forex';
     switch (listing.listingType) {
@@ -71,6 +75,8 @@ export class SecurityService {
         console.warn(`Unknown listing type encountered: ${listing.listingType}`);
         securityType = 'Stock';
     }
+
+    
 
     return {
       id: listing.id,

@@ -1,10 +1,11 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SecurityService } from '../../../services/security.service';
 import { ListingDetailsDto } from '../../../models/listing-details.dto';
 import { ListingType } from '../../../enums/listing-type.enum';
 import { catchError, map, switchMap, tap, throwError } from 'rxjs';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-stock-details',
@@ -13,15 +14,17 @@ import { catchError, map, switchMap, tap, throwError } from 'rxjs';
   templateUrl: './stock-details.component.html',
   styleUrls: ['./stock-details.component.css']
 })
-export class StockDetailsComponent implements OnInit {
+export class StockDetailsComponent implements OnInit, AfterViewInit {
   private route = inject(ActivatedRoute);
   private securityService = inject(SecurityService);
-
   listingDetails = signal<ListingDetailsDto | null>(null);
   isLoading = signal<boolean>(true);
   errorMessage = signal<string | null>(null);
   stockId = signal<number | null>(null);
   ListingType = ListingType;
+
+  @ViewChild('stockChart') stockChartRef!: ElementRef<HTMLCanvasElement>;
+  chart!: Chart;
 
   ngOnInit(): void {
     this.route.paramMap.pipe(
@@ -58,10 +61,47 @@ export class StockDetailsComponent implements OnInit {
       next: details => {
         this.listingDetails.set(details);
         this.isLoading.set(false);
+        this.securityService.getStockHistory(details.ticker).subscribe(histData => {
+          this.createChart(histData);
+        });
       },
-      error: (err) => {
-        console.error("Subscription error handler:", err.message);
+      error: err => {
+        console.error('Subscription error handler:', err.message);
         this.isLoading.set(false);
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+  }
+
+  private createChart(data: any[]) {
+    const labels = data.map(item => item.date);
+    const prices = data.map(item => item.price);
+    this.chart = new Chart(this.stockChartRef.nativeElement, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Price History',
+            data: prices,
+            borderColor: 'blue',
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            title: { display: true, text: 'Date' }
+          },
+          y: {
+            title: { display: true, text: 'Price' }
+          }
+        }
       }
     });
   }
