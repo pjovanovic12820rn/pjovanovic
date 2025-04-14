@@ -1,7 +1,7 @@
 <div class="stock-date-details-container">
   <h2>
     Options for {{ stockTicker() || 'Stock' }}
-    @if(selectedDate(); as date) {
+    @if (selectedDate(); as date) {
       - Expiration: {{ date | date:'longDate' }}
     }
   </h2>
@@ -14,48 +14,106 @@
       <p class="error-message">Error: {{ errorMsg }}</p>
     } @else {
 
-      @if (options(); as opts) {
-        @if (opts.length > 0) {
-          <div class="options-table-container">
-            <table class="options-table">
-              <thead>
+      @if (groupedOptions() && groupedOptions().length > 0) {
+        <div class="options-table-container">
+
+          <table class="options-table">
+            <!-- hederi -->
+            <thead>
+            <tr>
+              <th colspan="3">CALLS</th>
+              <th rowspan="2" class="strike-header">Strike</th>
+              <th colspan="3">PUTS</th>
+<!--              class="puts-header" bio u PUTS a i u CALLS-->
+            </tr>
+            <tr>
+              <th>Price</th>
+              <th>Vol</th>
+              <th>OI</th>
+              <th>Price</th>
+              <th>Vol</th>
+              <th>OI</th>
+            </tr>
+            </thead>
+
+            <!-- tjelo -->
+            <tbody>
+              @for (item of groupedOptions(); track item.strike ?? $index) {
                 <tr>
-                  <th>Type</th>
-                  <th>Strike Price</th>
-                  <th>Implied Volatility</th>
-                  <th>Open Interest</th>
-                  <th>Actions</th>
+                  <td [ngClass]="{'calls-cell': true, 'positive': item.strike > 0, 'negative': item.strike <= 0}">
+
+                    @if (item.call) {
+                      <div class="last-cell">
+                        <span>{{ item.call.price | number:'1.2-2' }}</span>
+                        <button
+                          class="action-button x-button"
+                          (click)="openBuyOptionModal(item.call)"
+                          title="Buy Call">
+                          Buy
+                        </button>
+                      </div>
+                    } @else {
+                      -
+                    }
+                  </td>
+                  <td [ngClass]="{'calls-cell': true, 'positive': item.strike > 0, 'negative': item.strike <= 0}">
+                    @if (item.call) {
+                      - <!-- TODO: menjati sa item.call.volume -->
+                    } @else {
+                      -
+                    }
+                  </td>
+                  <td [ngClass]="{'calls-cell': true, 'positive': item.strike > 0, 'negative': item.strike <= 0}">
+                    <!-- OI column -->
+                    @if (item.call) {
+                      {{ item.call.openInterest | number }}
+                    } @else {
+                      -
+                    }
+                  </td>
+
+                  <td class="strike-column">
+                    {{ item.strike | number:'1.2-2' }}
+                  </td>
+
+                  <!-- PUTS deo -->
+                  <td [ngClass]="{'puts-cell': true, 'positive': item.strike <= 0, 'negative': item.strike > 0}">
+                    @if (item.put) {
+                      <div class="last-cell">
+                        <span>{{ item.put.price | number:'1.2-2' }}</span>
+                        <button
+                          class="action-button x-button"
+                          (click)="openBuyOptionModal(item.put)"
+                          title="Buy Put">
+                          Buy
+                        </button>
+                      </div>
+                    } @else {
+                      -
+                    }
+                  </td>
+                  <td [ngClass]="{'puts-cell': true, 'positive': item.strike <= 0, 'negative': item.strike > 0}">
+                    @if (item.put) {
+                      - <!-- TODO: dodati item.put.volume -->
+                    } @else {
+                      -
+                    }
+                  </td>
+                  <td [ngClass]="{'puts-cell': true, 'positive': item.strike <= 0, 'negative': item.strike > 0}">
+                    <!-- OI column -->
+                    @if (item.put) {
+                      {{ item.put.openInterest | number }}
+                    } @else {
+                      -
+                    }
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                @for (option of opts; track option.id ?? $index) {
-                  <tr>
-                    <td>
-                      <span [ngClass]="{
-                        'tag-call': option.optionType === 'CALL',
-                        'tag-put': option.optionType === 'PUT'
-                      }">
-                        {{ option.optionType }}
-                      </span>
-                    </td>
-                    <td>{{ option.strikePrice | number:'1.2-2' }}</td>
-                    <td>{{ (option.impliedVolatility || 0) * 100 | number:'1.1-2' }}%</td>
-                    <td>{{ option.openInterest | number }}</td>
-                    <td class="actions-column">
-                      <app-button class="action-button buy-button" (click)="openBuyOptionModal(option)">
-                        Buy
-                      </app-button>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
-        } @else {
-          <p>No options found for this stock and expiration date.</p>
-        }
+              }
+            </tbody>
+          </table>
+        </div>
       } @else {
-        <p>No options data available.</p>
+        <p>No options found for this stock and expiration date.</p>
       }
     }
   }
@@ -69,5 +127,6 @@
   [contractSize]="modalContractSize"
   [listingId]="modalListingId"
   (closeModalEvent)="closeOrderModal()"
-  (createOrderEvent)="handleOrderCreation($event)">
+  (createOrderEvent)="handleOrderCreation($event)"
+>
 </app-order-creation-modal>
