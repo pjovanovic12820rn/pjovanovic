@@ -100,12 +100,19 @@
               >
               </input-text>
 
-              <input-text placeholder="Activity Code:" label="Activity Code:" id="activityCode"
-                          formControlName="activityCode" type="text" [disabledInput]="!isNewCompany"
-                          [formControlComp]="accountForm.controls['activityCode']"
-                          [errorMessages]="{ required: 'Activity code is required.', invalidActivityCode: 'Invalid activity code. :('  }"
-              >
-              </input-text>
+              <autocomplete-text
+                #activityCode
+                label="Activity Code"
+                placeholder="Activity Code"
+                [options]="activityCodeOptions"
+                filterKey="code"
+                formControlName="activityCode"
+                [disabled]="!isNewCompany"
+                [formControlComp]="activityCodeControl"
+                [errors]="getActivityCodeErrors()"
+                [showErrors]="activityCodeShowErrors"
+
+              ></autocomplete-text>
 
               <input-text placeholder="Majority Owner:" label="Majority Owner:" id="majorityOwner"
                           [value]="getClientName(accountForm.get('clientId')?.value)" type="text" [disabledInput]="true">
@@ -229,7 +236,7 @@
   </form>
 </div>
 
-<app-modal [title]="'Create Card'" [isOpen]="showCardModal" (closeModalEvent)="showCardModal = false">
+<app-modal [title]="'Create Card'" [isOpen]="showCardModal" (closeModalEvent)="onCloseModal()">
   <div class="modal-content">
     <br/>
     <form [formGroup]="cardForm" (ngSubmit)="submitCardForm()" class="flex-col gap-1">
@@ -245,12 +252,29 @@
         <label class="mb-05">Issuer</label>
         <select formControlName="issuer" required>
           <option value="VISA">VISA</option>
-          <option value="MASTER">MASTER</option>
+          <option value="MASTERCARD">MASTERCARD</option>
+          <option value="DINA">DINA</option>
+          <option value="AMERICAN_EXPRESS">AMERICAN_EXPRESS</option>
         </select>
       </div>
 
-      <input-text label="Card Name" type="text" formControlName="name" required></input-text>
-      <input-text label="Card Limit" type="number" formControlName="cardLimit" required></input-text>
+      <input-text label="Card Name"
+                  type="text"
+                  formControlName="name"
+                  required
+                  [formControlComp]="cardForm.controls['name']"
+                  [errorMessages]="{ required: 'Card name is required.' }"
+      ></input-text>
+      <input-text label="Card Limit"
+                  type="number"
+                  formControlName="cardLimit"
+                  required
+                  [formControlComp]="cardForm.controls['cardLimit']"
+                  [errorMessages]="{
+                    required: 'Card limit is required.',
+                    min: 'Card limit must be at least 1.'
+                  }"
+      ></input-text>
 
       <app-button type="submit" [disabled]="cardForm.invalid">Create Card</app-button>
     </form>

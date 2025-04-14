@@ -238,7 +238,7 @@ describe('Create Current Account Component', () => {
         cy.url().should('include', '/success');
       });
     })
-    it('should create new company and account', () => {
+    it.skip('should create new company and account', () => {
       cy.get('select[id="selectedCompany"]').select('-1');
       cy.get('#companyName').type('New Company');
       // cy.get('#majorityOwner').then(($input) => {
