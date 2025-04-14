@@ -37,10 +37,11 @@ interface Account {
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {
-  account: Account | null = null
-  cards: Card[] = []
-  accountNumber: string = ''
-  isModalOpen: boolean = false
+  account: Account | null = null;
+  cards: Card[] = [];
+  accountNumber: string = '';
+  isModalOpen: boolean = false;
+  cardsLoaded = false;
 
   constructor(protected authService: AuthService, private route: ActivatedRoute, private cardService: CardService, private accountService: AccountService, private alertService: AlertService, private router: Router) {}
 
@@ -76,11 +77,13 @@ export class CardsComponent implements OnInit {
   loadCards(): void {
     if(this.authService.isClient()) {
       this.cardService.getMyCardsForAccount(this.accountNumber).subscribe(data => {
-        this.cards = data
+        this.cards = data;
+        this.cardsLoaded = true;
       })
     } else {
       this.cardService.getCardsByAccount(this.accountNumber).subscribe(data => {
-        this.cards = data
+        this.cards = data;
+        this.cardsLoaded = true;
       })
     }
 // idk was this     this.cardService.getUserCardsForAccount(this.accountNumber).subscribe(data => {
@@ -134,8 +137,9 @@ export class CardsComponent implements OnInit {
 
   newCardReq(){
     if(this.authService.isClient()){
-      if(this.cards.length >= 2){
+      if(this.cards.length >= 3){
         this.alertService.showAlert('error', 'Client cant have more than 2 cards');
+        return;
       }
     }
     this.router.navigate([`/account/${this.accountNumber}/create-card`]).then(r => {})
