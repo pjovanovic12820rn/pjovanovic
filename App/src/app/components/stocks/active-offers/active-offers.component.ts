@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActiveOfferDto } from '../../../models/active-offer.dto';
 import { ActiveOffersService } from '../../../services/active-offers.service';
+import { ButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   standalone: true,
   selector: 'app-active-offers',
   templateUrl: './active-offers.component.html',
   styleUrls: ['./active-offers.component.css'],
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, ButtonComponent]
 })
 export class ActiveOffersComponent implements OnInit {
   private activeOffersService = inject(ActiveOffersService);
@@ -28,8 +29,10 @@ export class ActiveOffersComponent implements OnInit {
 
   fetchActiveOffers(): void {
     this.loading = true;
+    console.log("fechuje")
     this.activeOffersService.getActiveOffers().subscribe({
       next: (offers) => {
+        console.log(offers)
         this.activeOffers = offers;
         this.loading = false;
       },
@@ -53,6 +56,17 @@ export class ActiveOffersComponent implements OnInit {
 
   declineOffer(offer: ActiveOfferDto): void {
     this.activeOffersService.declineOffer(offer.id).subscribe({
+      next: () => {
+        this.activeOffers = this.activeOffers.filter(o => o.id !== offer.id);
+      },
+      error: () => {
+        this.errorMessage = 'Failed to decline offer.';
+      }
+    });
+  }
+
+  cancelOffer(offer: ActiveOfferDto): void {
+    this.activeOffersService.cancelOffer(offer.id).subscribe({
       next: () => {
         this.activeOffers = this.activeOffers.filter(o => o.id !== offer.id);
       },
