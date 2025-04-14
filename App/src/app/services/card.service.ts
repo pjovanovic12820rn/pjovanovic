@@ -45,7 +45,7 @@ export class CardService {
 
   // client
   getMyCardsForAccount(accountNumber: string): Observable<Card[]> {
-    return this.http.get<Card[]>(`${this.apiUrl}/${accountNumber}/cards/my-cards`, { headers: this.getAuthHeaders() })
+    return this.http.get<Card[]>(`${this.apiUrl}/${accountNumber}/cards/my-account-cards`, { headers: this.getAuthHeaders() })
   }
 
   blockCardByUser(accountNumber: string, cardNumber: string): Observable<any> {
