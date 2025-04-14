@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ActuaryAgentDto } from '../models/actuary-agent.dto';
 import { AuthService } from './auth.service';
-import {environment} from '../environments/environment';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -21,8 +21,8 @@ export class ActuariesService {
     });
   }
 
-  getBankProfit(): Observable<UserTaxInfo[]> {
-    return this.http.get<UserTaxInfo[]>(`${this.baseUrl}`, {
+  getBankProfit(): Observable<{ content: UserTaxInfo[] }> {
+    return this.http.get<{ content: UserTaxInfo[] }>(`${this.baseUrl}`, {
       headers: this.getAuthHeaders(),
     });
   }
