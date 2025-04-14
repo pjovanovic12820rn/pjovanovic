@@ -18,7 +18,7 @@
         <th>Name</th>
         <th>Lastname</th>
         <th>Profit</th>
-        <th>Role/th>
+        <th>Role</th>
       </tr>
     </thead>
     <tbody>
@@ -34,4 +34,11 @@
   <div *ngIf="!loading && userTaxes.length == 0 && !errorMessage">
     <p>No data available.</p>
   </div>
+
+   <!-- Pagination Controls -->
+   <app-pagination
+   [totalItems]="userTaxes.length"
+   [pageSize]="pageSize"
+   (pageChanged)="onPageChanged($event)">
+ </app-pagination>
 </div>

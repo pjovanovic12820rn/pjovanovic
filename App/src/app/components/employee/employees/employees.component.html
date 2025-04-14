@@ -31,7 +31,6 @@
           <ng-container *ngIf="employee.id !== currentUserId">
             <app-button class="delete-btn" (click)="openDeleteModal(employee)">Delete</app-button>
 
-            <!-- ✅ Corrected Toggle Activation Button -->
             <app-button class="toggle-status-btn"
                         (click)="deactivateEmployee(employee.id, employee.active)"
                         [ngClass]="employee.active ? 'deactivate-btn' : 'activate-btn'">

@@ -2,52 +2,64 @@
   <h2>Tax overview</h2>
 
   <div class="status-container">
-    <p>Status as of: {{ currentDate | date:'MM/dd/yyyy HH:mm' }}</p>
+    <p>Status as of: {{ currentDate | date : "MM/dd/yyyy HH:mm" }}</p>
   </div>
 
   <div class="filters">
-    <input type="text" placeholder="Filter by Role" [(ngModel)]="role" (input)="filterTransactions()">
-    <input type="text" placeholder="Filter by Name" [(ngModel)]="filterName" (input)="filterTransactions()">
-    <input type="text" placeholder="Filter by Lastname" [(ngModel)]="filterLastname" (input)="filterTransactions()">
+    <input
+      type="text"
+      placeholder="Filter by Role"
+      [(ngModel)]="role"
+      (input)="filterTransactions()"
+    />
+    <input
+      type="text"
+      placeholder="Filter by Name"
+      [(ngModel)]="filterName"
+      (input)="filterTransactions()"
+    />
+    <input
+      type="text"
+      placeholder="Filter by Lastname"
+      [(ngModel)]="filterLastname"
+      (input)="filterTransactions()"
+    />
   </div>
 
+  <div *ngIf="loading">Loading...</div>
 
-  <div class="filter-container">
-    <label for="periodFilter">Filter by period:</label>
-    <select id="periodFilter" [(ngModel)]="selectedPeriod" (change)="filterByPeriod()">
-      <option value="">All</option>
-      <option *ngFor="let period of periods" [value]="period.label">{{ period.label }}</option>
-    </select>
-  </div>
-
-
-  <table class="securities-table" *ngIf="filteredTransactions.length > 0">
+  <table
+    class="securities-table"
+    *ngIf="!loading && filteredUserTax.length > 0"
+  >
     <thead>
-    <tr>
-      <th>Name</th>
-      <th>Lastname</th>
-      <th>role</th>
-      <th>Unpaid Tax this month</th>
-      <th>Paid tax this year</th>
-    </tr>
+      <tr>
+        <th>Name</th>
+        <th>Lastname</th>
+        <th>role</th>
+        <th>Unpaid Tax this month</th>
+        <th>Paid tax this year</th>
+      </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let user of userTax">
-      <td >{{ user.firstName }}</td>
-      <td>{{ user.lastName   }}</td>
-      <td>{{ user.role }}</td>
-      <td>{{ user.unpaidTaxThisMonth  }}</td>
-      <td>{{ user.paidTaxThisYear }}</td>
-
-    </tr>
+      <tr *ngFor="let user of filteredUserTax">
+        <td>{{ user.firstName }}</td>
+        <td>{{ user.lastName }}</td>
+        <td>{{ user.role }}</td>
+        <td>{{ user.unpaidTaxThisMonth }}</td>
+        <td>{{ user.paidTaxThisYear }}</td>
+      </tr>
     </tbody>
   </table>
 
+  <!--  todo fix to calculate properly  -->
   <div class="total-tax-container">
-    <h3>Total Tax Value: {{  taxValue | number:'1.2-2' }}</h3>
+    <h3>Total Unpaid Tax: {{ unpaidTax}}</h3>
+    <h3>Total Paid Tax: {{ paidTax }}</h3>
   </div>
   <div class="total-tax-container">
-    <button class="calculate-tax-btn" (click)="calculateTax()">Send calculated tax</button>
+    <button class="calculate-tax-btn" (click)="calculateTax()">
+      Send calculated tax
+    </button>
   </div>
-
 </div>

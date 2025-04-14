@@ -3,13 +3,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ActuaryAgentDto } from '../models/actuary-agent.dto';
 import { AuthService } from './auth.service';
-import {environment} from '../environments/environment';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ActuariesService {
-  private baseUrl = `${environment.userUrl}/api/actuaries`;
+  private baseUrl = `${environment.userUrl}/api/admin/actuaries`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -21,14 +21,8 @@ export class ActuariesService {
     });
   }
 
-  getActuariesAgents(): Observable<ActuaryAgentDto[]> {
-    return this.http.get<ActuaryAgentDto[]>(`${this.baseUrl}/agents`, {
-      headers: this.getAuthHeaders(),
-    });
-  }
-
-  getBankProfit(): Observable<UserTaxInfo[]> {
-    return this.http.get<UserTaxInfo[]>(`${this.baseUrl}/all`, {
+  getBankProfit(): Observable<{ content: UserTaxInfo[] }> {
+    return this.http.get<{ content: UserTaxInfo[] }>(`${this.baseUrl}`, {
       headers: this.getAuthHeaders(),
     });
   }

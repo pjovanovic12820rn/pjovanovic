@@ -9,6 +9,7 @@ import { AccountResponse } from '../../../models/account-response.model';
 import { AlertService } from '../../../services/alert.service';
 import { OrderService } from '../../../services/order.service';
 import { CreateOrderDto } from '../../../models/create-order.dto';
+import {InputTextComponent} from '../input-text/input-text.component';
 
 export enum OrderType {
   MARKET = 'Market',
@@ -29,7 +30,8 @@ enum ModalView {
     CommonModule,
     FormsModule,
     ModalComponent,
-    ButtonComponent
+    ButtonComponent,
+    InputTextComponent
   ],
   templateUrl: './order-creation-modal.component.html',
   styleUrl: './order-creation-modal.component.css'
@@ -90,7 +92,6 @@ export class OrderCreationModalComponent implements OnInit, OnChanges {
     if (changes['direction'] && this.isOpen) {
        this.currentView = ModalView.FORM;
        needsUpdate = true;
-       directionChanged = true;
     }
 
     if ((changes['securityPrice'] || changes['contractSize'] || changes['listingId']) && this.isOpen) {
