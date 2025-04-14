@@ -14,6 +14,9 @@ import { InputTextComponent } from '../../shared/input-text/input-text.component
 import { OrderCreationModalComponent } from '../../shared/order-creation-modal/order-creation-modal.component';
 import {ListingType} from '../../../enums/listing-type.enum';
 
+
+
+
 @Component({
   selector: 'app-my-portfolio',
   standalone: true,

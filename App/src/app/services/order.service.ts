@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import {CreateOrderDto} from '../models/create-order.dto';
 import {OrderDto} from '../models/order.dto';
 import {environment} from '../environments/environment';
+import {OrderRealDto} from '../models/order-real-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,9 @@ import {environment} from '../environments/environment';
 export class OrderService {
   // Ako koristiš environment varijablu, ovde se može postaviti npr. environment.apiUrl + '/api/orders'
   private baseUrl = `${environment.stockUrl}/api/orders`;
+
+  //
+  private testUrl = "localhost:8083/api/orders";
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -65,7 +69,12 @@ export class OrderService {
     return this.http.post(`${this.baseUrl}/decline/${orderId}`, {}, { headers: this.getAuthHeaders() });
   }
 
-  cancelOrder(orderId: number, cancelQuantity: number): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${orderId}/cancel`, { cancelQuantity }, { headers: this.getAuthHeaders() });
+  cancelOrder(orderId: number): Observable<any> {
+    return this.http.post (`${this.baseUrl}/cancel/${orderId}`, { headers: this.getAuthHeaders() });
   }
+
+  getOrdersByUser(id: number): Observable<OrderRealDto[]> {
+    return this.http.get<OrderRealDto[]>(`${this.baseUrl}/${id}`, {headers: this.getAuthHeaders()})
+  }
+
 }

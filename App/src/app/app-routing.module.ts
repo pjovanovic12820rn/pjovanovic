@@ -114,7 +114,8 @@ export const routes: Routes = [
   { path: 'stock-details/:id/options/:date', component: StockDateDetailsComponent, canActivate: [authGuard, actuaryGuard] },
 
   // options
-  { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard, supervisorGuard] }, // treba supervisor gard, ovako ce biti dok se ne doda u beku
+  { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard, supervisorGuard] },
+  { path: 'my-orders', component: OrderOverviewComponent, canActivate: [authGuard] },// treba supervisor gard, ovako ce biti dok se ne doda u beku
   { path: 'settled-contracts', component: SettledContractsComponent, canActivate: [authGuard] },
   { path: 'active-offers', component: ActiveOffersComponent, canActivate: [authGuard] },
 
