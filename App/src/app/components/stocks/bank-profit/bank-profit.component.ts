@@ -35,21 +35,18 @@ export class BankProfitComponent implements OnInit, OnDestroy {
   loadBankProfit(): void {
     this.loading = true;
     this.errorMessage = '';
-    this.actuariesService
-      .getBankProfit()
-      .subscribe(
-        (profit) => {
-          this.userTaxes = profit;
-          this.loading = false;
+    this.actuariesService.getBankProfit().subscribe({
+        next: (profit) => {
+            this.userTaxes = profit.content;
+            this.loading = false;
         },
-        (error) => {
-          // console.error("Error loading bank profit", err);
-          this.errorMessage =
-            'Failed to load bank profit. Please try again later.';
-          this.loading = false;
+        error: (err) => {
+            console.error("Error loading bank profit:", err);
+            this.errorMessage = 'Failed to load bank profit. Please try again later.';
+            this.loading = false;
         }
-      );
-  }
+    });
+}
 
 
   ngOnDestroy(): void {
