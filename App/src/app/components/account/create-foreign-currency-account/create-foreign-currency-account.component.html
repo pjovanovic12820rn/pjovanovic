@@ -194,6 +194,12 @@
           </select>
         </div>
 
+        <input-text label="Initial balance:" id="initialBalance" placeholder="Initial balance" formControlName="initialBalance"
+                    type="number" required
+                    [formControlComp]="accountForm.controls['initialBalance']"
+                    [errorMessages]="{ pattern: 'Must be a valid number (decimal allowed).' }">
+        </input-text>
+
         <input-text label="Daily Limit:" id="dailyLimit" placeholder="Daily Limit" formControlName="dailyLimit"
                     type="number" required
                     [formControlComp]="accountForm.controls['dailyLimit']"

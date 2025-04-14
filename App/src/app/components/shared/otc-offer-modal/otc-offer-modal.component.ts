@@ -31,12 +31,12 @@ export class OtcOfferModalComponent {
   @Output() closeModalEvent = new EventEmitter<void>();
   @Output() makeOfferEvent = new EventEmitter<OtcOfferDetails>();
 
-  offerVolume: number | null = null;
+  offerQuantity: number | null = null;
   offerPrice: number | null = null;
   settlementDateOffer: string = '';
   premiumOffer: number | null = null;
 
-  volumeError: string | null = null;
+  quantityError: string | null = null;
   priceError: string | null = null;
   dateError: string | null = null;
   premiumError: string | null = null;
@@ -53,7 +53,7 @@ export class OtcOfferModalComponent {
     }
 
     const offerDetails: OtcOfferDetails = {
-      volume: this.offerVolume,
+      volume: this.offerQuantity,
       price: this.offerPrice,
       settlementDate: this.settlementDateOffer,
       premium: this.premiumOffer
@@ -67,8 +67,8 @@ export class OtcOfferModalComponent {
     this.resetErrors();
     let isValid = true;
 
-    if (this.offerVolume === null || this.offerVolume === undefined || this.offerVolume <= 0) {
-      this.volumeError = 'Volume is required and must be positive.';
+    if (this.offerQuantity === null || this.offerQuantity === undefined || this.offerQuantity <= 0) {
+      this.quantityError = 'Quantity is required and must be positive.';
       isValid = false;
     }
 
@@ -98,7 +98,7 @@ export class OtcOfferModalComponent {
   }
 
   private resetFormAndErrors(): void {
-    this.offerVolume = null;
+    this.offerQuantity = null;
     this.offerPrice = null;
     this.settlementDateOffer = '';
     this.premiumOffer = null;
@@ -106,7 +106,7 @@ export class OtcOfferModalComponent {
   }
 
   private resetErrors(): void {
-    this.volumeError = null;
+    this.quantityError = null;
     this.priceError = null;
     this.dateError = null;
     this.premiumError = null;

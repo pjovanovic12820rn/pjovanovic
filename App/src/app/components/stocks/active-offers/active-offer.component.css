@@ -1,0 +1,52 @@
+.active-offers-container {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .error-msg {
+    color: red;
+    margin-bottom: 1rem;
+  }
+  
+  .offers-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+  }
+  
+  .offers-table th,
+  .offers-table td {
+    text-align: left;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+  }
+  
+  .actions button {
+    margin-right: 0.5rem;
+  }
+  
+  .offer-green {
+    background-color: #d4edda;
+  }
+  
+  .offer-yellow {
+    background-color: #fff3cd;
+  }
+  
+  .offer-red {
+    background-color: #f8d7da;
+  }
+  
+  .counter-offer-form {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .loading {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 2rem;
+  }
+  

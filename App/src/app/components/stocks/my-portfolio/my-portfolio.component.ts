@@ -12,6 +12,7 @@ import { ButtonComponent } from '../../shared/button/button.component';
 import { ModalComponent } from '../../shared/modal/modal.component';
 import { InputTextComponent } from '../../shared/input-text/input-text.component';
 import { OrderCreationModalComponent } from '../../shared/order-creation-modal/order-creation-modal.component';
+import {ListingType} from '../../../enums/listing-type.enum';
 
 @Component({
   selector: 'app-my-portfolio',
@@ -73,6 +74,16 @@ export class MyPortfolioComponent implements OnInit {
 
     this.securityForSell = security;
     this.isOrderModalOpen = true;
+  }
+
+  useListing(security: MyPortfolio): void {
+    this.portfolioService.useListing(security.id).subscribe({
+      next: value => { security.used = true },
+      error: (err) => {
+        console.error('Failed to use security! ', err);
+        this.alertService.showAlert("error","Failed to use security!");
+      }
+    })
   }
 
   closeOrderModal(): void {
@@ -178,4 +189,5 @@ export class MyPortfolioComponent implements OnInit {
     return profit;
   }
 
+  protected readonly ListingType = ListingType;
 }

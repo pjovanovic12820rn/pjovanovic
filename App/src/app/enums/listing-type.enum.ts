@@ -1,5 +1,6 @@
 export enum ListingType {
     STOCK = 'STOCK',
     FUTURES = 'FUTURES',
-    FOREX = 'FOREX'
+    FOREX = 'FOREX',
+    OPTION = 'OPTION'
   }
