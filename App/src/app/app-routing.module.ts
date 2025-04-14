@@ -116,7 +116,7 @@ export const routes: Routes = [
   // options
   { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard, supervisorGuard] }, // treba supervisor gard, ovako ce biti dok se ne doda u beku
   { path: 'settled-contracts', component: SettledContractsComponent, canActivate: [authGuard] },
-  {path: 'active-offers', component: ActiveOffersComponent,canActivate: [authGuard, supervisorGuard]},
+  { path: 'active-offers', component: ActiveOffersComponent, canActivate: [authGuard] },
 
   // otc
   { path: 'otc', component: OtcOffersListComponent, canActivate: [authGuard, clientOrActuaryGuard] },
