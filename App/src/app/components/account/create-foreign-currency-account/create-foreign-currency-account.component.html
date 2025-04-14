@@ -101,6 +101,7 @@
               </input-text>
 
               <autocomplete-text
+                #activityCode
                 label="Activity Code"
                 placeholder="Activity Code"
                 [options]="activityCodeOptions"
@@ -110,6 +111,7 @@
                 [formControlComp]="activityCodeControl"
                 [errors]="getActivityCodeErrors()"
                 [showErrors]="activityCodeShowErrors"
+
               ></autocomplete-text>
 
               <input-text placeholder="Majority Owner:" label="Majority Owner:" id="majorityOwner"
