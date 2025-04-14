@@ -21,54 +21,46 @@
     </select>
   </div>
 
-  <div *ngIf="loading" class="loading-indicator">
-    Loading orders...
-  </div>
+  <div *ngIf="loading" class="loading-indicator">Loading orders...</div>
 
   <table *ngIf="!loading && orders.length > 0">
     <thead>
-    <tr>
-      <th>Agent</th>
-      <th>Order Type</th>
-      <th>Asset</th>
-      <th>Quantity</th>
-      <th>Contract Size</th>
-      <th>Price per Unit</th>
-      <th>Direction</th>
-      <th>Remaining Portions</th>
-      <th>Status</th>
-      <th>Actions</th>
-    </tr>
+      <tr>
+        <th>Client Name</th>
+        <th>Order Type</th>
+        <th>Asset</th>
+        <th>Quantity</th>
+        <th>Contract Size</th>
+        <th>Price per Unit</th>
+        <th>Direction</th>
+        <th>Status</th>
+        <th>Account number</th>
+        <th>Actions</th>
+      </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let order of orders">
-      <td>{{ order.agent }}</td>
-      <td>{{ order.orderType }}</td>
-      <td>{{ order.asset }}</td>
-      <td>{{ order.quantity | number }}</td>
-      <td>{{ order.contractSize | number }}</td>
-      <td>{{ order.pricePerUnit | currency }}</td>
-      <td>{{ order.direction }}</td>
-      <td>{{ order.remainingPortions | number }}</td>
-      <td>{{ order.status }}</td>
-      <td>
-        <ng-container *ngIf="order.status === 'PENDING'">
-          <!--            *ngIf="!isOrderExpired(order)" bilo u buttonu -->
-          <button
-            (click)="approveOrder(order)"
-            [disabled]="loading"
-          >
-            Approve
-          </button>
-          <button
-            (click)="declineOrder(order)"
-            [disabled]="loading"
-          >
-            Decline
-          </button>
-        </ng-container>
-      </td>
-    </tr>
+      <tr *ngFor="let order of orders">
+        <td>{{ order.clientName }}</td>
+        <td>{{ order.orderType }}</td>
+        <td>{{ order.asset }}</td>
+        <td>{{ order.quantity | number }}</td>
+        <td>{{ order.contractSize | number }}</td>
+        <td>{{ order.pricePerUnit | currency }}</td>
+        <td>{{ order.direction }}</td>
+        <td>{{ order.status }}</td>
+        <td>{{ order.accountNumber }}</td>
+        <td>
+          <ng-container *ngIf="order.status === 'PENDING'">
+            <!--            *ngIf="!isOrderExpired(order)" bilo u buttonu -->
+            <button (click)="approveOrder(order)" [disabled]="loading">
+              Approve
+            </button>
+            <button (click)="declineOrder(order)" [disabled]="loading">
+              Decline
+            </button>
+          </ng-container>
+        </td>
+      </tr>
     </tbody>
   </table>
 

@@ -16,6 +16,7 @@
       <th>In the money</th>
       <th>Used</th>
       <th>Publish</th>
+      <th>Use</th>
       <th>Sell Security</th>
     </tr>
     </thead>
@@ -39,6 +40,11 @@
         </td>
 
   <!--        <td><app-button class="sell-button" (onClick)="orderModalFlag(onePortfolio)">Sell</app-button> </td>-->
+        <td>
+          <app-button *ngIf="onePortfolio.Type === ListingType.OPTION" (click)="useListing(onePortfolio)">
+            Use
+          </app-button>
+        </td>
         <td>
           <app-button (click)="openSellOrderModal(onePortfolio)">
             Sell

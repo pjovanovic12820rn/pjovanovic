@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {map, Observable} from 'rxjs';
 import { AuthService } from './auth.service';
 import { NewBankAccount } from '../models/new-bank-account.model';
 import { AccountResponse } from '../models/account-response.model';
@@ -8,6 +8,7 @@ import {
   ChangeAccountLimitDto,
   ChangeAccountNameDto
 } from '../components/account/account-management/account-management.component';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ import {
 export class AccountService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
-  private apiUrl = 'http://localhost:8082/api/account';
+  private apiUrl = `${environment.bankUrl}/api/account`;
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.authService.getToken();
@@ -39,7 +40,20 @@ export class AccountService {
   // client - getMyAccounts
   getMyAccountsRegular(): Observable<AccountResponse[]> {
     const headers = this.getAuthHeaders().set('Accept', '*/*');
-    return this.http.get<AccountResponse[]>(`${this.apiUrl}`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/?firstName=Jovan&lastName=Jovanovic`, { headers })
+      .pipe(
+        map((response: any) => {
+          let accounts: AccountResponse[];
+
+          if (response && Array.isArray(response.content)) {
+            accounts = response.content;
+          } else {
+            accounts = response;
+          }
+
+          return accounts.filter(account => account.clientId != null);
+        })
+      );
   }
 
   getAccountsForOrder(): Observable<AccountResponse[]> {
@@ -78,7 +92,7 @@ export class AccountService {
     );
   }
 
-
+  // todo - mozda videti? idk samo klijent sme
   changeAccountName(accountNumber: string, newName: string): Observable<void> {
     const payload: ChangeAccountNameDto = { newName };
     return this.http.put<void>(`${this.apiUrl}/${accountNumber}/change-name`, payload, {

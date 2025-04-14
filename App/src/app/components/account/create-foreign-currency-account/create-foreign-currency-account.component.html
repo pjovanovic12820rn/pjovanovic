@@ -68,7 +68,7 @@
           <div *ngIf="accountForm.get('clientId')?.value">
             <div class="mb-1">
               <label class="mb-05">Select Company:</label>
-              <select formControlName="selectedCompany" (change)="onCompanySelect()">
+              <select id="selectedCompany" formControlName="selectedCompany" (change)="onCompanySelect()">
                 <option [value]="null" disabled>Select a company</option>
                 <option [value]="-1">Create New Company</option>
                 <option *ngFor="let company of companies" [value]="company.id">
@@ -188,6 +188,12 @@
             </option>
           </select>
         </div>
+
+        <input-text label="Initial balance:" id="initialBalance" placeholder="Initial balance" formControlName="initialBalance"
+                    type="number" required
+                    [formControlComp]="accountForm.controls['initialBalance']"
+                    [errorMessages]="{ pattern: 'Must be a valid number (decimal allowed).' }">
+        </input-text>
 
         <input-text label="Daily Limit:" id="dailyLimit" placeholder="Daily Limit" formControlName="dailyLimit"
                     type="number" required

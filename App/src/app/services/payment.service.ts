@@ -7,12 +7,13 @@ import { PaymentDetailsDto } from '../models/payment-details-dto';
 import { CreatePaymentDto } from '../models/create-payment-dto';
 import { AuthService } from './auth.service';
 import { TransferDto } from '../models/transfer.model';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PaymentService {
-  private baseUrl = 'http://localhost:8082/api/payment';
+  private baseUrl = `${environment.bankUrl}/api/payment`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

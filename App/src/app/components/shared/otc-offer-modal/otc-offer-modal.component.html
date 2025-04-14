@@ -4,26 +4,26 @@
       <p><strong>Owner of a stock:</strong> {{ owner }}</p>
       <p><strong>Stock:</strong> {{ stockSymbol }}</p>
     </div>
-  
+
     <div class="form-section">
       <!-- Volume Input -->
       <div class="form-group">
-        <label for="volume">Volume of a stock:</label>
+        <label for="quantity">Volume of a stock:</label>
         <input
           type="number"
-          id="volume"
-          name="volume"
-          [(ngModel)]="offerVolume"
-          placeholder="Enter volume"
+          id="quantity"
+          name="quantity"
+          [(ngModel)]="offerQuantity"
+          placeholder="Enter quantity"
           class="form-input"
-          [class.input-error]="volumeError"
+          [class.input-error]="quantityError"
           min="1"
-        /> 
-        @if (volumeError) {
-          <div class="error-message">{{ volumeError }}</div>
+        />
+        @if (quantityError) {
+          <div class="error-message">{{ quantityError }}</div>
         }
       </div>
-  
+
       <!-- Price Offer Input -->
       <div class="form-group">
         <label for="priceOffer">Price Offer:</label>
@@ -37,12 +37,12 @@
           [class.input-error]="priceError"
           min="0.01"
           step="0.01"
-        /> 
+        />
         @if (priceError) {
           <div class="error-message">{{ priceError }}</div>
         }
       </div>
-  
+
       <!-- Settlement Date Input -->
       <div class="form-group">
         <label for="settlementDate">Settlement Date Offer:</label>
@@ -53,12 +53,12 @@
           [(ngModel)]="settlementDateOffer"
           class="form-input"
           [class.input-error]="dateError"
-        /> 
+        />
         @if (dateError) {
           <div class="error-message">{{ dateError }}</div>
         }
       </div>
-  
+
       <!-- Premium Offer Input -->
       <div class="form-group">
         <label for="premiumOffer">Premium Offer:</label>
@@ -71,17 +71,17 @@
           class="form-input"
           min="0"
           step="0.01"
-        /> 
+        />
       </div>
     </div>
 
     @if (premiumError) {
       <div class="error-message">{{ premiumError }}</div>
     }
-  
+
     <div class="form-actions">
       <app-button type="button" (onClick)="closeModal()">CANCEL</app-button>
       <app-button (onClick)="makeOffer()">MAKE AN OFFER</app-button>
     </div>
-  
+
   </app-modal>

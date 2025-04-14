@@ -5,6 +5,7 @@ import {Order, PageResponse} from '../models/order.model';
 import { AuthService } from './auth.service';
 import {CreateOrderDto} from '../models/create-order.dto';
 import {OrderDto} from '../models/order.dto';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import {OrderDto} from '../models/order.dto';
 
 export class OrderService {
   // Ako koristiš environment varijablu, ovde se može postaviti npr. environment.apiUrl + '/api/orders'
-  private baseUrl = 'http://localhost:8083/api/orders';
+  private baseUrl = `${environment.stockUrl}/api/orders`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

@@ -1,0 +1,57 @@
+<div class="active-offers-container" *ngIf="!loading; else loadingSpinner">
+    <h2>Active Offers</h2>
+  
+    <div class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</div>
+  
+    <table class="offers-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Stock</th>
+          <th>Amount</th>
+          <th>Price/Stock</th>
+          <th>Settlement Date</th>
+          <th>Premium</th>
+          <th>Last Modified</th>
+          <th>Modified By</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let offer of activeOffers"
+          [ngClass]="getColorClass(offer)"
+        >
+          <td>{{ offer.id }}</td>
+          <td>{{ offer.stock }}</td>
+          <td>{{ offer.amount }}</td>
+          <td>{{ offer.pricePerStock }}</td>
+          <td>{{ offer.settlementDate }}</td>
+          <td>{{ offer.premium }}</td>
+          <td>{{ offer.lastModified }}</td>
+          <td>{{ offer.modifiedBy }}</td>
+          <td class="actions">
+            <button (click)="acceptOffer(offer)">Accept</button>
+            <button (click)="declineOffer(offer)">Decline</button>
+            <button (click)="openCounterOfferForm(offer)">Counter</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div *ngIf="selectedOffer" class="counter-offer-form">
+      <h3>Counter Offer for #{{ selectedOffer?.id }}</h3>
+      <label>Price per stock:</label>
+      <input type="number" [(ngModel)]="counterPrice" />
+      <label>Settlement Date:</label>
+      <input type="date" [(ngModel)]="counterSettlementDate" />
+      <label>Premium:</label>
+      <input type="number" [(ngModel)]="counterPremium" />
+      <button (click)="sendCounterOffer()">Send Counter Offer</button>
+    </div>
+  </div>
+  
+  <ng-template #loadingSpinner>
+    <div class="loading">Loading active offers...</div>
+  </ng-template>
+  

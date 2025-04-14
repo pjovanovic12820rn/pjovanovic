@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
-import {NgForOf, NgIf} from '@angular/common';
+import {CurrencyPipe, NgForOf, NgIf} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { AlertService } from '../../../services/alert.service';
@@ -12,7 +12,7 @@ import { SettledContractDto } from '../../../models/settled-contract-dto';
   templateUrl: './settled-contracts.component.html',
   styleUrls: ['./settled-contracts.component.css'],
   standalone: true,
-  imports: [FormsModule, NgForOf, ButtonComponent, NgIf],
+  imports: [FormsModule, NgForOf, ButtonComponent, NgIf, CurrencyPipe],
 })
 export class SettledContractsComponent implements OnInit{
   contracts: SettledContractDto[] = [];
@@ -43,7 +43,11 @@ export class SettledContractsComponent implements OnInit{
   }
 
   onExercise(contract: SettledContractDto): void {
-    if (!contract.isOption || contract.status !== 'ACTIVE') {
+
+    console.log(contract.id)
+    console.log(contract)
+
+    if (contract.status !== 'VALID') {
       this.alertService.showAlert('error', 'This contract cannot be exercised.');
       return;
     }
