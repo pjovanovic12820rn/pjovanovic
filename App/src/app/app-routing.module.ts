@@ -46,6 +46,7 @@ import { OtcOffersListComponent } from './components/stocks/otc-offers-list/otc-
 import { BankProfitComponent } from './components/stocks/bank-profit/bank-profit.component';
 import { StockDetailsComponent } from './components/stocks/stock-details/stock-details.component';
 import { StockDateDetailsComponent } from './components/stocks/stock-date-details/stock-date-details.component';
+import { ActiveOffersComponent } from './components/stocks/active-offers/active-offers.component';
 
 export const routes: Routes = [
   // login
@@ -115,6 +116,7 @@ export const routes: Routes = [
   // options
   { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard, supervisorGuard] }, // treba supervisor gard, ovako ce biti dok se ne doda u beku
   { path: 'settled-contracts', component: SettledContractsComponent, canActivate: [authGuard] },
+  {path: 'active-offers', component: ActiveOffersComponent,canActivate: [authGuard, supervisorGuard]},
 
   // otc
   { path: 'otc', component: OtcOffersListComponent, canActivate: [authGuard, clientOrActuaryGuard] },
