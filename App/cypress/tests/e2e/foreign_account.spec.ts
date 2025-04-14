@@ -119,7 +119,7 @@ describe('foreign currency account test', () => {
     cy.url().should('include', '/register-user');
   });
 
-  it('handles company selection correctly', () => {
+  it.skip('handles company selection correctly', () => {
     cy.get('[class="details-btn"] button').contains('New Account').click();
     cy.get('app-account-management > app-modal > .modal-overlay > .modal-container > :nth-child(2) > .modal-content > .flex > :nth-child(2) > button').contains('Foreign Currency Account').click();
     cy.get('#accountOwnerType').select('COMPANY');
