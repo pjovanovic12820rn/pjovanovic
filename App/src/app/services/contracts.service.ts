@@ -10,7 +10,7 @@ import {environment} from '../environments/environment';
   providedIn: 'root'
 })
 export class ContractsService {
-  private apiUrl = `${environment.stockUrl}/api/otc/options`;
+  private apiUrl = `${environment.stockUrl}/api/otc`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -23,10 +23,14 @@ export class ContractsService {
   }
 
   getSettledContracts(): Observable<SettledContractDto[]> {
-    return this.http.get<SettledContractDto[]>(`${this.apiUrl}`, { headers: this.getAuthHeaders() });
+    return this.http.get<SettledContractDto[]>(`${this.apiUrl}/options`, { headers: this.getAuthHeaders() });
   }
 
   exerciseContract(contractId: number): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${contractId}/exercise`, {}, { headers: this.getAuthHeaders() });
+    return this.http.post<void>(
+      `${this.apiUrl}/${contractId}/exercise`, {},
+      {
+        headers: this.getAuthHeaders()
+      });
   }
 }
