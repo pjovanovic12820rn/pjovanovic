@@ -238,7 +238,7 @@ describe('Create Current Account Component', () => {
         cy.url().should('include', '/success');
       });
     })
-    it.skip('should create new company and account', () => {
+    it('should create new company and account', () => {
       cy.get('select[id="selectedCompany"]').select('-1');
       cy.get('#companyName').type('New Company');
       // cy.get('#majorityOwner').then(($input) => {
@@ -250,7 +250,7 @@ describe('Create Current Account Component', () => {
       // });
       cy.get('#registrationNumber').type('987654');
       cy.get('#taxNumber').type('123456789');
-      cy.get('#activityCode').type('10.01');
+      cy.get('[placeholder="Activity Code"] input ').type('10.01');
       cy.get('#companyAddress').type('123 Main St');
       cy.get('#name').type('New Company Account');
       cy.get('#dailyLimit').type('15000');
@@ -320,7 +320,6 @@ describe('Create Current Account Component', () => {
       cy.get('app-modal select[formControlName="issuer"]').select('VISA');
       cy.get('app-modal input-text[formControlName="name"]').type('My Card');
       cy.get('app-modal input-text[formControlName="cardLimit"]').type('5000');
-      cy.get('app-modal [type="submit"] button').click();
 
       // 3) Wait for the intercepted request and log its status code
       cy.intercept('POST', '/api/account/**/cards/create').as('createCard');
