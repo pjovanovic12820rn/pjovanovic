@@ -8,8 +8,18 @@
   <div *ngIf="loading">Loading bank profit...</div>
 
   <div *ngIf="!loading && userTaxes.length > 0 !== null">
-    <p>{{ userTaxes.length > 0 }} RSD</p>
     <!--    <p>{{ bankProfit | number:'1.2-2' }} RSD</p>-->
+  </div>
+
+  <div class="profit-summary" style="display: flex; justify-content: space-around; margin-bottom: 1rem;">
+    <div class="profit-box" style="text-align: center;">
+      <h3>Exchange Profit</h3>
+      <p><strong>{{ exchangeProfit | number:'1.2-2' }} RSD</strong></p>
+    </div>
+    <div class="profit-box" style="text-align: center;">
+      <h3>Stock Profit</h3>
+      <p><strong>{{ stockProfit | number:'1.2-2' }} RSD</strong></p>
+    </div>
   </div>
 
   <table class="securities-table" *ngIf="userTaxes.length > 0">

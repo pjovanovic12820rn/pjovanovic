@@ -12,7 +12,7 @@ export interface MyPortfolio {
   publicAmount: number;
   inTheMoney: boolean;
   used: boolean; /// those two only for OPTIONs
-
+  currentPrice: number;
 }
 
 export interface UseListing {

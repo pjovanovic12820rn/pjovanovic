@@ -16,6 +16,8 @@ export class PortfolioService {
     private http = inject(HttpClient);
     private authService = inject(AuthService);
     private apiUrl = `${environment.stockUrl}/api/portfolio`;
+    private apiUrlBank = `${environment.bankUrl}/api/profit`;
+    private apiUrlStock = `${environment.stockUrl}/api/profit`;
 
     private getAuthHeaders(): HttpHeaders {
         const token = this.authService.getToken();
@@ -29,6 +31,18 @@ export class PortfolioService {
         return this.http.get<MyPortfolio[]>(this.apiUrl,{headers: this.getAuthHeaders()})
     }
 
+    getBankProfit(): Observable<{ exchangeProfit: number }> {
+      return this.http.get<{ exchangeProfit: number }>(
+        `${this.apiUrlBank}`,
+        { headers: this.getAuthHeaders() }
+      );
+    }
+    getStockProfit(): Observable<{ stockCommissionProfit: number }> {
+      return this.http.get<{ stockCommissionProfit: number }>(
+        `${this.apiUrlStock}`,
+        { headers: this.getAuthHeaders() }
+      );
+    }
 
     // only stock could be set PUBLIC
     setPublicAmount(portfolioEntryId: number, publicAmount: number): Observable<any> {

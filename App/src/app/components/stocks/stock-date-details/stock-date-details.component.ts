@@ -21,12 +21,11 @@ interface GroupedOption {
   imports: [
     CommonModule,
     OrderCreationModalComponent,
-    DatePipe,
-    ButtonComponent
+    DatePipe
   ],
   templateUrl: './stock-date-details.component.html',
   styleUrls: ['./stock-date-details.component.css']
-})
+}) // bio je i ButtonComponent u importima
 export class StockDateDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private optionService = inject(OptionService);
