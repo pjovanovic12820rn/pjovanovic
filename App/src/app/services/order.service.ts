@@ -17,7 +17,7 @@ export class OrderService {
   private baseUrl = `${environment.stockUrl}/api/orders`;
 
   //
-  private testUrl = "localhost:8083/api/orders";
+ // private testUrl = "localhost:8083/api/orders";
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -70,7 +70,7 @@ export class OrderService {
   }
 
   cancelOrder(orderId: number): Observable<any> {
-    return this.http.post (`${this.baseUrl}/cancel/${orderId}`, { headers: this.getAuthHeaders() });
+    return this.http.post(`${this.baseUrl}/cancel/${orderId}`,{}, { headers: this.getAuthHeaders() });
   }
 
   getOrdersByUser(id: number): Observable<OrderRealDto[]> {

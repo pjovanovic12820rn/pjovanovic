@@ -72,7 +72,7 @@ export class MyOrdersComponent  implements OnInit{
         }
       },
       error: (err) => {
-        this.alertService.showAlert("error","Failed to load my orders!");
+        this.alertService.showAlert("error","Failed to cancel the order!");
       }
     });
   }

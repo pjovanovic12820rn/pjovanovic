@@ -47,6 +47,7 @@ import { BankProfitComponent } from './components/stocks/bank-profit/bank-profit
 import { StockDetailsComponent } from './components/stocks/stock-details/stock-details.component';
 import { StockDateDetailsComponent } from './components/stocks/stock-date-details/stock-date-details.component';
 import { ActiveOffersComponent } from './components/stocks/active-offers/active-offers.component';
+import {MyOrdersComponent} from './components/stocks/my-orders/my-orders.component';
 
 export const routes: Routes = [
   // login
@@ -115,7 +116,7 @@ export const routes: Routes = [
 
   // options
   { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard, supervisorGuard] },
-  { path: 'my-orders', component: OrderOverviewComponent, canActivate: [authGuard] },// treba supervisor gard, ovako ce biti dok se ne doda u beku
+  { path: 'my-orders', component: MyOrdersComponent, canActivate: [authGuard] },// treba supervisor gard, ovako ce biti dok se ne doda u beku
   { path: 'settled-contracts', component: SettledContractsComponent, canActivate: [authGuard] },
   { path: 'active-offers', component: ActiveOffersComponent, canActivate: [authGuard] },
 
