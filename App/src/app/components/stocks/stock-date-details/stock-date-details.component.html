@@ -58,7 +58,7 @@
                   </td>
                   <td [ngClass]="{'calls-cell': true, 'positive': item.strike > 0, 'negative': item.strike <= 0}">
                     @if (item.call) {
-                      - <!-- TODO: menjati sa item.call.volume -->
+                      {{ item.call.volume | number:'1.2-2' }} <!-- TODO: menjati sa item.call.volume -->
                     } @else {
                       -
                     }
@@ -94,7 +94,7 @@
                   </td>
                   <td [ngClass]="{'puts-cell': true, 'positive': item.strike <= 0, 'negative': item.strike > 0}">
                     @if (item.put) {
-                      - <!-- TODO: dodati item.put.volume -->
+                      {{ item.put.volume | number:'1.2-2' }} <!-- TODO: dodati item.put.volume -->
 
                     } @else {
                       -
