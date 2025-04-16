@@ -61,7 +61,7 @@ export class StockDetailsComponent implements OnInit, AfterViewInit {
       next: details => {
         this.listingDetails.set(details);
         this.isLoading.set(false);
-        this.securityService.getStockHistory(details.ticker).subscribe(histData => {
+        this.securityService.getStockHistory(details.id).subscribe(histData => {
           this.createChart(histData);
         });
       },

@@ -55,8 +55,8 @@ export class SecurityService {
     return this.http.get<ListingDetailsDto>(url, { headers });
   }
 
-  getStockHistory(ticker: string) {
-    return this.http.get<any[]>(`/api/securities/${ticker}/history`);
+  getStockHistory(id: number) {
+    return this.http.get<any[]>(`/${id}/price-history`);
   }
 
   private mapListingToSecurity(listing: any): Security {
@@ -76,7 +76,7 @@ export class SecurityService {
         securityType = 'Stock';
     }
 
-    
+
 
     return {
       id: listing.id,

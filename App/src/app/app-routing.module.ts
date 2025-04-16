@@ -1,3 +1,4 @@
+// @ts-ignore
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard.guard';
 import { clientOrActuaryGuard } from './guards/client-or-actuary-guard.guard';
