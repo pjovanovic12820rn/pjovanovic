@@ -4,16 +4,19 @@ import { FormsModule } from '@angular/forms';
 import { ActiveOfferDto } from '../../../models/active-offer.dto';
 import { ActiveOffersService } from '../../../services/active-offers.service';
 import { ButtonComponent } from '../../shared/button/button.component';
+import {OtcOfferModalComponent} from '../../shared/otc-offer-modal/otc-offer-modal.component';
+import { AlertService } from '../../../services/alert.service';
 
 @Component({
   standalone: true,
   selector: 'app-active-offers',
   templateUrl: './active-offers.component.html',
   styleUrls: ['./active-offers.component.css'],
-  imports: [CommonModule, FormsModule, ButtonComponent]
+  imports: [CommonModule, FormsModule, ButtonComponent, OtcOfferModalComponent]
 })
 export class ActiveOffersComponent implements OnInit {
   private activeOffersService = inject(ActiveOffersService);
+  private alertService = inject(AlertService);
 
   activeOffers: ActiveOfferDto[] = [];
   selectedOffer: ActiveOfferDto | null = null;
@@ -22,6 +25,9 @@ export class ActiveOffersComponent implements OnInit {
   counterPremium?: number;
   errorMessage = '';
   loading = false;
+
+  isCounterModalOpen = false;
+  isSubmittingCounter = false;
 
   ngOnInit(): void {
     this.fetchActiveOffers();
@@ -78,9 +84,16 @@ export class ActiveOffersComponent implements OnInit {
 
   openCounterOfferForm(offer: ActiveOfferDto): void {
     this.selectedOffer = offer;
-    this.counterPrice = offer.pricePerStock;
-    this.counterSettlementDate = offer.settlementDate;
-    this.counterPremium = offer.premium;
+    this.isCounterModalOpen = true;
+    // this.counterPrice = offer.pricePerStock;
+    // this.counterSettlementDate = offer.settlementDate;
+    // this.counterPremium = offer.premium;
+  }
+
+  closeCounterModal(): void {
+    if (this.isSubmittingCounter) return;
+    this.isCounterModalOpen = false;
+    this.selectedOffer = null;
   }
 
   sendCounterOffer(): void {
@@ -98,6 +111,37 @@ export class ActiveOffersComponent implements OnInit {
         this.errorMessage = 'Failed to send counter offer.';
       }
     });
+  }
+
+  //nov poz
+  async handleCounterOffer(offerDetails: any): Promise<void> {
+    if (!this.selectedOffer) {
+      this.alertService.showAlert('error', 'No offer selected');
+      return;
+    }
+
+    this.isSubmittingCounter = true;
+
+    try {
+      const payload = {
+        portfolioEntryId: this.selectedOffer.id,
+        pricePerStock: offerDetails.price,
+        settlementDate: offerDetails.settlementDate,
+        premium: offerDetails.premium,
+        amount: offerDetails.volume
+      };
+
+      await this.activeOffersService.sendCounterOffer(this.selectedOffer.id, payload)
+        .toPromise();
+
+      this.alertService.showAlert('success', 'Counter offer sent successfully!');
+      this.closeCounterModal();
+      this.fetchActiveOffers();
+    } catch (error) {
+      this.alertService.showAlert('error', 'Failed to send counter offer');
+    } finally {
+      this.isSubmittingCounter = false;
+    }
   }
 
   getColorClass(offer: ActiveOfferDto): string {

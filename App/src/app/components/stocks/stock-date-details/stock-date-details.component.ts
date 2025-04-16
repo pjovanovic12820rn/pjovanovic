@@ -171,7 +171,7 @@ export class StockDateDetailsComponent implements OnInit {
   }
 
   get modalSecurityPrice(): number {
-    return this.selectedOptionForOrder()?.price ?? 0;
+    return this.selectedOptionForOrder()?.premium ?? 0;
   }
 
   get modalContractSize(): number {

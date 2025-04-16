@@ -26,22 +26,53 @@ export class ActiveOffersService {
   }
 
   getActiveOffers(): Observable<ActiveOfferDto[]> {
-    return this.http.get<ActiveOfferDto[]>(`${this.baseUrl}/received`, { headers: this.getAuthHeaders()});
+    return this.http.get<ActiveOfferDto[]>(`${this.baseUrl}/received`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
-  acceptOffer(offerId: number): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${offerId}/accept`, {}, { headers: this.getAuthHeaders()});
+  acceptOffer(offerId: number): Observable<string> {
+    return this.http.put(`${this.baseUrl}/${offerId}/accept`, {}, {
+      headers: this.getAuthHeaders(),
+      responseType: 'text'
+    });
+
   }
 
-  declineOffer(offerId: number): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${offerId}/reject`, {}, { headers: this.getAuthHeaders()});
+  declineOffer(offerId: number): Observable<string> {
+    return this.http.put(`${this.baseUrl}/${offerId}/reject`, {}, {
+      headers: this.getAuthHeaders(),
+      responseType: 'text'
+    });
   }
 
-  cancelOffer(offerId: number): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${offerId}/cancel`, {}, { headers: this.getAuthHeaders()});
+  cancelOffer(offerId: number): Observable<string> {
+    return this.http.put(`${this.baseUrl}/${offerId}/cancel`, {}, {
+      headers: this.getAuthHeaders(),
+      responseType: 'text'
+    });
   }
 
-  sendCounterOffer(offerId: number, payload: Partial<ActiveOfferDto>): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${offerId}/counter`, payload, { headers: this.getAuthHeaders()});
+  // sendCounterOffer(offerId: number, payload: Partial<ActiveOfferDto>): Observable<string> {
+  //   return this.http.put(`${this.baseUrl}/${offerId}/counter`, payload, {
+  //     headers: this.getAuthHeaders(),
+  //     responseType: 'text'
+  //   });
+  // }
+  sendCounterOffer(offerId: number, payload: any): Observable<string> {
+    return this.http.put(
+      `${this.baseUrl}/${offerId}/counter`,
+      {
+        portfolioEntryId: payload.portfolioEntryId,
+        pricePerStock: payload.pricePerStock,
+        settlementDate: payload.settlementDate,
+        premium: payload.premium,
+        amount: payload.amount
+      },
+      {
+        headers: this.getAuthHeaders(),
+        responseType: 'text'
+      }
+    );
   }
 }

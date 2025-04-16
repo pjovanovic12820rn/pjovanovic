@@ -34,6 +34,7 @@ export interface Option extends Listing {
   openInterest: number;
   settlementDate: Date;
   underlyingStock: Stock;
+  premium: number;
 }
 
 export interface OptionPair {

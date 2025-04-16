@@ -2,6 +2,7 @@ import {Stock} from './option.model';
 
 export interface ActiveOfferDto {
     id: number;
+    portfolioEntryId: number;
     stock: StockDto;
     amount: number;
     pricePerStock: number;
