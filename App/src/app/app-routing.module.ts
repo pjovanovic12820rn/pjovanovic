@@ -112,7 +112,7 @@ export const routes: Routes = [
   { path: 'my-portfolio', component: MyPortfolioComponent, canActivate: [authGuard] },
   { path: 'securities', component: SecuritiesComponent, canActivate: [authGuard, clientOrActuaryGuard] },
   { path: 'tax-portal', component: TaxCalculationComponent, canActivate: [authGuard, supervisorGuard] },
-  { path: 'stock-details/:id', component: StockDetailsComponent, canActivate: [authGuard, actuaryGuard] },
+  { path: 'stock-details/:id', component: StockDetailsComponent, canActivate: [authGuard] },
   { path: 'stock-details/:id/options/:date', component: StockDateDetailsComponent, canActivate: [authGuard, actuaryGuard] },
 
   // options

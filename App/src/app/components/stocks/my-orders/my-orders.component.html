@@ -4,50 +4,35 @@
   <table *ngIf="myOrders.length > 0">
     <thead>
     <tr>
-      <th>Order ID</th>
-      <th>Listing ID</th>
       <th>Listing Type</th>
       <th>Ticker</th>
       <th>Price</th>
-      <th>Change</th>
-      <th>Volume</th>
-      <th>Initial Margin Cost</th>
       <th>Exchange Mic</th>
-      <th>Ask</th>
       <th>OrderType</th>
       <th>Quantity</th>
       <th>Price Per Unit</th>
       <th>Direction</th>
       <th>Status</th>
       <th>LastModification</th>
-      <th>Transactions</th>
       <th>Profit</th>
-      <th>Client Name</th>
       <th>Account Number</th>
+      <th>Action</th>
 
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let order of myOrders">
-      <td>{{ order.id }}</td>
-      <td>{{ order.listing.id }}</td>
       <td>{{ order.listing.listingType }}</td>
       <td>{{ order.listing.ticker }}</td>
       <td>{{ order.listing.price }}</td>
-      <td>{{ order.listing.change }}</td>
-      <td>{{ order.listing.volume }}</td>
-      <td>{{ order.listing.initialMarginCost }}</td>
       <td>{{ order.listing.exchangeMic }}</td>
-      <td>{{ order.listing.ask }}</td>
       <td>{{ order.orderType }}</td>
       <td>{{ order.quantity }}</td>
       <td>{{ order.pricePerUnit }}</td>
       <td>{{ order.direction }}</td>
       <td>{{ order.status }}</td>
       <td>{{ order.lastModification }}</td>
-      <td>{{ order.transactions }}</td>
       <td>{{ order.profit }}</td>
-      <td>{{ order.clientName }}</td>
       <td>{{ order.accountNumber }}</td>
       <td>
         <app-button class="sell-button" (onClick)="cancelOrder(order.id)">

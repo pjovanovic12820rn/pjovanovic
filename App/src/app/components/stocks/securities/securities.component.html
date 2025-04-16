@@ -128,9 +128,9 @@
                      <td>{{ security.type === 'Future' ? security.settlementDate : 'N/A' }}</td>
                    }
                    <td class="actions-column">
-                     @if (security.type === 'Stock' || security.type === 'Future') {
+<!--                     @if (security.type === 'Stock' || security.type === 'Future') {-->
                        <button class="action-button buy-button" (click)="openBuyOrderModal(security)">Buy</button>
-                     }
+<!--                     }-->
                    </td>
                  </tr>
                }

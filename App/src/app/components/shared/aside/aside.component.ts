@@ -20,6 +20,7 @@ export class AsideComponent implements OnInit, OnDestroy {
 
   isAuthenticated = false;
   isAdmin = false;
+  isSupervisor = false;
   isEmployee = false;
   isClient = false;
   userId: number | null = null;
@@ -34,11 +35,13 @@ export class AsideComponent implements OnInit, OnDestroy {
         this.isAdmin = this.authService.isAdmin();
         this.isEmployee = this.authService.isEmployee();
         this.isClient = this.authService.isClient();
+        this.isSupervisor = this.authService.isSupervisor();
         this.userId = this.authService.getUserId();
       } else {
         this.isAdmin = false;
         this.isEmployee = false;
         this.isClient = false;
+        this.isSupervisor = false;
         this.userId = null;
       }
     });
@@ -91,11 +94,47 @@ export class AsideComponent implements OnInit, OnDestroy {
     }
   }
 
-  goToSecures() {
+  goToPortfolio() {
     this.navigateTo('/my-portfolio');
   }
 
   goToBankAccounts() {
     this.navigateTo('/bank-accounts');
+  }
+
+  goToSecurities() {
+    this.navigateTo('/securities');
+  }
+
+  goToActuaries() {
+    this.navigateTo('/actuaries');
+  }
+
+  goToBankProfit() {
+    this.navigateTo('/bank-profit');
+  }
+
+  goToTaxPortal() {
+    this.navigateTo('/tax-portal');
+  }
+
+  goToOrderList() {
+    if (!this.isClient) {
+      this.navigateTo(`/order-overview`);
+    } else {
+      this.navigateTo('/my-orders');
+    }
+  }
+
+  goToSettledOffers(){
+    this.navigateTo('/settled-offers');
+  }
+
+  goToOtc(){
+    this.navigateTo('/otc');
+  }
+
+  goToActiveOffers(){
+    this.navigateTo('/active-offers');
   }
 }

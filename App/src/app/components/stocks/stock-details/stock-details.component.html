@@ -6,6 +6,7 @@
   <p *ngIf="!isLoading() && errorMessage()" class="error-message">
     Error: {{ errorMessage() }}
   </p>
+
   <ng-container *ngIf="!isLoading() && !errorMessage() && listingDetails() as details">
     <div class="details-header">
       <h3>{{ details.name }} ({{ details.ticker }})</h3>
@@ -13,9 +14,11 @@
       <p>Exchange: {{ details.exchangeMic }}</p>
       <p>Listing type: {{ details.listingType }}</p>
 
-      <canvas #stockChart></canvas>
+      <div style="height: 400px;">
+        <canvas #stockChart></canvas>
+      </div>
 
-      <hr>
+      <hr />
 
       <div class="option-dates-section">
         <h4>Option Settlement Dates</h4>
