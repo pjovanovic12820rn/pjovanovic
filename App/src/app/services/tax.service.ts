@@ -45,10 +45,11 @@ export class TaxService {
     return this.http.get<TaxData[]>(`${this.baseUrl}`, { headers, params });
   }
 
-  calculateTax(): Observable<any> {
+  calculateTax(): Observable<string> {
     const headers = this.getAuthHeaders();
     return this.http.post(`${this.baseUrl}/process`, {}, {
       headers,
+      responseType: 'text'
     });
   }
 }

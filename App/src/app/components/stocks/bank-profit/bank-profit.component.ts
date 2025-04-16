@@ -3,14 +3,15 @@ import { ActuariesService } from '../../../services/actuaries.service';
 import { AuthService } from '../../../services/auth.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { NgForOf, NgIf } from '@angular/common';
+import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import { PaginationComponent } from '../../shared/pagination/pagination.component';
+import { PortfolioService } from '../../../services/portfolio.service';
 
 @Component({
   selector: 'app-bank-profit',
   templateUrl: './bank-profit.component.html',
   styleUrls: ['./bank-profit.component.css'],
-  imports: [NgIf, NgForOf, PaginationComponent],
+  imports: [NgIf, NgForOf, PaginationComponent, DecimalPipe],
   standalone: true,
 })
 export class BankProfitComponent implements OnInit, OnDestroy {
@@ -22,8 +23,12 @@ export class BankProfitComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   currentPage: number = 1;
 
+  exchangeProfit: number = 0;
+  stockProfit: number = 0;
+
   constructor(
     private actuariesService: ActuariesService,
+    private portfolioService: PortfolioService,
     public authService: AuthService
   ) {}
 
@@ -34,6 +39,7 @@ export class BankProfitComponent implements OnInit, OnDestroy {
       return;
     }
     this.loadBankProfit();
+    this.loadProfitSummaries();
   }
 
   loadBankProfit(): void {
@@ -52,6 +58,22 @@ export class BankProfitComponent implements OnInit, OnDestroy {
         }
     });
 }
+
+  loadProfitSummaries(): void {
+    this.portfolioService.getBankProfit().subscribe({
+      next: (res) => {
+        this.exchangeProfit = res.exchangeProfit ?? 0;
+      },
+      error: (err) => console.error('Bank profit fetch failed', err)
+    });
+
+    this.portfolioService.getStockProfit().subscribe({
+      next: (res) => {
+        this.stockProfit = res.stockCommissionProfit ?? 0;
+      },
+      error: (err) => console.error('Stock profit fetch failed', err)
+    });
+  }
 
 updatePagedUserTaxes(): void {
   const startIndex = (this.currentPage - 1) * this.pageSize;

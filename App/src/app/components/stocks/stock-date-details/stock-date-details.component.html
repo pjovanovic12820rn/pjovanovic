@@ -44,7 +44,7 @@
 
                     @if (item.call) {
                       <div class="last-cell">
-                        <span>{{ item.call.price | number:'1.2-2' }}</span>
+                        <span>{{ item.call.premium | number:'1.2-2' }}</span>
                         <button
                           class="action-button x-button"
                           (click)="openBuyOptionModal(item.call)"
@@ -58,7 +58,7 @@
                   </td>
                   <td [ngClass]="{'calls-cell': true, 'positive': item.strike > 0, 'negative': item.strike <= 0}">
                     @if (item.call) {
-                      - <!-- TODO: menjati sa item.call.volume -->
+                      {{ item.call.volume | number:'1.2-2' }} <!-- TODO: menjati sa item.call.volume -->
                     } @else {
                       -
                     }
@@ -80,7 +80,7 @@
                   <td [ngClass]="{'puts-cell': true, 'positive': item.strike <= 0, 'negative': item.strike > 0}">
                     @if (item.put) {
                       <div class="last-cell">
-                        <span>{{ item.put.price | number:'1.2-2' }}</span>
+                        <span>{{ item.put.premium | number:'1.2-2' }}</span>
                         <button
                           class="action-button x-button"
                           (click)="openBuyOptionModal(item.put)"
@@ -94,7 +94,8 @@
                   </td>
                   <td [ngClass]="{'puts-cell': true, 'positive': item.strike <= 0, 'negative': item.strike > 0}">
                     @if (item.put) {
-                      - <!-- TODO: dodati item.put.volume -->
+                      {{ item.put.volume | number:'1.2-2' }} <!-- TODO: dodati item.put.volume -->
+
                     } @else {
                       -
                     }
