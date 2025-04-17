@@ -7,7 +7,8 @@
     "types": []
   },
   "files": [
-    "src/main.ts"
+    "src/main.ts",
+//    "src/chartjs-financial-typing.d.ts"
   ],
   "include": [
     "src/**/*.d.ts"

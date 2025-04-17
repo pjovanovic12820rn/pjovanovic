@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { ListingDetailsDto } from '../models/listing-details.dto';
 import {environment} from '../environments/environment';
+import {TimeSeriesDto} from '../models/time-series.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,8 +56,8 @@ export class SecurityService {
     return this.http.get<ListingDetailsDto>(url, { headers });
   }
 
-  getStockHistory(id: number) {
-    return this.http.get<any[]>(`/${id}/price-history`);
+  getStockHistory(id: number): Observable<TimeSeriesDto> {
+    return this.http.get<TimeSeriesDto>(`${this.apiUrl}/${id}/price-history`, { headers: this.getAuthHeaders() });
   }
 
   private mapListingToSecurity(listing: any): Security {

@@ -6,6 +6,7 @@ import { ListingDetailsDto } from '../../../models/listing-details.dto';
 import { ListingType } from '../../../enums/listing-type.enum';
 import { catchError, map, switchMap, tap, throwError } from 'rxjs';
 import { Chart } from 'chart.js';
+import {TimeSeriesDto} from '../../../models/time-series.model';
 
 @Component({
   selector: 'app-stock-details',
@@ -24,7 +25,7 @@ export class StockDetailsComponent implements OnInit, AfterViewInit {
   ListingType = ListingType;
 
   @ViewChild('stockChart') stockChartRef!: ElementRef<HTMLCanvasElement>;
-  chart!: Chart;
+  chart!: Chart<"bar" | "line" | "scatter" | "bubble" | "pie" | "doughnut" | "polarArea" | "radar", number[], string>;
 
   ngOnInit(): void {
     this.route.paramMap.pipe(
@@ -75,9 +76,9 @@ export class StockDetailsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
   }
 
-  private createChart(data: any[]) {
-    const labels = data.map(item => item.date);
-    const prices = data.map(item => item.price);
+  private createChart(data: TimeSeriesDto) {
+    const labels = data.values.map(item => item.datetime);
+    const prices = data.values.map(item => item.volume);
     this.chart = new Chart(this.stockChartRef.nativeElement, {
       type: 'line',
       data: {

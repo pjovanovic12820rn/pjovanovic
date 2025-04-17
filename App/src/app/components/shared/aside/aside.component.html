@@ -24,6 +24,13 @@
         </a>
       </li>
 
+      <li *ngIf="isAdmin || isSupervisor">
+        <a class="sidebar-link" (click)="goToActuaries()">
+          <i class="ri-bank-line sidebar-icon"></i>
+          <span class="sidebar-text">Actuaries</span>
+        </a>
+      </li>
+
       <!-- Payments or employees-->
       <li *ngIf="isClient">
         <a class="sidebar-link" (click)="goToPayments()">
@@ -40,6 +47,29 @@
         </a>
       </li>
 
+      <!-- Bank Accounts -->
+      <li *ngIf="isAdmin">
+        <a class="sidebar-link" (click)="goToBankAccounts()">
+          <i class="ri-bank-line sidebar-icon"></i>
+          <span class="sidebar-text">Banks Accounts</span>
+        </a>
+      </li>
+
+      <!-- Bank Profit -->
+      <li *ngIf="isAdmin || isSupervisor">
+        <a class="sidebar-link" (click)="goToBankProfit()">
+          <i class="ri-bank-line sidebar-icon"></i>
+          <span class="sidebar-text">Bank Profit</span>
+        </a>
+      </li>
+
+      <li *ngIf="isAdmin || isSupervisor">
+        <a class="sidebar-link" (click)="goToTaxPortal()">
+          <i class="ri-bank-line sidebar-icon"></i>
+          <span class="sidebar-text">Tax Portal</span>
+        </a>
+      </li>
+
       <!-- Currency Exchange -->
       <li>
         <a class="sidebar-link" (click)="goToExchangeRate()">
@@ -48,19 +78,46 @@
         </a>
       </li>
 
-      <!-- Portfolio -->
-      <li *ngIf="isClient">
-        <a class="sidebar-link" (click)="goToSecures()">
+      <!-- Stocks -->
+      <li>
+        <a class="sidebar-link" (click)="goToPortfolio()">
           <i class="ri-exchange-line sidebar-icon"></i>
           <span class="sidebar-text">My Portfolio</span>
         </a>
       </li>
 
-      <!-- Bank Accounts -->
+      <li>
+        <a class="sidebar-link" (click)="goToSecurities()">
+          <i class="ri-exchange-line sidebar-icon"></i>
+          <span class="sidebar-text">Securities</span>
+        </a>
+      </li>
+
       <li *ngIf="isAdmin">
-        <a class="sidebar-link" (click)="goToBankAccounts()">
-          <i class="ri-bank-line sidebar-icon"></i>
-          <span class="sidebar-text">Banks Accounts</span>
+        <a class="sidebar-link" (click)="goToOrderList()">
+          <i class="ri-exchange-line sidebar-icon"></i>
+          <span class="sidebar-text">Orders</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="sidebar-link" (click)="goToSettledOffers()">
+          <i class="ri-exchange-line sidebar-icon"></i>
+          <span class="sidebar-text">Settled Offers</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="sidebar-link" (click)="goToOtc()">
+          <i class="ri-exchange-line sidebar-icon"></i>
+          <span class="sidebar-text">OTC</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="sidebar-link" (click)="goToActiveOffers()">
+          <i class="ri-exchange-line sidebar-icon"></i>
+          <span class="sidebar-text">Active Offers</span>
         </a>
       </li>
 

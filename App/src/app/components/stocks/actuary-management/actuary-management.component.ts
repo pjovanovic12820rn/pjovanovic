@@ -52,12 +52,16 @@ export class ActuaryManagementComponent implements OnInit {
       size
     ).subscribe({
       next: (res) => {
-        console.log(`prosao zahtev: ${res.content}`)
         this.loading = false;
         this.agents = res.content || [];
         this.totalElements = res.totalElements || 0;
         this.currentPage = page;
         this.agents.forEach(agent => {
+          console.log(agent);
+          if(agent.needsApproval) {
+            console.log(agent.needsApproval);
+            this.agentApproval[agent.id] = agent.needsApproval
+          }
           this.actuaryService.getAgentLimit(agent.id).subscribe({
             next: (limitData) => {
               this.agentLimits[agent.id] = limitData.limitAmount || 0;
@@ -116,40 +120,16 @@ export class ActuaryManagementComponent implements OnInit {
   toggleApproval(agentId: number): void {
     const currentApproval = this.agentApproval[agentId] || false;
     const newApproval = !currentApproval;
-  
+
     this.actuaryService.setApprovalValue(agentId, newApproval).subscribe({
       next: () => {
+        console.log(this.agentApproval[agentId])
+        console.log(newApproval)
         this.agentApproval[agentId] = newApproval;
       },
       error: (err) => {
         console.error('Error toggling approval', err);
         alert('Error toggling approval');
-      }
-    });
-  }
-
-  setApproval(agentId: number, approvalValue: boolean): void {
-    this.actuaryService.setApprovalValue(agentId, approvalValue).subscribe({
-      next: () => {
-        this.loadAgents(this.currentPage, this.pageSize);
-      },
-      error: (err) => {
-        console.error('Error setting approval', err);
-        alert('Error setting approval');
-      }
-    });
-  }
-
-  showAgentDetails(agentId: number): void {
-    this.selectedAgentId = agentId;
-    this.showDetails = true;
-    this.actuaryService.getAgentLimit(agentId).subscribe({
-      next: (data) => {
-        this.agentLimitDetails = data;
-      },
-      error: (err) => {
-        console.error('Error fetching agent limit info', err);
-        alert('Error fetching details');
       }
     });
   }
