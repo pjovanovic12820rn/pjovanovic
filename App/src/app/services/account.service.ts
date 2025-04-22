@@ -92,7 +92,6 @@ export class AccountService {
     );
   }
 
-  // todo - mozda videti? idk samo klijent sme
   changeAccountName(accountNumber: string, newName: string): Observable<void> {
     const payload: ChangeAccountNameDto = { newName };
     return this.http.put<void>(`${this.apiUrl}/${accountNumber}/change-name`, payload, {

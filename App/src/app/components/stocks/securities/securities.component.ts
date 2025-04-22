@@ -7,6 +7,7 @@ import { AuthService } from '../../../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { OrderCreationModalComponent } from '../../shared/order-creation-modal/order-creation-modal.component';
 import { AlertService } from '../../../services/alert.service';
+import {ButtonComponent} from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-securities',
@@ -15,14 +16,15 @@ import { AlertService } from '../../../services/alert.service';
     CommonModule,
     FormsModule,
     RouterModule,
-    OrderCreationModalComponent
+    OrderCreationModalComponent,
+    ButtonComponent
   ],
   templateUrl: './securities.component.html',
   styleUrl: './securities.component.css'
 })
 export class SecuritiesComponent implements OnInit {
   private securityService = inject(SecurityService);
-  private authService = inject(AuthService);
+  protected authService = inject(AuthService);
   private router = inject(Router);
   private alertService = inject(AlertService);
   private allSecurities: Security[] = [];
@@ -89,6 +91,19 @@ export class SecuritiesComponent implements OnInit {
             this.alertService.showAlert('error', 'Failed to load securities list.');
             this.isLoading = false;
         }
+    });
+  }
+
+  protected testMode(): void {
+    this.securityService.getSecurities().subscribe({
+      next: res => {
+        this.alertService.showAlert('success', 'Successfully toggled test market mode')
+      },
+      error: err => {
+        console.error("Error toggling test market mode:", err);
+        this.alertService.showAlert('error', 'Failed to toggle test market mode');
+        this.isLoading = false;
+      }
     });
   }
 
@@ -208,7 +223,7 @@ export class SecuritiesComponent implements OnInit {
         });
     }
 
-    this.securities = tempFilteredSecurities;  
+    this.securities = tempFilteredSecurities;
   }
   private checkRange(value: number | undefined | null, range: { min: number | null, max: number | null }): boolean {
     if (value === null || value === undefined) return true;

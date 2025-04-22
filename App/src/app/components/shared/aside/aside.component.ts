@@ -126,8 +126,8 @@ export class AsideComponent implements OnInit, OnDestroy {
     }
   }
 
-  goToSettledOffers(){
-    this.navigateTo('/settled-offers');
+  goToSettledContracts(){
+    this.navigateTo('/settled-contracts');
   }
 
   goToOtc(){

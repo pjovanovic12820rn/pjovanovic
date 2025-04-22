@@ -35,7 +35,7 @@
 <div class="modal" *ngIf="isNameModalOpen">
   <div class="modal-content">
     <h3>Change Account Name</h3>
-    <input type="text" [(ngModel)]="newAccountName" placeholder="Enter new account name" />
+    <input type="text" [(ngModel)]="newName" placeholder="Enter new account name" />
     <button (click)="changeAccountName()">Save</button>
     <button (click)="closeNameModal()">Cancel</button>
   </div>
