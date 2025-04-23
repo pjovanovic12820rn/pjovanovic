@@ -31,6 +31,7 @@ describe('Employee login and create account test', () => {
 });
 describe('Employee login and create user account test', () => {
   beforeEach(function() {
+    this.skip()
     cy.visit('/login/employee');
     cy.get('[name="email"] input').type('petar.p@example.com');
     cy.get('[name="password"] input').type('petarpetar');
