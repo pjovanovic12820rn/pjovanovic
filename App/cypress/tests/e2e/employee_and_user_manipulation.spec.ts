@@ -47,7 +47,6 @@ describe('Employee login and create user account test', () => {
     cy.get('[formcontrolname="username"] input').type('johndoe');
     cy.get('[formcontrolname="phone"] input').type('1234567890');
     cy.get('[formcontrolname="address"] input').type('123 Main St');
-    cy.get('[formcontrolname="password"] input').type('password123');
     cy.get('[formcontrolname="gender"]').select('M');
     cy.get('[formcontrolname="birthDate"] input').type('1990-01-01');
 
