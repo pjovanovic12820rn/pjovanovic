@@ -155,8 +155,7 @@ export class MyPortfolioComponent implements OnInit {
   }
 
   makeSecurityPublicServiceCall(entryId: number) {
-
-    if(this.toBePublished?.amount != undefined && this.toBePublished?.amount > this.publishAmount && this.publishAmount>0) {
+    if(this.toBePublished?.amount != undefined && this.toBePublished?.amount >= this.publishAmount && this.publishAmount>0) {
 
 
       this.portfolioService.setPublicAmount(entryId, this.publishAmount).subscribe({
