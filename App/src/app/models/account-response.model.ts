@@ -23,8 +23,6 @@ export interface AccountResponse {
   status: AccountStatus;
   balance: number;
   availableBalance: number;
-  dailyLimit: number;
-  monthlyLimit: number;
   dailySpending: number;
   monthlySpending: number;
   owner: ClientDto;
