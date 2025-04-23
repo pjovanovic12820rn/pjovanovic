@@ -27,7 +27,6 @@ import {ButtonComponent} from '../../shared/button/button.component';
 import {InputTextComponent} from '../../shared/input-text/input-text.component';
 import {ModalComponent} from '../../shared/modal/modal.component';
 import {AutocompleteTextComponent} from '../../shared/autocomplete-text/autocomplete-text.component';
-import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-account-creation',
@@ -73,15 +72,12 @@ export class AccountCreationComponent implements OnInit {
     clientId: 0,
     employeeId: 0,
     initialBalance: 0,
-    dailyLimit: 0,
-    monthlyLimit: 0,
     dailySpending: 0,
     monthlySpending: 0,
     isActive: 'INACTIVE',
     accountType: 'CURRENT',
     accountOwnerType: 'PERSONAL',
     createCard: false,
-    monthlyFee: 0,
     name: '',
   };
 
@@ -139,7 +135,6 @@ export class AccountCreationComponent implements OnInit {
     this.accountForm = this.fb.group({
       clientId: [this.newAccount.clientId, Validators.required],
       accountType: [{ value: this.newAccount.accountType, disabled: true }],
-      monthlyFee: [this.newAccount.monthlyFee, Validators.pattern(/^\d+(\.\d+)?$/)],
       accountOwnerType: [this.newAccount.accountOwnerType, Validators.required],
       // sel i company info
       selectedCompany: [this.selectedCompanyId],
@@ -151,8 +146,6 @@ export class AccountCreationComponent implements OnInit {
       companyAddress: [this.companyInfo.address, Validators.minLength(5)],
 
       name: [this.newAccount.name, Validators.required],
-      dailyLimit: [this.newAccount.dailyLimit, Validators.pattern(/^\d+(\.\d+)?$/)],
-      monthlyLimit: [this.newAccount.monthlyLimit, Validators.pattern(/^\d+(\.\d+)?$/)],
       initialBalance: [this.newAccount.initialBalance, Validators.pattern(/^\d+(\.\d+)?$/)],
       currency: [{ value: this.newAccount.currency, disabled: true }],
       isActive: [this.newAccount.isActive],

@@ -1,17 +1,17 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { SecurityService } from '../../../services/security.service';
 import { ListingDetailsDto } from '../../../models/listing-details.dto';
 import { ListingType } from '../../../enums/listing-type.enum';
 import { catchError, map, switchMap, tap, throwError } from 'rxjs';
 import { Chart } from 'chart.js';
-import {TimeSeriesDto} from '../../../models/time-series.model';
+import { TimeSeriesDto } from '../../../models/time-series.model';
 
 @Component({
   selector: 'app-stock-details',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './stock-details.component.html',
   styleUrls: ['./stock-details.component.css']
 })

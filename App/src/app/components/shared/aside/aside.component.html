@@ -17,7 +17,7 @@
         </a>
       </li>
 
-      <li *ngIf="isAdmin">
+      <li *ngIf="isAdmin || isSupervisor || isEmployee">
         <a class="sidebar-link" (click)="goToEmployees()">
           <i class="ri-bank-line sidebar-icon"></i>
           <span class="sidebar-text">Employees</span>
@@ -32,7 +32,7 @@
       </li>
 
       <!-- Payments or employees-->
-      <li *ngIf="isClient">
+      <li>
         <a class="sidebar-link" (click)="goToPayments()">
           <i class="ri-bank-card-line sidebar-icon"></i>
           <span class="sidebar-text">Payments</span>
@@ -93,7 +93,7 @@
         </a>
       </li>
 
-      <li *ngIf="isAdmin">
+      <li>
         <a class="sidebar-link" (click)="goToOrderList()">
           <i class="ri-exchange-line sidebar-icon"></i>
           <span class="sidebar-text">Orders</span>
