@@ -86,12 +86,13 @@ export class CardsComponent implements OnInit {
         this.cardsLoaded = true;
       })
     }
-// idk was this     this.cardService.getUserCardsForAccount(this.accountNumber).subscribe(data => {
-//       this.cards = data
-//     })
   }
 
   blockCard(cardNumber: string, status: string): void {
+    if (status === 'DEACTIVATED') {
+      this.updateCardStatus(cardNumber, 'DEACTIVATED');
+      return
+    }
     if (status === 'BLOCKED') {
       // Unblock the card
       this.cardService.unblockCard(this.accountNumber, cardNumber).subscribe({

@@ -44,6 +44,17 @@ export class SecurityService {
     );
   }
 
+  /**
+   * updateUser(userId: number, user: Partial<User>): Observable<User> {
+   *     return this.http.put<User>(`${this.apiUrl}/${userId}`, user, { headers: this.getAuthHeaders() });
+   *   }
+   */
+
+  testMode(): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.put(`${environment.stockUrl}/api/exchange`, {}, { headers: this.getAuthHeaders() });
+  }
+
   getSecurityById(id: number): Observable<Security | undefined> {
     return this.getSecurities().pipe(
       map(securities => securities.find(security => security.id === id))

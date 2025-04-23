@@ -1,4 +1,4 @@
-export type LoanType = 'CASH' | 'MORTGAGE' | 'CAR' | 'REFINANCING' | 'STUDENT';
+export type LoanType = 'CASH' | 'MORTGAGE' | 'AUTO' | 'REFINANCING' | 'STUDENT';
 export type EmploymentStatus = 'PERMANENT' | 'TEMPORARY' | 'UNEMPLOYED';
 export type LoanRequestStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 export type InterestRateType = 'FIXED' | 'CURRENT';

@@ -54,7 +54,6 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
   companies: Company[] = [];
   availablePersonnel: AuthorizedPersonnel[] = [];
 
-  isCurrentAccount = true;
   isCompanyAccount = false;
   isNewCompany = false;
   isNewPersonnel = false;
@@ -70,15 +69,12 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     clientId: 0,
     employeeId: 0,
     initialBalance: 0,
-    dailyLimit: 0,
-    monthlyLimit: 0,
     dailySpending: 0,
     monthlySpending: 0,
     isActive: 'INACTIVE',
     accountType: 'FOREIGN',
     accountOwnerType: 'PERSONAL',
     createCard: false,
-    monthlyFee: 0,
     name: ''
   };
 
@@ -145,7 +141,6 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     this.accountForm = this.fb.group({
       clientId: [this.newAccount.clientId, Validators.required],
       accountType: [{ value: this.newAccount.accountType, disabled: true }],
-      monthlyFee: [this.newAccount.monthlyFee, Validators.pattern(/^\d+(\.\d+)?$/)],
       accountOwnerType: [this.newAccount.accountOwnerType, Validators.required],
       selectedCompany: [this.selectedCompanyId],
       companyName: [this.companyInfo.name, Validators.minLength(3)],
@@ -155,8 +150,6 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
       companyAddress: [this.companyInfo.address, Validators.minLength(5)],
       selectedAuthorizedPersonnel: [this.selectedAuthorizedPersonnelId],
       currency: [this.newAccount.currency, Validators.required], //, disabled: true
-      dailyLimit: [this.newAccount.dailyLimit, Validators.pattern(/^\d+(\.\d+)?$/)],
-      monthlyLimit: [this.newAccount.monthlyLimit, Validators.pattern(/^\d+(\.\d+)?$/)],
       initialBalance: [this.newAccount.initialBalance, Validators.pattern(/^\d+(\.\d+)?$/)],
       isActive: [this.newAccount.isActive],
       createCard: [this.newAccount.createCard]

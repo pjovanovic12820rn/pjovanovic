@@ -94,6 +94,10 @@
           {{ isLoading ? 'Refreshing...' : 'Refresh All' }}
         </button>
 
+         <app-button *ngIf="authService.isSupervisor() || authService.isAdmin()" (onClick)="testMode()">
+           Market test mode
+         </app-button>
+
          <div class="securities-table-container">
            <table class="securities-table">
              <thead>

@@ -21,14 +21,6 @@
           </app-button>
         </div>
 
-        <!-- Monthly Fee -->
-        <input-text *ngIf="isCurrentAccount" placeholder="Monthly Fee:" label="Monthly Fee:" id="monthlyFee"
-                    formControlName="monthlyFee" type="number"
-                    [formControlComp]="accountForm.controls['monthlyFee']"
-                    [errorMessages]="{ pattern: 'Must be a valid number (decimal allowed).' }"
-        >
-        </input-text>
-
         <!-- Employee info -->
         <div class="info-card">
           <h3>Account Created By</h3>
@@ -199,18 +191,6 @@
         <input-text label="Initial balance:" id="initialBalance" placeholder="Initial balance" formControlName="initialBalance"
                     type="number" required
                     [formControlComp]="accountForm.controls['initialBalance']"
-                    [errorMessages]="{ pattern: 'Must be a valid number (decimal allowed).' }">
-        </input-text>
-
-        <input-text label="Daily Limit:" id="dailyLimit" placeholder="Daily Limit" formControlName="dailyLimit"
-                    type="number" required
-                    [formControlComp]="accountForm.controls['dailyLimit']"
-                    [errorMessages]="{ pattern: 'Must be a valid number (decimal allowed).' }">
-        </input-text>
-
-        <input-text label="Monthly Limit:" placeholder="Monthly Limit:" id="monthlyLimit" formControlName="monthlyLimit"
-                    type="number" required
-                    [formControlComp]="accountForm.controls['monthlyLimit']"
                     [errorMessages]="{ pattern: 'Must be a valid number (decimal allowed).' }">
         </input-text>
 

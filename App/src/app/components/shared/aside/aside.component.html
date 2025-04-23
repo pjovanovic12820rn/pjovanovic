@@ -29,7 +29,7 @@
           ></i>
         </a>
         <ul class="sidebar-sublist" *ngIf="isAccountsOpen">
-          <li *ngIf="isAdmin">
+          <li *ngIf="isAdmin || isSupervisor || isEmployee">
             <a class="sidebar-link" (click)="goToEmployees()">Employees</a>
           </li>
           <li *ngIf="isAdmin || isSupervisor">
@@ -46,7 +46,7 @@
       </div>
 
       <!-- Payments -->
-      <div *ngIf="isClient">
+      <div *ngIf="isClient || isEmployee">
         <a class="sidebar-link" (click)="goToPayments()">
           <i class="ri-bank-card-line sidebar-icon"></i>
           <span class="sidebar-text">Payments</span>
@@ -124,8 +124,8 @@
             <a class="sidebar-link" (click)="goToOrderList()">Orders</a>
           </li>
           <li>
-            <a class="sidebar-link" (click)="goToSettledOffers()"
-              >Settled Offers</a
+            <a class="sidebar-link" (click)="goToSettledContracts()"
+              >Settled Contracts</a
             >
           </li>
           <li>
