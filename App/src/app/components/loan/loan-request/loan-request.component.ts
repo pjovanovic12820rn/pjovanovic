@@ -8,8 +8,8 @@ import { LoanRequest, LoanType, EmploymentStatus, InterestRateType } from '../..
 import { Currency } from '../../../models/currency.model';
 import { AccountService } from '../../../services/account.service';
 import { AuthService } from '../../../services/auth.service';
-import {InputTextComponent} from '../../shared/input-text/input-text.component';
-import {ButtonComponent} from '../../shared/button/button.component';
+import { InputTextComponent } from '../../shared/input-text/input-text.component';
+import { ButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-loan-request',
@@ -35,14 +35,14 @@ export class LoanRequestComponent implements OnInit {
     this.loanForm = new FormGroup({});
   }
 
-  loanTypes: LoanType[] = ['CASH', 'MORTGAGE', 'CAR', 'REFINANCING', 'STUDENT'];
+  loanTypes: LoanType[] = ['CASH', 'MORTGAGE', 'AUTO', 'REFINANCING', 'STUDENT'];
   employmentStatuses: EmploymentStatus[] = ['PERMANENT', 'TEMPORARY', 'UNEMPLOYED'];
   interestRateTypes: InterestRateType[] = ['FIXED', 'CURRENT'];
 
   repaymentOptions: { [key in LoanType]: number[] } = {
     CASH: [12, 24, 36, 48, 60, 72, 84],
     MORTGAGE: [60, 120, 180, 240, 300, 360],
-    CAR: [12, 24, 36, 48, 60, 72, 84],
+    AUTO: [12, 24, 36, 48, 60, 72, 84],
     REFINANCING: [12, 24, 36, 48, 60, 72, 84],
     STUDENT: [12, 24, 36, 48, 60, 72, 84]
   };

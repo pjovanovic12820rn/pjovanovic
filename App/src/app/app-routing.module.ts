@@ -46,7 +46,6 @@ import { SettledContractsComponent } from './components/stocks/settled-contracts
 import { OtcOffersListComponent } from './components/stocks/otc-offers-list/otc-offers-list.component';
 import { BankProfitComponent } from './components/stocks/bank-profit/bank-profit.component';
 import { StockDetailsComponent } from './components/stocks/stock-details/stock-details.component';
-import { StockDateDetailsComponent } from './components/stocks/stock-date-details/stock-date-details.component';
 import { ActiveOffersComponent } from './components/stocks/active-offers/active-offers.component';
 import {MyOrdersComponent} from './components/stocks/my-orders/my-orders.component';
 
@@ -113,7 +112,6 @@ export const routes: Routes = [
   { path: 'securities', component: SecuritiesComponent, canActivate: [authGuard, clientOrActuaryGuard] },
   { path: 'tax-portal', component: TaxCalculationComponent, canActivate: [authGuard, supervisorGuard] },
   { path: 'stock-details/:id', component: StockDetailsComponent, canActivate: [authGuard] },
-  { path: 'stock-details/:id/options/:date', component: StockDateDetailsComponent, canActivate: [authGuard, actuaryGuard] },
 
   // options
   { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard, supervisorGuard] },

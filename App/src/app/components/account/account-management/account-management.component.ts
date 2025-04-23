@@ -33,7 +33,7 @@ export class AccountManagementComponent implements OnInit {
 
   isNameModalOpen: boolean = false;
   isLimitModalOpen: boolean = false;
-  newAccountName: string = '';
+  newName: string = '';
   newAccountLimit: number = 0;
   editingAccountNumber: string | null = null;
   isAccountModalOpen: boolean = false;
@@ -111,7 +111,7 @@ export class AccountManagementComponent implements OnInit {
 
   openNameModal(accountNumber: string, currentName: string) {
     this.editingAccountNumber = accountNumber;
-    this.newAccountName = currentName;
+    this.newName = currentName;
     this.isNameModalOpen = true;
   }
 
@@ -132,10 +132,10 @@ export class AccountManagementComponent implements OnInit {
   }
 
   changeAccountName() {
-    if (!this.editingAccountNumber || !this.newAccountName.trim()) return;
+    if (!this.editingAccountNumber || !this.newName.trim()) return;
 
     this.accountService
-      .changeAccountName(this.editingAccountNumber, this.newAccountName.trim())
+      .changeAccountName(this.editingAccountNumber, this.newName.trim())
       .subscribe({
         next: () => {
           this.alertService.showAlert('success', 'Account name updated successfully.');

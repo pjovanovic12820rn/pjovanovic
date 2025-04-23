@@ -24,13 +24,6 @@
             <option value="CURRENT">CURRENT</option>
           </select>
 
-          <!-- Monthly Fee -->
-          <input-text *ngIf="isCurrentAccount" label="Monthly Fee:" placeholder="Monthly Fee" id="monthlyFee"
-                      formControlName="monthlyFee" type="number"
-                      [formControlComp]="accountForm.controls['monthlyFee']"
-                      [errorMessages]="{ pattern: 'Must be a valid number (decimal allowed).' }">
-          </input-text>
-
           <!-- Employee info -->
           <div class="info-card">
             <h3>Account Created By</h3>
@@ -180,20 +173,8 @@
             <option value="RSD">RSD</option>
           </select>
 
-          <input-text id="name" formControlName="name" placeholder="Account Name:" label="Account Name:" required>
-          </input-text>
-          <input-text id="dailyLimit" formControlName="dailyLimit" type="number"
-                      placeholder="Daily Limit" label="Daily Limit" required
-                      [formControlComp]="accountForm.controls['dailyLimit']"
-                      [errorMessages]="{ pattern: 'Must be a valid number (decimal allowed).' }"
-          >
-          </input-text>
-          <input-text id="monthlyLimit" formControlName="monthlyLimit" type="number"
-                      placeholder="Monthly Limit" label="Monthly Limit" required
-                      [formControlComp]="accountForm.controls['monthlyLimit']"
-                      [errorMessages]="{ pattern: 'Must be a valid number (decimal allowed).' }"
-          >
-          </input-text>
+          <input-text id="name" formControlName="name" placeholder="Account Name:" label="Account Name:" required></input-text>
+
           <input-text label="Initial balance:" id="initialBalance" placeholder="Initial balance" formControlName="initialBalance"
                       type="number" required
                       [formControlComp]="accountForm.controls['initialBalance']"

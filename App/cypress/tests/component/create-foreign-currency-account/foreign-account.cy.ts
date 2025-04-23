@@ -25,8 +25,6 @@ describe('Foreign Currency Account Form', () => {
     cy.get('#businessBtn').should('exist');
     cy.get('#clientId').should('exist');
     cy.get('.employee-info').should('exist');
-    cy.get('#dailyLimit').should('exist');
-    cy.get('#monthlyLimit').should('exist');
     cy.get('#createCard').should('exist');
     cy.get('#currency').should('exist');
     cy.get('.submit-btn').should('exist');
@@ -36,8 +34,6 @@ describe('Foreign Currency Account Form', () => {
     cy.get('.submit-btn').should('be.disabled');
     cy.get('#clientId').select('1'); // Simulating user selection
     cy.get('#currency').select('USD');
-    cy.get('#dailyLimit').type('500');
-    cy.get('#monthlyLimit').type('5000');
     cy.get('.submit-btn').should('not.be.disabled');
   });
 

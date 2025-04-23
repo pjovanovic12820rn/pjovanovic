@@ -65,8 +65,6 @@ describe('Create Current Account Component', () => {
       });
       cy.get('#accountOwnerType').select('PERSONAL');
       cy.get('#name').type('Personal Account');
-      cy.get('#dailyLimit').type('5000');
-      cy.get('#monthlyLimit').type('20000');
     });
 
     it('should enable submit button when required fields are filled', () => {
@@ -215,8 +213,6 @@ describe('Create Current Account Component', () => {
       }); // End of beforeEach
       it('should create account with existing company', () => {
         cy.get('#name').type('Company Account');
-        cy.get('#dailyLimit').type('10000');
-        cy.get('#monthlyLimit').type('50000');
         cy.get('.submit-btn button').click();
         cy.url().should('include', '/success');
       });
@@ -232,7 +228,6 @@ describe('Create Current Account Component', () => {
         cy.get('#phoneNumber').type('1234567890');
         cy.get('#personnelAddress').type('456 Oak St');
         cy.get('#name').type('Account With Personnel');
-        cy.get('#dailyLimit').type('20000');
         cy.get('#monthlyLimit').type('100000');
         cy.get('.submit-btn button').click();
         cy.url().should('include', '/success');
@@ -253,9 +248,6 @@ describe('Create Current Account Component', () => {
       cy.get('[placeholder="Activity Code"] input ').type('10.01');
       cy.get('#companyAddress').type('123 Main St');
       cy.get('#name').type('New Company Account');
-      cy.get('#dailyLimit').type('15000');
-      cy.get('#monthlyLimit').type('75000');
-      cy.get('#monthlyFee > .input-container > input').clear().type('1000')
       cy.get('#isActive').check();
       cy.get('app-button.submit-btn > .submit-btn').click();
     });
@@ -305,8 +297,6 @@ describe('Create Current Account Component', () => {
         trySelectOption(0);
       });
       cy.get('#name').type('Account With Card');
-      cy.get('#dailyLimit').type('5000');
-      cy.get('#monthlyLimit').type('20000');
       cy.get('#createCard').check();
       cy.get('.submit-btn button').click();
     });

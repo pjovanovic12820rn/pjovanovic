@@ -15,8 +15,6 @@ import { OrderCreationModalComponent } from '../../shared/order-creation-modal/o
 import {ListingType} from '../../../enums/listing-type.enum';
 
 
-
-
 @Component({
   selector: 'app-my-portfolio',
   standalone: true,

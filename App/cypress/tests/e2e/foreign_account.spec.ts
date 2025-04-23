@@ -85,10 +85,6 @@ describe('foreign currency account test', () => {
       // Select currency
       cy.get('#currency').select('USD');
 
-      // Enter daily and monthly limits
-      cy.get('#dailyLimit').type('5000');
-      cy.get('#monthlyLimit').type('20000');
-
       // Check "Is Active"
       cy.get('#isActive').check();
 
@@ -307,10 +303,6 @@ describe('foreign currency account test', () => {
 
       // 5) Select currency
       cy.get('#currency').select('USD');
-
-      // 6) Enter daily and monthly limits
-      cy.get('#dailyLimit').type('10000');
-      cy.get('#monthlyLimit').type('50000');
 
       // 7) Check "Is Active"
       cy.get('#isActive').check();

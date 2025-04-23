@@ -18,33 +18,6 @@
         <canvas #stockChart></canvas>
       </div>
 
-      <hr />
-
-      <div class="option-dates-section">
-        <h4>Option Settlement Dates</h4>
-        <ng-container *ngIf="
-          details.listingType === ListingType.STOCK &&
-          details.optionSettlementDates &&
-          details.optionSettlementDates.length > 0;
-          else noOptions
-        ">
-          <ul>
-            <li *ngFor="let date of details.optionSettlementDates">
-              <ng-container *ngIf="stockId() as id; else missingId">
-                <a [routerLink]="['/stock-details', id, 'options', date]">
-                  {{ date | date:'longDate' }}
-                </a>
-              </ng-container>
-              <ng-template #missingId>
-                <span>{{ date | date:'longDate' }} (Error: Missing ID for link)</span>
-              </ng-template>
-            </li>
-          </ul>
-        </ng-container>
-        <ng-template #noOptions>
-          <p>No option settlement dates available for this listing.</p>
-        </ng-template>
-      </div>
     </div>
   </ng-container>
 </div>

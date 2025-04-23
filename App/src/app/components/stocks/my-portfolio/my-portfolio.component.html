@@ -14,10 +14,7 @@
       <th>Profit</th>
       <th>Last Modified</th>
       <th>Public Amount</th>
-<!--      <th>In the money</th>-->
-      <th>Used</th>
       <th>Publish</th>
-      <th>Use</th>
       <th>Sell Security</th>
     </tr>
     </thead>
@@ -33,8 +30,6 @@
         <td>{{ onePortfolio.profit }}</td>
         <td>{{ onePortfolio.lastModified }}</td>
         <td>{{ onePortfolio.publicAmount }}</td>
-<!--        <td>{{ onePortfolio.inTheMoney }}</td>-->
-        <td>{{ onePortfolio.used }}</td>
         <td>
           <app-button class="sell-button" (onClick)="publishFlag(onePortfolio)">
             Make Public
@@ -42,13 +37,7 @@
         </td>
 
   <!--        <td><app-button class="sell-button" (onClick)="orderModalFlag(onePortfolio)">Sell</app-button> </td>-->
-        <td>
-          <app-button
-            [disabled]="onePortfolio.Type !== ListingType.OPTION || !onePortfolio.inTheMoney"
-            (click)="useListing(onePortfolio)">
-            Use
-          </app-button>
-        </td>
+
         <td>
           <app-button (click)="openSellOrderModal(onePortfolio)">
             Sell
