@@ -133,7 +133,7 @@ export class AccountCreationComponent implements OnInit {
 
   ngOnInit(): void {
     this.accountForm = this.fb.group({
-      clientId: [this.newAccount.clientId, Validators.required],
+      clientId: [{value: this.newAccount.clientId, disabled: true}, Validators.required],
       accountType: [{ value: this.newAccount.accountType, disabled: true }],
       accountOwnerType: [this.newAccount.accountOwnerType, Validators.required],
       // sel i company info
