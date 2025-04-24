@@ -3,4 +3,5 @@
   padding: 0.5rem 1rem;
   margin-left: 16rem;
   margin-top: 4rem;
+  max-height: fit-content;
 }

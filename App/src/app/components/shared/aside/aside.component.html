@@ -1,149 +1,192 @@
-<aside id="logo-sidebar" [ngClass]="{ 'open': isSidebarOpen }" aria-label="Sidebar">
+<aside
+  id="logo-sidebar"
+  [ngClass]="{ open: isSidebarOpen }"
+  aria-label="Sidebar"
+>
   <div class="sidebar-content">
-    <ul class="sidebar-list">
-      <!-- Client Portal OR User Detail -->
-      <li>
+    <div class="sidebar-list">
+      <!-- Client Portal -->
+      <div>
         <a class="sidebar-link" (click)="goToClientPortalOrUserDetail()">
           <i class="ri-user-line sidebar-icon"></i>
           <span class="sidebar-text">Client Portal</span>
         </a>
-      </li>
+      </div>
 
-      <!-- Accounts -->
-      <li *ngIf="isClient">
+      <!-- Accounts Group -->
+      <div *ngIf="!isClient">
+        <a
+          class="sidebar-link sidebar-group-button"
+          (click)="toggleGroup('isAccountsOpen')"
+        >
+          <div>
+            <i class="ri-team-line sidebar-icon"></i>
+            <span class="sidebar-text">Accounts</span>
+          </div>
+          <i
+            class="ri-arrow-down-s-line dropdown-icon"
+            [ngClass]="{ rotate: isAccountsOpen }"
+          ></i>
+        </a>
+        <ul class="sidebar-sublist" *ngIf="isAccountsOpen">
+          <li *ngIf="isAdmin || isSupervisor || isEmployee">
+            <a class="sidebar-link" (click)="goToEmployees()">Employees</a>
+          </li>
+          <li *ngIf="isAdmin || isSupervisor">
+            <a class="sidebar-link" (click)="goToActuaries()">Actuaries</a>
+          </li>
+        </ul>
+      </div>
+
+      <div *ngIf="isClient">
         <a class="sidebar-link" (click)="goToAccountManagement()">
-          <i class="ri-bank-line sidebar-icon"></i>
+          <i class="ri-wallet-3-line sidebar-icon"></i>
           <span class="sidebar-text">Accounts</span>
         </a>
-      </li>
+      </div>
 
-      <li *ngIf="isAdmin || isSupervisor || isEmployee">
-        <a class="sidebar-link" (click)="goToEmployees()">
-          <i class="ri-bank-line sidebar-icon"></i>
-          <span class="sidebar-text">Employees</span>
-        </a>
-      </li>
-
-      <li *ngIf="isAdmin || isSupervisor">
-        <a class="sidebar-link" (click)="goToActuaries()">
-          <i class="ri-bank-line sidebar-icon"></i>
-          <span class="sidebar-text">Actuaries</span>
-        </a>
-      </li>
-
-      <!-- Payments or employees-->
-      <li>
+      <!-- Payments -->
+      <div *ngIf="isClient || isEmployee">
         <a class="sidebar-link" (click)="goToPayments()">
           <i class="ri-bank-card-line sidebar-icon"></i>
           <span class="sidebar-text">Payments</span>
         </a>
-      </li>
+      </div>
 
       <!-- Loans -->
-      <li>
+      <div>
         <a class="sidebar-link" (click)="goToLoans()">
           <i class="ri-hand-coin-line sidebar-icon"></i>
           <span class="sidebar-text">Loans</span>
         </a>
-      </li>
+      </div>
 
-      <!-- Bank Accounts -->
-      <li *ngIf="isAdmin">
-        <a class="sidebar-link" (click)="goToBankAccounts()">
-          <i class="ri-bank-line sidebar-icon"></i>
-          <span class="sidebar-text">Banks Accounts</span>
+      <!-- Bank Admin Group -->
+      <div *ngIf="isAdmin || isSupervisor" class="sidebar-group">
+        <a
+          class="sidebar-link sidebar-group-button"
+          (click)="toggleGroup('isBankAdminOpen')"
+        >
+          <div>
+            <i class="ri-bank-line sidebar-icon"></i>
+            <span class="sidebar-text">Bank Admin</span>
+          </div>
+          <i
+            class="ri-arrow-down-s-line dropdown-icon"
+            [ngClass]="{ rotate: isBankAdminOpen }"
+          ></i>
         </a>
-      </li>
+        <ul class="sidebar-sublist" *ngIf="isBankAdminOpen">
+          <li *ngIf="isAdmin">
+            <a class="sidebar-link" (click)="goToBankAccounts()"
+              >Bank Accounts</a
+            >
+          </li>
+          <li>
+            <a class="sidebar-link" (click)="goToBankProfit()">Bank Profit</a>
+          </li>
+          <li>
+            <a class="sidebar-link" (click)="goToTaxPortal()">Tax Portal</a>
+          </li>
+        </ul>
+      </div>
 
-      <!-- Bank Profit -->
-      <li *ngIf="isAdmin || isSupervisor">
-        <a class="sidebar-link" (click)="goToBankProfit()">
-          <i class="ri-bank-line sidebar-icon"></i>
-          <span class="sidebar-text">Bank Profit</span>
-        </a>
-      </li>
-
-      <li *ngIf="isAdmin || isSupervisor">
-        <a class="sidebar-link" (click)="goToTaxPortal()">
-          <i class="ri-bank-line sidebar-icon"></i>
-          <span class="sidebar-text">Tax Portal</span>
-        </a>
-      </li>
-
-      <!-- Currency Exchange -->
-      <li>
+      <div>
         <a class="sidebar-link" (click)="goToExchangeRate()">
           <i class="ri-exchange-line sidebar-icon"></i>
           <span class="sidebar-text">Currency Exchange</span>
         </a>
-      </li>
+      </div>
 
-      <!-- Stocks -->
-      <li>
-        <a class="sidebar-link" (click)="goToPortfolio()">
-          <i class="ri-exchange-line sidebar-icon"></i>
-          <span class="sidebar-text">My Portfolio</span>
+      <!-- Market Group -->
+      <div class="sidebar-group">
+        <a
+          class="sidebar-link sidebar-group-button"
+          (click)="toggleGroup('isMarketOpen')"
+        >
+          <div>
+            <i class="ri-stock-line sidebar-icon"></i>
+            <span class="sidebar-text">Market</span>
+          </div>
+          <i
+            class="ri-arrow-down-s-line dropdown-icon"
+            [ngClass]="{ rotate: isMarketOpen }"
+          ></i>
         </a>
-      </li>
-
-      <li>
-        <a class="sidebar-link" (click)="goToSecurities()">
-          <i class="ri-exchange-line sidebar-icon"></i>
-          <span class="sidebar-text">Securities</span>
-        </a>
-      </li>
-
-      <li>
-        <a class="sidebar-link" (click)="goToOrderList()">
-          <i class="ri-exchange-line sidebar-icon"></i>
-          <span class="sidebar-text">Orders</span>
-        </a>
-      </li>
-
-      <li>
-        <a class="sidebar-link" (click)="goToSettledContracts()">
-          <i class="ri-exchange-line sidebar-icon"></i>
-          <span class="sidebar-text">Settled Contracts</span>
-        </a>
-      </li>
-
-      <li>
-        <a class="sidebar-link" (click)="goToOtc()">
-          <i class="ri-exchange-line sidebar-icon"></i>
-          <span class="sidebar-text">OTC</span>
-        </a>
-      </li>
-
-      <li>
-        <a class="sidebar-link" (click)="goToActiveOffers()">
-          <i class="ri-exchange-line sidebar-icon"></i>
-          <span class="sidebar-text">Active Offers</span>
-        </a>
-      </li>
-
-    </ul>
+        <ul class="sidebar-sublist" *ngIf="isMarketOpen">
+          <li>
+            <a class="sidebar-link" (click)="goToPortfolio()">My Portfolio</a>
+          </li>
+          <li>
+            <a class="sidebar-link" (click)="goToSecurities()">Securities</a>
+          </li>
+          <li *ngIf="isAdmin">
+            <a class="sidebar-link" (click)="goToOrderList()">Orders</a>
+          </li>
+          <li>
+            <a class="sidebar-link" (click)="goToSettledContracts()"
+              >Settled Contracts</a
+            >
+          </li>
+          <li>
+            <a class="sidebar-link" (click)="goToOtc()">OTC</a>
+          </li>
+          <li>
+            <a class="sidebar-link" (click)="goToActiveOffers()"
+              >Active Offers</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </aside>
 
-<app-modal [title]="'Payment'" [isOpen]="isModalOpen" (closeModalEvent)="isModalOpen = false">
-    <br>
+<app-modal
+  [title]="'Payment'"
+  [isOpen]="isModalOpen"
+  (closeModalEvent)="isModalOpen = false"
+>
+  <br />
   <div class="modal-content flex-col gap-1">
     <div class="flex gap-1">
-      <app-button class="flex-1 width-full" (click)="navigateTo('/new-payment')">New Payment</app-button>
-      <app-button class="flex-1 width-full" (click)="navigateTo('/transfer')">Transfer Payment</app-button>
+      <app-button class="flex-1 width-full" (click)="navigateTo('/new-payment')"
+        >New Payment</app-button
+      >
+      <app-button class="flex-1 width-full" (click)="navigateTo('/transfer')"
+        >Transfer Payment</app-button
+      >
     </div>
     <div class="flex gap-1">
-      <app-button class="flex-1 width-full" (click)="navigateTo('/recipients')">Payment Recipients</app-button>
-      <app-button class="flex-1 width-full" (click)="navigateTo('/payment-details')">Payment Details</app-button>
+      <app-button class="flex-1 width-full" (click)="navigateTo('/recipients')"
+        >Payment Recipients</app-button
+      >
+      <app-button
+        class="flex-1 width-full"
+        (click)="navigateTo('/payment-details')"
+        >Payment Details</app-button
+      >
     </div>
   </div>
 </app-modal>
 
-<app-modal [title]="'New Account'" [isOpen]="isAccountModalOpen" (closeModalEvent)="this.isAccountModalOpen = false;">
+<app-modal
+  [title]="'New Account'"
+  [isOpen]="isAccountModalOpen"
+  (closeModalEvent)="this.isAccountModalOpen = false"
+>
   <div class="modal-content">
     <div class="new-account-options">
-      <app-button [routerLink]="['/create-current-account']" (click)="this.isAccountModalOpen = false;">Checking Account</app-button>
-      <app-button [routerLink]="['/create-foreign-currency-account']" (click)="this.isAccountModalOpen = false;">Foreign Currency Account</app-button>
+      <app-button
+        [routerLink]="['/create-current-account']"
+        (click)="this.isAccountModalOpen = false"
+        >Checking Account</app-button
+      >
+      <app-button
+        [routerLink]="['/create-foreign-currency-account']"
+        (click)="this.isAccountModalOpen = false"
+        >Foreign Currency Account</app-button
+      >
     </div>
   </div>
 </app-modal>

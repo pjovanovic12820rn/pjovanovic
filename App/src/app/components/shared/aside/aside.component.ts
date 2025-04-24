@@ -1,22 +1,41 @@
-import { Component, inject, Input, OnInit, OnDestroy } from '@angular/core';
-import { NgClass, NgIf } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../services/auth.service';
-import { Subscription } from 'rxjs';
-import { ModalComponent } from '../modal/modal.component';
-import {ButtonComponent} from '../button/button.component';
+import { Component, inject, Input, OnInit, OnDestroy } from "@angular/core";
+import { NgClass, NgIf } from "@angular/common";
+import { Router, RouterLink } from "@angular/router";
+import { AuthService } from "../../../services/auth.service";
+import { Subscription } from "rxjs";
+import { ModalComponent } from "../modal/modal.component";
+import { ButtonComponent } from "../button/button.component";
 
 @Component({
-  selector: 'app-aside',
+  selector: "app-aside",
   standalone: true,
   imports: [NgClass, NgIf, ModalComponent, RouterLink, ButtonComponent],
-  templateUrl: './aside.component.html',
-  styleUrl: './aside.component.css'
+  templateUrl: "./aside.component.html",
+  styleUrl: "./aside.component.css",
 })
 export class AsideComponent implements OnInit, OnDestroy {
   @Input() isSidebarOpen: boolean = false;
   protected router = inject(Router);
   protected authService = inject(AuthService);
+
+  activeGroup: string | null = null;
+
+  toggleGroup(group: string) {
+    this.activeGroup = this.activeGroup === group ? null : group;
+  }
+
+  get isAccountsOpen() {
+    return this.activeGroup === "isAccountsOpen";
+  }
+  get isPaymentsOpen() {
+    return this.activeGroup === "isPaymentsOpen";
+  }
+  get isBankAdminOpen() {
+    return this.activeGroup === "isBankAdminOpen";
+  }
+  get isMarketOpen() {
+    return this.activeGroup === "isMarketOpen";
+  }
 
   isAuthenticated = false;
   isAdmin = false;
@@ -60,14 +79,14 @@ export class AsideComponent implements OnInit, OnDestroy {
 
   navigateTo(route: string) {
     this.isModalOpen = false;
-    this.router.navigate([route]).then(r => {});
+    this.router.navigate([route]).then((r) => { });
   }
 
   goToClientPortalOrUserDetail() {
     if (this.isClient && this.userId) {
       this.navigateTo(`/user/${this.userId}`);
     } else {
-      this.navigateTo('/client-portal');
+      this.navigateTo("/client-portal");
     }
   }
 
@@ -83,51 +102,51 @@ export class AsideComponent implements OnInit, OnDestroy {
     }
   }
 
-  goToEmployees(){
-    this.navigateTo('/employees');
+  goToEmployees() {
+    this.navigateTo("/employees");
   }
 
   goToExchangeRate() {
-    this.navigateTo('/exchange-rate');
+    this.navigateTo("/exchange-rate");
   }
 
   goToLoans() {
     if (this.isClient) {
       this.navigateTo(`/loan-management/${this.userId}`);
     } else {
-      this.navigateTo('/loan-requests');
+      this.navigateTo("/loan-requests");
     }
   }
 
   goToPortfolio() {
-    this.navigateTo('/my-portfolio');
+    this.navigateTo("/my-portfolio");
   }
 
   goToBankAccounts() {
-    this.navigateTo('/bank-accounts');
+    this.navigateTo("/bank-accounts");
   }
 
   goToSecurities() {
-    this.navigateTo('/securities');
+    this.navigateTo("/securities");
   }
 
   goToActuaries() {
-    this.navigateTo('/actuaries');
+    this.navigateTo("/actuaries");
   }
 
   goToBankProfit() {
-    this.navigateTo('/bank-profit');
+    this.navigateTo("/bank-profit");
   }
 
   goToTaxPortal() {
-    this.navigateTo('/tax-portal');
+    this.navigateTo("/tax-portal");
   }
 
   goToOrderList() {
     if (!this.isClient) {
       this.navigateTo(`/order-overview`);
     } else {
-      this.navigateTo('/my-orders');
+      this.navigateTo("/my-orders");
     }
   }
 
@@ -135,11 +154,11 @@ export class AsideComponent implements OnInit, OnDestroy {
     this.navigateTo('/settled-contracts');
   }
 
-  goToOtc(){
-    this.navigateTo('/otc');
+  goToOtc() {
+    this.navigateTo("/otc");
   }
 
-  goToActiveOffers(){
-    this.navigateTo('/active-offers');
+  goToActiveOffers() {
+    this.navigateTo("/active-offers");
   }
 }
