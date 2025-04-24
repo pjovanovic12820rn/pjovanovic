@@ -45,6 +45,7 @@ export class ActiveOffersComponent implements OnInit {
       error: () => {
         this.loading = false;
         this.errorMessage = 'Failed to load active offers.';
+        this.alertService.showAlert('error', 'Failed to load active offer.')
       }
     });
   }
@@ -53,9 +54,11 @@ export class ActiveOffersComponent implements OnInit {
     this.activeOffersService.acceptOffer(offer.id).subscribe({
       next: () => {
         this.activeOffers = this.activeOffers.filter(o => o.id !== offer.id);
+        this.alertService.showAlert('success', 'Offer successfully accepted.')
       },
       error: () => {
         this.errorMessage = 'Failed to accept offer.';
+        this.alertService.showAlert('error', 'Failed to accept offer.')
       }
     });
   }
@@ -64,8 +67,10 @@ export class ActiveOffersComponent implements OnInit {
     this.activeOffersService.declineOffer(offer.id).subscribe({
       next: () => {
         this.activeOffers = this.activeOffers.filter(o => o.id !== offer.id);
+        this.alertService.showAlert('success', 'Offer successfully declined.')
       },
       error: () => {
+        this.alertService.showAlert('error', 'Failed to decline offer.')
         this.errorMessage = 'Failed to decline offer.';
       }
     });
@@ -75,8 +80,10 @@ export class ActiveOffersComponent implements OnInit {
     this.activeOffersService.cancelOffer(offer.id).subscribe({
       next: () => {
         this.activeOffers = this.activeOffers.filter(o => o.id !== offer.id);
+        this.alertService.showAlert('success', 'Offer successfully canceled.')
       },
       error: () => {
+        this.alertService.showAlert('error', 'Failed to cancel offer.')
         this.errorMessage = 'Failed to decline offer.';
       }
     });
@@ -106,9 +113,11 @@ export class ActiveOffersComponent implements OnInit {
     this.activeOffersService.sendCounterOffer(this.selectedOffer.id, payload).subscribe({
       next: () => {
         this.selectedOffer = null;
+        this.alertService.showAlert('success', 'Counter offer sent successfully.')
       },
       error: () => {
         this.errorMessage = 'Failed to send counter offer.';
+        this.alertService.showAlert('error', 'Failed to send counter offer.');
       }
     });
   }
