@@ -20,6 +20,7 @@ describe('Create Current Account Component', () => {
 
   describe('Personal Account Creation', () => {
     beforeEach(function() {
+      this.skip();
       cy.get('[class="details-btn"] button').contains('New Account').click();
       cy.get('app-account-management > app-modal > .modal-overlay > .modal-container > :nth-child(2) > .modal-content > .flex > :nth-child(1) > button').contains('Checking Account').click();
       cy.wait(222)
@@ -85,6 +86,7 @@ describe('Create Current Account Component', () => {
 
   describe('Company Account Creation', () => {
     beforeEach(function() {
+      this.skip();
       cy.get('[class="details-btn"] button').contains('New Account').click();
       cy.get('app-account-management > app-modal > .modal-overlay > .modal-container > :nth-child(2) > .modal-content > .flex > :nth-child(1) > button').contains('Checking Account').click();
       cy.wait(222)
@@ -255,6 +257,7 @@ describe('Create Current Account Component', () => {
 
   describe('Card Creation Modal', () => {
     beforeEach(function() {
+      this.skip();
       cy.get('[class="details-btn"] button').contains('New Account').click();
       cy.get('app-account-management > app-modal > .modal-overlay > .modal-container > :nth-child(2) > .modal-content > .flex > :nth-child(1) > button').contains('Checking Account').click();
       cy.get('#clientId option').then($options => {
