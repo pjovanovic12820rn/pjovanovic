@@ -53,8 +53,6 @@ export class MyPortfolioComponent implements OnInit {
   toBePublished: MyPortfolio | undefined;
   securityForSell: MyPortfolio | undefined;
 
-  myAccounts: AccountResponse[] = [];
-
   portfolio: MyPortfolio[] = [];
   taxes: MyTax | undefined;
 
@@ -62,7 +60,6 @@ export class MyPortfolioComponent implements OnInit {
   ngOnInit(): void {
     this.loadPortfolio();
     this.myUser = this.authService.getUserId();
-    this.getMyAccounts();
 
   }
 
@@ -143,16 +140,6 @@ export class MyPortfolioComponent implements OnInit {
     });
   }
 
-  getMyAccounts() {
-    this.accountService.getMyAccountsRegular().subscribe({
-      next: (accounts) => {
-        this.myAccounts = accounts;
-      },
-      error: () => {
-        this.alertService.showAlert('error', 'Failed to load your accounts.');
-      },
-    });
-  }
 
   makeSecurityPublicServiceCall(entryId: number) {
     if(this.toBePublished?.amount != undefined && this.toBePublished?.amount >= this.publishAmount && this.publishAmount>0) {
