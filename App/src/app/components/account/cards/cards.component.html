@@ -22,9 +22,9 @@
     <div class="flex-col gap-1">
 
       <div>
-        <app-button class="width-full" (onClick)="openModal()" *ngIf="isEmployee">Payment</app-button>
+        <app-button class="width-full" (onClick)="openModal()" *ngIf="authService.isClient()">Payment</app-button>
       </div>
-      <div *ngIf="cardsLoaded && (authService.isEmployee() || authService.isClient())">
+      <div *ngIf="cardsLoaded">
         <app-button class="width-full"
                     (click)="newCardReq()"
                     *ngIf="cards.length <= 2"

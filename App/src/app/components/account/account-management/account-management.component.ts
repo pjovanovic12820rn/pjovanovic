@@ -49,7 +49,7 @@ export class AccountManagementComponent implements OnInit {
   ngOnInit(): void {
     this.clientId = this.route.snapshot.queryParamMap.get('id');
     console.log(this.clientId)
-    if ((this.isEmployee() || this.isAdmin()) && this.clientId) {
+    if (this.clientId) {
       this.fetchAccountsForEmployee(this.clientId);
     } else if ((this.isEmployee() || this.isAdmin()) && !this.clientId) {
       this.router.navigate(['/client-portal']);

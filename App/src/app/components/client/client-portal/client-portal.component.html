@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <app-button *ngIf="isEmployee || isAdmin" (onClick)="registerNewUser()">Register New User</app-button>
+    <app-button *ngIf="isEmployeeOrHigher" (onClick)="registerNewUser()">Register New User</app-button>
   </div>
 
   <!-- Client List -->
@@ -25,10 +25,10 @@
         <span class="client-email">{{ client.email }}</span>
       </div>
       <div class="flex" style="gap: 0.4rem">
-        <app-button *ngIf="isAdmin || isEmployee" (click)="listAccounts(client.id)">List Accounts</app-button>
-        <app-button *ngIf="isAdmin || isEmployee" [routerLink]="['/users', client.id]">Edit User</app-button>
+        <app-button *ngIf="isEmployeeOrHigher" (click)="listAccounts(client.id)">List Accounts</app-button>
+        <app-button *ngIf="isEmployeeOrHigher" [routerLink]="['/users', client.id]">Edit User</app-button>
         <app-button *ngIf="isAdmin" (click)="deleteUser(client.id)">Delete User</app-button>
-        <app-button *ngIf="isAdmin" (click)="clientLoans(client.id)">Loans</app-button>
+        <!-- <app-button *ngIf="isAdmin || isEmployeeOrHigher" (click)="clientLoans(client.id)">Loans</app-button> -->
       </div>
     </div>
   </div>
