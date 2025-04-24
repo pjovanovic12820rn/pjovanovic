@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalComponent } from '../modal/modal.component';
 import { ButtonComponent } from '../button/button.component';
+import { InputTextComponent } from '../input-text/input-text.component';
 
 export interface OtcOfferDetails {
   volume: number | null;
@@ -18,7 +19,8 @@ export interface OtcOfferDetails {
     CommonModule,
     FormsModule,
     ModalComponent,
-    ButtonComponent
+    ButtonComponent,
+    InputTextComponent
   ],
   templateUrl: './otc-offer-modal.component.html',
   styleUrl: './otc-offer-modal.component.css'
@@ -31,10 +33,10 @@ export class OtcOfferModalComponent {
   @Output() closeModalEvent = new EventEmitter<void>();
   @Output() makeOfferEvent = new EventEmitter<OtcOfferDetails>();
 
-  offerQuantity: number | null = null;
-  offerPrice: number | null = null;
-  settlementDateOffer: string = '';
-  premiumOffer: number | null = null;
+  @Input() offerQuantity: number | null = null;
+  @Input() offerPrice: number | null = null;
+  @Input() settlementDateOffer: string = '';
+  @Input() premiumOffer: number | null = null;
 
   quantityError: string | null = null;
   priceError: string | null = null;

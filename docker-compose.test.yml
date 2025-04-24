@@ -1,10 +1,4 @@
 services:
-  front-app:
-    build:
-      context: .
-      dockerfile: DockerFileTest
-    ports:
-      - "4200:80"
   main_db:
     image: postgres:17.3-alpine
     restart: always
