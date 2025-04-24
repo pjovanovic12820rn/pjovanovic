@@ -120,7 +120,7 @@
           <li>
             <a class="sidebar-link" (click)="goToSecurities()">Securities</a>
           </li>
-          <li *ngIf="isSupervisor || isAdmin || isClient">
+          <li *ngIf="isSupervisor || isAdmin || isAgent || isClient">
             <a class="sidebar-link" (click)="goToOrderList()">Orders</a>
           </li>
           <li>

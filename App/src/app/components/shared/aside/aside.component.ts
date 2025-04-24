@@ -144,10 +144,10 @@ export class AsideComponent implements OnInit, OnDestroy {
   }
 
   goToOrderList() {
-    if (!this.isClient) {
-      this.navigateTo(`/order-overview`);
-    } else {
+    if (this.isClient || this.isAgent) {
       this.navigateTo("/my-orders");
+    } else {
+      this.navigateTo(`/order-overview`);
     }
   }
 
