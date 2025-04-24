@@ -50,10 +50,9 @@ export class OrderOverviewComponent implements OnInit, OnDestroy {
               return {
                 id: dto.id,
                 clientName: dto.clientName,
-                asset: dto.asset,
+                listing: dto.listing,
                 orderType: dto.orderType,
                 quantity: dto.quantity,
-                contractSize: dto.contractSize,
                 pricePerUnit: dto.pricePerUnit ?? 0,
                 direction: dto.direction,
                 status: dto.status,

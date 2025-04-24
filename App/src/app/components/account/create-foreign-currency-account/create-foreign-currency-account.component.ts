@@ -49,7 +49,7 @@ import {Observable} from 'rxjs';
 })
 export class CreateForeignCurrencyAccountComponent implements OnInit {
   loggedInEmployee: Employee | null = null;
-  users: User[] = [];
+  selectedClient: User | null = null;
   currencies: CurrencyDto[] = [];
   companies: Company[] = [];
   availablePersonnel: AuthorizedPersonnel[] = [];
@@ -184,45 +184,45 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
     }
     this.isCompanyAccount = this.newAccount.accountOwnerType === 'COMPANY';
     this.currencies = this.currencyService.getCurrencies();
-    this.loadUsers();
 
     this.employeeId = this.authService.getUserId();
     if (this.employeeId) {
       this.newAccount.employeeId = this.employeeId;
       if (!this.authService.isAdmin()) {
-        this.employeeService.getEmployeeSelf().subscribe(
-          (employee) => {
+        this.employeeService.getEmployeeSelf().subscribe({
+          next: (employee) => {
             this.loggedInEmployee = employee;
           },
-          (error) => {
+          error: (error) => {
             console.error('Error fetching employee details:', error);
           }
-        );
+        });
       }
     }
 
     this.route.queryParams.subscribe(params => {
       const userId = params['userId'];
       if (userId) {
-        this.accountForm.patchValue({ clientId: +userId });
-        if (this.isCompanyAccount) {
-          this.loadCompaniesForClient();
-        }
+        this.userService.getUserById(userId).subscribe({
+          next: (client: User) => {
+            this.selectedClient = client;
+            this.accountForm.patchValue({ clientId: +userId });
+            if (this.isCompanyAccount) {
+              this.loadCompaniesForClient();
+            }
+          },
+          error: (error: any) => {
+            console.error('Error fetching client:', error);
+            this.alertService.showAlert('error', 'Failed to load client information');
+            this.router.navigate(['/account-management']);
+          }
+        });
       }
     });
   }
 
   navigateToRegisterUser() {
     this.router.navigate(['/register-user'], { queryParams: { redirect: 'foreign-account' } });
-  }
-
-  loadUsers() {
-    this.userService.getAllUsers(0, 100).subscribe({
-      next: (response) => {
-        this.users = response.content;
-      },
-      error: (error) => console.error('Failed to load users:', error)
-    });
   }
 
   private loadAvailablePersonnel(companyId: number): void {
@@ -450,9 +450,8 @@ export class CreateForeignCurrencyAccountComponent implements OnInit {
   }
 
   getClientName(clientId: number | string): string {
-    const id = typeof clientId === 'string' ? parseInt(clientId, 10) : clientId;
-    const client = this.users.find(u => u.id === id);
-    return client ? `${client.firstName} ${client.lastName}` : 'Unknown';
+    if (!this.selectedClient) return 'Unknown';
+    return `${this.selectedClient.firstName} ${this.selectedClient.lastName}`;
   }
 
   async onSubmit() {

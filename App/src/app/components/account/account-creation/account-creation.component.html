@@ -7,10 +7,9 @@
         <div class="flex-col gap-1 width-50">
           <!-- Clients -->
           <label>Client:</label>
-          <select id="clientId" formControlName="clientId" (change)="onClientChange()">
-            <option value="0" disabled>Client...</option>
-            <option *ngFor="let user of users" [value]="user.id">
-              {{ user.firstName }} {{ user.lastName }} ({{ user.email }})
+          <select id="clientId" formControlName="clientId" [disabled] = true>
+            <option [value]="selectedClient?.id">
+              {{ selectedClient?.firstName }} {{ selectedClient?.lastName }} ({{ selectedClient?.email }})
             </option>
           </select>
           <div>

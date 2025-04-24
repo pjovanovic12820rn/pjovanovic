@@ -53,8 +53,8 @@
   <div class="modal-content">
       <br/>
     <div class="flex gap-1">
-      <app-button [routerLink]="['/create-current-account']" (click)="closeAccountModal()">Checking Account</app-button>
-      <app-button [routerLink]="['/create-foreign-currency-account']" (click)="closeAccountModal()">Foreign Currency Account</app-button>
+      <app-button [routerLink]="['/create-current-account']" [queryParams]="{userId: clientId}" (click)="closeAccountModal()">Checking Account</app-button>
+      <app-button [routerLink]="['/create-foreign-currency-account']" [queryParams]="{userId: clientId}" (click)="closeAccountModal()">Foreign Currency Account</app-button>
     </div>
   </div>
 </app-modal>

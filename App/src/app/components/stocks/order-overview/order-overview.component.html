@@ -28,9 +28,8 @@
       <tr>
         <th>Client Name</th>
         <th>Order Type</th>
-        <th>Asset</th>
+        <th>Listing</th>
         <th>Quantity</th>
-        <th>Contract Size</th>
         <th>Price per Unit</th>
         <th>Direction</th>
         <th>Status</th>
@@ -42,9 +41,8 @@
       <tr *ngFor="let order of orders">
         <td>{{ order.clientName }}</td>
         <td>{{ order.orderType }}</td>
-        <td>{{ order.asset }}</td>
+        <td>{{ order.listing.ticker }}</td>
         <td>{{ order.quantity | number }}</td>
-        <td>{{ order.contractSize | number }}</td>
         <td>{{ order.pricePerUnit | currency }}</td>
         <td>{{ order.direction }}</td>
         <td>{{ order.status }}</td>
