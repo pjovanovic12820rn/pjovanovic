@@ -3,10 +3,10 @@
     <h2>Banka 3</h2>
     <form #loginForm="ngForm" (ngSubmit)="login()">
       <input-text name="email" type="email" placeholder="Email" [(ngModel)]="email"
-                  [validationRules]="[validations.required, validations.minLength(3), validations.isEmail]"></input-text>
+        [validationRules]="[validations.required, validations.minLength(3), validations.isEmail]"></input-text>
 
       <input-text name="password" type="password" placeholder="********" [(ngModel)]="password"
-                  [validationRules]="[validations.required, validations.minLength(3)]"></input-text>
+        [validationRules]="[validations.required, validations.minLength(3)]"></input-text>
 
       <div class="flex justify-between login-links">
         <app-button type="submit" [disabled]="loginForm.invalid">Login</app-button>
@@ -14,5 +14,9 @@
         <a [routerLink]="['/forgot-password']">Forgot Password?</a>
       </div>
     </form>
+<div *ngIf="errorAlert" class="error-card">
+  <i class="ri-error-warning-line icon"></i>
+  {{ errorMessage }}
+</div>
   </div>
 </div>
