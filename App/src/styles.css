@@ -86,6 +86,10 @@
   margin-top: 2rem;
 }
 
+.mx-auto {
+  margin: 0 auto;
+}
+
 .loading {
   color: #555;
   font-weight: 600;
