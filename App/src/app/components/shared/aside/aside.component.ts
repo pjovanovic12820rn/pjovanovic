@@ -56,6 +56,7 @@ export class AsideComponent implements OnInit, OnDestroy {
         this.isEmployee = this.authService.isEmployee();
         this.isClient = this.authService.isClient();
         this.isSupervisor = this.authService.isSupervisor();
+        this.isAgent = this.authService.isAgent();
         this.userId = this.authService.getUserId();
       } else {
         this.isAdmin = false;
@@ -95,7 +96,7 @@ export class AsideComponent implements OnInit, OnDestroy {
   }
 
   goToPayments() {
-    if(this.isEmployee) {
+    if(this.isClient) {
       this.openModal()
     } else {
       this.navigateTo(`/payment-details`);

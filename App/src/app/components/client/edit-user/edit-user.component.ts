@@ -82,11 +82,6 @@ export class EditUserComponent implements OnInit {
   }
 
   saveChanges(): void {
-    if (!this.isAdmin) {
-      this.alertService.showAlert('error', 'Only admins can update user data.');
-      return;
-    }
-
     if (this.userForm.invalid) {
       this.alertService.showAlert('warning', 'Form is invalid. Please fix errors before saving.');
       this.userForm.markAllAsTouched();

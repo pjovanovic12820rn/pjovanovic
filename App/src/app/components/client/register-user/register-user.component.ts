@@ -37,11 +37,6 @@ export class RegisterUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!(this.isAdmin || this.isEmployee)) {
-      this.alertService.showAlert('error', 'You do not have permission to register users.');
-      this.router.navigate(['/']);
-      return;
-    }
     this.route.queryParams.subscribe(params => {
       this.redirectTarget = params['redirect'] || '';
     });
@@ -65,11 +60,6 @@ export class RegisterUserComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (!(this.isAdmin || this.isEmployee)) {
-      this.alertService.showAlert('error', 'Only admins can register users.');
-      return;
-    }
-
     if (this.registerUserForm.invalid) {
       this.alertService.showAlert('warning', 'Please correct errors before submitting.');
       this.registerUserForm.markAllAsTouched();

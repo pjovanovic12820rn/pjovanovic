@@ -87,6 +87,9 @@ export class StockDetailsComponent implements OnInit, AfterViewInit {
 				next: (details) => {
 					this.listingDetails.set(details);
 					this.isLoading.set(false);
+					if (details.listingType === ListingType.FUTURES) {
+						return;
+					}
 					setTimeout(() => {
 						this.createChart(details.priceHistory);
 						this.chart.resetZoom(); // ← manually call this after rendering
@@ -119,25 +122,7 @@ export class StockDetailsComponent implements OnInit, AfterViewInit {
 			c: item.close,
 		}));
 
-		const closeLineData = sorted.map((item) => ({
-			x: Date.parse(item.datetime),
-			y: item.close,
-		}));
 
-		const openLineData = sorted.map((item) => ({
-			x: Date.parse(item.datetime),
-			y: item.open,
-		}));
-
-		const highLineData = sorted.map((item) => ({
-			x: Date.parse(item.datetime),
-			y: item.high,
-		}));
-
-		const lowLineData = sorted.map((item) => ({
-			x: Date.parse(item.datetime),
-			y: item.low,
-		}));
 		const config: ChartConfiguration<"candlestick" | "line", any, unknown> = {
 			type: "candlestick",
 			data: {
@@ -146,51 +131,7 @@ export class StockDetailsComponent implements OnInit, AfterViewInit {
 						label: "OHLC",
 						data: candlestickData,
 						type: "candlestick",
-					},
-					{
-						label: "Close Price",
-						data: closeLineData,
-						type: "line",
-						borderColor: "blue",
-						backgroundColor: "rgba(0, 0, 255, 0.05)",
-						yAxisID: "y",
-						tension: 0.3,
-						pointRadius: 0,
-						fill: false,
-					},
-					{
-						label: "Open Price",
-						data: openLineData,
-						type: "line",
-						borderColor: "green",
-						backgroundColor: "rgba(0, 128, 0, 0.05)",
-						yAxisID: "y",
-						tension: 0.3,
-						pointRadius: 0,
-						fill: false,
-					},
-					{
-						label: "High Price",
-						data: highLineData,
-						type: "line",
-						borderColor: "orange",
-						backgroundColor: "rgba(255, 165, 0, 0.05)",
-						yAxisID: "y",
-						tension: 0.3,
-						pointRadius: 0,
-						fill: false,
-					},
-					{
-						label: "Low Price",
-						data: lowLineData,
-						type: "line",
-						borderColor: "red",
-						backgroundColor: "rgba(255, 0, 0, 0.05)",
-						yAxisID: "y",
-						tension: 0.3,
-						pointRadius: 0,
-						fill: false,
-					},
+					}
 				],
 			},
 			options: {

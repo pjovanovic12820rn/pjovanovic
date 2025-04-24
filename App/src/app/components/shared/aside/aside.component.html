@@ -14,7 +14,7 @@
       </div>
 
       <!-- Accounts Group -->
-      <div *ngIf="!isClient">
+      <div *ngIf="isSupervisor || isAdmin">
         <a
           class="sidebar-link sidebar-group-button"
           (click)="toggleGroup('isAccountsOpen')"
@@ -29,7 +29,7 @@
           ></i>
         </a>
         <ul class="sidebar-sublist" *ngIf="isAccountsOpen">
-          <li *ngIf="isAdmin || isSupervisor || isEmployee">
+          <li *ngIf="isAdmin">
             <a class="sidebar-link" (click)="goToEmployees()">Employees</a>
           </li>
           <li *ngIf="isAdmin || isSupervisor">
@@ -46,7 +46,7 @@
       </div>
 
       <!-- Payments -->
-      <div *ngIf="isClient || isEmployee">
+      <div *ngIf="true">
         <a class="sidebar-link" (click)="goToPayments()">
           <i class="ri-bank-card-line sidebar-icon"></i>
           <span class="sidebar-text">Payments</span>
@@ -77,7 +77,7 @@
           ></i>
         </a>
         <ul class="sidebar-sublist" *ngIf="isBankAdminOpen">
-          <li *ngIf="isAdmin">
+          <li *ngIf="isAdmin || isSupervisor">
             <a class="sidebar-link" (click)="goToBankAccounts()"
               >Bank Accounts</a
             >
@@ -99,7 +99,7 @@
       </div>
 
       <!-- Market Group -->
-      <div class="sidebar-group">
+      <div *ngIf="isAdmin || isSupervisor || isAgent" class="sidebar-group">
         <a
           class="sidebar-link sidebar-group-button"
           (click)="toggleGroup('isMarketOpen')"
