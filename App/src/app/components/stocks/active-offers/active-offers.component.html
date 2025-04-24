@@ -1,40 +1,45 @@
-<div class="active-offers-container" *ngIf="!loading; else loadingSpinner">
+<div class="card width-full" *ngIf="!loading; else loadingSpinner">
   <h2>Active Offers</h2>
 
   <div class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</div>
 
   <table class="offers-table">
     <thead>
-    <tr>
-      <th>Name</th>
-      <th>Stock</th>
-      <th>Amount</th>
-      <th>Price/Stock</th>
-      <th>Settlement Date</th>
-      <th>Premium</th>
-      <th>Status</th>
-      <th>Actions</th>
-    </tr>
+      <tr>
+        <th>Name</th>
+        <th>Stock</th>
+        <th>Amount</th>
+        <th>Price/Stock</th>
+        <th>Settlement Date</th>
+        <th>Premium</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
     </thead>
     <tbody>
-    <tr
-      *ngFor="let offer of activeOffers"
-      [ngClass]="getColorClass(offer)"
-    >
-      <td>{{ offer.name }}</td>
-      <td>{{ offer.stock.name }}  {{ offer.stock.ticker }}  {{ offer.stock.price }}</td>
-      <td>{{ offer.amount }}</td>
-      <td>{{ offer.pricePerStock }}</td>
-      <td>{{ offer.settlementDate }}</td>
-      <td>{{ offer.premium }}</td>
-      <td>{{ offer.status }}</td>
-      <td class="actions">
-        <app-button *ngIf="offer.canInteract" (click)="acceptOffer(offer)">Accept</app-button>
-        <app-button *ngIf="offer.canInteract" (click)="declineOffer(offer)">Reject</app-button>
-        <app-button *ngIf="offer.canInteract" (click)="openCounterOfferForm(offer)">Counter</app-button>
-        <app-button *ngIf="!offer.canInteract" (click)="cancelOffer(offer)">Cancel</app-button>
-      </td>
-    </tr>
+      <tr *ngFor="let offer of activeOffers" [ngClass]="getColorClass(offer)">
+        <td>{{ offer.name }}</td>
+        <td>
+          {{ offer.stock.name }} {{ offer.stock.ticker }}
+          {{ offer.stock.price }}
+        </td>
+        <td>{{ offer.amount }}</td>
+        <td>{{ offer.pricePerStock }}</td>
+        <td>{{ offer.settlementDate }}</td>
+        <td>{{ offer.premium }}</td>
+        <td>{{ offer.status }}</td>
+        <td>
+          <div class="flex gap-1 mx-auto width-fit">
+            <app-button *ngIf="offer.canInteract" (click)="acceptOffer(offer)">Accept</app-button>
+            <app-button *ngIf="offer.canInteract" (click)="declineOffer(offer)">Reject</app-button>
+            <app-button *ngIf="offer.canInteract" (click)="openCounterOfferForm(offer)">Counter</app-button>
+            <app-button *ngIf="!offer.canInteract" (click)="cancelOffer(offer)">Cancel</app-button>
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="activeOffers.length === 0">
+        <td colspan="8">No Active Offers.</td>
+      </tr>
     </tbody>
   </table>
 
@@ -43,9 +48,9 @@
     [owner]="selectedOffer?.name || ''"
     [stockSymbol]="selectedOffer?.stock?.ticker || ''"
     (closeModalEvent)="closeCounterModal()"
-    (makeOfferEvent)="handleCounterOffer($event)">
+    (makeOfferEvent)="handleCounterOffer($event)"
+  >
   </app-otc-offer-modal>
-
 </div>
 
 <ng-template #loadingSpinner>

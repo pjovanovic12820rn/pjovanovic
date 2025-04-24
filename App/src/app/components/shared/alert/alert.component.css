@@ -1,6 +1,5 @@
 /* Base Alert Styles */
 .alert {
-  /* Remove transform from base styles */
   display: flex;
   align-items: center;
   padding: 1rem;

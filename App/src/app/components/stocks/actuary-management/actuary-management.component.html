@@ -1,41 +1,33 @@
-<div class="container actuary-portal">
-  <h2 class="page-title">Actuary Management Portal</h2>
+<div class="card width-fit">
+  <h2 class="mb-1">Actuary Management Portal</h2>
 
-  <div class="row mb-3">
-    <div class="col filter-section">
-      <input
-        type="text"
-        [(ngModel)]="searchEmail"
-        placeholder="Email"
-        class="form-control form-control-sm mb-2"
-      />
-      <input
-        type="text"
-        [(ngModel)]="searchFirstName"
-        placeholder="First Name"
-        class="form-control form-control-sm mb-2"
-      />
-      <input
-        type="text"
-        [(ngModel)]="searchLastName"
-        placeholder="Last Name"
-        class="form-control form-control-sm mb-2"
-      />
-      <input
-        type="text"
-        [(ngModel)]="searchPosition"
-        placeholder="Position"
-        class="form-control form-control-sm mb-2"
-      />
-      <button (click)="applyFilter()" class="btn btn-primary btn-sm">
+  <div class="flex mb-2 width-full gap-1">
+    <input-text type="text" [(ngModel)]="searchEmail" placeholder="Email" />
+    <input-text
+      type="text"
+      [(ngModel)]="searchFirstName"
+      placeholder="First Name"
+    />
+    <input-text
+      type="text"
+      [(ngModel)]="searchLastName"
+      placeholder="Last Name"
+    />
+    <input-text
+      type="text"
+      [(ngModel)]="searchPosition"
+      placeholder="Position"
+    />
+    <div>
+      <app-button (click)="applyFilter()" class="btn btn-primary btn-sm">
         Search
-      </button>
+      </app-button>
     </div>
   </div>
 
   <div *ngIf="loading" class="alert alert-info" role="alert">Loading...</div>
 
-  <div class="table-responsive" *ngIf="!loading && agents.length > 0">
+  <div class="mt-1" *ngIf="!loading && agents.length > 0">
     <table class="table table-sm table-striped agents-table">
       <thead>
         <tr>
@@ -54,7 +46,7 @@
           <td>{{ agent.usedLimit }}</td>
           <td>
             <div class="action-buttons">
-              <input
+              <input-text
                 #limitBox
                 type="number"
                 class="form-control form-control-sm limit-input"
@@ -73,11 +65,17 @@
                 Reset Limit
               </button>
               <button
-                [ngClass]="agentApproval[agent.id] ? 'btn-approved' : 'btn-not-approved'"
+                [ngClass]="
+                  agentApproval[agent.id] ? 'btn-approved' : 'btn-not-approved'
+                "
                 class="btn btn-sm"
                 (click)="toggleApproval(agent.id)"
               >
-                {{ agentApproval[agent.id] ? "Needs Approval" : "No Approval needed" }}
+                {{
+                  agentApproval[agent.id]
+                    ? "Needs Approval"
+                    : "No Approval needed"
+                }}
               </button>
             </div>
           </td>

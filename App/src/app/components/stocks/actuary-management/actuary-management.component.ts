@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActuaryService } from '../../../services/actuary.service';
 import {FormsModule} from '@angular/forms';
 import {JsonPipe, NgForOf, NgIf, NgClass} from '@angular/common';
+import { ButtonComponent } from '../../shared/button/button.component';
+import { InputTextComponent } from '../../shared/input-text/input-text.component';
 
 
 @Component({
@@ -13,7 +15,9 @@ import {JsonPipe, NgForOf, NgIf, NgClass} from '@angular/common';
     JsonPipe,
     NgForOf,
     NgIf,
-    NgClass
+    NgClass,
+    ButtonComponent,
+    InputTextComponent
   ],
   styleUrls: ['./actuary-management.component.css']
 })

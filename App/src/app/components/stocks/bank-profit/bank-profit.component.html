@@ -1,5 +1,5 @@
-<div class="card">
-  <h2>Profit Banke (RSD)</h2>
+<div class="card width-fit text-center mx-auto">
+  <h2 class="mb-1">Profit Banke (RSD)</h2>
 
   <div *ngIf="errorMessage" class="error-message">
     {{ errorMessage }}
@@ -11,18 +11,22 @@
     <!--    <p>{{ bankProfit | number:'1.2-2' }} RSD</p>-->
   </div>
 
-  <div class="profit-summary" style="display: flex; justify-content: space-around; margin-bottom: 1rem;">
-    <div class="profit-box" style="text-align: center;">
+  <div class="flex justify-between">
+    <div>
       <h3>Exchange Profit</h3>
-      <p><strong>{{ exchangeProfit | number:'1.2-2' }} RSD</strong></p>
+      <p>
+        <strong>{{ exchangeProfit | number: "1.2-2" }} RSD</strong>
+      </p>
     </div>
-    <div class="profit-box" style="text-align: center;">
+    <div>
       <h3>Stock Profit</h3>
-      <p><strong>{{ stockProfit | number:'1.2-2' }} RSD</strong></p>
+      <p>
+        <strong>{{ stockProfit | number: "1.2-2" }} RSD</strong>
+      </p>
     </div>
   </div>
 
-  <table class="securities-table" *ngIf="userTaxes.length > 0">
+  <table *ngIf="userTaxes.length > 0">
     <thead>
       <tr>
         <th>Name</th>
@@ -45,10 +49,11 @@
     <p>No data available.</p>
   </div>
 
-   <!-- Pagination Controls -->
-   <app-pagination
-   [totalItems]="userTaxes.length"
-   [pageSize]="pageSize"
-   (pageChanged)="onPageChanged($event)">
- </app-pagination>
+  <!-- Pagination Controls -->
+  <app-pagination
+    [totalItems]="userTaxes.length"
+    [pageSize]="pageSize"
+    (pageChanged)="onPageChanged($event)"
+  >
+  </app-pagination>
 </div>

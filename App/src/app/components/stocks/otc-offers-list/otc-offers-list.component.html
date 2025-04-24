@@ -1,4 +1,4 @@
-<div class="otc-offers-container">
+<div class="card width-full">
   <h2>Public Stocks for OTC Offers</h2>
 
   @if (isLoading) {
@@ -8,12 +8,12 @@
   @if (errorMessage && !isLoading) {
     <div class="error-message-box">
       <p>{{ errorMessage }}</p>
-      <app-button label="Retry" (onClick)="loadPublicStocks()"></app-button>
+      <app-button (onClick)="loadPublicStocks()">Retry</app-button>
     </div>
   }
 
   @if (!isLoading && !errorMessage) {
-    <table class="styled-table">
+    <table>
       <thead>
         <tr>
           <th>Security</th>
@@ -31,21 +31,18 @@
             <td>{{ stock.security }}</td>
             <td>{{ stock.ticker }}</td>
             <td>{{ stock.amount | number }}</td>
-            <td>{{ stock.price | number:'1.2-2' }}</td>
+            <td>{{ stock.price | number: "1.2-2" }}</td>
             <td>{{ stock.owner }}</td>
-            <td>{{ stock.lastModified | date:'d.M.yyyy HH:mm' }}</td>
+            <td>{{ stock.lastModified | date: "d.M.yyyy HH:mm" }}</td>
             <td>
-              <app-button
-                label="OFFER"
-                class="action-button offer-button"
-                (onClick)="openOfferModal(stock)">
-                OFFER
-              </app-button>
+              <app-button (onClick)="openOfferModal(stock)"> OFFER </app-button>
             </td>
           </tr>
         } @empty {
           <tr>
-            <td colspan="7" style="text-align: center;">No public stocks available for OTC offers.</td>
+            <td colspan="7" style="text-align: center">
+              No public stocks available for OTC offers.
+            </td>
           </tr>
         }
       </tbody>
@@ -55,8 +52,9 @@
 
 <app-otc-offer-modal
   [isOpen]="isOfferModalOpen"
-  [owner]="selectedStock?.owner || ''" 
+  [owner]="selectedStock?.owner || ''"
   [stockSymbol]="selectedStock?.ticker || ''"
   (closeModalEvent)="closeOfferModal()"
-  (makeOfferEvent)="handleMakeOffer($event)">
+  (makeOfferEvent)="handleMakeOffer($event)"
+>
 </app-otc-offer-modal>
