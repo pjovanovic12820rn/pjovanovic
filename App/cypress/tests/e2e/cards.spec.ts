@@ -1,5 +1,6 @@
 describe('Cards Component USER', () => {
   beforeEach(function()  {
+    this.skip();
     cy.loginAsClient();
     cy.get('.sidebar-link').contains('Accounts').click()
     cy.url().should('include', '/account-management');

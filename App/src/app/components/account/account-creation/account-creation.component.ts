@@ -47,7 +47,7 @@ import {AutocompleteTextComponent} from '../../shared/autocomplete-text/autocomp
 export class AccountCreationComponent implements OnInit {
 
   loggedInEmployee: Employee | null = null;
-  users: User[] = [];
+  selectedClient: User | null = null;
   isCurrentAccount = true;
   isCompanyAccount = false;
   employeeId: number | null = null;
@@ -133,7 +133,7 @@ export class AccountCreationComponent implements OnInit {
 
   ngOnInit(): void {
     this.accountForm = this.fb.group({
-      clientId: [this.newAccount.clientId, Validators.required],
+      clientId: [{value: this.newAccount.clientId, disabled: true}, Validators.required],
       accountType: [{ value: this.newAccount.accountType, disabled: true }],
       accountOwnerType: [this.newAccount.accountOwnerType, Validators.required],
       // sel i company info
@@ -179,43 +179,45 @@ export class AccountCreationComponent implements OnInit {
       this.router.navigate(['/']);
       return;
     }
-    this.loadUsers();
+
     this.employeeId = this.authService.getUserId();
     if (this.employeeId) {
       this.newAccount.employeeId = this.employeeId;
       if (!this.isCurrAdmin) {
-        this.employeeService.getEmployeeSelf().subscribe(
-          (employee) => {
+        this.employeeService.getEmployeeSelf().subscribe({
+          next: (employee) => {
             this.loggedInEmployee = employee;
           },
-          (error) => {
+          error: (error) => {
             console.error('Error fetching employee details:', error);
           }
-        );
+        });
       }
     }
+
     this.route.queryParams.subscribe(params => {
       const userId = params['userId'];
       if (userId) {
-        this.accountForm.patchValue({ clientId: +userId });
-        if (this.isCompanyAccount) {
-          this.loadCompaniesForClient();
-        }
+        this.userService.getUserById(userId).subscribe({
+          next: (client: User) => {
+            this.selectedClient = client;
+            this.accountForm.patchValue({ clientId: +userId });
+            if (this.isCompanyAccount) {
+              this.loadCompaniesForClient();
+            }
+          },
+          error: (error: any) => {
+            console.error('Error fetching client:', error);
+            this.alertService.showAlert('error', 'Failed to load client information');
+            this.router.navigate(['/account-management']);
+          }
+        });
       }
     });
   }
 
   navigateToRegisterUser() {
     this.router.navigate(['/register-user'], { queryParams: { redirect: 'current-account' } });
-  }
-
-  loadUsers() {
-    this.userService.getAllUsers(0, 100).subscribe({
-      next: (response) => {
-        this.users = response.content;
-      },
-      error: (error) => console.error('Failed to load users:', error)
-    });
   }
 
   private loadAvailablePersonnel(companyId: number): void {
@@ -445,10 +447,9 @@ export class AccountCreationComponent implements OnInit {
     });
   }
 
-  getClientName(clientId: number | string): string { //bio je : number
-    const id = typeof clientId === 'string' ? parseInt(clientId, 10) : clientId;
-    const client = this.users.find(u => u.id === id);
-    return client ? `${client.firstName} ${client.lastName}` : 'Unknown';
+  getClientName(clientId: number | string): string {
+    if (!this.selectedClient) return 'Unknown';
+    return `${this.selectedClient.firstName} ${this.selectedClient.lastName}`;
   }
 
   async onSubmit() {

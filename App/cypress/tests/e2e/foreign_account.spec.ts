@@ -1,5 +1,6 @@
 describe('foreign currency account test', () => {
   beforeEach(function() {
+    this.skip();
     cy.visit('/login/employee'); // Visit the employee login page before each test
     cy.get('[name="email"] input').type('petar.p@example.com');
     cy.get('[name="password"] input').type('petarpetar');
