@@ -99,7 +99,7 @@
       </div>
 
       <!-- Market Group -->
-      <div *ngIf="isAdmin || isSupervisor || isAgent" class="sidebar-group">
+      <div *ngIf="isAdmin || isSupervisor || isAgent || isClient" class="sidebar-group">
         <a
           class="sidebar-link sidebar-group-button"
           (click)="toggleGroup('isMarketOpen')"
