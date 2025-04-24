@@ -6,6 +6,7 @@ describe('Employee login and create account test', () => {
     cy.get('[type="submit"] button').click();
   });
   it('should navigate to employees page, go to register new employee, and create an employee', () => {
+    cy.get('.sidebar-link').contains('Accounts').click();
     cy.get('.sidebar-link').contains('Employees').click();
 
     cy.get('[class="register-btn"] button').contains('Register new employee').click();
