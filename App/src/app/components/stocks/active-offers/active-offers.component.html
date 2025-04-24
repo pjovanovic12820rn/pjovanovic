@@ -47,6 +47,10 @@
     [isOpen]="isCounterModalOpen"
     [owner]="selectedOffer?.name || ''"
     [stockSymbol]="selectedOffer?.stock?.ticker || ''"
+    [offerQuantity]="selectedOffer?.amount || null"
+    [offerPrice]="selectedOffer?.pricePerStock || null"
+    [settlementDateOffer]="selectedOffer?.settlementDate || ''"
+    [premiumOffer]="selectedOffer?.premium || null"
     (closeModalEvent)="closeCounterModal()"
     (makeOfferEvent)="handleCounterOffer($event)"
   >
