@@ -1,24 +1,3 @@
-/* Global Styles */
-body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #B399DD, #D0C9EA);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-  padding: 30px;
-}
-
-/* Container */
-.client-portal-container {
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  width: 800px;
-  animation: fadeIn 0.5s ease-in-out;
-}
 
 /* Filter Section */
 .filter-section {
