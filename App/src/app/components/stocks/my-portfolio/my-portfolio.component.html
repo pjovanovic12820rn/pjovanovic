@@ -9,11 +9,12 @@
       <th>Ticker</th>
       <th>Type</th>
       <th>Amount</th>
+      <th>Reserved Amount</th>
+      <th>Public Amount</th>
       <th>Average Price</th>
       <th>Current Price</th>
       <th>Profit</th>
       <th>Last Modified</th>
-      <th>Public Amount</th>
       <th>Publish</th>
       <th>Sell Security</th>
     </tr>
@@ -23,13 +24,14 @@
         <td>{{ onePortfolio.id }}</td>
         <td>{{ onePortfolio.securityName }}</td>
         <td>{{ onePortfolio.ticker }}</td>
-        <td>{{ onePortfolio.Type }}</td>
+        <td>{{ onePortfolio.type }}</td>
         <td>{{ onePortfolio.amount }}</td>
+        <td>{{ onePortfolio.reservedAmount }}</td>
+        <td>{{ onePortfolio.publicAmount }}</td>
         <td>{{ onePortfolio.averagePrice }}</td>
         <td>{{ onePortfolio.currentPrice }}</td>
         <td>{{ onePortfolio.profit }}</td>
         <td>{{ onePortfolio.lastModified }}</td>
-        <td>{{ onePortfolio.publicAmount }}</td>
         <td>
           <app-button class="sell-button" (onClick)="publishFlag(onePortfolio)">
             Make Public

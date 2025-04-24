@@ -8,10 +8,9 @@
         <!-- Clients -->
         <div>
           <label class="mb-05">Client:</label>
-          <select id="clientId" formControlName="clientId" (change)="onClientChange()" required>
-            <option value="0" disabled>Client...</option>
-            <option *ngFor="let user of users" [value]="user.id">
-              {{ user.firstName }} {{ user.lastName }} ({{ user.email }})
+          <select id="clientId" formControlName="clientId" [disabled] = true>
+            <option [value]="selectedClient?.id">
+              {{ selectedClient?.firstName }} {{ selectedClient?.lastName }} ({{ selectedClient?.email }})
             </option>
           </select>
         </div>
@@ -20,6 +19,11 @@
             Create New User
           </app-button>
         </div>
+
+        <label>Account Type:</label>
+        <select id="accountType" formControlName="accountType"> <!--[disabled] = true-->
+          <option value="FOREIGN">FOREIGN</option>
+        </select>
 
         <!-- Employee info -->
         <div class="info-card">

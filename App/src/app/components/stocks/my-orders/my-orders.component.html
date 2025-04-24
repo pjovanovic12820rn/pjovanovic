@@ -9,12 +9,12 @@
       <th>Price</th>
       <th>Exchange Mic</th>
       <th>OrderType</th>
-      <th>Quantity</th>
+      <th>Total Quantity</th>
+      <th>Remaining Quantity</th>
       <th>Price Per Unit</th>
       <th>Direction</th>
       <th>Status</th>
       <th>LastModification</th>
-      <th>Profit</th>
       <th>Account Number</th>
       <th>Action</th>
 
@@ -28,14 +28,14 @@
       <td>{{ order.listing.exchangeMic }}</td>
       <td>{{ order.orderType }}</td>
       <td>{{ order.quantity }}</td>
+      <td>{{ order.remainingPortions }}</td>
       <td>{{ order.pricePerUnit }}</td>
       <td>{{ order.direction }}</td>
       <td>{{ order.status }}</td>
       <td>{{ order.lastModification }}</td>
-      <td>{{ order.profit }}</td>
       <td>{{ order.accountNumber }}</td>
       <td>
-        <app-button class="sell-button" (onClick)="cancelOrder(order.id)">
+        <app-button *ngIf="order.status === 'PENDING'" class="sell-button" (onClick)="cancelOrder(order.id)">
           Cancel
         </app-button>
       </td>
