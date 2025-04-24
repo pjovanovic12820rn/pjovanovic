@@ -28,7 +28,7 @@
         <app-button *ngIf="isEmployeeOrHigher" (click)="listAccounts(client.id)">List Accounts</app-button>
         <app-button *ngIf="isEmployeeOrHigher" [routerLink]="['/users', client.id]">Edit User</app-button>
         <app-button *ngIf="isAdmin" (click)="deleteUser(client.id)">Delete User</app-button>
-        <!-- <app-button *ngIf="isAdmin || isEmployeeOrHigher" (click)="clientLoans(client.id)">Loans</app-button> -->
+        <app-button *ngIf="isEmployeeOrHigher" (click)="clientLoans(client.id)">Loans</app-button>
       </div>
     </div>
   </div>
