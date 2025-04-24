@@ -1,4 +1,8 @@
 export interface PriceHistoryDto {
-    date: string;
-    price: number;
-  }
+	datetime: string;
+	open: number;
+	high: number;
+	low: number;
+	close: number;
+	volume: number;
+}
