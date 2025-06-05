@@ -47,8 +47,8 @@ export class ClientPortalComponent implements OnInit {
     return <boolean>this.authService.isAdmin();
   }
 
-  get isEmployee(): boolean {
-    return <boolean>this.authService.isEmployee();
+  get isEmployeeOrHigher(): boolean {
+    return <boolean>this.authService.isEmployee() || <boolean>this.authService.isAgent() || <boolean>this.authService.isSupervisor() || <boolean>this.authService.isAdmin();
   }
 
   loadClients(): void {
@@ -112,7 +112,7 @@ export class ClientPortalComponent implements OnInit {
   }
 
   listAccounts(clientId: number): void {
-    if (this.isAdmin || this.isEmployee) {
+    if (this.isEmployeeOrHigher) {
       this.router.navigate(['/account-management'], {queryParams: {id: clientId}}).then(_ =>{});
      }
   }

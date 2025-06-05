@@ -1,7 +1,8 @@
+// @ts-ignore
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard.guard';
 import { clientOrActuaryGuard } from './guards/client-or-actuary-guard.guard';
-import { employeeOrAdminGuard } from './guards/employee-or-admin-guard.guard';
+import { employeeOrHigherRoleGuard } from './guards/employee-or-admin-guard.guard';
 import { adminGuard } from './guards/admin-guard.guard';
 import { supervisorGuard } from './guards/supervisor-guard.guard';
 import { actuaryGuard } from './guards/actuary-guard.guard';
@@ -45,8 +46,8 @@ import { SettledContractsComponent } from './components/stocks/settled-contracts
 import { OtcOffersListComponent } from './components/stocks/otc-offers-list/otc-offers-list.component';
 import { BankProfitComponent } from './components/stocks/bank-profit/bank-profit.component';
 import { StockDetailsComponent } from './components/stocks/stock-details/stock-details.component';
-import { StockDateDetailsComponent } from './components/stocks/stock-date-details/stock-date-details.component';
 import { ActiveOffersComponent } from './components/stocks/active-offers/active-offers.component';
+import {MyOrdersComponent} from './components/stocks/my-orders/my-orders.component';
 
 export const routes: Routes = [
   // login
@@ -60,8 +61,8 @@ export const routes: Routes = [
   { path: 'forgot-password', component: MailComponent },
 
   // users
-  { path: 'register-user', component: RegisterUserComponent, canActivate: [authGuard, employeeOrAdminGuard] },
-  { path: 'users/:id', component: EditUserComponent, canActivate: [authGuard, employeeOrAdminGuard] },
+  { path: 'register-user', component: RegisterUserComponent, canActivate: [authGuard, employeeOrHigherRoleGuard] },
+  { path: 'users/:id', component: EditUserComponent, canActivate: [authGuard, employeeOrHigherRoleGuard] },
   { path: 'user/:id', component: UserDetailComponent, canActivate: [authGuard] },
 
   // employees
@@ -69,12 +70,12 @@ export const routes: Routes = [
   { path: 'register-employee', component: RegisterEmployeeComponent, canActivate: [authGuard, adminGuard] },
   { path: 'employees/:id', component: EditEmployeeComponent, canActivate: [authGuard, adminGuard] },
   { path: 'employee/:id', component: EmployeeDetailComponent, canActivate: [authGuard] },
-  { path: 'client-portal', component: ClientPortalComponent, canActivate: [authGuard, employeeOrAdminGuard] },
+  { path: 'client-portal', component: ClientPortalComponent, canActivate: [authGuard, employeeOrHigherRoleGuard] },
 
   // accounts
   { path: 'account/:accountNumber', component: CardsComponent, canActivate: [authGuard] },
-  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [authGuard, employeeOrAdminGuard] },
-  { path: 'create-current-account', component: AccountCreationComponent, canActivate: [authGuard, employeeOrAdminGuard] },
+  { path: 'create-foreign-currency-account', component: CreateForeignCurrencyAccountComponent, canActivate: [authGuard, employeeOrHigherRoleGuard] },
+  { path: 'create-current-account', component: AccountCreationComponent, canActivate: [authGuard, employeeOrHigherRoleGuard] },
   { path: 'account-management', component: AccountManagementComponent, canActivate: [authGuard] },
   { path: 'bank-accounts', component: BankAccountsComponent, canActivate: [authGuard, adminGuard] },
 
@@ -110,13 +111,13 @@ export const routes: Routes = [
   { path: 'my-portfolio', component: MyPortfolioComponent, canActivate: [authGuard] },
   { path: 'securities', component: SecuritiesComponent, canActivate: [authGuard, clientOrActuaryGuard] },
   { path: 'tax-portal', component: TaxCalculationComponent, canActivate: [authGuard, supervisorGuard] },
-  { path: 'stock-details/:id', component: StockDetailsComponent, canActivate: [authGuard, actuaryGuard] },
-  { path: 'stock-details/:id/options/:date', component: StockDateDetailsComponent, canActivate: [authGuard, actuaryGuard] },
+  { path: 'stock-details/:id', component: StockDetailsComponent, canActivate: [authGuard] },
 
   // options
-  { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard, supervisorGuard] }, // treba supervisor gard, ovako ce biti dok se ne doda u beku
+  { path: 'order-overview', component: OrderOverviewComponent, canActivate: [authGuard, supervisorGuard] },
+  { path: 'my-orders', component: MyOrdersComponent, canActivate: [authGuard] },// treba supervisor gard, ovako ce biti dok se ne doda u beku
   { path: 'settled-contracts', component: SettledContractsComponent, canActivate: [authGuard] },
-  {path: 'active-offers', component: ActiveOffersComponent,canActivate: [authGuard, supervisorGuard]},
+  { path: 'active-offers', component: ActiveOffersComponent, canActivate: [authGuard] },
 
   // otc
   { path: 'otc', component: OtcOffersListComponent, canActivate: [authGuard, clientOrActuaryGuard] },

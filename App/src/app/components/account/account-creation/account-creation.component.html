@@ -7,10 +7,9 @@
         <div class="flex-col gap-1 width-50">
           <!-- Clients -->
           <label>Client:</label>
-          <select id="clientId" formControlName="clientId" (change)="onClientChange()">
-            <option value="0" disabled>Client...</option>
-            <option *ngFor="let user of users" [value]="user.id">
-              {{ user.firstName }} {{ user.lastName }} ({{ user.email }})
+          <select id="clientId" formControlName="clientId" [disabled] = true>
+            <option [value]="selectedClient?.id">
+              {{ selectedClient?.firstName }} {{ selectedClient?.lastName }} ({{ selectedClient?.email }})
             </option>
           </select>
           <div>
@@ -23,13 +22,6 @@
           <select id="accountType" formControlName="accountType"> <!--[disabled] = true-->
             <option value="CURRENT">CURRENT</option>
           </select>
-
-          <!-- Monthly Fee -->
-          <input-text *ngIf="isCurrentAccount" label="Monthly Fee:" placeholder="Monthly Fee" id="monthlyFee"
-                      formControlName="monthlyFee" type="number"
-                      [formControlComp]="accountForm.controls['monthlyFee']"
-                      [errorMessages]="{ pattern: 'Must be a valid number (decimal allowed).' }">
-          </input-text>
 
           <!-- Employee info -->
           <div class="info-card">
@@ -151,12 +143,18 @@
                         [errorMessages]="{ required: 'Tax number is required.', minlength: 'Minimum length is 3.' }"
             >
             </input-text>
-            <input-text id="activityCode" formControlName="activityCode" placeholder="Activity Code"
-                        label="Activity Code" [disabledInput]="!isNewCompany"
-                        [formControlComp]="accountForm.controls['activityCode']"
-                        [errorMessages]="{ required: 'Activity code is required.', invalidActivityCode: 'Invalid activity code. :('  }"
-            >
-            </input-text>
+            <autocomplete-text
+              #activityCode
+              label="Activity Code"
+              placeholder="Activity Code"
+              [options]="activityCodeOptions"
+              filterKey="code"
+              formControlName="activityCode"
+              [disabled]="!isNewCompany"
+              [formControlComp]="activityCodeControl"
+              [errors]="getActivityCodeErrors()"
+              [showErrors]="activityCodeShowErrors"
+            ></autocomplete-text>
             <input-text id="companyAddress" formControlName="companyAddress" placeholder="Address"
                         label="Address" [disabledInput]="!isNewCompany"
                         [formControlComp]="accountForm.controls['companyAddress']"
@@ -174,20 +172,8 @@
             <option value="RSD">RSD</option>
           </select>
 
-          <input-text id="name" formControlName="name" placeholder="Account Name:" label="Account Name:" required>
-          </input-text>
-          <input-text id="dailyLimit" formControlName="dailyLimit" type="number"
-                      placeholder="Daily Limit" label="Daily Limit" required
-                      [formControlComp]="accountForm.controls['dailyLimit']"
-                      [errorMessages]="{ pattern: 'Must be a valid number (decimal allowed).' }"
-          >
-          </input-text>
-          <input-text id="monthlyLimit" formControlName="monthlyLimit" type="number"
-                      placeholder="Monthly Limit" label="Monthly Limit" required
-                      [formControlComp]="accountForm.controls['monthlyLimit']"
-                      [errorMessages]="{ pattern: 'Must be a valid number (decimal allowed).' }"
-          >
-          </input-text>
+          <input-text id="name" formControlName="name" placeholder="Account Name:" label="Account Name:" required></input-text>
+
           <input-text label="Initial balance:" id="initialBalance" placeholder="Initial balance" formControlName="initialBalance"
                       type="number" required
                       [formControlComp]="accountForm.controls['initialBalance']"
@@ -215,7 +201,7 @@
   </form>
 </div>
 
-<app-modal [title]="'Create Card'" [isOpen]="showCardModal" (closeModalEvent)="showCardModal = false">
+<app-modal [title]="'Create Card'" [isOpen]="showCardModal" (closeModalEvent)="onCloseModal()">
   <div class="modal-content">
     <br/>
     <form [formGroup]="cardForm" (ngSubmit)="submitCardForm()" class="flex-col gap-1">
@@ -231,12 +217,29 @@
         <label class="mb-05">Issuer</label>
         <select formControlName="issuer" required>
           <option value="VISA">VISA</option>
-          <option value="MASTER">MASTER</option>
+          <option value="MASTERCARD">MASTERCARD</option>
+          <option value="DINA">DINA</option>
+          <option value="AMERICAN_EXPRESS">AMERICAN_EXPRESS</option>
         </select>
       </div>
 
-      <input-text label="Card Name" type="text" formControlName="name" required></input-text>
-      <input-text label="Card Limit" type="number" formControlName="cardLimit" required></input-text>
+      <input-text label="Card Name"
+                  type="text"
+                  formControlName="name"
+                  required
+                  [formControlComp]="cardForm.controls['name']"
+                  [errorMessages]="{ required: 'Card name is required.' }"
+      ></input-text>
+      <input-text label="Card Limit"
+                  type="number"
+                  formControlName="cardLimit"
+                  required
+                  [formControlComp]="cardForm.controls['cardLimit']"
+                  [errorMessages]="{
+                    required: 'Card limit is required.',
+                    min: 'Card limit must be at least 1.'
+                  }"
+      ></input-text>
 
       <app-button type="submit" [disabled]="cardForm.invalid">Create Card</app-button>
     </form>

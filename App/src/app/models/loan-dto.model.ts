@@ -1,17 +1,4 @@
-export enum LoanType {
-  CASH = 'CASH',
-  MORTGAGE = 'MORTGAGE',
-  AUTO = 'AUTO',
-  REFINANCING = 'REFINANCING',
-  STUDENT = 'STUDENT',
-}
-
-export enum LoanStatus {
-  APPROVED = 'APPROVED',
-  REJECTED = 'REJECTED',
-  PAID_OFF = 'PAID_OFF',
-  DELINQUENT = 'DELINQUENT',
-}
+import { LoanRequestStatus, LoanType } from './loan-request.model';
 
 export interface Loan {
   id?: number;
@@ -27,5 +14,5 @@ export interface Loan {
   nextInstallmentDate?: string;
   remainingDebt?: number;
   currencyCode?: string;
-  status?: LoanStatus;
+  status?: LoanRequestStatus;
 }

@@ -14,6 +14,7 @@ import { InputTextComponent } from '../../shared/input-text/input-text.component
 import { OrderCreationModalComponent } from '../../shared/order-creation-modal/order-creation-modal.component';
 import {ListingType} from '../../../enums/listing-type.enum';
 
+
 @Component({
   selector: 'app-my-portfolio',
   standalone: true,
@@ -52,8 +53,6 @@ export class MyPortfolioComponent implements OnInit {
   toBePublished: MyPortfolio | undefined;
   securityForSell: MyPortfolio | undefined;
 
-  myAccounts: AccountResponse[] = [];
-
   portfolio: MyPortfolio[] = [];
   taxes: MyTax | undefined;
 
@@ -61,7 +60,6 @@ export class MyPortfolioComponent implements OnInit {
   ngOnInit(): void {
     this.loadPortfolio();
     this.myUser = this.authService.getUserId();
-    this.getMyAccounts();
 
   }
 
@@ -142,20 +140,9 @@ export class MyPortfolioComponent implements OnInit {
     });
   }
 
-  getMyAccounts() {
-    this.accountService.getMyAccountsRegular().subscribe({
-      next: (accounts) => {
-        this.myAccounts = accounts;
-      },
-      error: () => {
-        this.alertService.showAlert('error', 'Failed to load your accounts.');
-      },
-    });
-  }
 
   makeSecurityPublicServiceCall(entryId: number) {
-
-    if(this.toBePublished?.amount != undefined && this.toBePublished?.amount > this.publishAmount && this.publishAmount>0) {
+    if(this.toBePublished?.amount != undefined && this.toBePublished?.amount >= this.publishAmount && this.publishAmount>0) {
 
 
       this.portfolioService.setPublicAmount(entryId, this.publishAmount).subscribe({

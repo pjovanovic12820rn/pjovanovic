@@ -27,8 +27,6 @@ describe('Create New Account Form', () => {
     cy.get('select#accountType').should('be.visible').and('be.disabled');
     cy.get('select#accountOwnerType').should('be.visible');
     cy.get('select#currency').should('be.visible').and('be.disabled');
-    cy.get('input#dailyLimit').should('be.visible');
-    cy.get('input#monthlyLimit').should('be.visible');
     cy.get('input#createCard').should('be.visible');
   });
 
@@ -36,8 +34,6 @@ describe('Create New Account Form', () => {
     cy.get('button.submit-btn').should('be.disabled');
 
     cy.get('select#clientId').select('0: 1');
-    cy.get('input#dailyLimit').type('1000');
-    cy.get('input#monthlyLimit').type('5000');
 
     cy.get('button.submit-btn').should('not.be.disabled');
   });
@@ -48,9 +44,4 @@ describe('Create New Account Form', () => {
     cy.get('input#registrationNumber').should('be.visible');
   });
 
-  it('should validate numeric inputs', () => {
-    cy.get('input#dailyLimit').type('abc');
-    cy.get('input#dailyLimit').should('have.value', '0');
-    cy.get('input#dailyLimit').clear().type('1000').should('have.value', '1000');
-  });
 });

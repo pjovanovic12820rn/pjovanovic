@@ -1,4 +1,4 @@
-<div class="portfolio-container">
+<div class="card width-fit mx-auto">
   <h2>My Portfolio</h2>
 
   <table *ngIf="portfolio.length > 0">
@@ -9,14 +9,13 @@
       <th>Ticker</th>
       <th>Type</th>
       <th>Amount</th>
+      <th>Reserved Amount</th>
+      <th>Public Amount</th>
       <th>Average Price</th>
+      <th>Current Price</th>
       <th>Profit</th>
       <th>Last Modified</th>
-      <th>Public Amount</th>
-      <th>In the money</th>
-      <th>Used</th>
       <th>Publish</th>
-      <th>Use</th>
       <th>Sell Security</th>
     </tr>
     </thead>
@@ -25,73 +24,98 @@
         <td>{{ onePortfolio.id }}</td>
         <td>{{ onePortfolio.securityName }}</td>
         <td>{{ onePortfolio.ticker }}</td>
-        <td>{{ onePortfolio.Type }}</td>
+        <td>{{ onePortfolio.type }}</td>
         <td>{{ onePortfolio.amount }}</td>
+        <td>{{ onePortfolio.reservedAmount }}</td>
+        <td>{{ onePortfolio.publicAmount }}</td>
         <td>{{ onePortfolio.averagePrice }}</td>
+        <td>{{ onePortfolio.currentPrice }}</td>
         <td>{{ onePortfolio.profit }}</td>
         <td>{{ onePortfolio.lastModified }}</td>
-        <td>{{ onePortfolio.publicAmount }}</td>
-        <td>{{ onePortfolio.inTheMoney }}</td>
-        <td>{{ onePortfolio.used }}</td>
         <td>
           <app-button class="sell-button" (onClick)="publishFlag(onePortfolio)">
             Make Public
           </app-button>
         </td>
 
-  <!--        <td><app-button class="sell-button" (onClick)="orderModalFlag(onePortfolio)">Sell</app-button> </td>-->
+        <!--        <td><app-button class="sell-button" (onClick)="orderModalFlag(onePortfolio)">Sell</app-button> </td>-->
+
         <td>
-          <app-button *ngIf="onePortfolio.Type === ListingType.OPTION" (click)="useListing(onePortfolio)">
-            Use
-          </app-button>
-        </td>
-        <td>
-          <app-button (click)="openSellOrderModal(onePortfolio)">
-            Sell
-          </app-button>
+          <div>
+            <app-button (click)="openSellOrderModal(onePortfolio)">
+              Sell
+            </app-button>
+          </div>
         </td>
       </tr>
     </tbody>
   </table>
-  <h4> </h4>
+  <h4></h4>
 
-  <div class="portfolio-buttons">
-    <app-button class="info-button" (onClick)="profitFlag()">Profit Info</app-button>
-    <app-button class="info-button" (onClick)="taxFlag()">Tax Info</app-button>
+  <div class="flex gap-1">
+    <app-button (onClick)="profitFlag()">Profit Info</app-button>
+    <app-button (onClick)="taxFlag()">Tax Info</app-button>
   </div>
 
-  <app-modal [title]="'Profit Information'"  [isOpen]="isProfitModalOpen" (closeModalEvent)="isProfitModalOpen = false">
+  <app-modal
+    [title]="'Profit Information'"
+    [isOpen]="isProfitModalOpen"
+    (closeModalEvent)="isProfitModalOpen = false"
+  >
     <div class="modal-content">
       <div class="text-left">
-        <p>Total Profit: <strong>{{ getTotalProfit().toFixed(2) }}</strong></p>
+        <p>
+          Total Profit: <strong>{{ getTotalProfit().toFixed(2) }}</strong>
+        </p>
       </div>
       <div class="width-fit">
-        <app-button class="close-button" (click)="profitFlag()">Close</app-button>
+        <app-button class="close-button" (click)="profitFlag()"
+          >Close</app-button
+        >
       </div>
     </div>
   </app-modal>
 
-  <app-modal [title]="'Tax Information'"  [isOpen]="isTaxModalOpen" (closeModalEvent)="isTaxModalOpen = false">
+  <app-modal
+    [title]="'Tax Information'"
+    [isOpen]="isTaxModalOpen"
+    (closeModalEvent)="isTaxModalOpen = false"
+  >
     <div class="modal-content">
       <div class="text-left">
-        <p>Tax Paid (Current Year): <strong> {{ taxes?.paidForThisYear}}</strong></p> <!--Converting it to RSD --->
-        <p>Unpaid Tax (Current Month): <strong>{{ taxes?.unpaidForThisMonth }}</strong></p>
-
+        <p>
+          Tax Paid (Current Year):
+          <strong> {{ taxes?.paidForThisYear }}</strong>
+        </p>
+        <!--Converting it to RSD --->
+        <p>
+          Unpaid Tax (Current Month):
+          <strong>{{ taxes?.unpaidForThisMonth }}</strong>
+        </p>
       </div>
       <h4></h4>
       <div class="width-fit">
-         <app-button class="close-button" (click)="taxFlag()">Close</app-button>
+        <app-button class="close-button" (click)="taxFlag()">Close</app-button>
       </div>
     </div>
   </app-modal>
 
-
-  <app-modal [title]="'Make your security Public'"  [isOpen]="isPublishModalOpen" (closeModalEvent)="isPublishModalOpen = false">
+  <app-modal
+    [title]="'Make your security Public'"
+    [isOpen]="isPublishModalOpen"
+    (closeModalEvent)="isPublishModalOpen = false"
+  >
     <div class="modal-content">
       <div class="text-center">
-        <p>Security ID: <strong> {{ toBePublished?.id }}</strong></p>
-        <p>Security name: <strong> {{ toBePublished?.securityName }}</strong></p>
-        <p>Available amount: <strong> {{ toBePublished?.amount }}</strong></p>
+        <p>
+          Security ID: <strong> {{ toBePublished?.id }}</strong>
+        </p>
+        <p>
+          Security name: <strong> {{ toBePublished?.securityName }}</strong>
+        </p>
+        <p>
+          Available amount: <strong> {{ toBePublished?.amount }}</strong>
+        </p>
 
         <input-text
           [(ngModel)]="publishAmount"
@@ -102,8 +126,14 @@
       </div>
       <h4></h4>
       <div class="width-fit">
-        <app-button class="close-button" (click)="publishFlagClose()">Close</app-button>
-        <app-button class="close-button" (click)="makeSecurityPublicServiceCall(publishID)">Confirm</app-button>
+        <app-button class="close-button" (click)="publishFlagClose()"
+          >Close</app-button
+        >
+        <app-button
+          class="close-button"
+          (click)="makeSecurityPublicServiceCall(publishID)"
+          >Confirm</app-button
+        >
       </div>
     </div>
   </app-modal>
@@ -112,12 +142,11 @@
     [isOpen]="isOrderModalOpen"
     [direction]="'SELL'"
     [securityTicker]="securityForSell?.securityName || ''"
-    [securityPrice]="securityForSell?.averagePrice || 0"
+    [securityPrice]="securityForSell?.currentPrice || 0"
     [contractSize]="1"
     [listingId]="securityForSell?.listingId || null"
     (closeModalEvent)="closeOrderModal()"
-    (createOrderEvent)="handleOrderCreation()">
+    (createOrderEvent)="handleOrderCreation()"
+  >
   </app-order-creation-modal>
-
 </div>
-

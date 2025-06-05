@@ -1,13 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ClientService } from '../../../services/client.service';
 import { AuthService } from '../../../services/auth.service';
 import { AlertService } from '../../../services/alert.service';
 import { User } from '../../../models/user.model';
-import {InputTextComponent} from '../../shared/input-text/input-text.component';
-import {ButtonComponent} from '../../shared/button/button.component';
+import { InputTextComponent } from '../../shared/input-text/input-text.component';
+import { ButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-register-user',
@@ -26,7 +26,6 @@ export class RegisterUserComponent implements OnInit {
 
   registerUserForm!: FormGroup;
   loading = false;
-  redirectToAccountCreation = false;
 
   redirectTarget = '';
 
@@ -38,19 +37,9 @@ export class RegisterUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!(this.isAdmin || this.isEmployee)) {
-      this.alertService.showAlert('error', 'You do not have permission to register users.');
-      this.router.navigate(['/']);
-      return;
-    }
     this.route.queryParams.subscribe(params => {
       this.redirectTarget = params['redirect'] || '';
     });
-    // this.route.queryParams.subscribe(params => {
-    //   if (params['redirect'] === 'account') {
-    //     this.redirectToAccountCreation = true;
-    //   }
-    // });
 
     this.initForm();
   }
@@ -66,17 +55,11 @@ export class RegisterUserComponent implements OnInit {
       phone: ['', [Validators.required, Validators.pattern(/^0?[1-9][0-9]{6,14}$/)]],
       address: ['', [Validators.required, Validators.minLength(5)]],
       jmbg: ['', [Validators.required, Validators.pattern(/^[0-9]{13}$/)]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
       role: ['user', Validators.required],
     });
   }
 
   onSubmit(): void {
-    if (!(this.isAdmin || this.isEmployee)) {
-      this.alertService.showAlert('error', 'Only admins can register users.');
-      return;
-    }
-
     if (this.registerUserForm.invalid) {
       this.alertService.showAlert('warning', 'Please correct errors before submitting.');
       this.registerUserForm.markAllAsTouched();

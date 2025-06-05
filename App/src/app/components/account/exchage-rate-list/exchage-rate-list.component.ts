@@ -36,6 +36,7 @@ export class ExchageRateListComponent implements OnInit {
         this.exchageRateList = response;
         this.currencies = this.extractCurrencies(response);
         this.updateAvailableToCurrencies();
+        console.log(this.currencies)
       },
       error: () => {
         this.alertService.showAlert('error', 'Failed to load exchange rate list. Please try again later.');
@@ -54,9 +55,17 @@ export class ExchageRateListComponent implements OnInit {
   }
 
   updateAvailableToCurrencies() {
-    this.availableToCurrencies = this.exchageRateList
-      .filter(rate => rate.fromCurrency.code === this.fromCurrency)
-      .map(rate => rate.toCurrency.code);
+    const allCurrencies = new Set<string>();
+
+    this.exchageRateList.forEach(rate => {
+      allCurrencies.add(rate.fromCurrency.code);
+      allCurrencies.add(rate.toCurrency.code);
+    });
+  
+    // Remove the current "from" currency from the target list
+    allCurrencies.delete(this.fromCurrency);
+  
+    this.availableToCurrencies = Array.from(allCurrencies);
   }
 
   exchangeRateCalculation() {
@@ -78,7 +87,9 @@ export class ExchageRateListComponent implements OnInit {
 
   onFromCurrencyChange() {
     this.updateAvailableToCurrencies();
-    this.toCurrency = this.availableToCurrencies.length ? this.availableToCurrencies[0] : '';
+    if (this.fromCurrency == this.toCurrency) {
+      this.toCurrency = this.availableToCurrencies.length ? this.availableToCurrencies[0] : '';
+    }
     this.exchangeRateCalculation();
   }
 

@@ -1,11 +1,12 @@
 // TODO duplicate DODATI PROKLETI LISTING MRS NOSITE SER SVI VISE CITAJTE POROKLETI DTO SA BEKA MRSSSSSSSSSSSSSSSS
+import {ListingDetailsDto} from './listing-details.dto';
+
 export interface OrderDto {
   id: number;
   clientName: string;
-  asset: string;
+  listing: ListingDetailsDto;
   orderType: string;
   quantity: number;
-  contractSize: number;
   pricePerUnit: number | null;
   direction: 'BUY' | 'SELL';
   status: 'PENDING' | 'APPROVED' | 'DENIED' | 'DONE';
@@ -17,3 +18,5 @@ export interface OrderDto {
   afterHours: boolean;
   accountNumber: string;
 }
+
+

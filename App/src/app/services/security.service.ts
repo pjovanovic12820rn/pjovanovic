@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { ListingDetailsDto } from '../models/listing-details.dto';
 import {environment} from '../environments/environment';
+import {TimeSeriesDto} from '../models/time-series.model';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,17 @@ export class SecurityService {
     );
   }
 
+  /**
+   * updateUser(userId: number, user: Partial<User>): Observable<User> {
+   *     return this.http.put<User>(`${this.apiUrl}/${userId}`, user, { headers: this.getAuthHeaders() });
+   *   }
+   */
+
+  testMode(): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.put(`${environment.stockUrl}/api/exchange`, {}, { headers: this.getAuthHeaders() });
+  }
+
   getSecurityById(id: number): Observable<Security | undefined> {
     return this.getSecurities().pipe(
       map(securities => securities.find(security => security.id === id))
@@ -53,6 +65,10 @@ export class SecurityService {
     const headers = this.getAuthHeaders();
     const url = `${this.apiUrl}/${id}`;
     return this.http.get<ListingDetailsDto>(url, { headers });
+  }
+
+  getStockHistory(id: number): Observable<TimeSeriesDto> {
+    return this.http.get<TimeSeriesDto>(`${this.apiUrl}/${id}/price-history`, { headers: this.getAuthHeaders() });
   }
 
   private mapListingToSecurity(listing: any): Security {
@@ -71,6 +87,8 @@ export class SecurityService {
         console.warn(`Unknown listing type encountered: ${listing.listingType}`);
         securityType = 'Stock';
     }
+
+
 
     return {
       id: listing.id,

@@ -1,53 +1,109 @@
 /* Login forma */
 .login-container {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: white;
-    display: flex;
-    justify-content: center;
-    animation: fadeIn 0.5s ease-in-out;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #6a4bbc, #b399dd, #d0c9ea);
+  display: flex;
+  justify-content: center;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
 .login-card {
   width: 350px;
   margin: auto;
+  position: relative;
+  z-index: 100;
 }
+
 .login-card form {
   display: flex;
   flex-direction: column;
-  gap:0.75rem;
+  gap: 0.75rem;
 }
+
 /* Animacija učitavanja */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Link */
 .login-links a {
-    color: #6b21a8;
-    text-decoration: none;
-    font-size: 1rem;
-    transition: color 0.3s ease-in-out;
-    font-weight: 500;
+  color: #6b21a8;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease-in-out;
+  font-weight: 500;
 }
 
 /* Separator između linkova */
 .separator {
-    color: #bbb;
-    margin: 0 8px;
+  color: #bbb;
+  margin: 0 8px;
 }
 
 /* Hover na link */
 .login-links a:hover {
-    color: #9E7CD7;
+  color: #9e7cd7;
+}
+
+.error-card {
+  position: absolute;
+  bottom: -5.5rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  border: 1px solid #fca5a5;
+  border-radius: 0.5rem;
+  z-index: 10;
+  color: #991b1b;
+  background-color: #fef2f2;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  animation: slideFadeIn 0.4s ease-in-out, fadeOut 0.5s ease-in-out 2.5s forwards;
+}
+
+.error-card .icon {
+  font-size: 1.5rem;
+  color: #dc2626;
+}
+
+/* Slide-in from below the card */
+@keyframes slideFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade-out animation */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-4rem);
+  }
 }

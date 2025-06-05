@@ -1,5 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators, ValidationErrors, AbstractControl} from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+  ValidationErrors,
+  AbstractControl,
+  FormControl
+} from '@angular/forms';
 import { ClientService } from '../../../services/client.service';
 import { AuthService } from '../../../services/auth.service';
 import { AccountService } from '../../../services/account.service';
@@ -18,6 +26,7 @@ import {NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {ButtonComponent} from '../../shared/button/button.component';
 import {InputTextComponent} from '../../shared/input-text/input-text.component';
 import {ModalComponent} from '../../shared/modal/modal.component';
+import {AutocompleteTextComponent} from '../../shared/autocomplete-text/autocomplete-text.component';
 
 @Component({
   selector: 'app-account-creation',
@@ -31,13 +40,14 @@ import {ModalComponent} from '../../shared/modal/modal.component';
     InputTextComponent,
     NgIf,
     ModalComponent,
+    AutocompleteTextComponent,
   ],
   styleUrls: ['./account-creation.component.css']
 })
 export class AccountCreationComponent implements OnInit {
 
   loggedInEmployee: Employee | null = null;
-  users: User[] = [];
+  selectedClient: User | null = null;
   isCurrentAccount = true;
   isCompanyAccount = false;
   employeeId: number | null = null;
@@ -62,15 +72,12 @@ export class AccountCreationComponent implements OnInit {
     clientId: 0,
     employeeId: 0,
     initialBalance: 0,
-    dailyLimit: 0,
-    monthlyLimit: 0,
     dailySpending: 0,
     monthlySpending: 0,
     isActive: 'INACTIVE',
     accountType: 'CURRENT',
     accountOwnerType: 'PERSONAL',
     createCard: false,
-    monthlyFee: 0,
     name: '',
   };
 
@@ -90,13 +97,26 @@ export class AccountCreationComponent implements OnInit {
 
   selectedCompanyId: number | null = null;
   selectedAuthorizedPersonnelId: number | null = null;
-  private allowedActivityCodes: string[] = [
+  public allowedActivityCodes: string[] = [
     "10.01", "62.01", "5.1", "62.09", "56.1", "86.1", "90.02",
     "1.11", "1.13", "13.1", "24.1", "24.2", "41.1", "41.2", "42.11",
     "42.12", "42.13", "42.21", "42.22", "7.1", "7.21", "8.11", "8.92",
     "47.11", "53.1", "53.2", "85.1", "85.2", "86.21", "86.22", "86.9",
     "84.12", "90.01", "90.04", "93.11", "93.13", "93.19", "26.11", "27.12", "29.1"
   ];
+
+  // filteredActivityCodes$!: Observable<string[]>;
+  get activityCodeControl(): FormControl<string> {
+    return this.accountForm.get('activityCode') as FormControl<string>;
+  }
+
+  get activityCodeOptions(): { code: string }[] {
+    return this.allowedActivityCodes.map(code => ({ code }));
+  }
+  get activityCodeShowErrors(): boolean {
+    const control = this.accountForm.get('activityCode');
+    return !!control && control.invalid && (control.dirty); //control.touched ||
+  }
   constructor(
     private fb: FormBuilder,
     private userService: ClientService,
@@ -113,9 +133,8 @@ export class AccountCreationComponent implements OnInit {
 
   ngOnInit(): void {
     this.accountForm = this.fb.group({
-      clientId: [this.newAccount.clientId, Validators.required],
+      clientId: [{value: this.newAccount.clientId, disabled: true}, Validators.required],
       accountType: [{ value: this.newAccount.accountType, disabled: true }],
-      monthlyFee: [this.newAccount.monthlyFee, Validators.pattern(/^\d+(\.\d+)?$/)],
       accountOwnerType: [this.newAccount.accountOwnerType, Validators.required],
       // sel i company info
       selectedCompany: [this.selectedCompanyId],
@@ -123,12 +142,10 @@ export class AccountCreationComponent implements OnInit {
       companyName: [this.companyInfo.name, Validators.minLength(3)],
       registrationNumber: [this.companyInfo.registrationNumber, Validators.minLength(3)],
       taxNumber: [this.companyInfo.taxNumber, Validators.minLength(3)],
-      activityCode: [this.companyInfo.activityCode, [this.activityCodeValidator.bind(this)]],
+      activityCode: [this.companyInfo.activityCode], //[Validators.required, this.activityCodeValidator.bind(this)]
       companyAddress: [this.companyInfo.address, Validators.minLength(5)],
 
       name: [this.newAccount.name, Validators.required],
-      dailyLimit: [this.newAccount.dailyLimit, Validators.pattern(/^\d+(\.\d+)?$/)],
-      monthlyLimit: [this.newAccount.monthlyLimit, Validators.pattern(/^\d+(\.\d+)?$/)],
       initialBalance: [this.newAccount.initialBalance, Validators.pattern(/^\d+(\.\d+)?$/)],
       currency: [{ value: this.newAccount.currency, disabled: true }],
       isActive: [this.newAccount.isActive],
@@ -140,7 +157,7 @@ export class AccountCreationComponent implements OnInit {
       type: [this.newCard.type, Validators.required],
       issuer: [this.newCard.issuer, Validators.required],
       name: [this.newCard.name, Validators.required],
-      cardLimit: [this.newCard.cardLimit, Validators.required],
+      cardLimit: [this.newCard.cardLimit, [Validators.required,Validators.min(1)]],
     });
 
     // New auth personela
@@ -162,43 +179,45 @@ export class AccountCreationComponent implements OnInit {
       this.router.navigate(['/']);
       return;
     }
-    this.loadUsers();
+
     this.employeeId = this.authService.getUserId();
     if (this.employeeId) {
       this.newAccount.employeeId = this.employeeId;
       if (!this.isCurrAdmin) {
-        this.employeeService.getEmployeeSelf().subscribe(
-          (employee) => {
+        this.employeeService.getEmployeeSelf().subscribe({
+          next: (employee) => {
             this.loggedInEmployee = employee;
           },
-          (error) => {
+          error: (error) => {
             console.error('Error fetching employee details:', error);
           }
-        );
+        });
       }
     }
+
     this.route.queryParams.subscribe(params => {
       const userId = params['userId'];
       if (userId) {
-        this.accountForm.patchValue({ clientId: +userId });
-        if (this.isCompanyAccount) {
-          this.loadCompaniesForClient();
-        }
+        this.userService.getUserById(userId).subscribe({
+          next: (client: User) => {
+            this.selectedClient = client;
+            this.accountForm.patchValue({ clientId: +userId });
+            if (this.isCompanyAccount) {
+              this.loadCompaniesForClient();
+            }
+          },
+          error: (error: any) => {
+            console.error('Error fetching client:', error);
+            this.alertService.showAlert('error', 'Failed to load client information');
+            this.router.navigate(['/account-management']);
+          }
+        });
       }
     });
   }
 
   navigateToRegisterUser() {
     this.router.navigate(['/register-user'], { queryParams: { redirect: 'current-account' } });
-  }
-
-  loadUsers() {
-    this.userService.getAllUsers(0, 100).subscribe({
-      next: (response) => {
-        this.users = response.content;
-      },
-      error: (error) => console.error('Failed to load users:', error)
-    });
   }
 
   private loadAvailablePersonnel(companyId: number): void {
@@ -428,10 +447,9 @@ export class AccountCreationComponent implements OnInit {
     });
   }
 
-  getClientName(clientId: number | string): string { //bio je : number
-    const id = typeof clientId === 'string' ? parseInt(clientId, 10) : clientId;
-    const client = this.users.find(u => u.id === id);
-    return client ? `${client.firstName} ${client.lastName}` : 'Unknown';
+  getClientName(clientId: number | string): string {
+    if (!this.selectedClient) return 'Unknown';
+    return `${this.selectedClient.firstName} ${this.selectedClient.lastName}`;
   }
 
   async onSubmit() {
@@ -456,6 +474,7 @@ export class AccountCreationComponent implements OnInit {
               companyId = newCompany.id;
             }
           } catch (error: any) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             const errorMessage = error?.error?.message || 'Failed to create company (try different tax number or registration number)';
             this.alertService.showAlert('error', errorMessage);
             return;
@@ -521,25 +540,32 @@ export class AccountCreationComponent implements OnInit {
   }
 
   submitCardForm(): void {
+
+    const payload = {
+      ...this.cardForm.getRawValue(),
+      accountNumber: this.newCard.accountNumber
+    };
+
     const request = this.authService.isClient()
-      ? this.cardService.requestCard(this.cardForm.getRawValue())
-      : this.cardService.createCard(this.cardForm.getRawValue());
+      ? this.cardService.requestCard(payload)
+      : this.cardService.createCard(payload);
 
     request.subscribe({
       next: () => {
         this.showCardModal = false;
         this.router.navigate(['/success'], {
           state: {
-            title: 'Card Created!',
-            message: 'The card has been successfully created.',
-            buttonName: 'Go to Account',
-            continuePath: `/account/${this.newCard.accountNumber}`
+            title: 'Account and Card Created!',
+            message: 'The account and the card has been successfully created.',
+            buttonName: 'Go to Client Portal',
+            continuePath: '/client-portal'
           }
         });
       },
       error: (err) => {
         this.alertService.showAlert('error', 'Failed to create card.');
         console.error(err);
+        this.router.navigate(['/client-portal']);
       }
     });
   }
@@ -561,5 +587,25 @@ export class AccountCreationComponent implements OnInit {
     const today = new Date();
     const inputDate = new Date(control.value);
     return inputDate < today ? null : { invalidDate: 'Birthdate must be in the past' };
+  }
+
+  getActivityCodeErrors(): string[] {
+    const errors = [];
+    const control = this.accountForm.get('activityCode');
+
+    if (control?.hasError('required')) {
+      errors.push('Activity code is required.');
+    }
+    if (control?.hasError('invalidActivityCode')) {
+      errors.push('Invalid activity code.');
+    }
+
+    return errors;
+  }
+
+  onCloseModal(): void {
+    this.showCardModal = false;
+    this.router.navigate(['/client-portal']);
+    this.alertService.showAlert('info', 'Card creation canceled.');
   }
 }

@@ -1,19 +1,18 @@
-/* Base button styles */
 button {
-  background-color: #641C85; /* bg-purple-700 */
-  color: #ffffff; /* text-white */
-  font-weight: 500; /* font-medium */
-  font-size: 0.875rem; /* text-sm */
-  padding: 0.625rem 1.25rem; /* px-5 py-2.5 */
-  border-radius: 0.5rem; /* rounded-lg */
-  border: none; /* Remove default border */
-  cursor: pointer; /* Add pointer cursor */
-  transition: background-color 0.2s, box-shadow 0.2s; /* Smooth transitions */
+  background-color: #641c85;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
 }
 
 button.disabled {
-  background-color: #3A0D50;
-  color: #A78BFA;
+  background-color: #3a0d50;
+  color: #a78bfa;
   cursor: not-allowed;
   opacity: 0.7;
   box-shadow: none;
@@ -22,11 +21,18 @@ button.disabled {
 
 /* Hover state */
 button:hover {
-  background-color: #6b21a8; /* hover:bg-purple-800 */
+  background-color: #6b21a8;
 }
 
 /* Focus state */
 button:focus {
-  outline: none; /* focus:outline-none */
-  box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.5); /* focus:ring-4 focus:ring-purple-300 */
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.5);
+}
+
+button.active {
+  background-color: ghostwhite !important;
+  color: #641c85;
+  border: 0.1rem solid #641c85;
+  padding: 0.6rem 1.25rem;
 }

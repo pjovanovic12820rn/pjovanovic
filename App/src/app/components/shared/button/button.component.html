@@ -3,6 +3,7 @@
   [type]="type === 'back-button' ? 'button' : type"
   [disabled]="disabled"
   [class.disabled]="disabled"
+  [class.active]="active"
   (click)="type === 'back-button' ? goBack() : onClick.emit()">
   <ng-content></ng-content>
 </button>
