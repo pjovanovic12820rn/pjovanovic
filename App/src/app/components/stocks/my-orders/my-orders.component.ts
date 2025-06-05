@@ -5,7 +5,7 @@ import {AccountService} from '../../../services/account.service';
 import {OrderService} from '../../../services/order.service';
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
-import {OrderCreationModalComponent} from '../../shared/order-creation-modal/order-creation-modal.component';
+import { PaginationComponent } from '../../shared/pagination/pagination.component';
 import {ButtonComponent} from '../../shared/button/button.component';
 import {ModalComponent} from '../../shared/modal/modal.component';
 import {InputTextComponent} from '../../shared/input-text/input-text.component';
@@ -18,12 +18,16 @@ import {OrderRealDto} from '../../../models/order-real-dto';
     NgIf,
     NgForOf,
     ButtonComponent,
-    ButtonComponent
+    ButtonComponent,
+    PaginationComponent
   ],
   templateUrl: './my-orders.component.html',
   styleUrl: './my-orders.component.css'
 })
 export class MyOrdersComponent  implements OnInit{
+
+  currentPage = 1;
+  pageSize = 10;
 
   private alertService = inject(AlertService);
   private authService= inject(AuthService);
@@ -32,6 +36,7 @@ export class MyOrdersComponent  implements OnInit{
 
 
   myOrders: OrderRealDto[] = [];
+  pagedOrders: OrderRealDto[] = [];
   userId: number | null = 0;
 
 
@@ -42,6 +47,17 @@ export class MyOrdersComponent  implements OnInit{
     if(this.userId != null) {
       this.loadMyOrders(this.userId);
     }
+  }
+
+  updatePagedOrders(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.pagedOrders = this.myOrders.slice(startIndex, endIndex);
+  }
+
+  onPageChanged(page: number): void {
+    this.currentPage = page;
+    this.updatePagedOrders();
   }
 
   getMyUserId(){
@@ -55,6 +71,7 @@ export class MyOrdersComponent  implements OnInit{
     this.orderService.getOrdersByUser(userId).subscribe({
       next: (data) => {
         this.myOrders = data;
+        this.updatePagedOrders();
       },
       error: (err) => {
         this.alertService.showAlert("error","Failed to load my orders!");

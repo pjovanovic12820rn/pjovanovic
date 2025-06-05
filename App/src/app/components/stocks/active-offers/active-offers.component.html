@@ -17,7 +17,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let offer of activeOffers" [ngClass]="getColorClass(offer)">
+      <tr *ngFor="let offer of pagedActiveOffers" [ngClass]="getColorClass(offer)">
         <td>{{ offer.name }}</td>
         <td>
           {{ offer.stock.name }} {{ offer.stock.ticker }}
@@ -43,19 +43,26 @@
     </tbody>
   </table>
 
+  
   <app-otc-offer-modal
-    [isOpen]="isCounterModalOpen"
-    [owner]="selectedOffer?.name || ''"
-    [stockSymbol]="selectedOffer?.stock?.ticker || ''"
-    [offerQuantity]="selectedOffer?.amount || null"
-    [offerPrice]="selectedOffer?.pricePerStock || null"
-    [settlementDateOffer]="selectedOffer?.settlementDate || ''"
-    [premiumOffer]="selectedOffer?.premium || null"
-    (closeModalEvent)="closeCounterModal()"
-    (makeOfferEvent)="handleCounterOffer($event)"
+  [isOpen]="isCounterModalOpen"
+  [owner]="selectedOffer?.name || ''"
+  [stockSymbol]="selectedOffer?.stock?.ticker || ''"
+  [offerQuantity]="selectedOffer?.amount || null"
+  [offerPrice]="selectedOffer?.pricePerStock || null"
+  [settlementDateOffer]="selectedOffer?.settlementDate || ''"
+  [premiumOffer]="selectedOffer?.premium || null"
+  (closeModalEvent)="closeCounterModal()"
+  (makeOfferEvent)="handleCounterOffer($event)"
   >
-  </app-otc-offer-modal>
+</app-otc-offer-modal>
 </div>
+
+<app-pagination
+  [totalItems]="acceptOffer.length"
+  [pageSize]="pageSize"
+  (pageChanged)="onPageChanged($event)"
+>
 
 <ng-template #loadingSpinner>
   <div class="loading">Loading active offers...</div>
