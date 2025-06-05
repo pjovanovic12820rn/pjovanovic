@@ -1,12 +1,15 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '../../shared/button/button.component';
-import { OtcOfferModalComponent, OtcOfferDetails } from '../../shared/otc-offer-modal/otc-offer-modal.component';
+import {
+  OtcOfferModalComponent,
+  OtcOfferDetails,
+} from '../../shared/otc-offer-modal/otc-offer-modal.component';
 import { OtcService } from '../../../services/otc.service';
 import { PublicStockDto } from '../../../models/public-stock.dto';
 import { AlertService } from '../../../services/alert.service';
 import { CreateOtcOfferDto } from '../../../models/create-otc-offer.dto';
-
+import { PaginationComponent } from '../../shared/pagination/pagination.component';
 
 @Component({
   selector: 'app-otc-offers-list',
@@ -14,13 +17,13 @@ import { CreateOtcOfferDto } from '../../../models/create-otc-offer.dto';
   imports: [
     CommonModule,
     ButtonComponent,
-    OtcOfferModalComponent
+    OtcOfferModalComponent,
+    PaginationComponent,
   ],
   templateUrl: './otc-offers-list.component.html',
-  styleUrl: './otc-offers-list.component.css'
+  styleUrl: './otc-offers-list.component.css',
 })
 export class OtcOffersListComponent implements OnInit {
-
   private otcService = inject(OtcService);
   private alertService = inject(AlertService);
 
@@ -28,12 +31,26 @@ export class OtcOffersListComponent implements OnInit {
   isLoading: boolean = false;
   errorMessage: string | null = null;
 
+  currentPage = 1;
+  pageSize = 10;
+  pagedPubilStocks: PublicStockDto[] = [];
+
   isOfferModalOpen = false;
   selectedStock: PublicStockDto | null = null;
   isSubmittingOffer: boolean = false;
 
   ngOnInit(): void {
     this.loadPublicStocks();
+  }
+  updatePagedPubilcStocks(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.pagedPubilStocks = this.publicStocks.slice(startIndex, endIndex);
+  }
+
+  onPageChanged(page: number): void {
+    this.currentPage = page;
+    this.updatePagedPubilcStocks();
   }
 
   loadPublicStocks(): void {
@@ -47,13 +64,15 @@ export class OtcOffersListComponent implements OnInit {
         this.isLoading = false;
         if (data.length === 0) {
         }
+        this.updatePagedPubilcStocks();
       },
       error: (err) => {
-        this.errorMessage = 'Failed to load public stocks. Please try again later.';
+        this.errorMessage =
+          'Failed to load public stocks. Please try again later.';
         console.error('Error loading public stocks:', err);
         this.isLoading = false;
         this.alertService.showAlert('error', this.errorMessage);
-      }
+      },
     });
   }
 
@@ -70,42 +89,65 @@ export class OtcOffersListComponent implements OnInit {
   }
 
   handleMakeOffer(offerDetails: OtcOfferDetails): void {
-    if (!this.selectedStock || offerDetails.volume === null || offerDetails.price === null || !offerDetails.settlementDate || offerDetails.premium === null) {
-      console.error('Cannot make offer: Missing selected stock or required offer details.');
-      this.alertService.showAlert('error', 'Cannot make offer: Missing required information.');
+    if (
+      !this.selectedStock ||
+      offerDetails.volume === null ||
+      offerDetails.price === null ||
+      !offerDetails.settlementDate ||
+      offerDetails.premium === null
+    ) {
+      console.error(
+        'Cannot make offer: Missing selected stock or required offer details.'
+      );
+      this.alertService.showAlert(
+        'error',
+        'Cannot make offer: Missing required information.'
+      );
       return;
     }
 
-    if (this.selectedStock.portfolioEntryId === undefined || this.selectedStock.portfolioEntryId === null) {
-        console.error('Cannot make offer: The selected public stock is missing the required portfolioEntryId.');
-        this.alertService.showAlert('error', 'Cannot submit offer: Missing required identifier from stock data.');
-        return;
+    if (
+      this.selectedStock.portfolioEntryId === undefined ||
+      this.selectedStock.portfolioEntryId === null
+    ) {
+      console.error(
+        'Cannot make offer: The selected public stock is missing the required portfolioEntryId.'
+      );
+      this.alertService.showAlert(
+        'error',
+        'Cannot submit offer: Missing required identifier from stock data.'
+      );
+      return;
     }
 
     if (this.isSubmittingOffer) {
       return;
     }
-    this.isSubmittingOffer = true; 
+    this.isSubmittingOffer = true;
 
     const createDto: CreateOtcOfferDto = {
       portfolioEntryId: this.selectedStock.portfolioEntryId,
       amount: offerDetails.volume,
       pricePerStock: offerDetails.price,
       settlementDate: offerDetails.settlementDate,
-      premium: offerDetails.premium
+      premium: offerDetails.premium,
     };
 
     this.otcService.createOtcOffer(createDto).subscribe({
       next: () => {
         this.isSubmittingOffer = false;
-        this.alertService.showAlert('success', `Offer for ${this.selectedStock?.ticker} submitted successfully!`);
+        this.alertService.showAlert(
+          'success',
+          `Offer for ${this.selectedStock?.ticker} submitted successfully!`
+        );
       },
       error: (err) => {
         this.isSubmittingOffer = false;
         console.error('Error creating OTC offer:', err);
-        const errorMsg = err.message || 'Failed to submit offer. Please try again.';
+        const errorMsg =
+          err.message || 'Failed to submit offer. Please try again.';
         this.alertService.showAlert('error', errorMsg);
-      }
+      },
     });
   }
 }
