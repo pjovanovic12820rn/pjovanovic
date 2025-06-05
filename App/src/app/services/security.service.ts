@@ -52,7 +52,7 @@ export class SecurityService {
 
   testMode(): Observable<any> {
     const headers = this.getAuthHeaders();
-    return this.http.put(`${environment.stockUrl}/api/exchange`, {}, { headers: this.getAuthHeaders() });
+    return this.http.put(`${environment.stockUrl}/api/exchange`, {}, { headers });
   }
 
   getSecurityById(id: number): Observable<Security | undefined> {
