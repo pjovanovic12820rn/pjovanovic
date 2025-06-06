@@ -31,17 +31,14 @@ export class OtcOffersListComponent implements OnInit {
   isLoading: boolean = false;
   errorMessage: string | null = null;
 
-  currentPage = 1;
-  pageSize = 10;
-  pagedPubilStocks: PublicStockDto[] = [];
-
   isOfferModalOpen = false;
   selectedStock: PublicStockDto | null = null;
   isSubmittingOffer: boolean = false;
 
-  ngOnInit(): void {
-    this.loadPublicStocks();
-  }
+  currentPage = 1;
+  pageSize = 10;
+  pagedPubilStocks: PublicStockDto[] = [];
+
   updatePagedPubilcStocks(): void {
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
@@ -51,6 +48,10 @@ export class OtcOffersListComponent implements OnInit {
   onPageChanged(page: number): void {
     this.currentPage = page;
     this.updatePagedPubilcStocks();
+  }
+
+  ngOnInit(): void {
+    this.loadPublicStocks();
   }
 
   loadPublicStocks(): void {

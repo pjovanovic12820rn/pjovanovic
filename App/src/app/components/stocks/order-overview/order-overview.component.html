@@ -61,6 +61,12 @@
       </tr>
     </tbody>
   </table>
+  <app-pagination
+    [totalItems]="orders.length"
+    [pageSize]="pageSize"
+    (pageChanged)="onPageChanged($event)"
+  >
+  </app-pagination>
 
   <div *ngIf="!loading && orders.length === 0" class="empty-state">
     No orders found matching the selected criteria.
