@@ -7,12 +7,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
+import { PaginationComponent } from '../../shared/pagination/pagination.component';
 
 @Component({
   selector: 'app-order-overview',
   templateUrl: './order-overview.component.html',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PaginationComponent],
   styleUrls: ['./order-overview.component.css'],
 })
 export class OrderOverviewComponent implements OnInit, OnDestroy {
@@ -21,6 +22,10 @@ export class OrderOverviewComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   errorMessage: string = '';
   private destroy$ = new Subject<void>();
+
+  currentPage = 1;
+  pageSize = 10;
+  pagedOrders: Order[] = [];
 
   constructor(
     private orderService: OrderService,
@@ -34,6 +39,17 @@ export class OrderOverviewComponent implements OnInit, OnDestroy {
       return;
     }
     this.loadOrders();
+  }
+
+  updatePagedOrders(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.pagedOrders = this.orders.slice(startIndex, endIndex);
+  }
+
+  onPageChanged(page: number): void {
+    this.currentPage = page;
+    this.updatePagedOrders();
   }
 
   loadOrders(): void {
@@ -77,6 +93,7 @@ export class OrderOverviewComponent implements OnInit, OnDestroy {
           console.log('orders', page);
           this.orders = page.content;
           this.loading = false;
+          this.updatePagedOrders();
         },
         error: (err) => {
           console.error('Error fetching orders', err);

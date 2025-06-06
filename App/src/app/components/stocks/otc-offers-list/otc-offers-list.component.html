@@ -2,51 +2,53 @@
   <h2>Public Stocks for OTC Offers</h2>
 
   @if (isLoading) {
-    <div class="loading-indicator">Loading public stocks...</div>
-  }
-
-  @if (errorMessage && !isLoading) {
-    <div class="error-message-box">
-      <p>{{ errorMessage }}</p>
-      <app-button (onClick)="loadPublicStocks()">Retry</app-button>
-    </div>
-  }
-
-  @if (!isLoading && !errorMessage) {
-    <table>
-      <thead>
-        <tr>
-          <th>Security</th>
-          <th>Ticker</th>
-          <th>Amount</th>
-          <th>Price</th>
-          <th>Owner</th>
-          <th>Last Modified</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (stock of publicStocks; track stock.portfolioEntryId) {
-          <tr>
-            <td>{{ stock.security }}</td>
-            <td>{{ stock.ticker }}</td>
-            <td>{{ stock.amount | number }}</td>
-            <td>{{ stock.price | number: "1.2-2" }}</td>
-            <td>{{ stock.owner }}</td>
-            <td>{{ stock.lastModified | date: "d.M.yyyy HH:mm" }}</td>
-            <td>
-              <app-button (onClick)="openOfferModal(stock)"> OFFER </app-button>
-            </td>
-          </tr>
-        } @empty {
-          <tr>
-            <td colspan="7" style="text-align: center">
-              No public stocks available for OTC offers.
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
+  <div class="loading-indicator">Loading public stocks...</div>
+  } @if (errorMessage && !isLoading) {
+  <div class="error-message-box">
+    <p>{{ errorMessage }}</p>
+    <app-button (onClick)="loadPublicStocks()">Retry</app-button>
+  </div>
+  } @if (!isLoading && !errorMessage) {
+  <table>
+    <thead>
+      <tr>
+        <th>Security</th>
+        <th>Ticker</th>
+        <th>Amount</th>
+        <th>Price</th>
+        <th>Owner</th>
+        <th>Last Modified</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (stock of pagedPubilStocks; track stock.portfolioEntryId) {
+      <tr>
+        <td>{{ stock.security }}</td>
+        <td>{{ stock.ticker }}</td>
+        <td>{{ stock.amount | number }}</td>
+        <td>{{ stock.price | number : "1.2-2" }}</td>
+        <td>{{ stock.owner }}</td>
+        <td>{{ stock.lastModified | date : "d.M.yyyy HH:mm" }}</td>
+        <td>
+          <app-button (onClick)="openOfferModal(stock)"> OFFER </app-button>
+        </td>
+      </tr>
+      } @empty {
+      <tr>
+        <td colspan="7" style="text-align: center">
+          No public stocks available for OTC offers.
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+  <app-pagination
+    [totalItems]="publicStocks.length"
+    [pageSize]="pageSize"
+    (pageChanged)="onPageChanged($event)"
+  >
+  </app-pagination>
   }
 </div>
 
