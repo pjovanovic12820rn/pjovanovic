@@ -107,7 +107,7 @@ export class SecuritiesComponent implements OnInit {
 	}
 
 	protected testMode(): void {
-		this.securityService.getSecurities().subscribe({
+		this.securityService.testMode().subscribe({
 			next: (res) => {
 				this.alertService.showAlert(
 					"success",
